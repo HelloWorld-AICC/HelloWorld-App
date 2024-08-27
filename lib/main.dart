@@ -1,7 +1,23 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+
+  runApp(
+    EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ko', 'KR'),
+          Locale('ja', 'JP'),
+          Locale('zh', 'CN'),
+          Locale('vi', 'VN')
+        ],
+        path: 'assets/translations',
+        fallbackLocale: const Locale('en', 'US'),
+        child: const MainApp()),
+  );
 }
 
 class MainApp extends StatelessWidget {
