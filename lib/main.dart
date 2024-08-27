@@ -1,5 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:package_info_plus/package_info_plus.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -20,11 +22,48 @@ void main() async {
   );
 }
 
-class MainApp extends StatelessWidget {
+class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
   @override
+  State<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends State<MainApp> {
+  bool? isFirstLaunch;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    PackageInfo packageInfo = await PackageInfo.fromPlatform();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    // 앱 버전 관리로 첫 실행 확인
+    String currentVersion = packageInfo.version;
+    String? lastVersion = prefs.getString('lastVersion');
+    isFirstLaunch = lastVersion != currentVersion;
+
+    if (isFirstLaunch!) {
+      await prefs.setString('lastVersion', currentVersion);
+    }
+
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isFirstLaunch == null) {
+      return const MaterialApp(
+        home: Scaffold(
+          body: Center(child: CircularProgressIndicator()),
+        ),
+      );
+    }
+
     return const MaterialApp(
       home: Scaffold(
         body: Center(
