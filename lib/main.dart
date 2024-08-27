@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'route/route_service.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
@@ -31,6 +33,7 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   bool? isFirstLaunch;
+  RouteService? _routeService;
 
   @override
   void initState() {
@@ -51,6 +54,10 @@ class _MainAppState extends State<MainApp> {
       await prefs.setString('lastVersion', currentVersion);
     }
 
+    _routeService = RouteService(
+      isFirstLaunch: isFirstLaunch!,
+    );
+
     setState(() {});
   }
 
@@ -64,12 +71,8 @@ class _MainAppState extends State<MainApp> {
       );
     }
 
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp.router(
+      routerConfig: _routeService!.router,
     );
   }
 }
