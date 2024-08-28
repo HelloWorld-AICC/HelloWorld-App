@@ -1,11 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:package_info_plus/package_info_plus.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
-import 'auth/token_authenticator.dart';
+import 'auth/service/auth_service.dart';
+import 'route/check_initialization.dart';
 import 'route/route_service.dart';
+import 'token/token_authenticator.dart';
 
 void setupDio(Dio dio, TokenAuthenticator tokenAuthenticator) {
   dio.interceptors.add(
@@ -52,14 +52,28 @@ void setupDio(Dio dio, TokenAuthenticator tokenAuthenticator) {
   );
 }
 
+Future<bool> _checkUserLoggedIn(AuthService authService) async {
+  final accessToken = await authService.fetchAccessToken();
+  return accessToken != null;
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
 
   final Dio dio = Dio();
-  final RouteService routeService = RouteService(
-    isFirstLaunch: false, // Placeholder, will be updated later
+  final AuthService authService = AuthService(
+    dio,
+    'https://example.com/api/v1/google/login',
   );
+
+  final isFirstLaunch = CheckInitialization.performInitialization();
+  isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
+
+  final RouteService routeService = RouteService(
+    isUserLoggedIn: _checkUserLoggedIn(authService),
+  );
+
   final TokenAuthenticator tokenAuthenticator = TokenAuthenticator(
     dio,
     'https://example.com/', // Base URL
@@ -76,12 +90,12 @@ void main() async {
         Locale('ko', 'KR'),
         Locale('ja', 'JP'),
         Locale('zh', 'CN'),
-        Locale('vi', 'VN')
+        Locale('vi', 'VN'),
       ],
       path: 'assets/translations',
       fallbackLocale: const Locale('en', 'US'),
       child: MainApp(
-        tokenAuthenticator: tokenAuthenticator,
+        authService: authService,
         routeService: routeService,
       ),
     ),
@@ -89,12 +103,12 @@ void main() async {
 }
 
 class MainApp extends StatefulWidget {
-  final TokenAuthenticator tokenAuthenticator;
+  final AuthService authService;
   final RouteService routeService;
 
   const MainApp({
     super.key,
-    required this.tokenAuthenticator,
+    required this.authService,
     required this.routeService,
   });
 
@@ -103,51 +117,10 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
-  bool? isFirstLaunch;
-  RouteService? _routeService;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeApp();
-  }
-
-  Future<void> _initializeApp() async {
-    PackageInfo packageInfo = await PackageInfo.fromPlatform();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    // 앱 버전 관리로 첫 실행 확인
-    String currentVersion = packageInfo.version;
-    String? lastVersion = prefs.getString('lastVersion');
-    isFirstLaunch = lastVersion != currentVersion;
-
-    if (isFirstLaunch!) {
-      await prefs.setString('lastVersion', currentVersion);
-    }
-
-    _routeService = RouteService(
-      isFirstLaunch: isFirstLaunch!,
-    );
-
-    setState(() {
-      _routeService = RouteService(
-        isFirstLaunch: isFirstLaunch!,
-      );
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    if (isFirstLaunch == null) {
-      return const MaterialApp(
-        home: Scaffold(
-          body: Center(child: CircularProgressIndicator()),
-        ),
-      );
-    }
-
     return MaterialApp.router(
-      routerConfig: _routeService!.router,
+      routerConfig: widget.routeService.router,
     );
   }
 }

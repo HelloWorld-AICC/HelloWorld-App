@@ -23,7 +23,7 @@ class TokenAuthenticator {
       final tokenRefreshSuccess = await _fetchUpdateToken();
 
       if (tokenRefreshSuccess) {
-        final newToken = await _fetchAccessToken();
+        final newToken = await fetchAccessToken();
         requestOptions.headers['Authorization'] = 'Bearer $newToken';
         return requestOptions;
       } else {
@@ -62,7 +62,7 @@ class TokenAuthenticator {
     return false;
   }
 
-  Future<String?> _fetchAccessToken() async {
+  Future<String?> fetchAccessToken() async {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString('accessToken');
   }
