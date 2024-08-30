@@ -45,8 +45,6 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
       setState(() {
         _selectedLocale = locale;
       });
-      // Set the locale using provider
-      context.read<LocaleProvider>().setLocale(locale);
     }
   }
 
@@ -108,11 +106,10 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
                 backgroundColor: Colors.grey[200],
                 selectedColor: Colors.blue,
                 onSelected: (selected) {
+                  // 로케일을 바로 변경하지 않고, 단지 선택된 로케일을 변경
                   setState(() {
                     _selectedLocale = locale;
                   });
-                  // Update locale using provider
-                  context.read<LocaleProvider>().setLocale(locale);
                 },
               );
             }).toList(),
@@ -123,8 +120,8 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
         padding: EdgeInsets.all(32.0 * paddingVal / 100),
         child: ElevatedButton(
           onPressed: _selectedLocale != null
-              ? () {
-                  // Update locale using provider
+              ? () async {
+                  // Update locale using provider only when Confirm button is pressed
                   context.read<LocaleProvider>().setLocale(_selectedLocale!);
                   log("[FirstLaunchScreen-ConfirmButton] Selected locale: ${_selectedLocale!.languageCode}");
 
@@ -143,7 +140,7 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
                   // );
 
                   // Navigate to the next screen
-                  context.go(
+                  context.push(
                       '/home'); // Change '/next_screen' to your desired route
                   log("[FirstLaunchScreen-ConfirmButton] Navigating to '/home'");
                 }

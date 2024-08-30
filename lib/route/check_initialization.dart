@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -17,7 +15,7 @@ class CheckInitialization {
       final prefs = await SharedPreferences.getInstance();
       final firstLaunch = prefs.getString('isFirstLaunch') == 'true';
 
-      log("[CheckInitialization-performInitialization()] isFirstLaunch: $firstLaunch");
+      // log("[CheckInitialization-performInitialization()] isFirstLaunch: $firstLaunch");
 
       if (firstLaunch) {
         final prefs = await SharedPreferences.getInstance();

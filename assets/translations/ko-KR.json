@@ -7,5 +7,22 @@
   "lan_ja": "일본어",
   "lan_zh": "중국어",
   "lan_vi": "베트남어",
-  "confirm_button": "확인"
+  "confirm_button": "확인",
+  "chat_consultation": "채팅상담",
+  "call_bot": "콜봇",
+  "resume_writing": "이력서 작성",
+  "job_information": "채용정보",
+  "home": "홈",
+  "chat": "채팅",
+  "profile": "프로필",
+  "hello_message": "안녕하세요! 저는 챗봇입니다 😀 \n\n시작하려면 아래 버튼을 누르거나 메시지를 입력해 주세요. \n\nAI가 제공하는 정보는 정확하지 않을 수 있으며 참고용으로만 사용해 주세요.",
+  "start_button": "시작",
+  "choose_question": "문의 내용을 선택해 주세요. \n\n처음으로 돌아가려면 '시작'을 입력해 주세요.",
+  "answer_message": "{content}에 대해 답변 드리겠습니다. \n추가적인 문의 사항은 메시지를 입력해서 요청해주세요. \n처음으로 돌아가려면 '{start_button}'을 입력해주세요.",
+  "law": "법률",
+  "visa": "비자",
+  "employment": "취업",
+  "living": "생활",
+  "help_needed": "아니요. 도움이 필요합니다.",
+  "input_hint": "메시지 입력"
 }

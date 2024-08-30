@@ -7,5 +7,22 @@
   "lan_ja": "Japanese",
   "lan_zh": "Chinese",
   "lan_vi": "Vietnamese",
-  "confirm_button": "Confirm"
+  "confirm_button": "Confirm",
+  "chat_consultation": "Chat Consultation",
+  "call_bot": "Call Bot",
+  "resume_writing": "Resume Writing",
+  "job_information": "Job Information",
+  "home": "Home",
+  "chat": "Chat",
+  "profile": "Profile",
+  "hello_message": "Hello! I'm your chatbot 😀 \n\nTo get started, press the button below or type a message. \n\nPlease note that the information provided by AI may not be accurate and should be used for reference only.",
+  "start_button": "Start",
+  "choose_question": "Please choose your inquiry. \n\nTo return to the start, type 'Start'.",
+  "answer_message": "I will answer about {content}. \nFor additional inquiries, please enter your message. \nTo return to the start, type '{start_button}'.",
+  "law": "Law",
+  "visa": "Visa",
+  "employment": "Employment",
+  "living": "Living",
+  "help_needed": "No. I need help.",
+  "input_hint": "Type your message"
 }

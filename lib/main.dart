@@ -97,7 +97,6 @@ void main() async {
         Locale('vi', 'VN'),
       ],
       path: 'assets/translations',
-      fallbackLocale: const Locale('ko'),
       child: ChangeNotifierProvider(
         create: (context) => LocaleProvider(),
         child: MainApp(
@@ -128,11 +127,19 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: widget.routeService.router,
-      localizationsDelegates: context.localizationDelegates,
-      supportedLocales: context.supportedLocales,
-      locale: context.locale,
+    return ChangeNotifierProvider(
+      create: (_) => LocaleProvider(),
+      child: Consumer<LocaleProvider>(
+        builder: (context, localeProvider, child) {
+          return MaterialApp.router(
+            routerConfig: widget.routeService.router,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: localeProvider.locale ??
+                context.locale, // LocaleProvider의 locale 사용
+          );
+        },
+      ),
     );
   }
 }
