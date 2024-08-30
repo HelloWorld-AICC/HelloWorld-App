@@ -1,11 +1,16 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
+import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/service/auth_service.dart';
 import 'auth/service/token/token_authenticator.dart';
+import 'chat/provider/room_provider.dart';
 import 'locale/locale_provider.dart';
 import 'route/route_service.dart';
 
@@ -97,8 +102,19 @@ void main() async {
         Locale('vi', 'VN'),
       ],
       path: 'assets/translations',
-      child: ChangeNotifierProvider(
-        create: (context) => LocaleProvider(),
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => LocaleProvider()),
+          ChangeNotifierProvider(create: (_) => RoomProvider()),
+          ChangeNotifierProvider(
+            create: (_) => RecentRoomProvider(
+              RecentRoomService(
+                baseUrl: "http://15.165.84.103:8082",
+                userId: "1",
+              ),
+            ),
+          ),
+        ],
         child: MainApp(
           authService: authService,
           routeService: RouteService(
@@ -127,19 +143,27 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => LocaleProvider(),
-      child: Consumer<LocaleProvider>(
-        builder: (context, localeProvider, child) {
-          return MaterialApp.router(
-            routerConfig: widget.routeService.router,
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: localeProvider.locale ??
-                context.locale, // LocaleProvider의 locale 사용
-          );
-        },
-      ),
+    final recentRoomService = RecentRoomService(
+      baseUrl: "http://15.165.84.103:8082",
+      userId: "1",
+    );
+
+    log("[MainApp] Detected locale: ${context.locale}");
+
+    return Consumer<LocaleProvider>(
+      builder: (context, localeProvider, child) {
+        final locale = localeProvider.locale ?? context.locale;
+        // log("[MainApp] Applying locale: $locale");
+
+        // log("[MainApp] EasyLocalization locale: ${EasyLocalization.of(context)?.locale}");
+
+        return MaterialApp.router(
+          routerConfig: widget.routeService.router,
+          localizationsDelegates: context.localizationDelegates,
+          supportedLocales: context.supportedLocales,
+          locale: localeProvider.locale ?? context.locale,
+        );
+      },
     );
   }
 }

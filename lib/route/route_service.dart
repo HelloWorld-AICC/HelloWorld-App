@@ -1,11 +1,13 @@
 import 'dart:developer';
 
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
 
 import '../auth/view/login_screen.dart';
 import '../chat/view/chat_screen.dart';
 import '../home_screen.dart';
 import '../locale/first_launch_screen.dart';
+import '../resume/resume_screen.dart';
 import 'check_initialization.dart';
 
 int selectedBottomNavIndex = 0;
@@ -61,11 +63,34 @@ class RouteService {
           builder: (context, state) => const HomeScreen(),
         ),
         GoRoute(
-          path: '/chat',
-          builder: (context, state) => const ChatScreen(),
+          path: '/chat/:roomId',
+          builder: (context, state) {
+            final roomId = state.pathParameters['roomId'] ?? 'new_chat';
+            log("[RouteService] Navigate to /chat/$roomId");
+            return ChatScreen(roomId: roomId);
+          },
+        ),
+        GoRoute(
+          path: '/resume',
+          builder: (context, state) => const ResumeScreen(),
+        ),
+        GoRoute(
+          path:
+              '/reopenedChat/:roomId', // Capture roomId directly from the path
+          builder: (context, state) {
+            final roomId = state
+                .pathParameters['roomId']; // Access roomId from path parameters
+            log("[RouteService] Navigate to /reopenedChat/$roomId");
+            return const ChatScreenReopened(); // Pass roomId to ChatScreenReopened
+          },
+          routes: const [],
         ),
         // 다른 라우트 정의...
       ],
     );
+  }
+
+  void navigateToChatRoom(String roomId) {
+    router.go('/reopenedChat/room/$roomId');
   }
 }

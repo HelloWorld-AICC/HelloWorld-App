@@ -5,9 +5,10 @@ import 'dart:developer';
 import 'package:http/http.dart' as http;
 
 class GPTService {
-  final StreamController<String> _controller;
+  final StreamController<String> _controller =
+      StreamController<String>.broadcast();
 
-  GPTService(this._controller);
+  Stream<String> get stream => _controller.stream;
 
   Future<String?> sendMessage(String roomId, String message) async {
     final url = Uri.parse('http://15.165.84.103:8082/chat/ask?roomId=$roomId');
@@ -19,26 +20,23 @@ class GPTService {
 
     final request = http.Request('POST', url)
       ..headers.addAll(headers)
-      ..body = jsonEncode(message); // Send raw JSON string
+      ..body =
+          jsonEncode({'message': message}); // Wrap message in a JSON object
 
     log("Requesting to room ID: $roomId");
 
     try {
       final streamedResponse = await request.send();
       final responseStream = streamedResponse.stream;
-      final responseBytes = <int>[];
-      final completer = Completer<void>();
 
-      StringBuffer finalResponse =
-          StringBuffer(); // Use StringBuffer to concatenate strings efficiently
+      final completer = Completer<void>();
+      final responseBuffer = StringBuffer();
 
       responseStream.listen(
         (List<int> chunk) {
-          responseBytes.addAll(chunk);
-          final responseString = utf8.decode(responseBytes);
+          final chunkString = utf8.decode(chunk);
+          final lines = chunkString.split('\n');
 
-          // Process each line starting with "data:"
-          final lines = responseString.split('\n');
           for (var line in lines) {
             if (line.startsWith('data:')) {
               var data = line.substring(5).trim();
@@ -48,23 +46,21 @@ class GPTService {
               }
               // Append non-empty data or space to the StringBuffer
               if (!data.startsWith('Room ID:')) {
-                finalResponse.write(data); // Append data to the StringBuffer
+                responseBuffer.write(data);
               }
             }
           }
-
-          // Clear the responseBytes after processing
-          responseBytes.clear();
         },
         onDone: () {
-          log("Final response for room ID $roomId: ${finalResponse.toString()}");
+          log("Final response for room ID $roomId: ${responseBuffer.toString()}");
           _controller.add(
-              finalResponse.toString()); // Send the final response to the UI
+              responseBuffer.toString()); // Send the final response to the UI
           completer.complete();
         },
         onError: (e) {
           log('Error for room ID $roomId: $e');
           _controller.add('Error occurred: $e');
+          completer.complete();
         },
         cancelOnError: true,
       );

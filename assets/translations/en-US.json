@@ -24,5 +24,21 @@
   "employment": "Employment",
   "living": "Living",
   "help_needed": "No. I need help.",
-  "input_hint": "Type your message"
+  "input_hint": "Type your message",
+  "resumeTitle": "Resume",
+  "autoGenerateResume": "Auto Generate Resume",
+  "manageResume": "Manage Resume",
+  "buttonText": "Choose Keywords",
+  "textFieldHint": "Enter your title here",
+  "infoSectionTitle": "Yunseo",
+  "phone": "010-1234-5678",
+  "email": "1234@gmail.com",
+  "intro": "Hello, I am Yunseo, a cross-platform developer.",
+  "experienceTitle": "Experience",
+  "educationTitle": "Education",
+  "skillsTitle": "Technical Skills",
+  "certificationsTitle": "Certifications",
+  "projectsTitle": "Projects",
+  "projectA": "Project A: Shopping App Development with Flutter",
+  "projectB": "Project B: Machine Learning-Based Recommendation System"
 }

@@ -24,5 +24,21 @@
   "employment": "취업",
   "living": "생활",
   "help_needed": "아니요. 도움이 필요합니다.",
-  "input_hint": "메시지 입력"
+  "input_hint": "메시지 입력",
+  "resumeTitle": "이력서",
+  "autoGenerateResume": "이력서 자동생성",
+  "manageResume": "내 이력서 관리",
+  "buttonText": "키워드 고르기",
+  "textFieldHint": "여기에 제목을 작성하세요",
+  "infoSectionTitle": "이윤서",
+  "phone": "010-1234-5678",
+  "email": "1234@gmail.com",
+  "intro": "안녕하세요. 저는 크로스플랫폼 개발자 이윤서입니다.",
+  "experienceTitle": "경력 사항",
+  "educationTitle": "학력 사항",
+  "skillsTitle": "기술 스킬",
+  "certificationsTitle": "자격증",
+  "projectsTitle": "프로젝트",
+  "projectA": "프로젝트 A: Flutter 기반의 쇼핑 앱 개발",
+  "projectB": "프로젝트 B: Machine Learning 기반의 추천 시스템"
 }

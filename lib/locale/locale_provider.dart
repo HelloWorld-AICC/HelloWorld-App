@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 
 class LocaleProvider extends ChangeNotifier {
@@ -7,6 +9,7 @@ class LocaleProvider extends ChangeNotifier {
 
   void setLocale(Locale locale) {
     _locale = locale;
+    log("[LocaleProvider] setLocale: $locale");
     notifyListeners();
   }
 }

@@ -2,7 +2,6 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -35,13 +34,26 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
     _loadLocaleFromServer();
   }
 
+  // Define a mapping between server locale strings and app locale codes
+  static const Map<String, Locale> serverToAppLocale = {
+    'ENGLISH': Locale('en', 'US'),
+    'KOREAN': Locale('ko', 'KR'),
+    'JAPANESE': Locale('ja', 'JP'),
+    'CHINESE': Locale('zh', 'CN'),
+    'VIETNAMESE': Locale('vi', 'VN'),
+    // Add more mappings as needed
+  };
+
   Future<void> _loadLocaleFromServer() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     var userId = prefs.getString('userId') ?? '1';
     var localeString = await _viewModel.fetchLocaleFromServer(userId);
+    // log("[FirstLaunchScreen-loadLocaleFromServer()] Locale from server: $localeString");
 
     if (localeString != null) {
-      Locale locale = Locale(localeString);
+      Locale locale = serverToAppLocale[localeString.toUpperCase()] ??
+          const Locale('en', 'US'); // Default to 'en' if not found;
+      // log("[FirstLaunchScreen-loadLocalFromServer()] Setting locale from server: $locale");
       setState(() {
         _selectedLocale = locale;
       });
@@ -122,8 +134,22 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
           onPressed: _selectedLocale != null
               ? () async {
                   // Update locale using provider only when Confirm button is pressed
-                  context.read<LocaleProvider>().setLocale(_selectedLocale!);
-                  log("[FirstLaunchScreen-ConfirmButton] Selected locale: ${_selectedLocale!.languageCode}");
+                  // context.read<LocaleProvider>().setLocale(_selectedLocale!);
+                  // log("[FirstLaunchScreen-ConfirmButton] Selected locale: ${_selectedLocale!}");
+
+                  Provider.of<LocaleProvider>(context, listen: false)
+                      .setLocale(_selectedLocale!);
+                  EasyLocalization.of(context)?.setLocale(_selectedLocale!);
+
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    if (context.mounted) {
+                      // Safe to use context
+                      Navigator.pushReplacementNamed(context, '/home');
+                    } else {
+                      // Handle the case where the context is no longer valid
+                      log("Context is no longer mounted.");
+                    }
+                  });
 
                   // Uncomment and use this code if needed
                   // Send selected locale to server
@@ -138,11 +164,6 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
                   //   body: jsonEncode(
                   //       {'locale': _selectedLocale!.languageCode}),
                   // );
-
-                  // Navigate to the next screen
-                  context.push(
-                      '/home'); // Change '/next_screen' to your desired route
-                  log("[FirstLaunchScreen-ConfirmButton] Navigating to '/home'");
                 }
               : null,
           child: Text('confirm_button',

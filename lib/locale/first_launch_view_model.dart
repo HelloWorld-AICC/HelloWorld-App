@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 class FirstLaunchViewModel extends ChangeNotifier {
   Future<String?> fetchLocaleFromServer(String userId) async {
     final response = await http.get(
-      Uri.parse('http://13.209.87.5:8082/user/'),
+      Uri.parse('http://15.165.84.103:8082/user/'),
       headers: <String, String>{
         'accept': '*/*',
         'user_id': userId,

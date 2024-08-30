@@ -5,13 +5,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/route/route_service.dart';
+import 'package:provider/provider.dart';
 
 import '../model/chatting_state.dart';
+import '../provider/recent_room_provider.dart';
 import '../service/gpt_service.dart';
-import 'custom_blue_button.dart';
+import '../service/room_service.dart';
+import 'common/custom_blue_button.dart';
+import 'room_drawer.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key});
+  final String roomId;
+  const ChatScreen({super.key, this.roomId = 'new_chat'});
 
   @override
   ChatScreenState createState() => ChatScreenState();
@@ -21,6 +26,11 @@ class ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  final StreamController<String> _streamController = StreamController<String>();
+
+  late AnimationController _animationController;
+  late GPTService _gptService;
+  late RoomService _roomService;
 
   final List<Map<String, String>> _messages = [
     {
@@ -30,26 +40,24 @@ class ChatScreenState extends State<ChatScreen>
     }
   ];
 
-  late AnimationController _animationController;
-  late GPTService _gptService;
   ChattingState _chatPageState = ChattingState.initial;
   bool _isTyping = false;
-
   String _displayText = '';
   String _fullText = '';
-  final StreamController<String> _streamController = StreamController<String>();
-
   List<Map<String, String>> roomList = [];
+  String? _currentRoomId;
 
   @override
   void initState() {
     super.initState();
+    _gptService = GPTService();
+    _roomService = RoomService();
+    _initialize();
+    // final roomId = widget.roomId;
 
-    _gptService = GPTService(_streamController);
-    _animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 1),
-    )..repeat();
+    final recentRoomProvider =
+        Provider.of<RecentRoomProvider>(context, listen: false);
+    recentRoomProvider.fetchRecentChatRoom(); // Fetch chat room data
   }
 
   @override
@@ -61,43 +69,58 @@ class ChatScreenState extends State<ChatScreen>
     super.dispose();
   }
 
+  Future<void> _initialize() async {
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1),
+    )..repeat();
+
+    await _fetchRoomList();
+  }
+
+  Future<void> _fetchRoomList() async {
+    try {
+      final rooms = await _roomService.fetchRoomList();
+      setState(() {
+        roomList = rooms
+            .map((room) => {
+                  'roomId': room.roomId,
+                  'title': room.title,
+                })
+            .toList();
+      });
+    } catch (e) {
+      log('Error fetching room list: $e');
+    }
+  }
+
+  Future<void> _fetchRecentChatLogs(String roomId) async {
+    try {
+      final chatLogs = await _roomService.fetchRecentChatLogs(roomId);
+      // Handle chat logs accordingly, update state if needed
+    } catch (e) {
+      log('Error fetching chat logs: $e');
+    }
+  }
+
   void _setTyping(bool typing) {
     setState(() {
       _isTyping = typing;
     });
   }
 
-  Future<void> _addDelayedMessage(String role, String content) async {
-    _setTyping(true);
-
-    await Future.delayed(const Duration(seconds: 1));
-    _addMessage(role, content);
-
-    _setTyping(false);
-  }
-
-  void _setChattingState(ChattingState state) {
-    setState(() {
-      _chatPageState = state;
-    });
-  }
-
-  void _sendMessage() async {
+  Future<void> _sendMessage() async {
     final message = _controller.text;
 
     if (message.isEmpty) return;
 
     _addMessage('user', message);
     _controller.clear();
-
     _setTyping(true);
 
     if (message == '시작') {
-      _addMessage('bot', '문의 내용을 선택해 주세요. \n\n처음으로 돌아오려면 ' '시작' '을 입력해주세요.');
+      _addMessage('bot', '문의 내용을 선택해 주세요. \n\n처음으로 돌아오려면 시작을 입력해주세요.');
       _setChattingState(ChattingState.listView);
-
-      _controller.clear();
-      _setTyping(false);
       return;
     }
 
@@ -116,7 +139,7 @@ class ChatScreenState extends State<ChatScreen>
     } catch (e) {
       _setTyping(false);
       _addMessage('bot', 'Error: Could not fetch response from GPT. $e');
-      log('[ChatPageState-sendMessage()] Error: Could not fetch response from GPT. $e');
+      log('[ChatScreenState-sendMessage()] Error: Could not fetch response from GPT. $e');
     }
   }
 
@@ -136,7 +159,7 @@ class ChatScreenState extends State<ChatScreen>
 
   Future<void> _startTyping() async {
     setState(() {
-      _displayText = ''; // 초기화
+      _displayText = '';
     });
 
     for (int i = 0; i < _fullText.length; i++) {
@@ -148,7 +171,7 @@ class ChatScreenState extends State<ChatScreen>
   }
 
   List<Widget> _buildActionButtons() {
-    final List<String> buttonContents = [
+    final buttonContents = [
       tr('law'),
       tr('visa'),
       tr('employment'),
@@ -158,18 +181,19 @@ class ChatScreenState extends State<ChatScreen>
     switch (_chatPageState) {
       case ChattingState.initial:
         return [
-          CustomBlueButton(
+          _buildCustomButton(
+            text: tr('start_button'),
             onPressed: () {
               _addMessage('user', tr('start_button'));
               _addDelayedMessage('bot', tr('choose_question'));
               _setChattingState(ChattingState.listView);
             },
-            text: tr('start_button'),
           ),
         ];
       case ChattingState.listView:
         return buttonContents.map((content) {
-          return CustomBlueButton(
+          return _buildCustomButton(
+            text: content,
             onPressed: () {
               _controller.text = content;
               _controller.clear();
@@ -187,16 +211,15 @@ class ChatScreenState extends State<ChatScreen>
                 ),
               );
             },
-            text: content,
           );
         }).toList();
       case ChattingState.detailView:
         return [
-          CustomBlueButton(
+          _buildCustomButton(
+            text: tr('help_needed'),
             onPressed: () {
               _setChattingState(ChattingState.reponsed);
             },
-            text: tr('help_needed'),
           ),
         ];
       case ChattingState.reponsed:
@@ -206,115 +229,11 @@ class ChatScreenState extends State<ChatScreen>
     }
   }
 
-  @override
-  Widget build(BuildContext context) {
-    var paddingVal = MediaQuery.of(context).size.height * 0.1;
-
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.grey[200],
-        title: Text(
-          'Hello World Chatbot',
-          style: TextStyle(
-            color: const Color(0xff3369FF),
-            fontWeight: FontWeight.bold,
-            fontSize: 20 * paddingVal / 100,
-          ),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.summarize, color: Color(0xff3369FF)),
-            onPressed: () {
-              // TODO: Implement summary feature
-            },
-          ),
-          SizedBox(
-            width: 10 * paddingVal / 100,
-          ),
-        ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text(
-                'Room List',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                ),
-              ),
-            ),
-            ...roomList.map((room) {
-              return ListTile(
-                title: Text(room['title'] ?? ''),
-                subtitle: Text(room['roomId'] ?? ''),
-              );
-            }),
-          ],
-        ),
-      ),
-      backgroundColor: Colors.white,
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: _buildMessageList(),
-            ),
-            if (_isTyping) _buildTypingIndicator(),
-            Padding(
-              padding: const EdgeInsets.only(top: 20, right: 20),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: _buildActionButtons(),
-              ),
-            ),
-            _buildInputArea(),
-          ],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home),
-            label: tr('home'),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.chat),
-            label: tr('chat'),
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person),
-            label: tr('profile'),
-          ),
-        ],
-        currentIndex: selectedBottomNavIndex,
-        onTap: (int index) {
-          selectedBottomNavIndex = index;
-
-          context.go(bottomNavItems[index]);
-        },
-        selectedItemColor: const Color(0xff3369FF),
-        unselectedItemColor: Colors.grey,
-        backgroundColor: Colors.white, // 배경색
-        elevation: 4.0, // 그림자 깊이
-        type: BottomNavigationBarType.fixed,
-        showSelectedLabels: true,
-        showUnselectedLabels: true,
-        selectedLabelStyle: const TextStyle(
-          fontSize: 16.0, // 선택된 아이템의 폰트 크기
-        ),
-        unselectedLabelStyle: const TextStyle(
-          fontSize: 14.0, // 선택되지 않은 아이템의 폰트 크기
-        ),
-        iconSize: 24.0, // 아이콘 크기
-      ),
+  Widget _buildCustomButton(
+      {required String text, required VoidCallback onPressed}) {
+    return CustomBlueButton(
+      onPressed: onPressed,
+      text: text,
     );
   }
 
@@ -323,30 +242,29 @@ class ChatScreenState extends State<ChatScreen>
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          for (int i = 0; i < 3; i++)
-            AnimatedBuilder(
-              animation: _animationController,
-              builder: (context, child) {
-                double scale = 1.0 +
-                    0.3 *
-                        (1.0 - (_animationController.value - i / 3).abs())
-                            .clamp(0.0, 1.0);
-                return Transform.scale(
-                  scale: scale,
-                  child: Container(
-                    width: 12.0,
-                    height: 12.0,
-                    margin: EdgeInsets.only(right: i < 2 ? 6.0 : 0.0),
-                    decoration: const BoxDecoration(
-                      color: Colors.grey,
-                      shape: BoxShape.circle,
-                    ),
+        children: List.generate(3, (index) {
+          return AnimatedBuilder(
+            animation: _animationController,
+            builder: (context, child) {
+              double scale = 1.0 +
+                  0.3 *
+                      (1.0 - (_animationController.value - index / 3).abs())
+                          .clamp(0.0, 1.0);
+              return Transform.scale(
+                scale: scale,
+                child: Container(
+                  width: 12.0,
+                  height: 12.0,
+                  margin: EdgeInsets.only(right: index < 2 ? 6.0 : 0.0),
+                  decoration: const BoxDecoration(
+                    color: Colors.grey,
+                    shape: BoxShape.circle,
                   ),
-                );
-              },
-            ),
-        ],
+                ),
+              );
+            },
+          );
+        }),
       ),
     );
   }
@@ -358,7 +276,6 @@ class ChatScreenState extends State<ChatScreen>
       itemBuilder: (context, index) {
         final message = _messages[index];
         final isUser = message['role'] == 'user';
-        // log("[ChatPageState-buildMessageList()] isUser: $isUser");
 
         return Column(
           crossAxisAlignment:
@@ -414,5 +331,111 @@ class ChatScreenState extends State<ChatScreen>
         ],
       ),
     );
+  }
+
+  void _setChattingState(ChattingState state) {
+    setState(() {
+      _chatPageState = state;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final paddingVal = MediaQuery.of(context).size.height * 0.1;
+    final recentRoomProvider = Provider.of<RecentRoomProvider>(context);
+
+    if (recentRoomProvider.recentChatRoom == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    final roomId = widget.roomId;
+    final chatLogs = recentRoomProvider.recentChatRoom?['chatLogs'] ?? [];
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.grey[200],
+        title: Text(
+          'Hello World Chatbot',
+          style: TextStyle(
+            color: const Color(0xff3369FF),
+            fontWeight: FontWeight.bold,
+            fontSize: 20 * paddingVal / 100,
+          ),
+        ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.summarize, color: Color(0xff3369FF)),
+            onPressed: () {
+              // TODO: Implement summary feature
+            },
+          ),
+          SizedBox(width: 10 * paddingVal / 100),
+        ],
+      ),
+      drawer: const RoomDrawer(),
+      backgroundColor: Colors.white,
+      body: SafeArea(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(child: _buildMessageList()),
+            if (_isTyping) _buildTypingIndicator(),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, right: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: _buildActionButtons(),
+              ),
+            ),
+            _buildInputArea(),
+          ],
+        ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.home),
+            label: tr('home'),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.chat),
+            label: tr('chat'),
+          ),
+          BottomNavigationBarItem(
+            icon: const Icon(Icons.person),
+            label: tr('profile'),
+          ),
+        ],
+        currentIndex: selectedBottomNavIndex,
+        onTap: (index) {
+          selectedBottomNavIndex = index;
+          context.go(bottomNavItems[index]);
+        },
+        selectedItemColor: const Color(0xff3369FF),
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        elevation: 4.0,
+        type: BottomNavigationBarType.fixed,
+        showSelectedLabels: true,
+        showUnselectedLabels: true,
+        selectedLabelStyle: const TextStyle(fontSize: 16.0),
+        unselectedLabelStyle: const TextStyle(fontSize: 14.0),
+        iconSize: 24.0,
+      ),
+    );
+  }
+
+  void _addDelayedMessage(String role, String content) async {
+    _setTyping(true);
+    await Future.delayed(const Duration(seconds: 1));
+    _addMessage(role, content);
+    _setTyping(false);
+  }
+
+  void _onRoomSelected(String roomId) async {
+    _currentRoomId = roomId;
+    await _fetchRecentChatLogs(roomId);
+    Navigator.pop(context); // Close the drawer
+    _setChattingState(ChattingState.initial); // Reset screen state
   }
 }
