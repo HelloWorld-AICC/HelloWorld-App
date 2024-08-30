@@ -1,0 +1,11 @@
+{
+  "app_name": "외국인 노동자 지원센터 AICC",
+  "login_button": "로그인",
+  "select_language": "사용 가능한 언어를 골라주세요",
+  "lan_en": "영어",
+  "lan_ko": "한국어",
+  "lan_ja": "일본어",
+  "lan_zh": "중국어",
+  "lan_vi": "베트남어",
+  "confirm_button": "확인"
+}

@@ -51,5 +51,23 @@
 		<string>en</string>
 		<string>nb</string>
 	</array>
+
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>sms</string>
+  		<string>tel</string>
+	</array>
+
+	<key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>myapp</string>
+            </array>
+            <key>CFBundleURLName</key>
+            <string>com.example.myapp</string>
+        </dict>
+    </array>
 </dict>
 </plist>

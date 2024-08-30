@@ -1,43 +1,53 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../model/auth_response.dart'; // Import the models
-
 class AuthService {
   final Dio _dio;
-  final String _loginUrl;
 
-  AuthService(this._dio, this._loginUrl);
+  AuthService(this._dio);
 
-  Future<bool> login(String token) async {
+  Future<Map<String, dynamic>> getGoogleAuthUrl() async {
+    const url = 'http://15.164.219.143:8080/api/v1/google/login-view';
+
     try {
       final response = await _dio.post(
-        _loginUrl,
-        data: {
-          'token': token,
-        },
+        url,
+        options: Options(
+          headers: {'Accept': '*/*'},
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        ),
       );
 
-      final authResponse = AuthResponse.fromJson(response.data);
-
-      if (authResponse.isSuccess) {
-        final authResult = authResponse.result.first;
-
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setString('accessToken', authResult.token);
-        await prefs.setString('tokenExpriresTime',
-            authResult.tokenExpriresTime.toIso8601String());
-
-        return true;
+      if (response.statusCode == 301) {
+        final parsedResponse = _parseLoginResponse(response);
+        // log("[AuthService] Parsed Response: $parsedResponse");
+        return parsedResponse;
       } else {
-        log('Login failed: ${authResponse.message}');
-        return false;
+        throw Exception('Failed to fetch data: ${response.statusCode}');
       }
     } catch (e) {
-      log('Error occurred during login: $e');
-      return false;
+      throw Exception('Error: $e');
+    }
+  }
+
+  Map<String, dynamic> _parseLoginResponse(Response response) {
+    try {
+      final responseData = response.data is String
+          ? json.decode(response.data as String)
+          : response.data as Map<String, dynamic>;
+
+      // log("[AuthService] Response: $responseData");
+
+      return {
+        'isSuccess': responseData['isSuccess'] as bool,
+        'googleAuthUrl': responseData['result'] as String,
+      };
+    } catch (e) {
+      throw Exception('Failed to parse login response: $e');
     }
   }
 

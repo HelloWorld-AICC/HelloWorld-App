@@ -1,0 +1,11 @@
+{
+  "app_name": "Foreign Support Center AICC",
+  "login_button": "Login",
+  "select_language": "Please select a language",
+  "lan_en": "English",
+  "lan_ko": "Korean",
+  "lan_ja": "Japanese",
+  "lan_zh": "Chinese",
+  "lan_vi": "Vietnamese",
+  "confirm_button": "Confirm"
+}

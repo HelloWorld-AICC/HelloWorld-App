@@ -1,9 +1,11 @@
+import 'dart:developer';
+
 import 'package:go_router/go_router.dart';
 
 import '../auth/view/login_screen.dart';
 import '../home_screen.dart';
-import '../intro/first_launch_screen.dart';
-import '../splash_screen.dart';
+import '../intro/splash_screen.dart';
+import '../locale/first_launch_screen.dart';
 import 'check_initialization.dart';
 
 class RouteService {
@@ -16,18 +18,23 @@ class RouteService {
   GoRouter get router {
     return GoRouter(
       redirect: (context, state) async {
+        final firstLaunch = await CheckInitialization.isFirstLaunch();
+        log("[RouteService] firstLaunch: $firstLaunch");
+        if (firstLaunch) {
+          return '/firstLaunch';
+        }
+
         final isInitialized = await CheckInitialization.performInitialization();
+        log("[RouteService] isInitialized: $isInitialized");
 
         if (!isInitialized) {
           return '/splash';
         }
 
-        final firstLaunch = await CheckInitialization.performInitialization();
         final loggedIn = await isUserLoggedIn;
+        log("[RouteService] firstLaunch: $firstLaunch, loggedIn: $loggedIn");
 
-        if (firstLaunch) {
-          return '/firstLaunch';
-        } else if (!loggedIn) {
+        if (!firstLaunch && !loggedIn) {
           return '/login';
         } else {
           return '/home';
