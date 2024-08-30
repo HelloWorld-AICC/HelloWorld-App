@@ -145,6 +145,7 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
                   // Navigate to the next screen
                   context.go(
                       '/home'); // Change '/next_screen' to your desired route
+                  log("[FirstLaunchScreen-ConfirmButton] Navigating to '/home'");
                 }
               : null,
           child: Text('confirm_button',

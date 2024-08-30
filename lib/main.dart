@@ -5,9 +5,9 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/service/auth_service.dart';
+import 'auth/service/token/token_authenticator.dart';
 import 'locale/locale_provider.dart';
 import 'route/route_service.dart';
-import 'token/token_authenticator.dart';
 
 void setupDio(Dio dio, TokenAuthenticator tokenAuthenticator) {
   dio.interceptors.add(
