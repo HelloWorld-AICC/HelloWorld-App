@@ -20,7 +20,7 @@ class RecentRoomService {
 
   // Fetch recent chat room data and notify the provider
   Future<void> fetchRecentChatRoom() async {
-    log("[RecentRoomService] Request is being sent to: $baseUrl with user_id: $userId");
+    // log("[RecentRoomService] Request is being sent to: $baseUrl with user_id: $userId");
     try {
       final response = await http.get(
         Uri.parse(baseUrl),
@@ -29,11 +29,11 @@ class RecentRoomService {
           'user_id': userId,
         },
       );
-      log("[RecentRoomService] Response: ${response.body}");
+      // log("[RecentRoomService] Response: ${response.body}");
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
-        log("[RecentRoomService] Data: $data");
+        // log("[RecentRoomService] Data: $data");
 
         // Parse and update the provider with the Room model
         Room room = _parseRoomFromResponse(data);

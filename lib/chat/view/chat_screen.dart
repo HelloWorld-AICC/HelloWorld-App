@@ -45,7 +45,6 @@ class ChatScreenState extends State<ChatScreen>
   String _fullText = '';
 
   List<Map<String, String>> roomList = [];
-  String? _currentRoomId;
 
   @override
   void initState() {
@@ -156,7 +155,9 @@ class ChatScreenState extends State<ChatScreen>
 
     try {
       // Send the message using the existing _gptService
-      await _gptService.sendMessage(_currentRoomId!, message);
+      String? currentRoomId = widget.roomId;
+      log('[ChatScreenState-sendMessage()] Current room ID: $currentRoomId');
+      await _gptService.sendMessage(currentRoomId, message);
 
       // Listen to the existing SSE stream
       _gptService.stream.listen(
@@ -425,7 +426,7 @@ class ChatScreenState extends State<ChatScreen>
     final paddingVal = MediaQuery.of(context).size.height * 0.1;
     final recentRoomProvider = Provider.of<RecentRoomProvider>(context);
     log("[ChatScreenState-build()] Building ChatScreen...");
-    log("[ChatScreenState-build()] Recent chat room: ${recentRoomProvider.recentChatRoom}");
+    // log("[ChatScreenState-build()] Recent chat room: ${recentRoomProvider.recentChatRoom}");
 
     if (recentRoomProvider.recentChatRoom == null) {
       return const Center(child: CircularProgressIndicator());
@@ -513,12 +514,5 @@ class ChatScreenState extends State<ChatScreen>
     await Future.delayed(const Duration(seconds: 1));
     _addMessage(role, content);
     _setTyping(false);
-  }
-
-  void _onRoomSelected(String roomId) async {
-    _currentRoomId = roomId;
-    await _fetchRecentChatLogs(roomId);
-    Navigator.pop(context); // Close the drawer
-    _setChattingState(ChattingState.initial); // Reset screen state
   }
 }
