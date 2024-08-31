@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../model/chatting_state.dart';
 import '../provider/recent_room_provider.dart';
 import '../service/gpt_service.dart';
+import '../service/recent_room_service.dart';
 import '../service/room_service.dart';
 import 'common/custom_blue_button.dart';
 import 'room_drawer.dart';
@@ -71,9 +72,21 @@ class ChatScreenState extends State<ChatScreen>
 
     _initialize();
 
-    final recentRoomProvider =
-        Provider.of<RecentRoomProvider>(context, listen: false);
-    recentRoomProvider.fetchRecentChatRoom(); // Fetch chat room data
+    // final recentRoomProvider =
+    //     Provider.of<RecentRoomProvider>(context, listen: false);
+    // log("[ChatScreenState-initState()] Fetching recent chat room...");
+    // recentRoomProvider.fetchRecentChatRoom(); // Fetch chat room data
+
+    final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
+    RecentRoomService recentRoomService = RecentRoomService(
+      baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
+      userId: '1',
+      recentRoomProvider: recentRoomProvider,
+    );
+
+    // Fetch recent chat room when the screen initializes
+    final provider = Provider.of<RecentRoomProvider>(context, listen: false);
+    provider.fetchRecentChatRoom(recentRoomService);
   }
 
   @override
@@ -411,6 +424,8 @@ class ChatScreenState extends State<ChatScreen>
   Widget build(BuildContext context) {
     final paddingVal = MediaQuery.of(context).size.height * 0.1;
     final recentRoomProvider = Provider.of<RecentRoomProvider>(context);
+    log("[ChatScreenState-build()] Building ChatScreen...");
+    log("[ChatScreenState-build()] Recent chat room: ${recentRoomProvider.recentChatRoom}");
 
     if (recentRoomProvider.recentChatRoom == null) {
       return const Center(child: CircularProgressIndicator());

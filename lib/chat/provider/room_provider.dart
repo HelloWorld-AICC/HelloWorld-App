@@ -20,6 +20,7 @@ class RoomProvider extends ChangeNotifier {
   Future<void> _fetchRooms() async {
     try {
       final roomList = await _roomService.fetchRoomList();
+      log("[RoomProvider-fetchRooms()] Rooms: $roomList");
       _rooms = roomList;
       notifyListeners();
     } catch (e) {

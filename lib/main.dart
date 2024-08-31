@@ -79,16 +79,7 @@ void main() async {
 
   // isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
 
-  final RecentRoomService recentRoomService = RecentRoomService(
-    baseUrl: "http://15.165.84.103:8082/chat/recent-room",
-    userId: "1",
-  );
-
-  final RouteService routeService = RouteService(
-    recentRoomService,
-    isUserLoggedIn: _checkUserLoggedIn(authService),
-  );
-
+  /*
   final TokenAuthenticator tokenAuthenticator = TokenAuthenticator(
     dio,
     'https://example.com/', // Base URL
@@ -97,6 +88,19 @@ void main() async {
   );
 
   setupDio(dio, tokenAuthenticator);
+  */
+
+  final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
+  RecentRoomService recentRoomService = RecentRoomService(
+    baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
+    userId: '1',
+    recentRoomProvider: recentRoomProvider,
+  );
+  final routeService = RouteService(
+    recentRoomService,
+    isUserLoggedIn:
+        Future.value(true), // Replace true with your actual login status check
+  );
 
   runApp(
     EasyLocalization(
@@ -113,12 +117,7 @@ void main() async {
           ChangeNotifierProvider(create: (_) => LocaleProvider()),
           ChangeNotifierProvider(create: (_) => RoomProvider()),
           ChangeNotifierProvider(
-            create: (_) => RecentRoomProvider(
-              RecentRoomService(
-                baseUrl: 'http://15.165.84.103:8082',
-                userId: '1',
-              ),
-            ),
+            create: (_) => RecentRoomProvider(),
           ),
         ],
         child: MainApp(

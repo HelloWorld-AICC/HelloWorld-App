@@ -5,15 +5,22 @@ import 'package:http/http.dart' as http;
 
 import '../model/room/chat_log.dart';
 import '../model/room/room.dart';
+import '../provider/recent_room_provider.dart'; // Import the provider
 
 class RecentRoomService {
   final String baseUrl;
   final String userId;
+  final RecentRoomProvider recentRoomProvider; // Add reference to the provider
 
-  RecentRoomService({required this.baseUrl, required this.userId});
+  RecentRoomService({
+    required this.baseUrl,
+    required this.userId,
+    required this.recentRoomProvider,
+  });
 
-  // Fetch recent chat room data and return as a Room instance
-  Future<Room> fetchRecentChatRoom() async {
+  // Fetch recent chat room data and notify the provider
+  Future<void> fetchRecentChatRoom() async {
+    log("[RecentRoomService] Request is being sent to: $baseUrl with user_id: $userId");
     try {
       final response = await http.get(
         Uri.parse(baseUrl),
@@ -22,15 +29,16 @@ class RecentRoomService {
           'user_id': userId,
         },
       );
-      // log("[RecentRoomService] Request: $baseUrl, user_id: $userId");
       log("[RecentRoomService] Response: ${response.body}");
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
         log("[RecentRoomService] Data: $data");
 
-        // Parse and return the Room model
-        return _parseRoomFromResponse(data);
+        // Parse and update the provider with the Room model
+        Room room = _parseRoomFromResponse(data);
+        recentRoomProvider
+            .updateRoom(room); // Update the provider with new data
       } else {
         log('[RecentRoomService-fetchRecentChatRoom] Error fetching recent chat room: ${response.statusCode}');
         throw Exception('Failed to load recent chat room');

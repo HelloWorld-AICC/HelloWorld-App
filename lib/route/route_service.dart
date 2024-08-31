@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/chat/model/room/room.dart';
+import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
 
 import '../auth/view/login_screen.dart';
@@ -23,7 +24,9 @@ List<String> bottomNavItems = [
 class RouteService {
   final Future<bool> isUserLoggedIn;
   String? _recentRoomId;
+
   final RecentRoomService _recentRoomService;
+  final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
 
   RouteService(
     this._recentRoomService, {
@@ -33,11 +36,19 @@ class RouteService {
   String? get recentRoomId => _recentRoomId;
 
   Future<List<String>> getRoutes() async {
-    Room temp = await _recentRoomService.fetchRecentChatRoom();
+    log("[RouteService-getRoutes()] Fetching recent room ID...");
+    RecentRoomService recentRoomService = RecentRoomService(
+      baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
+      userId: '1',
+      recentRoomProvider: recentRoomProvider,
+    );
+    Room temp = recentRoomProvider.recentChatRoom ??
+        Room(title: '', roomId: 'new_chat');
     _recentRoomId = temp.roomId;
 
-    final recentRoomIdPath =
-        _recentRoomId != null ? '/chat/${_recentRoomId!}' : '/new_chat';
+    final recentRoomIdPath = _recentRoomId != null
+        ? '/chat/${_recentRoomId!}'
+        : '/new_chat'; // 로직 중복됨.. 추후 수정 필요
     return [
       recentRoomIdPath, // This will include the recent roomId
       '/callbot',
@@ -50,7 +61,7 @@ class RouteService {
     return GoRouter(
       redirect: (context, state) async {
         final firstLaunch = await CheckInitialization.performInitialization();
-        log("[RouteService] firstLaunch: $firstLaunch");
+        log("[RouteService-get()] firstLaunch: $firstLaunch");
 
         var loggedIn = await isUserLoggedIn;
         loggedIn = true; // 테스트용으로 강제 로그인 상태

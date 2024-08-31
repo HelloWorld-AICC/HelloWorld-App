@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import 'chat/model/room/room.dart';
+import 'chat/provider/recent_room_provider.dart';
 import 'chat/service/recent_room_service.dart';
 import 'locale/locale_provider.dart';
 import 'route/route_service.dart';
@@ -20,10 +20,34 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _recentRoomId = 'new_chat'; // Store the recent room ID
 
-  final RecentRoomService _recentRoomService = RecentRoomService(
-    baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
-    userId: '1',
-  );
+  late RecentRoomService _recentRoomService;
+
+  @override
+  void initState() {
+    super.initState();
+    final recentRoomProvider =
+        Provider.of<RecentRoomProvider>(context, listen: false);
+    _recentRoomService = RecentRoomService(
+      baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
+      userId: '1',
+      recentRoomProvider: recentRoomProvider,
+    );
+    _fetchRecentRoomId();
+  }
+
+  Future<void> _fetchRecentRoomId() async {
+    try {
+      await _recentRoomService.fetchRecentChatRoom();
+      setState(() {
+        _recentRoomId =
+            context.read<RecentRoomProvider>().recentChatRoom?.roomId ??
+                'new_chat';
+      });
+    } catch (e) {
+      log('Error fetching recent room ID: $e');
+      _recentRoomId = 'new_chat'; // Fallback in case of error
+    }
+  }
 
   List<String> _getImages() {
     return [
@@ -35,12 +59,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<List<String>> _getRoutes() async {
-    _recentRoomId = _recentRoomId == 'new_chat'
-        ? await _recentRoomService
-            .fetchRecentChatRoom()
-            .then((value) => value.roomId)
-        : _recentRoomId;
-    log("[HomeScreen-GetRoutes] Recent room ID: $_recentRoomId");
+    if (_recentRoomId == 'new_chat') {
+      await _fetchRecentRoomId();
+    }
 
     return [
       '/chat/$_recentRoomId', // Updated to include roomId
@@ -48,15 +69,6 @@ class _HomeScreenState extends State<HomeScreen> {
       '/resume',
       '/job',
     ];
-  }
-
-  Future<void> fetchRecentRoomId() async {
-    try {
-      Room? temp = await _recentRoomService.fetchRecentChatRoom();
-      _recentRoomId = temp.roomId ?? 'new_chat';
-    } catch (e) {
-      print('Error fetching recent room ID: $e');
-    }
   }
 
   String _getTextForIndex(int index, BuildContext context) {
