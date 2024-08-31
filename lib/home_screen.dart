@@ -107,14 +107,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       Text(
                         "app_name",
                         style: TextStyle(
-                          fontSize: 28 * paddingVal / 100,
+                          fontSize: 32 * paddingVal / 100,
                           fontWeight: FontWeight.bold,
                         ),
                       ).tr(),
                       Text(
                         "Hello World",
                         style: TextStyle(
-                          fontSize: 28 * paddingVal / 100,
+                          fontSize: 32 * paddingVal / 100,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -151,7 +151,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisSpacing: 8.0 * paddingVal / 50,
                             mainAxisSpacing: 8.0 * paddingVal / 50,
                             childAspectRatio:
-                                1.2, // Aspect ratio for grid items
+                                1.0, // Aspect ratio for grid items
                           ),
                           itemCount: 4,
                           itemBuilder: (context, index) {
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           text,
                                           style: TextStyle(
                                             color: Colors.black,
-                                            fontSize: 20.0 * paddingVal / 100,
+                                            fontSize: 24.0 * paddingVal / 100,
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),

@@ -1,8 +1,11 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/chat/view/user_created_chat_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/room_provider.dart';
+import 'chat_screen.dart';
 
 class RoomDrawer extends StatelessWidget {
   const RoomDrawer({super.key});
@@ -21,7 +24,13 @@ class RoomDrawer extends StatelessWidget {
                   title: Text(room.title),
                   subtitle: Text(room.roomId),
                   onTap: () {
-                    context.go('/reopenedChat/room/${room.roomId}');
+                    log("[RoomDrawer] Navigating to ChatScreen with roomId: ${room.roomId}");
+                    // Navigate to ChatScreen with the roomId
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => ChatScreen(roomId: room.roomId),
+                      ),
+                    );
                   },
                 );
               }),
@@ -58,15 +67,23 @@ class RoomDrawer extends StatelessWidget {
   }
 
   void _addRoomAndNavigate(BuildContext context) {
-    final dummyTitle = 'New Room ${DateTime.now().millisecondsSinceEpoch}';
     final dummyRoomId = 'room_${DateTime.now().millisecondsSinceEpoch}';
+    final dummyTitle = 'Not Yet Named Room_$dummyRoomId';
 
     // Call the provider to add the room
     context.read<RoomProvider>().addRoom(dummyTitle, dummyRoomId);
 
-    // Navigate to the new room
+    // Close the current screen and navigate to the new screen
+    Navigator.of(context)
+        .popUntil((route) => route.isFirst); // Pop to the root if necessary
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.go('/chat/room/$dummyRoomId');
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) =>
+              UserCreatedChatScreen(roomId: 'user_created_room_$dummyRoomId'),
+        ),
+      );
     });
   }
 }

@@ -8,24 +8,24 @@ import 'package:hello_world_mvp/route/route_service.dart';
 import 'package:provider/provider.dart';
 
 import '../model/chatting_state.dart';
-import '../model/room/room.dart';
 import '../provider/recent_room_provider.dart';
 import '../service/gpt_service.dart';
 import '../service/recent_room_service.dart';
 import '../service/room_service.dart';
+import 'chat_screen.dart';
 import 'common/custom_blue_button.dart';
 import 'room_drawer.dart';
 
 // ignore: must_be_immutable
-class ChatScreen extends StatefulWidget {
+class UserCreatedChatScreen extends StatefulWidget {
   late String roomId;
-  ChatScreen({super.key, this.roomId = 'new_chat'});
+  UserCreatedChatScreen({super.key, this.roomId = 'new_chat'});
 
   @override
-  ChatScreenState createState() => ChatScreenState();
+  UserCreatedChatScreenState createState() => UserCreatedChatScreenState();
 }
 
-class ChatScreenState extends State<ChatScreen>
+class UserCreatedChatScreenState extends State<UserCreatedChatScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -52,17 +52,7 @@ class ChatScreenState extends State<ChatScreen>
   @override
   void initState() {
     super.initState();
-    // Scroll to the bottom after the frame is rendered
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _scrollToBottom();
-    });
     _initializeServices();
-  }
-
-  void _scrollToBottom() {
-    if (_scrollController.hasClients) {
-      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
-    }
   }
 
   void _initializeServices() async {
@@ -76,13 +66,13 @@ class ChatScreenState extends State<ChatScreen>
           Provider.of<RecentRoomProvider>(context, listen: false),
     );
 
-    // Fetch recent chat room and update messages
-    Room room = await _recentRoomService.fetchRecentChatRoom();
-    for (var chatLog in room.chatLogs) {
-      // 백엔드 응답 에러
-      _addMessage(chatLog.content, chatLog.sender);
-      // log("[ChatScreenState-initState()] Chat Log: ${chatLog.sender} by ${chatLog.content}");
-    }
+    // // Fetch recent chat room and update messages
+    // Room room = await _recentRoomService.fetchRecentChatRoom();
+    // for (var chatLog in room.chatLogs) {
+    //   // 백엔드 응답 에러
+    //   _addMessage(chatLog.content, chatLog.sender);
+    //   log("[ChatScreenState-initState()] Chat Log: ${chatLog.sender} by ${chatLog.content}");
+    // }
 
     // Initialize GPTService
     _gptService = GPTService(roomId: widget.roomId);
@@ -95,7 +85,16 @@ class ChatScreenState extends State<ChatScreen>
         setState(() {
           widget.roomId = roomId;
         });
-        log("[ChatScreenState-initState()-listened] Room ID: $roomId");
+        log("[UserCreatedChatScreenState-initState()-listened] Room ID: $roomId");
+
+        if (roomId != widget.roomId) {
+          log("[UserCreatedChatScreenState-initState()-listened] Navigating to ChatScreen...");
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => ChatScreen(roomId: roomId),
+            ),
+          );
+        }
       } else {
         _messageStreamController.add(message);
       }
@@ -401,10 +400,9 @@ class ChatScreenState extends State<ChatScreen>
 
   @override
   Widget build(BuildContext context) {
-    selectedBottomNavIndex = 1;
     final paddingVal = MediaQuery.of(context).size.height * 0.1;
     final recentRoomProvider = Provider.of<RecentRoomProvider>(context);
-    log("[ChatScreenState-build()] Building ChatScreen...");
+    log("[UserCreatedChatScreenState-build()] Building ChatScreen...");
 
     if (recentRoomProvider.recentChatRoom == null) {
       return const Center(child: CircularProgressIndicator());

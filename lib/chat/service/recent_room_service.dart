@@ -19,7 +19,7 @@ class RecentRoomService {
   });
 
   // Fetch recent chat room data and notify the provider
-  Future<void> fetchRecentChatRoom() async {
+  Future<Room> fetchRecentChatRoom() async {
     // log("[RecentRoomService] Request is being sent to: $baseUrl with user_id: $userId");
     try {
       final response = await http.get(
@@ -39,6 +39,7 @@ class RecentRoomService {
         Room room = _parseRoomFromResponse(data);
         recentRoomProvider
             .updateRoom(room); // Update the provider with new data
+        return room;
       } else {
         log('[RecentRoomService-fetchRecentChatRoom] Error fetching recent chat room: ${response.statusCode}');
         throw Exception('Failed to load recent chat room');
