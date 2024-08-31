@@ -16,25 +16,27 @@ class RecentRoomService {
   Future<Room> fetchRecentChatRoom() async {
     try {
       final response = await http.get(
-        Uri.parse('$baseUrl/chat/recent-room'),
+        Uri.parse(baseUrl),
         headers: {
           'Accept': '*/*',
           'user_id': userId,
         },
       );
-      log("[RecentRoomService] Request: $baseUrl/chat/recent-room");
+      // log("[RecentRoomService] Request: $baseUrl, user_id: $userId");
       log("[RecentRoomService] Response: ${response.body}");
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = json.decode(response.body);
+        log("[RecentRoomService] Data: $data");
 
         // Parse and return the Room model
         return _parseRoomFromResponse(data);
       } else {
+        log('[RecentRoomService-fetchRecentChatRoom] Error fetching recent chat room: ${response.statusCode}');
         throw Exception('Failed to load recent chat room');
       }
     } catch (e) {
-      log('Error fetching recent chat room: $e');
+      log('[RecentRoomService-fetchRecentChatRoom] Error fetching recent chat room: $e');
       throw Exception('Failed to load recent chat room: $e');
     }
   }

@@ -78,8 +78,6 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Consumer<LocaleProvider>(
       builder: (context, localeProvider, child) {
-        final currentLocale = localeProvider.locale ?? context.locale;
-
         final paddingVal = MediaQuery.of(context).size.height * 0.1;
 
         return Scaffold(

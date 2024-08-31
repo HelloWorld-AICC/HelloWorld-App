@@ -115,8 +115,8 @@ void main() async {
           ChangeNotifierProvider(
             create: (_) => RecentRoomProvider(
               RecentRoomService(
-                baseUrl: "http://15.165.84.103:8082",
-                userId: "1",
+                baseUrl: 'http://15.165.84.103:8082',
+                userId: '1',
               ),
             ),
           ),
@@ -147,11 +147,6 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
-    final recentRoomService = RecentRoomService(
-      baseUrl: "http://15.165.84.103:8082",
-      userId: "1",
-    );
-
     log("[MainApp] Detected locale: ${context.locale}");
 
     return Consumer<LocaleProvider>(
