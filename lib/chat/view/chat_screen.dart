@@ -27,11 +27,14 @@ class ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  final StreamController<String> _streamController = StreamController<String>();
 
   late AnimationController _animationController;
   late GPTService _gptService;
   late RoomService _roomService;
+
+  final StreamController<String> _streamController = StreamController<String>();
+  StringBuffer _messageBuffer = StringBuffer();
+  late StreamSubscription<String> _subscription;
 
   final List<Map<String, String>> _messages = [
     {'role': 'bot', 'content': tr('hello_message')}
@@ -42,29 +45,50 @@ class ChatScreenState extends State<ChatScreen>
   bool _isTyping = false;
 
   String _displayText = '';
-  String _fullText = '';
+  final String _fullText = '';
 
   List<Map<String, String>> roomList = [];
 
   @override
   void initState() {
     super.initState();
-    _gptService = GPTService.connect(
-        uri: Uri.parse(
-            'http://15.165.84.103:8082/chat/ask?roomId=${widget.roomId}'));
+    selectedBottomNavIndex = 1;
 
-    _gptService.stream.listen((data) async {
-      _fullText += data;
-      await _startTyping();
+    _gptService = GPTService(roomId: widget.roomId);
 
-      if (_displayText == _fullText) {
-        _addMessage('bot', _displayText);
-        _setTyping(false);
+    // 메시지 스트림 구독 및 UI 업데이트
+    _subscription = _gptService.messages.listen((message) {
+      if (message.startsWith('data:')) {
+        String extractedMessage = message.substring(5).trim();
+
+        if (extractedMessage.startsWith('Room ID: ')) {
+          // 메시지 버퍼에 저장된 내용 추가
+          if (_messageBuffer.isNotEmpty) {
+            setState(() {
+              _addDelayedMessage('bot', _messageBuffer.toString());
+              log("[ChatScreenState-initState()-listened] Added message: ${_messageBuffer.toString()}");
+              _messageBuffer.clear();
+            });
+          }
+
+          // roomId 처리
+          String roomId = extractedMessage.substring(10).trim();
+          log("[ChatScreenState-initState()-listened] Room ID: $roomId");
+        } else {
+          // 일반 메시지 처리
+          _messageBuffer.write(extractedMessage);
+
+          // 메시지의 끝을 확인하고, 완성된 메시지를 추가
+          setState(() {
+            _addDelayedMessage('bot', _messageBuffer.toString());
+            log("[ChatScreenState-initState()-listened] Added message: ${_messageBuffer.toString()}");
+            _messageBuffer.clear();
+          });
+        }
+
+        // 로그 출력 (디버깅 용도)
+        log("[ChatScreenState-initState()] Extracted message: $extractedMessage");
       }
-    }, onError: (e) {
-      _setTyping(false);
-      _addMessage('bot', 'Error: Could not fetch response from GPT. $e');
-      log('[ChatScreenState-sendMessage()] Error: Could not fetch response from GPT. $e');
     });
 
     _roomService = RoomService();
@@ -94,7 +118,8 @@ class ChatScreenState extends State<ChatScreen>
     _scrollController.dispose();
     _animationController.dispose();
     _streamController.close();
-    _gptService.close();
+
+    _subscription.cancel(); // 스트림 구독 취소
     super.dispose();
   }
 
@@ -138,57 +163,6 @@ class ChatScreenState extends State<ChatScreen>
     });
   }
 
-  Future<void> _sendMessage() async {
-    final message = _controller.text;
-
-    if (message.isEmpty) return;
-
-    _addMessage('user', message);
-    _controller.clear();
-    _setTyping(true);
-
-    if (message == '시작') {
-      _addMessage('bot', '문의 내용을 선택해 주세요.');
-      _setChattingState(ChattingState.listView);
-      return;
-    }
-
-    try {
-      // Send the message using the existing _gptService
-      String? currentRoomId = widget.roomId;
-      log('[ChatScreenState-sendMessage()] Current room ID: $currentRoomId');
-      await _gptService.sendMessage(currentRoomId, message);
-
-      // Listen to the existing SSE stream
-      _gptService.stream.listen(
-        (data) async {
-          _fullText += data;
-          await _startTyping();
-
-          if (_displayText == _fullText) {
-            _addMessage('bot', _displayText);
-            _setTyping(false);
-          }
-        },
-        onError: (error) {
-          _setTyping(false);
-          _addMessage(
-              'bot', 'Error: Could not fetch response from GPT. $error');
-          log('[ChatScreenState-sendMessage()-listening] Error: $error');
-        },
-        onDone: () {
-          _setTyping(false);
-          log('[ChatScreenState-sendMessage()] SSE stream closed.');
-        },
-      );
-    } catch (e) {
-      _setTyping(false);
-      _addMessage('bot', 'Error: Could not fetch response from GPT. $e');
-      log('[ChatScreenState-sendMessage()] Error: $e');
-    }
-    return;
-  }
-
 /*
   Future<void> _sendMessage() async {
     final message = _controller.text;
@@ -228,6 +202,7 @@ class ChatScreenState extends State<ChatScreen>
   void _addMessage(String role, String content) {
     setState(() {
       _messages.add({'role': role, 'content': content});
+      log("[ChatScreenState-_addMessage()] Added message: $content");
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -406,7 +381,14 @@ class ChatScreenState extends State<ChatScreen>
                 hintText: '메시지 입력',
               ),
               onSubmitted: (value) {
-                _sendMessage();
+                _gptService.addMessage(value);
+                _messageBuffer = StringBuffer();
+                _messageBuffer = StringBuffer(value);
+
+                setState(() {
+                  _addMessage('user', value);
+                });
+                _controller.clear();
               },
             ),
           ),
