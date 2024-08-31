@@ -34,6 +34,7 @@ class _ResumeScreenState extends State<ResumeScreen>
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
+        backgroundColor: Colors.grey[200],
         centerTitle: true,
         title: Text(
           'resumeTitle'.tr(),

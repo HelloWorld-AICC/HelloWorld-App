@@ -42,5 +42,58 @@
   "projectA": "Project A: Shopping App Development with Flutter",
   "projectB": "Project B: Machine Learning-Based Recommendation System",
   "startButton": "Start",
-  "inputHint": "Type your message"
+  "inputHint": "Type your message",
+  "resume": {
+    "experienceTitle": "Experience",
+    "educationTitle": "Education",
+    "skillsTitle": "Skills",
+    "certificationsTitle": "Certifications",
+    "projectsTitle": "Projects",
+    "experience": {
+      "company": "Hyundai",
+      "duration": "2022.01 ~ 2024.08",
+      "position": "Software Intern",
+      "details": {
+        "detail1": "Improved app performance by identifying and fixing bugs, resulting in a 15% increase in app speed.",
+        "detail2": "Contributed to the successful implementation of a new feature, leading to a 20% increase in user engagement.",
+        "detail3": "Enhanced app stability by conducting thorough testing and resolving critical issues, reducing crashes by 25%."
+      }
+    },
+    "education": {
+      "institution": "Seoul National University",
+      "duration": "2017.03 ~ 2021.02",
+      "degree": "Bachelor in Computer Science",
+      "details": {
+        "detail1": "Participated in research on machine learning algorithms.",
+        "detail2": "Developed a mobile app as part of a senior project, which was awarded the best project in the class.",
+        "detail3": "Completed coursework in data structures, algorithms, and software engineering with top grades."
+      }
+    },
+    "skills": {
+      "languages": "Programming Languages: Dart, Java, Python",
+      "frameworks": "Frameworks: Flutter, Spring Boot",
+      "databases": "Databases: MySQL, MongoDB",
+      "tools": "Tools: Git, Docker, Jenkins",
+      "others": "Others: RESTful APIs, Agile Development"
+    },
+    "certifications": {
+      "cert1": "Google Certified Associate Android Developer",
+      "cert2": "AWS Certified Solutions Architect – Associate",
+      "cert3": "Certified ScrumMaster (CSM)"
+    },
+    "projects": {
+      "projectA": {
+        "title": "Project A: Shopping App Development with Flutter",
+        "duration": "2023.03 ~ 2023.12",
+        "description": "Developed a shopping app with a user-friendly UI. Key features include a shopping cart, order tracking, and user review system.",
+        "contribution": "Contribution: Frontend and backend development, API integration"
+      },
+      "projectB": {
+        "title": "Project B: Machine Learning-based Recommendation System",
+        "duration": "2022.06 ~ 2022.12",
+        "description": "Developed a system that provides personalized recommendations by analyzing user behavior. Conducted data analysis and model training.",
+        "contribution": "Contribution: Data preprocessing, model training and evaluation, results analysis"
+      }
+    }
+  }
 }

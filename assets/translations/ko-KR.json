@@ -42,5 +42,58 @@
   "projectA": "프로젝트 A: Flutter 기반의 쇼핑 앱 개발",
   "projectB": "프로젝트 B: Machine Learning 기반의 추천 시스템",
   "startButton": "시작",
-  "inputHint": "메시지 입력"
+  "inputHint": "메시지 입력",
+  "resume": {
+    "experienceTitle": "경력",
+    "educationTitle": "학력",
+    "skillsTitle": "기술",
+    "certificationsTitle": "자격증",
+    "projectsTitle": "프로젝트",
+    "experience": {
+      "company": "현대자동차",
+      "duration": "2022.01 ~ 2024.08",
+      "position": "소프트웨어 인턴",
+      "details": {
+        "detail1": "버그를 식별하고 수정하여 앱 성능을 개선했습니다. 결과적으로 앱 속도가 15% 향상되었습니다.",
+        "detail2": "새로운 기능을 성공적으로 구현하여 사용자 참여도가 20% 증가했습니다.",
+        "detail3": "철저한 테스트를 수행하고 치명적인 문제를 해결하여 앱 안정성을 향상시켰습니다. 결과적으로 충돌이 25% 감소했습니다."
+      }
+    },
+    "education": {
+      "institution": "서울대학교",
+      "duration": "2017.03 ~ 2021.02",
+      "degree": "컴퓨터 공학과 학사",
+      "details": {
+        "detail1": "기계 학습 알고리즘에 대한 연구에 참여했습니다.",
+        "detail2": "졸업 프로젝트의 일환으로 모바일 앱을 개발했으며, 클래스에서 최고의 프로젝트로 선정되었습니다.",
+        "detail3": "데이터 구조, 알고리즘, 소프트웨어 공학 관련 과정을 우수한 성적으로 마쳤습니다."
+      }
+    },
+    "skills": {
+      "languages": "프로그래밍 언어: Dart, Java, Python",
+      "frameworks": "프레임워크: Flutter, Spring Boot",
+      "databases": "데이터베이스: MySQL, MongoDB",
+      "tools": "도구: Git, Docker, Jenkins",
+      "others": "기타: RESTful APIs, Agile Development"
+    },
+    "certifications": {
+      "cert1": "구글 인증 어소시에이트 안드로이드 개발자",
+      "cert2": "AWS 공인 솔루션 아키텍트 – 어소시에이트",
+      "cert3": "인증 스크럼 마스터 (CSM)"
+    },
+    "projects": {
+      "projectA": {
+        "title": "프로젝트 A: Flutter 기반의 쇼핑 앱 개발",
+        "duration": "2023.03 ~ 2023.12",
+        "description": "사용자 친화적인 UI를 갖춘 쇼핑 앱을 개발했습니다. 주요 기능으로는 장바구니, 주문 추적, 사용자 리뷰 시스템이 포함됩니다.",
+        "contribution": "기여: 앱의 프론트엔드 및 백엔드 개발, API 통합"
+      },
+      "projectB": {
+        "title": "프로젝트 B: 기계 학습 기반 추천 시스템",
+        "duration": "2022.06 ~ 2022.12",
+        "description": "사용자의 행동을 분석하여 개인화된 추천을 제공하는 시스템을 개발했습니다. 데이터 분석 및 모델 훈련을 수행했습니다.",
+        "contribution": "기여: 데이터 전처리, 모델 훈련 및 평가, 결과 분석"
+      }
+    }
+  }
 }
