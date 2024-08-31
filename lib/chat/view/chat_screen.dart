@@ -15,9 +15,10 @@ import '../service/room_service.dart';
 import 'common/custom_blue_button.dart';
 import 'room_drawer.dart';
 
+// ignore: must_be_immutable
 class ChatScreen extends StatefulWidget {
-  final String roomId;
-  const ChatScreen({super.key, this.roomId = 'new_chat'});
+  late String roomId;
+  ChatScreen({super.key, this.roomId = 'new_chat'});
 
   @override
   ChatScreenState createState() => ChatScreenState();
@@ -32,8 +33,8 @@ class ChatScreenState extends State<ChatScreen>
   late GPTService _gptService;
   late RoomService _roomService;
 
-  final StreamController<String> _streamController = StreamController<String>();
-  StringBuffer _messageBuffer = StringBuffer();
+  final StreamController<String> _messageStreamController =
+      StreamController<String>();
   late StreamSubscription<String> _subscription;
 
   final List<Map<String, String>> _messages = [
@@ -44,10 +45,7 @@ class ChatScreenState extends State<ChatScreen>
 
   bool _isTyping = false;
 
-  String _displayText = '';
-  final String _fullText = '';
-
-  List<Map<String, String>> roomList = [];
+  final List<Map<String, String>> roomList = [];
 
   @override
   void initState() {
@@ -58,47 +56,28 @@ class ChatScreenState extends State<ChatScreen>
 
     // 메시지 스트림 구독 및 UI 업데이트
     _subscription = _gptService.messages.listen((message) {
-      if (message.startsWith('data:')) {
+      if (message.startsWith('data:Room ID: ')) {
         String extractedMessage = message.substring(5).trim();
-
-        if (extractedMessage.startsWith('Room ID: ')) {
-          // 메시지 버퍼에 저장된 내용 추가
-          if (_messageBuffer.isNotEmpty) {
-            setState(() {
-              _addDelayedMessage('bot', _messageBuffer.toString());
-              log("[ChatScreenState-initState()-listened] Added message: ${_messageBuffer.toString()}");
-              _messageBuffer.clear();
-            });
-          }
-
-          // roomId 처리
-          String roomId = extractedMessage.substring(10).trim();
-          log("[ChatScreenState-initState()-listened] Room ID: $roomId");
-        } else {
-          // 일반 메시지 처리
-          _messageBuffer.write(extractedMessage);
-
-          // 메시지의 끝을 확인하고, 완성된 메시지를 추가
-          setState(() {
-            _addDelayedMessage('bot', _messageBuffer.toString());
-            log("[ChatScreenState-initState()-listened] Added message: ${_messageBuffer.toString()}");
-            _messageBuffer.clear();
-          });
-        }
-
-        // 로그 출력 (디버깅 용도)
-        log("[ChatScreenState-initState()] Extracted message: $extractedMessage");
+        String roomId = extractedMessage.substring(10).trim();
+        widget.roomId = roomId;
+        log("[ChatScreenState-initState()-listened] Room ID: $roomId");
+      } else {
+        _messageStreamController.add(message);
       }
+
+      // Scroll to the bottom of the list when a new message is added
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
     });
 
     _roomService = RoomService();
 
     _initialize();
-
-    // final recentRoomProvider =
-    //     Provider.of<RecentRoomProvider>(context, listen: false);
-    // log("[ChatScreenState-initState()] Fetching recent chat room...");
-    // recentRoomProvider.fetchRecentChatRoom(); // Fetch chat room data
 
     final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
     RecentRoomService recentRoomService = RecentRoomService(
@@ -117,7 +96,7 @@ class ChatScreenState extends State<ChatScreen>
     _controller.dispose();
     _scrollController.dispose();
     _animationController.dispose();
-    _streamController.close();
+    _messageStreamController.close();
 
     _subscription.cancel(); // 스트림 구독 취소
     super.dispose();
@@ -136,12 +115,10 @@ class ChatScreenState extends State<ChatScreen>
     try {
       final rooms = await _roomService.fetchRoomList();
       setState(() {
-        roomList = rooms
-            .map((room) => {
-                  'roomId': room.roomId,
-                  'title': room.title,
-                })
-            .toList();
+        roomList.addAll(rooms.map((room) => {
+              'roomId': room.roomId,
+              'title': room.title,
+            }));
       });
     } catch (e) {
       log('Error fetching room list: $e');
@@ -163,48 +140,12 @@ class ChatScreenState extends State<ChatScreen>
     });
   }
 
-/*
-  Future<void> _sendMessage() async {
-    final message = _controller.text;
-
-    if (message.isEmpty) return;
-
-    _addMessage('user', message);
-    _controller.clear();
-    _setTyping(true);
-
-    if (message == '시작') {
-      _addMessage('bot', '문의 내용을 선택해 주세요. \n\n처음으로 돌아오려면 시작을 입력해주세요.');
-      _setChattingState(ChattingState.listView);
-      return;
-    }
-
-    try {
-      await _gptService.sendMessage('66ab9a96f7265b2a2b1b5130', message);
-
-      _streamController.stream.listen((data) async {
-        _fullText = data;
-        await _startTyping();
-
-        if (_displayText == _fullText) {
-          _addMessage('bot', _displayText);
-          _setTyping(false);
-        }
-      });
-    } catch (e) {
-      _setTyping(false);
-      _addMessage('bot', 'Error: Could not fetch response from GPT. $e');
-      log('[ChatScreenState-sendMessage()] Error: Could not fetch response from GPT. $e');
-    }
-  }
-*/
-
   void _addMessage(String role, String content) {
     setState(() {
       _messages.add({'role': role, 'content': content});
-      log("[ChatScreenState-_addMessage()] Added message: $content");
     });
 
+    // Scroll to the bottom of the list when a new message is added
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollController.animateTo(
         _scrollController.position.maxScrollExtent,
@@ -214,17 +155,37 @@ class ChatScreenState extends State<ChatScreen>
     });
   }
 
-  Future<void> _startTyping() async {
+  Future<void> _addDelayedMessageV2(String role, String content) async {
+    _setTyping(true);
     setState(() {
-      _displayText = '';
+      _messages
+          .add({'role': role, 'content': ''}); // Placeholder for typing effect
     });
 
-    for (int i = 0; i < _fullText.length; i++) {
+    StringBuffer displayTextBuffer = StringBuffer();
+    for (int i = 0; i < content.length; i++) {
       await Future.delayed(const Duration(milliseconds: 50));
+      displayTextBuffer.write(content[i]);
       setState(() {
-        _displayText += _fullText[i];
+        _messages.last = {
+          'role': role,
+          'content': displayTextBuffer.toString(),
+        };
+      });
+
+      // Scroll to the bottom if needed
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollController.animateTo(
+          _scrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
       });
     }
+
+    setState(() {
+      _isTyping = false;
+    });
   }
 
   List<Widget> _buildActionButtons() {
@@ -242,7 +203,7 @@ class ChatScreenState extends State<ChatScreen>
             text: tr('start_button'),
             onPressed: () {
               _addMessage('user', tr('start_button'));
-              _addDelayedMessage('bot', tr('choose_question'));
+              _addDelayedMessageV2('bot', tr('choose_question'));
               _setChattingState(ChattingState.listView);
             },
           ),
@@ -257,7 +218,7 @@ class ChatScreenState extends State<ChatScreen>
               _setTyping(false);
               _setChattingState(ChattingState.detailView);
               _addMessage('user', content);
-              _addDelayedMessage(
+              _addDelayedMessageV2(
                 'bot',
                 tr(
                   'answer_message',
@@ -327,43 +288,58 @@ class ChatScreenState extends State<ChatScreen>
   }
 
   Widget _buildMessageList() {
-    return ListView.builder(
-      controller: _scrollController,
-      itemCount: _messages.length,
-      itemBuilder: (context, index) {
-        final message = _messages[index];
-        final isUser = message['role'] == 'user';
+    return StreamBuilder<String>(
+      stream: _messageStreamController.stream,
+      builder: (context, snapshot) {
+        final messages = List<Map<String, String>>.from(_messages);
+        if (snapshot.hasData) {
+          messages.add({'role': 'bot', 'content': snapshot.data!});
+        }
 
-        return Column(
-          crossAxisAlignment:
-              isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            Container(
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-              margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              constraints: BoxConstraints(
-                maxWidth: MediaQuery.of(context).size.width * 0.7,
-              ),
-              decoration: BoxDecoration(
-                color:
-                    isUser ? const Color(0xFFDFEAFF) : const Color(0xFFF4F4F4),
-                borderRadius: BorderRadius.only(
-                  topLeft: const Radius.circular(16),
-                  topRight: const Radius.circular(16),
-                  bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
-                  bottomRight: isUser ? Radius.zero : const Radius.circular(16),
+        return ListView.builder(
+          controller: _scrollController,
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
+            final message = messages[index];
+            final isUser = message['role'] == 'user';
+
+            return Column(
+              crossAxisAlignment:
+                  isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+              children: [
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width * 0.7,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isUser
+                        ? const Color(0xFFDFEAFF)
+                        : const Color(0xFFF4F4F4),
+                    borderRadius: BorderRadius.only(
+                      topLeft: const Radius.circular(16),
+                      topRight: const Radius.circular(16),
+                      bottomLeft:
+                          isUser ? const Radius.circular(16) : Radius.zero,
+                      bottomRight:
+                          isUser ? Radius.zero : const Radius.circular(16),
+                    ),
+                  ),
+                  child: Text(
+                    message['content']!,
+                    style: TextStyle(
+                      color: isUser ? const Color(0xFF1777E9) : Colors.black87,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
                 ),
-              ),
-              child: Text(
-                message['content']!,
-                style: TextStyle(
-                  color: isUser ? const Color(0xFF1777E9) : Colors.black87,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ],
+              ],
+            );
+          },
         );
       },
     );
@@ -377,18 +353,19 @@ class ChatScreenState extends State<ChatScreen>
           Expanded(
             child: TextField(
               controller: _controller,
-              decoration: const InputDecoration(
-                hintText: '메시지 입력',
+              decoration: InputDecoration(
+                hintText: tr('inputHint'),
               ),
               onSubmitted: (value) {
-                _gptService.addMessage(value);
-                _messageBuffer = StringBuffer();
-                _messageBuffer = StringBuffer(value);
+                if (value == tr("startButton")) {
+                  _setChattingState(ChattingState.initial);
+                }
 
-                setState(() {
-                  _addMessage('user', value);
-                });
+                _addMessage('user', value);
+                _gptService.addMessage(value);
+                // _messageStreamController.add(value);
                 _controller.clear();
+                _setTyping(false);
               },
             ),
           ),
@@ -408,7 +385,6 @@ class ChatScreenState extends State<ChatScreen>
     final paddingVal = MediaQuery.of(context).size.height * 0.1;
     final recentRoomProvider = Provider.of<RecentRoomProvider>(context);
     log("[ChatScreenState-build()] Building ChatScreen...");
-    // log("[ChatScreenState-build()] Recent chat room: ${recentRoomProvider.recentChatRoom}");
 
     if (recentRoomProvider.recentChatRoom == null) {
       return const Center(child: CircularProgressIndicator());
@@ -424,7 +400,7 @@ class ChatScreenState extends State<ChatScreen>
           style: TextStyle(
             color: const Color(0xff3369FF),
             fontWeight: FontWeight.bold,
-            fontSize: 20 * paddingVal / 100,
+            fontSize: 28 * paddingVal / 100,
           ),
         ),
         actions: [
@@ -489,12 +465,5 @@ class ChatScreenState extends State<ChatScreen>
         iconSize: 24.0,
       ),
     );
-  }
-
-  void _addDelayedMessage(String role, String content) async {
-    _setTyping(true);
-    await Future.delayed(const Duration(seconds: 1));
-    _addMessage(role, content);
-    _setTyping(false);
   }
 }

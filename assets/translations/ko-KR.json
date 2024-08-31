@@ -40,5 +40,7 @@
   "certificationsTitle": "자격증",
   "projectsTitle": "프로젝트",
   "projectA": "프로젝트 A: Flutter 기반의 쇼핑 앱 개발",
-  "projectB": "프로젝트 B: Machine Learning 기반의 추천 시스템"
+  "projectB": "프로젝트 B: Machine Learning 기반의 추천 시스템",
+  "startButton": "시작",
+  "inputHint": "메시지 입력"
 }

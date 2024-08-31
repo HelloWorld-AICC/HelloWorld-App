@@ -40,5 +40,7 @@
   "certificationsTitle": "Certifications",
   "projectsTitle": "Projects",
   "projectA": "Project A: Shopping App Development with Flutter",
-  "projectB": "Project B: Machine Learning-Based Recommendation System"
+  "projectB": "Project B: Machine Learning-Based Recommendation System",
+  "startButton": "Start",
+  "inputHint": "Type your message"
 }

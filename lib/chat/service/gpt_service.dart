@@ -22,7 +22,6 @@ class GPTService {
             httpClient ?? http.Client(); // httpClient가 제공되지 않으면 기본값 사용
 
   void addMessage(String message) {
-    _controller.sink.add(message);
     _startListening(
         message, _roomId ?? 'new_chat'); // Pass the message to start listening
   }
@@ -42,7 +41,7 @@ class GPTService {
     StringBuffer finalResponse = StringBuffer();
 
     response.stream.transform(utf8.decoder).listen((data) {
-      _controller.sink.add(data);
+      // _controller.sink.add(data);
       log("Received data: $data");
 
       if (data.startsWith('data:')) {
@@ -56,10 +55,19 @@ class GPTService {
 
         // Append non-empty data or space to the StringBuffer
         if (data.startsWith('data:Room ID: ')) {
+          _controller.sink.add(data);
           _controller.close();
           log("roomId: $temp");
+        } else if (data.startsWith('data:') && temp == 'data:') {
+          finalResponse.write('\n');
+          log("Appended data: ${finalResponse.toString()}");
+        } else {
+          finalResponse.write(temp);
+          log("Appended data: ${finalResponse.toString()}");
+
+          // Sink the accumulated content to the stream
+          _controller.sink.add(finalResponse.toString());
         }
-        finalResponse.write(temp);
       }
     });
     log("Final response: ${finalResponse.toString()}");
