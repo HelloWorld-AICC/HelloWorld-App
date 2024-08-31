@@ -32,6 +32,7 @@ class _ResumeScreenState extends State<ResumeScreen>
     var paddingVal = MediaQuery.of(context).size.height * 0.1;
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         title: Text(

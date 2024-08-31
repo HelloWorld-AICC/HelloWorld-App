@@ -14,13 +14,26 @@ class CustomBlueButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    final dynamicPadding = EdgeInsets.symmetric(
+      vertical: screenHeight * 0.01,
+      horizontal: screenWidth * 0.03,
+    );
+
+    final dynamicMargin = EdgeInsets.symmetric(
+      vertical: screenHeight * 0.01, // 1% of screen height
+      horizontal: screenWidth * 0.01, // 2% of screen width
+    );
+
     return GestureDetector(
       onTap: onPressed,
       child: IntrinsicWidth(
         child: IntrinsicHeight(
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-            margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 6),
+            padding: dynamicPadding,
+            margin: dynamicMargin,
             decoration: BoxDecoration(
               color: isOutlined ? Colors.white : const Color(0xFF1777E9),
               borderRadius: BorderRadius.circular(12),
@@ -33,7 +46,8 @@ class CustomBlueButton extends StatelessWidget {
                 text,
                 style: TextStyle(
                   color: isOutlined ? const Color(0xFF1777E9) : Colors.white,
-                  fontSize: 16,
+                  fontSize: MediaQuery.of(context).size.width *
+                      0.04, // 4% of screen width
                   fontWeight: FontWeight.w600,
                 ),
               ),

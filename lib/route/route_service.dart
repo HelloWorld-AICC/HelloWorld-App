@@ -1,9 +1,11 @@
 import 'dart:developer';
 
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/chat/model/room/room.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
 
 import '../auth/view/login_screen.dart';
+import '../chat/service/recent_room_service.dart';
 import '../chat/view/chat_screen.dart';
 import '../home_screen.dart';
 import '../locale/first_launch_screen.dart';
@@ -20,10 +22,29 @@ List<String> bottomNavItems = [
 
 class RouteService {
   final Future<bool> isUserLoggedIn;
+  String? _recentRoomId;
+  final RecentRoomService _recentRoomService;
 
-  RouteService({
+  RouteService(
+    this._recentRoomService, {
     required this.isUserLoggedIn,
   });
+
+  String? get recentRoomId => _recentRoomId;
+
+  Future<List<String>> getRoutes() async {
+    Room temp = await _recentRoomService.fetchRecentChatRoom();
+    _recentRoomId = temp.roomId;
+
+    final recentRoomIdPath =
+        _recentRoomId != null ? '/chat/${_recentRoomId!}' : '/new_chat';
+    return [
+      recentRoomIdPath, // This will include the recent roomId
+      '/callbot',
+      '/resume',
+      '/job',
+    ];
+  }
 
   GoRouter get router {
     return GoRouter(

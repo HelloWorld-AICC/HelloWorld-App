@@ -33,27 +33,43 @@ class ChatScreenState extends State<ChatScreen>
   late RoomService _roomService;
 
   final List<Map<String, String>> _messages = [
-    {
-      'role': 'bot',
-      'content':
-          '안녕하세요. 챗봇입니다 😀 \n\n도움을 원하시는 경우, 아래 시작 버튼을 누르거나 채팅을 입력해주세요. \n\nAI가 제공하는 정보는 실제와 다를 수 있으니 참고용으로만 사용해주시기 바랍니다.'
-    }
+    {'role': 'bot', 'content': tr('hello_message')}
   ];
 
   ChattingState _chatPageState = ChattingState.initial;
+
   bool _isTyping = false;
+
   String _displayText = '';
   String _fullText = '';
+
   List<Map<String, String>> roomList = [];
   String? _currentRoomId;
 
   @override
   void initState() {
     super.initState();
-    _gptService = GPTService();
+    _gptService = GPTService.connect(
+        uri: Uri.parse(
+            'http://15.165.84.103:8082/chat/ask?roomId=${widget.roomId}'));
+
+    _gptService.stream.listen((data) async {
+      _fullText += data;
+      await _startTyping();
+
+      if (_displayText == _fullText) {
+        _addMessage('bot', _displayText);
+        _setTyping(false);
+      }
+    }, onError: (e) {
+      _setTyping(false);
+      _addMessage('bot', 'Error: Could not fetch response from GPT. $e');
+      log('[ChatScreenState-sendMessage()] Error: Could not fetch response from GPT. $e');
+    });
+
     _roomService = RoomService();
+
     _initialize();
-    // final roomId = widget.roomId;
 
     final recentRoomProvider =
         Provider.of<RecentRoomProvider>(context, listen: false);
@@ -66,6 +82,7 @@ class ChatScreenState extends State<ChatScreen>
     _scrollController.dispose();
     _animationController.dispose();
     _streamController.close();
+    _gptService.close();
     super.dispose();
   }
 
@@ -119,6 +136,56 @@ class ChatScreenState extends State<ChatScreen>
     _setTyping(true);
 
     if (message == '시작') {
+      _addMessage('bot', '문의 내용을 선택해 주세요.');
+      _setChattingState(ChattingState.listView);
+      return;
+    }
+
+    try {
+      // Send the message using the existing _gptService
+      await _gptService.sendMessage(_currentRoomId!, message);
+
+      // Listen to the existing SSE stream
+      _gptService.stream.listen(
+        (data) async {
+          _fullText += data;
+          await _startTyping();
+
+          if (_displayText == _fullText) {
+            _addMessage('bot', _displayText);
+            _setTyping(false);
+          }
+        },
+        onError: (error) {
+          _setTyping(false);
+          _addMessage(
+              'bot', 'Error: Could not fetch response from GPT. $error');
+          log('[ChatScreenState-sendMessage()-listening] Error: $error');
+        },
+        onDone: () {
+          _setTyping(false);
+          log('[ChatScreenState-sendMessage()] SSE stream closed.');
+        },
+      );
+    } catch (e) {
+      _setTyping(false);
+      _addMessage('bot', 'Error: Could not fetch response from GPT. $e');
+      log('[ChatScreenState-sendMessage()] Error: $e');
+    }
+    return;
+  }
+
+/*
+  Future<void> _sendMessage() async {
+    final message = _controller.text;
+
+    if (message.isEmpty) return;
+
+    _addMessage('user', message);
+    _controller.clear();
+    _setTyping(true);
+
+    if (message == '시작') {
       _addMessage('bot', '문의 내용을 선택해 주세요. \n\n처음으로 돌아오려면 시작을 입력해주세요.');
       _setChattingState(ChattingState.listView);
       return;
@@ -142,6 +209,7 @@ class ChatScreenState extends State<ChatScreen>
       log('[ChatScreenState-sendMessage()] Error: Could not fetch response from GPT. $e');
     }
   }
+*/
 
   void _addMessage(String role, String content) {
     setState(() {
@@ -348,7 +416,7 @@ class ChatScreenState extends State<ChatScreen>
       return const Center(child: CircularProgressIndicator());
     }
     final roomId = widget.roomId;
-    final chatLogs = recentRoomProvider.recentChatRoom?['chatLogs'] ?? [];
+    final chatLogs = recentRoomProvider.recentChatRoom?.chatLogs ?? [];
 
     return Scaffold(
       appBar: AppBar(

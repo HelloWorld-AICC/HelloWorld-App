@@ -79,7 +79,13 @@ void main() async {
 
   // isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
 
+  final RecentRoomService recentRoomService = RecentRoomService(
+    baseUrl: "http://15.165.84.103:8082/chat/recent-room",
+    userId: "1",
+  );
+
   final RouteService routeService = RouteService(
+    recentRoomService,
     isUserLoggedIn: _checkUserLoggedIn(authService),
   );
 
@@ -117,9 +123,7 @@ void main() async {
         ],
         child: MainApp(
           authService: authService,
-          routeService: RouteService(
-            isUserLoggedIn: _checkUserLoggedIn(authService),
-          ),
+          routeService: routeService,
         ),
       ),
     ),

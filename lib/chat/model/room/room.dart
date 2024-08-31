@@ -2,7 +2,7 @@ import 'chat_log.dart';
 
 class Room {
   final String title;
-  final String roomId;
+  String roomId;
   final List<ChatLog> chatLogs;
 
   Room({
@@ -15,6 +15,12 @@ class Room {
   void addChatLog(ChatLog chatLog) {
     chatLogs.add(chatLog);
   }
+
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'roomId': roomId,
+        'chatLogs': chatLogs.map((log) => log.toJson()).toList(),
+      };
 
   @override
   String toString() =>

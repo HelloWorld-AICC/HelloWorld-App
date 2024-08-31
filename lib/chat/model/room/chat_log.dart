@@ -7,6 +7,11 @@ class ChatLog {
     required this.sender,
   });
 
+  Map<String, dynamic> toJson() => {
+        'content': content,
+        'sender': sender,
+      };
+
   @override
   String toString() => 'ChatLog(content: $content, sender: $sender)';
 
