@@ -99,32 +99,35 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(24 * paddingVal / 100),
-          child: Wrap(
-            spacing: 8.0 * paddingVal / 100, // Horizontal space between tiles
-            runSpacing: 8.0 * paddingVal / 100, // Vertical space between lines
-            children: supportedLocales.map((locale) {
-              final isSelected = _selectedLocale == locale;
-              return ChoiceChip(
-                label: Text(
-                  _localeDisplayName(locale).tr(),
-                  style: TextStyle(
-                    color: isSelected ? Colors.white : Colors.black,
-                    fontSize: 16 * paddingVal / 100,
+        child: Center(
+          child: Padding(
+            padding: EdgeInsets.all(24 * paddingVal / 100),
+            child: Wrap(
+              spacing: 8.0 * paddingVal / 100, // Horizontal space between tiles
+              runSpacing:
+                  8.0 * paddingVal / 100, // Vertical space between lines
+              children: supportedLocales.map((locale) {
+                final isSelected = _selectedLocale == locale;
+                return ChoiceChip(
+                  label: Text(
+                    _localeDisplayName(locale).tr(),
+                    style: TextStyle(
+                      color: isSelected ? Colors.white : Colors.black,
+                      fontSize: 16 * paddingVal / 80,
+                    ),
                   ),
-                ),
-                selected: isSelected,
-                backgroundColor: Colors.grey[200],
-                selectedColor: Colors.blue,
-                onSelected: (selected) {
-                  // 로케일을 바로 변경하지 않고, 단지 선택된 로케일을 변경
-                  setState(() {
-                    _selectedLocale = locale;
-                  });
-                },
-              );
-            }).toList(),
+                  selected: isSelected,
+                  backgroundColor: Colors.grey[200],
+                  selectedColor: Colors.blue,
+                  onSelected: (selected) {
+                    // 로케일을 바로 변경하지 않고, 단지 선택된 로케일을 변경
+                    setState(() {
+                      _selectedLocale = locale;
+                    });
+                  },
+                );
+              }).toList(),
+            ),
           ),
         ),
       ),
@@ -168,7 +171,7 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
               : null,
           child: Text('confirm_button',
                   style: TextStyle(
-                      fontSize: 16 * paddingVal / 100,
+                      fontSize: 16 * paddingVal / 80,
                       fontWeight: FontWeight.bold))
               .tr(),
         ),

@@ -54,10 +54,30 @@ class _MyPageScreenState extends State<MyPageScreen> {
                       context.push('/edit-profile');
                     },
                   ),
-                  const SizedBox(height: 24),
+                  SizedBox(height: MediaQuery.of(context).size.height / 20),
                   buildName(user),
-                  const SizedBox(height: 24),
-                  buildLocaleChangeButton(context),
+                  SizedBox(height: MediaQuery.of(context).size.height / 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Language Preference",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 20),
+                      ),
+                      const Divider(),
+                      Text("Current Locale: ${context.locale}",
+                          style: const TextStyle(fontSize: 16)),
+                      SizedBox(height: MediaQuery.of(context).size.height / 60),
+                      ElevatedButton(
+                        onPressed: () {
+                          showLocaleSelectionDialog(context);
+                        },
+                        child: const Text('Change Locale'),
+                      ),
+                    ],
+                  )
+                  // buildLocaleChangeButton(context),
                 ],
               ),
             ),
@@ -117,7 +137,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
       elevation: 0,
       centerTitle: true,
       title: Text(
-        tr('MyPage'),
+        tr('my_page'),
         style: const TextStyle(
           color: Colors.black,
           fontSize: 24,
@@ -142,19 +162,22 @@ class _MyPageScreenState extends State<MyPageScreen> {
       );
 
   Widget buildLocaleChangeButton(BuildContext context) {
-    return IntrinsicWidth(
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          foregroundColor: Colors.white,
-          backgroundColor: Colors.blue, // 버튼의 배경 색상
-          shape: const StadiumBorder(), // 버튼의 모양
-          padding: const EdgeInsets.symmetric(
-              horizontal: 32, vertical: 12), // 버튼의 패딩
+    return SizedBox(
+      width: MediaQuery.of(context).size.width / 2,
+      child: Expanded(
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.blue, // 버튼의 배경 색상
+            shape: const StadiumBorder(), // 버튼의 모양
+            padding: const EdgeInsets.symmetric(
+                horizontal: 32, vertical: 12), // 버튼의 패딩
+          ),
+          onPressed: () {
+            showLocaleSelectionDialog(context);
+          },
+          child: Text(tr('change_locale_button')),
         ),
-        onPressed: () {
-          showLocaleSelectionDialog(context);
-        },
-        child: Text(tr('change_locale_button')),
       ),
     );
   }

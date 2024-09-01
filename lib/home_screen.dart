@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Padding(
-            padding: EdgeInsets.all(paddingVal / 1.4),
+            padding: EdgeInsets.all(paddingVal / 1.6),
             child: Column(
               children: [
                 Container(
@@ -105,12 +105,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "app_name",
+                        "${tr("app_name")},",
                         style: TextStyle(
                           fontSize: 32 * paddingVal / 100,
                           fontWeight: FontWeight.bold,
                         ),
-                      ).tr(),
+                      ),
                       Text(
                         "Hello World",
                         style: TextStyle(
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Container(
                   alignment: Alignment.centerRight,
-                  margin: EdgeInsets.only(bottom: 16 * paddingVal / 100),
+                  margin: EdgeInsets.only(bottom: 8 * paddingVal / 100),
                   child: SizedBox(
                     width: 250.0 * paddingVal / 100, // Width of the image
                     height: 300.0 * paddingVal / 100, // Height of the image
@@ -150,8 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisCount: 2,
                             crossAxisSpacing: 8.0 * paddingVal / 50,
                             mainAxisSpacing: 8.0 * paddingVal / 50,
-                            childAspectRatio:
-                                1.0, // Aspect ratio for grid items
+                            childAspectRatio: 1, // Aspect ratio for grid items
                           ),
                           itemCount: 4,
                           itemBuilder: (context, index) {
@@ -171,8 +170,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: Container(
                                 decoration: BoxDecoration(
                                   color:
-                                      const Color(0xFFB2B2F0).withOpacity(0.04),
+                                      const Color.fromARGB(255, 224, 224, 224)
+                                          .withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(15.0),
+                                  border: Border.all(
+                                    color: const Color(0xFFB2B2F0)
+                                        .withOpacity(0.3),
+                                  ),
                                   boxShadow: [
                                     BoxShadow(
                                       color: const Color(0xFFB2B2F0)
@@ -184,7 +188,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(1.0),
+                                  padding: const EdgeInsets.all(3.0),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -204,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       Expanded(
                                         child: Align(
                                           alignment: Alignment
-                                              .bottomRight, // Align image to bottom-right
+                                              .centerRight, // Align image to bottom-right
                                           child: Padding(
                                             padding: EdgeInsets.all(
                                                 8.0 * paddingVal / 100),
