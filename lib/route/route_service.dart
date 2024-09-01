@@ -7,6 +7,7 @@ import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
 import 'package:hello_world_mvp/personal/view/edit_profile_screen.dart';
 
 import '../auth/view/login_screen.dart';
+import '../call_bot_screen.dart';
 import '../chat/service/recent_room_service.dart';
 import '../chat/view/chat_screen.dart';
 import '../home_screen.dart';
@@ -126,6 +127,10 @@ class RouteService {
         GoRoute(
           path: '/edit-profile',
           builder: (context, state) => const EditProfileScreen(),
+        ),
+        GoRoute(
+          path: '/callbot',
+          builder: (context, state) => const CallbotScreen(),
         ),
         // 다른 라우트 정의...
       ],

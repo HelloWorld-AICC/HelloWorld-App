@@ -51,7 +51,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                   ProfileWidget(
                     imagePath: user.imagePath,
                     onClicked: () {
-                      context.go('/edit-profile');
+                      context.push('/edit-profile');
                     },
                   ),
                   const SizedBox(height: 24),
@@ -154,7 +154,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
         onPressed: () {
           showLocaleSelectionDialog(context);
         },
-        child: Text(tr('Change Locale')),
+        child: Text(tr('change_locale_button')),
       ),
     );
   }
