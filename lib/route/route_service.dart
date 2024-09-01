@@ -4,12 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/chat/model/room/room.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
+import 'package:hello_world_mvp/personal/view/edit_profile_screen.dart';
 
 import '../auth/view/login_screen.dart';
 import '../chat/service/recent_room_service.dart';
 import '../chat/view/chat_screen.dart';
 import '../home_screen.dart';
 import '../locale/first_launch_screen.dart';
+import '../personal/view/my_page_screen.dart';
 import '../resume/resume_screen.dart';
 import 'check_initialization.dart';
 
@@ -116,6 +118,14 @@ class RouteService {
             return const ChatScreenReopened(); // Pass roomId to ChatScreenReopened
           },
           routes: const [],
+        ),
+        GoRoute(
+          path: '/profile',
+          builder: (context, state) => const MyPageScreen(),
+        ),
+        GoRoute(
+          path: '/edit-profile',
+          builder: (context, state) => const EditProfileScreen(),
         ),
         // 다른 라우트 정의...
       ],

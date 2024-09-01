@@ -1,3 +1,101 @@
 {
-  "login": "Login"
+  "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
+  "login_button": "Đăng nhập",
+  "select_language": "Vui lòng chọn ngôn ngữ",
+  "lan_en": "Tiếng Anh",
+  "lan_ko": "Tiếng Hàn",
+  "lan_ja": "Tiếng Nhật",
+  "lan_zh": "Tiếng Trung",
+  "lan_vi": "Tiếng Việt",
+  "confirm_button": "Xác nhận",
+  "chat_consultation": "Tư vấn qua chat",
+  "call_bot": "Gọi Bot",
+  "resume_writing": "Viết hồ sơ",
+  "job_information": "Thông tin việc làm",
+  "home": "Trang chủ",
+  "chat": "Chat",
+  "profile": "Hồ sơ",
+  "hello_message": "Chào! Tôi là chatbot của bạn 😀 \n\nĐể bắt đầu, hãy nhấn vào nút bên dưới hoặc nhập một tin nhắn. \n\nLưu ý rằng thông tin do AI cung cấp có thể không chính xác và chỉ nên được sử dụng để tham khảo.",
+  "start_button": "Bắt đầu",
+  "choose_question": "Vui lòng chọn câu hỏi của bạn. \n\nĐể quay lại, hãy nhập 'Start'.",
+  "answer_message": "Tôi sẽ trả lời về {content}. \nĐể hỏi thêm, hãy nhập tin nhắn của bạn. \nĐể quay lại, hãy nhập '{start_button}'.",
+  "law": "Luật",
+  "visa": "Thị thực",
+  "employment": "Việc làm",
+  "living": "Sống",
+  "help_needed": "Không. Tôi cần giúp đỡ.",
+  "input_hint": "Nhập tin nhắn của bạn",
+  "resumeTitle": "Hồ sơ",
+  "autoGenerateResume": "Tự động tạo hồ sơ",
+  "manageResume": "Quản lý hồ sơ",
+  "buttonText": "Chọn từ khóa",
+  "textFieldHint": "Nhập tiêu đề của bạn tại đây",
+  "infoSectionTitle": "Yunseo",
+  "phone": "010-1234-5678",
+  "email": "1234@gmail.com",
+  "intro": "Chào, tôi là Yunseo, một nhà phát triển đa nền tảng.",
+  "experienceTitle": "Kinh nghiệm",
+  "educationTitle": "Giáo dục",
+  "skillsTitle": "Kỹ năng kỹ thuật",
+  "certificationsTitle": "Chứng chỉ",
+  "projectsTitle": "Dự án",
+  "projectA": "Dự án A: Phát triển ứng dụng mua sắm với Flutter",
+  "projectB": "Dự án B: Hệ thống gợi ý dựa trên học máy",
+  "startButton": "Bắt đầu",
+  "inputHint": "Nhập tin nhắn của bạn",
+  "resume": {
+    "experienceTitle": "Kinh nghiệm",
+    "educationTitle": "Giáo dục",
+    "skillsTitle": "Kỹ năng",
+    "certificationsTitle": "Chứng chỉ",
+    "projectsTitle": "Dự án",
+    "experience": {
+      "company": "Hyundai",
+      "duration": "2022.01 ~ 2024.08",
+      "position": "Thực tập sinh phần mềm",
+      "details": {
+        "detail1": "Cải thiện hiệu suất ứng dụng bằng cách xác định và sửa lỗi, dẫn đến việc tăng tốc ứng dụng lên 15%.",
+        "detail2": "Đóng góp vào việc triển khai thành công một tính năng mới, dẫn đến việc tăng cường sự tương tác của người dùng lên 20%.",
+        "detail3": "Nâng cao độ ổn định của ứng dụng bằng cách thực hiện kiểm tra kỹ lưỡng và giải quyết các vấn đề quan trọng, giảm thiểu sự cố xuống 25%."
+      }
+    },
+    "education": {
+      "institution": "Đại học Quốc gia Seoul",
+      "duration": "2017.03 ~ 2021.02",
+      "degree": "Cử nhân Khoa học Máy tính",
+      "details": {
+        "detail1": "Tham gia nghiên cứu về các thuật toán học máy.",
+        "detail2": "Phát triển ứng dụng di động như một phần của dự án cuối khóa, được trao giải dự án xuất sắc nhất trong lớp.",
+        "detail3": "Hoàn thành khóa học về cấu trúc dữ liệu, thuật toán và kỹ thuật phần mềm với điểm số cao nhất."
+      }
+    },
+    "skills": {
+      "languages": "Ngôn ngữ lập trình: Dart, Java, Python",
+      "frameworks": "Các framework: Flutter, Spring Boot",
+      "databases": "Cơ sở dữ liệu: MySQL, MongoDB",
+      "tools": "Công cụ: Git, Docker, Jenkins",
+      "others": "Khác: RESTful APIs, Phát triển Agile"
+    },
+    "certifications": {
+      "cert1": "Chứng nhận Nhà phát triển Android Cấp độ Associate của Google",
+      "cert2": "Chứng nhận Kiến trúc sư giải pháp AWS – Cấp độ Associate",
+      "cert3": "Chứng nhận ScrumMaster (CSM)"
+    },
+    "projects": {
+      "projectA": {
+        "title": "Dự án A: Phát triển ứng dụng mua sắm với Flutter",
+        "duration": "2023.03 ~ 2023.12",
+        "description": "Phát triển ứng dụng mua sắm với giao diện người dùng thân thiện. Các tính năng chính bao gồm giỏ hàng, theo dõi đơn hàng và hệ thống đánh giá của người dùng.",
+        "contribution": "Đóng góp: Phát triển frontend và backend, tích hợp API"
+      },
+      "projectB": {
+        "title": "Dự án B: Hệ thống gợi ý dựa trên học máy",
+        "duration": "2022.06 ~ 2022.12",
+        "description": "Phát triển hệ thống cung cấp gợi ý cá nhân hóa bằng cách phân tích hành vi người dùng. Thực hiện phân tích dữ liệu và đào tạo mô hình.",
+        "contribution": "Đóng góp: Tiền xử lý dữ liệu, đào tạo và đánh giá mô hình, phân tích kết quả"
+      }
+    }
+  },
+  "change_locale_button": "Thay đổi ngôn ngữ",
+  "my_page": "Trang của tôi"
 }

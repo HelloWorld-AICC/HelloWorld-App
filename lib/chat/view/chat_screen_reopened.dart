@@ -349,7 +349,9 @@ class ChatScreenReopenedState extends State<ChatScreenReopened>
           SizedBox(width: 10 * paddingVal / 100),
         ],
       ),
-      drawer: const RoomDrawer(),
+      drawer: RoomDrawer(
+        currentRoomId: roomId,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(

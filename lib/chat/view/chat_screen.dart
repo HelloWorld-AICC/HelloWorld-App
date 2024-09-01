@@ -435,7 +435,9 @@ class ChatScreenState extends State<ChatScreen>
           SizedBox(width: 10 * paddingVal / 100),
         ],
       ),
-      drawer: const RoomDrawer(),
+      drawer: RoomDrawer(
+        currentRoomId: widget.roomId,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(
@@ -472,8 +474,21 @@ class ChatScreenState extends State<ChatScreen>
         ],
         currentIndex: selectedBottomNavIndex,
         onTap: (index) {
-          selectedBottomNavIndex = index;
-          context.go(bottomNavItems[index]);
+          setState(() {
+            selectedBottomNavIndex = index;
+          });
+
+          // Handle navigation based on the selected tab
+          if (index == 1) {
+            // Chat screen tab is tapped
+            if (widget.roomId == 'new_chat') {
+              context.go('/chat/new_chat');
+            } else {
+              context.go('/chat/${widget.roomId}');
+            }
+          } else {
+            context.go(bottomNavItems[index]);
+          }
         },
         selectedItemColor: const Color(0xff3369FF),
         unselectedItemColor: Colors.grey,

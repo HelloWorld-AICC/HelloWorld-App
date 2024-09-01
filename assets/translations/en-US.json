@@ -95,5 +95,7 @@
         "contribution": "Contribution: Data preprocessing, model training and evaluation, results analysis"
       }
     }
-  }
+  },
+  "change_locale_button": "Change Language",
+  "my_page": "My Page"
 }

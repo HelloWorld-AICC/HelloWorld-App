@@ -7,8 +7,24 @@ import 'package:provider/provider.dart';
 import '../provider/room_provider.dart';
 import 'chat_screen.dart';
 
-class RoomDrawer extends StatelessWidget {
-  const RoomDrawer({super.key});
+class RoomDrawer extends StatefulWidget {
+  final String currentRoomId;
+
+  const RoomDrawer({super.key, required this.currentRoomId});
+
+  @override
+  _RoomDrawerState createState() => _RoomDrawerState();
+}
+
+class _RoomDrawerState extends State<RoomDrawer> {
+  late String selectedRoomId;
+
+  @override
+  void initState() {
+    super.initState();
+    // 초기 selectedRoomId를 현재 roomId로 설정
+    selectedRoomId = widget.currentRoomId;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +37,27 @@ class RoomDrawer extends StatelessWidget {
               _buildDrawerHeader(context),
               ...roomProvider.rooms.map((room) {
                 return ListTile(
-                  title: Text(room.title),
-                  subtitle: Text(room.roomId),
+                  title: Text(
+                    room.title,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  subtitle: Text(
+                    room.roomId,
+                    style: const TextStyle(
+                      color: Colors.blue,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  selected: selectedRoomId == room.roomId,
+                  selectedTileColor: Colors.blue.shade100, // 선택된 항목의 배경색
                   onTap: () {
+                    setState(() {
+                      selectedRoomId = room.roomId; // 선택된 roomId 업데이트
+                    });
                     log("[RoomDrawer] Navigating to ChatScreen with roomId: ${room.roomId}");
-                    // Navigate to ChatScreen with the roomId
                     Navigator.of(context).push(
                       MaterialPageRoute(
                         builder: (context) => ChatScreen(roomId: room.roomId),

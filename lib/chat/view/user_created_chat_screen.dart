@@ -433,7 +433,9 @@ class UserCreatedChatScreenState extends State<UserCreatedChatScreen>
           SizedBox(width: 10 * paddingVal / 100),
         ],
       ),
-      drawer: const RoomDrawer(),
+      drawer: RoomDrawer(
+        currentRoomId: widget.roomId,
+      ),
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Column(

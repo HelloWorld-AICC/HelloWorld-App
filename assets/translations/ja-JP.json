@@ -1,0 +1,101 @@
+{
+  "app_name": "外国支援センター AICC",
+  "login_button": "ログイン",
+  "select_language": "言語を選択してください",
+  "lan_en": "英語",
+  "lan_ko": "韓国語",
+  "lan_ja": "日本語",
+  "lan_zh": "中国語",
+  "lan_vi": "ベトナム語",
+  "confirm_button": "確認",
+  "chat_consultation": "チャット相談",
+  "call_bot": "ボットを呼ぶ",
+  "resume_writing": "履歴書作成",
+  "job_information": "仕事情報",
+  "home": "ホーム",
+  "chat": "チャット",
+  "profile": "プロフィール",
+  "hello_message": "こんにちは！あなたのチャットボットです 😀 \n\n開始するには、下のボタンを押すか、メッセージを入力してください。 \n\nAIが提供する情報は正確でない場合があるため、参考用としてのみ使用してください。",
+  "start_button": "開始",
+  "choose_question": "ご質問を選択してください。 \n\nスタートに戻るには、'Start' と入力してください。",
+  "answer_message": "{content} に関する回答をします。 \n追加の質問がある場合は、メッセージを入力してください。 \nスタートに戻るには、'{start_button}' と入力してください。",
+  "law": "法律",
+  "visa": "ビザ",
+  "employment": "雇用",
+  "living": "生活",
+  "help_needed": "いいえ。助けが必要です。",
+  "input_hint": "メッセージを入力",
+  "resumeTitle": "履歴書",
+  "autoGenerateResume": "履歴書を自動生成",
+  "manageResume": "履歴書管理",
+  "buttonText": "キーワードを選択",
+  "textFieldHint": "ここにタイトルを入力",
+  "infoSectionTitle": "ユンソ",
+  "phone": "010-1234-5678",
+  "email": "1234@gmail.com",
+  "intro": "こんにちは、私はクロスプラットフォーム開発者のユンソです。",
+  "experienceTitle": "経験",
+  "educationTitle": "教育",
+  "skillsTitle": "技術スキル",
+  "certificationsTitle": "資格",
+  "projectsTitle": "プロジェクト",
+  "projectA": "プロジェクトA: Flutterによるショッピングアプリ開発",
+  "projectB": "プロジェクトB: 機械学習ベースの推薦システム",
+  "startButton": "開始",
+  "inputHint": "メッセージを入力",
+  "resume": {
+    "experienceTitle": "経験",
+    "educationTitle": "教育",
+    "skillsTitle": "スキル",
+    "certificationsTitle": "資格",
+    "projectsTitle": "プロジェクト",
+    "experience": {
+      "company": "ヒュンダイ",
+      "duration": "2022.01 ~ 2024.08",
+      "position": "ソフトウェアインターン",
+      "details": {
+        "detail1": "バグを特定して修正し、アプリのパフォーマンスを15%向上させました。",
+        "detail2": "新機能の成功した実装に貢献し、ユーザーエンゲージメントを20%向上させました。",
+        "detail3": "徹底的なテストを行い、クリティカルな問題を解決してアプリの安定性を向上させ、クラッシュを25%削減しました。"
+      }
+    },
+    "education": {
+      "institution": "ソウル国立大学",
+      "duration": "2017.03 ~ 2021.02",
+      "degree": "コンピュータサイエンスの学士号",
+      "details": {
+        "detail1": "機械学習アルゴリズムに関する研究に参加しました。",
+        "detail2": "クラスの最優秀プロジェクトに選ばれたモバイルアプリを開発しました。",
+        "detail3": "データ構造、アルゴリズム、ソフトウェアエンジニアリングのコースを最高の成績で修了しました。"
+      }
+    },
+    "skills": {
+      "languages": "プログラミング言語: Dart, Java, Python",
+      "frameworks": "フレームワーク: Flutter, Spring Boot",
+      "databases": "データベース: MySQL, MongoDB",
+      "tools": "ツール: Git, Docker, Jenkins",
+      "others": "その他: RESTful API, アジャイル開発"
+    },
+    "certifications": {
+      "cert1": "Google認定アソシエイトAndroid開発者",
+      "cert2": "AWS認定ソリューションアーキテクト – アソシエイト",
+      "cert3": "認定スクラムマスター (CSM)"
+    },
+    "projects": {
+      "projectA": {
+        "title": "プロジェクトA: Flutterによるショッピングアプリ開発",
+        "duration": "2023.03 ~ 2023.12",
+        "description": "ユーザーフレンドリーなUIを持つショッピングアプリを開発しました。主要な機能には、ショッピングカート、注文追跡、ユーザーレビューシステムが含まれています。",
+        "contribution": "貢献: フロントエンドおよびバックエンド開発、API統合"
+      },
+      "projectB": {
+        "title": "プロジェクトB: 機械学習ベースの推薦システム",
+        "duration": "2022.06 ~ 2022.12",
+        "description": "ユーザーの行動を分析してパーソナライズされた推薦を提供するシステムを開発しました。データ分析とモデルのトレーニングを行いました。",
+        "contribution": "貢献: データ前処理、モデルのトレーニングと評価、結果の分析"
+      }
+    }
+  },
+  "change_locale_button": "言語を変更",
+  "my_page": "マイページ"
+}
