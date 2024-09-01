@@ -97,5 +97,8 @@
     }
   },
   "change_locale_button": "言語を変更",
-  "my_page": "マイページ"
+  "my_page": "マイページ",
+  "keywords": "キーワードを選択",
+  "chatRooms": "チャットルーム",
+  "chat_title": "Hello World チャットボット"
 }

@@ -97,5 +97,8 @@
     }
   },
   "change_locale_button": "언어 변경",
-  "my_page": "마이페이지"
+  "my_page": "마이페이지",
+  "keywords": "키워드 선택",
+  "chatRooms": "채팅방",
+  "chat_title": "Hello World 챗봇"
 }

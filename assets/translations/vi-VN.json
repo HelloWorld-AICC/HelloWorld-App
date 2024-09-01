@@ -97,5 +97,8 @@
     }
   },
   "change_locale_button": "Thay đổi ngôn ngữ",
-  "my_page": "Trang của tôi"
+  "my_page": "Trang của tôi",
+  "keywords": "Chọn từ khóa",
+  "chatRooms": "Phòng chat",
+  "chat_title": "Hello World Chatbot à?"
 }

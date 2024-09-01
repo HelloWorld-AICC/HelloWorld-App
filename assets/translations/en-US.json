@@ -97,5 +97,8 @@
     }
   },
   "change_locale_button": "Change Language",
-  "my_page": "My Page"
+  "my_page": "My Page",
+  "keywords": "Select Keywords",
+  "chatRooms": "Chat Rooms",
+  "chat_title": "Hello World Chatbot"
 }

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world_mvp/chat/view/user_created_chat_screen.dart';
 import 'package:provider/provider.dart';
@@ -81,9 +82,9 @@ class _RoomDrawerState extends State<RoomDrawer> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Text(
-            'Chat Rooms',
-            style: TextStyle(
+          Text(
+            tr('chatRooms'),
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 28,
               fontWeight: FontWeight.bold,

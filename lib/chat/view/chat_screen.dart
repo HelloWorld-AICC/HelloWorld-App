@@ -416,7 +416,7 @@ class ChatScreenState extends State<ChatScreen>
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
         title: Text(
-          'Hello World Chatbot',
+          tr('chat_title'),
           style: TextStyle(
             color: const Color(0xff3369FF),
             fontWeight: FontWeight.bold,

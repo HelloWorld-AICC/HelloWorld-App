@@ -97,5 +97,8 @@
     }
   },
   "change_locale_button": "更改语言",
-  "my_page": "我的页面"
+  "my_page": "我的页面",
+  "keywords": "选择关键词",
+  "chatRooms": "聊天室",
+  "chat_title": "Hello World 聊天机器人"
 }
