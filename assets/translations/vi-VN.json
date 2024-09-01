@@ -100,5 +100,64 @@
   "my_page": "Trang của tôi",
   "keywords": "Chọn từ khóa",
   "chatRooms": "Phòng chat",
-  "chat_title": "Hello World Chatbot à?"
+  "chat_title": "Hello World Chatbot à?",
+  "jobTitle": "Cơ hội việc làm",
+  "search": "Nhập truy vấn tìm kiếm",
+  "languages": {
+    "en": "Tiếng Anh",
+    "ko": "Tiếng Hàn",
+    "ja": "Tiếng Nhật",
+    "zh": "Tiếng Trung",
+    "vi": "Tiếng Việt"
+  },
+  "result_count_text": "4 kết quả",
+  "job_dummy_items": {
+    "item0": {
+      "job": "Nhà phát triển Android",
+      "company": "Blind",
+      "companyLoc": "Seoul",
+      "detail": {
+        "area": "IT",
+        "employed": "toàn thời gian"
+      },
+      "registred_date": "2024-08-24",
+      "end_date": "2024-09-13"
+    },
+    "item1": {
+      "job": "Kỹ sư phát triển phần mềm Android",
+      "company": "Accenture",
+      "companyLoc": "Pangyo",
+      "detail": {
+        "area": "Trò chơi",
+        "employed": "bán thời gian"
+      },
+      "registred_date": "2024-09-01",
+      "end_date": "Bất kỳ lúc nào"
+    },
+    "item2": {
+      "job": "Kỹ sư phần mềm Android",
+      "company": "Tiktok",
+      "companyLoc": "Seoul",
+      "detail": {
+        "area": "IT",
+        "employed": "toàn thời gian"
+      },
+      "registred_date": "2024-08-13",
+      "end_date": "2024-09-30"
+    },
+    "item3": {
+      "job": "Kỹ sư SDK Android",
+      "company": "Sendbird",
+      "companyLoc": "Jeju",
+      "detail": {
+        "area": "IT",
+        "employed": "bán thời gian"
+      },
+      "registred_date": "2024-08-02",
+      "end_date": "Bất kỳ lúc nào"
+    }
+  },
+  "registered_date": "Ngày đăng ký",
+  "end_date": "Ngày kết thúc",
+  "apply_button": "Nộp đơn"
 }

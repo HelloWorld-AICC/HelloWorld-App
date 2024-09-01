@@ -100,5 +100,64 @@
   "my_page": "My Page",
   "keywords": "Select Keywords",
   "chatRooms": "Chat Rooms",
-  "chat_title": "Hello World Chatbot"
+  "chat_title": "Hello World Chatbot",
+  "jobTitle": "Job Openings",
+  "search": "Enter your search query",
+  "languages": {
+    "english": "English",
+    "korean": "Korean",
+    "japanese": "Japanese",
+    "chinese": "Chinese",
+    "vietnamese": "Vietnamese"
+  },
+  "result_count_text": "4 results",
+  "job_dummy_items": {
+    "item0": {
+      "job": "Android Developer",
+      "company": "Blind",
+      "companyLoc": "Seoul",
+      "detail": {
+        "area": "IT",
+        "employed": "full-time"
+      },
+      "registred_date": "2024-08-24",
+      "end_date": "2024-09-13"
+    },
+    "item1": {
+      "job": "Android SW Development Engineer",
+      "company": "Accenture",
+      "companyLoc": "Pangyo",
+      "detail": {
+        "area": "Game",
+        "employed": "part-time"
+      },
+      "registred_date": "2024-09-01",
+      "end_date": "Anytime"
+    },
+    "item2": {
+      "job": "Android SW Engineer",
+      "company": "Tiktok",
+      "companyLoc": "Seoul",
+      "detail": {
+        "area": "IT",
+        "employed": "full-time"
+      },
+      "registred_date": "2024-08-13",
+      "end_date": "2024-09-30"
+    },
+    "item3": {
+      "job": "Android Sdk Engineer",
+      "company": "Sendbird",
+      "companyLoc": "Jeju",
+      "detail": {
+        "area": "IT",
+        "employed": "part-time"
+      },
+      "registred_date": "2024-08-02",
+      "end_date": "Anytime"
+    }
+  },
+  "registered_date": "Registered Date",
+  "end_date": "End Date",
+  "apply_button": "Apply"
 }

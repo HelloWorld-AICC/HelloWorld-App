@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           backgroundColor: Colors.white,
           body: Padding(
-            padding: EdgeInsets.all(paddingVal / 1.3),
+            padding: EdgeInsets.all(paddingVal / 1.4),
             child: Column(
               children: [
                 Container(

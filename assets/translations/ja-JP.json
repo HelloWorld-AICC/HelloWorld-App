@@ -100,5 +100,64 @@
   "my_page": "マイページ",
   "keywords": "キーワードを選択",
   "chatRooms": "チャットルーム",
-  "chat_title": "Hello World チャットボット"
+  "chat_title": "Hello World チャットボット",
+  "jobTitle": "求人情報",
+  "search": "検索クエリを入力",
+  "languages": {
+    "english": "英語",
+    "korean": "韓国語",
+    "japanese": "日本語",
+    "chinese": "中国語",
+    "vietnamese": "ベトナム語",
+    "result_count_text": "4 件の結果"
+  },
+  "job_dummy_items": {
+    "item0": {
+      "job": "Android開発者",
+      "company": "Blind",
+      "companyLoc": "ソウル",
+      "detail": {
+        "area": "IT",
+        "employed": "正社員"
+      },
+      "registred_date": "2024-08-24",
+      "end_date": "2024-09-13"
+    },
+    "item1": {
+      "job": "Androidソフトウェア開発エンジニア",
+      "company": "Accenture",
+      "companyLoc": "パンギョ",
+      "detail": {
+        "area": "ゲーム",
+        "employed": "パートタイム"
+      },
+      "registred_date": "2024-09-01",
+      "end_date": "いつでも"
+    },
+    "item2": {
+      "job": "Androidソフトウェアエンジニア",
+      "company": "Tiktok",
+      "companyLoc": "ソウル",
+      "detail": {
+        "area": "IT",
+        "employed": "正社員"
+      },
+      "registred_date": "2024-08-13",
+      "end_date": "2024-09-30"
+    },
+    "item3": {
+      "job": "Android SDKエンジニア",
+      "company": "Sendbird",
+      "companyLoc": "済州",
+      "detail": {
+        "area": "IT",
+        "employed": "パートタイム"
+      },
+      "registred_date": "2024-08-02",
+      "end_date": "いつでも"
+    }
+  },
+  "registered_date": "登録日",
+  "end_date": "終了日",
+  "apply_button": "応募"
 }

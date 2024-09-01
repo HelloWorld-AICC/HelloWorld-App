@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/chat/model/room/room.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
+import 'package:hello_world_mvp/job/job_screen.dart';
 import 'package:hello_world_mvp/personal/view/edit_profile_screen.dart';
 
 import '../auth/view/login_screen.dart';
@@ -131,6 +132,10 @@ class RouteService {
         GoRoute(
           path: '/callbot',
           builder: (context, state) => const CallbotScreen(),
+        ),
+        GoRoute(
+          path: '/job',
+          builder: (context, state) => const JobScreen(),
         ),
         // 다른 라우트 정의...
       ],

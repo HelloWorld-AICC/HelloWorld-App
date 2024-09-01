@@ -100,5 +100,64 @@
   "my_page": "마이페이지",
   "keywords": "키워드 선택",
   "chatRooms": "채팅방",
-  "chat_title": "Hello World 챗봇"
+  "chat_title": "Hello World 챗봇",
+  "jobTitle": "채용공고",
+  "search": "검색어를 입력하세요",
+  "languages": {
+    "english": "영어",
+    "korean": "한국어",
+    "japanese": "일본어",
+    "chinese": "중국어",
+    "vietnamese": "베트남어",
+    "result_count_text": "전체 5건"
+  },
+  "job_dummy_items": {
+    "item0": {
+      "job": "안드로이드 개발자",
+      "company": "Blind",
+      "companyLoc": "서울",
+      "detail": {
+        "area": "IT",
+        "employed": "정규직"
+      },
+      "registred_date": "2024-08-24",
+      "end_date": "2024-09-13"
+    },
+    "item1": {
+      "job": "안드로이드 SW 개발 엔지니어",
+      "company": "Accenture",
+      "companyLoc": "판교",
+      "detail": {
+        "area": "게임",
+        "employed": "파트타임"
+      },
+      "registred_date": "2024-09-01",
+      "end_date": "상시 채용"
+    },
+    "item2": {
+      "job": "안드로이드 SW 엔지니어",
+      "company": "Tiktok",
+      "companyLoc": "서울",
+      "detail": {
+        "area": "IT",
+        "employed": "정규직"
+      },
+      "registred_date": "2024-08-13",
+      "end_date": "2024-09-30"
+    },
+    "item3": {
+      "job": "안드로이드 SDK 엔지니어",
+      "company": "Sendbird",
+      "companyLoc": "제주",
+      "detail": {
+        "area": "IT",
+        "employed": "파트타임"
+      },
+      "registred_date": "2024-08-02",
+      "end_date": "상시 채용"
+    }
+  },
+  "registered_date": "등록일",
+  "end_date": "마감일",
+  "apply_button": "지원하기"
 }

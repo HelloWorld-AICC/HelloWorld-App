@@ -100,5 +100,64 @@
   "my_page": "我的页面",
   "keywords": "选择关键词",
   "chatRooms": "聊天室",
-  "chat_title": "Hello World 聊天机器人"
+  "chat_title": "Hello World 聊天机器人",
+  "jobTitle": "职位空缺",
+  "search": "输入搜索内容",
+  "languages": {
+    "en": "英语",
+    "ko": "韩语",
+    "ja": "日语",
+    "zh": "中文",
+    "vi": "越南语"
+  },
+  "result_count_text": "4 个结果",
+  "job_dummy_items": {
+    "item0": {
+      "job": "Android 开发者",
+      "company": "Blind",
+      "companyLoc": "首尔",
+      "detail": {
+        "area": "IT",
+        "employed": "全职"
+      },
+      "registred_date": "2024-08-24",
+      "end_date": "2024-09-13"
+    },
+    "item1": {
+      "job": "Android 软件开发工程师",
+      "company": "Accenture",
+      "companyLoc": "板桥",
+      "detail": {
+        "area": "游戏",
+        "employed": "兼职"
+      },
+      "registred_date": "2024-09-01",
+      "end_date": "随时"
+    },
+    "item2": {
+      "job": "Android 软件工程师",
+      "company": "Tiktok",
+      "companyLoc": "首尔",
+      "detail": {
+        "area": "IT",
+        "employed": "全职"
+      },
+      "registred_date": "2024-08-13",
+      "end_date": "2024-09-30"
+    },
+    "item3": {
+      "job": "Android SDK 工程师",
+      "company": "Sendbird",
+      "companyLoc": "济州",
+      "detail": {
+        "area": "IT",
+        "employed": "兼职"
+      },
+      "registred_date": "2024-08-02",
+      "end_date": "随时"
+    }
+  },
+  "registered_date": "注册日期",
+  "end_date": "结束日期",
+  "apply_button": "申请"
 }
