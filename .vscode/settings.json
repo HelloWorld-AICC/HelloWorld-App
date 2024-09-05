@@ -1,3 +1,4 @@
 {
-    "cmake.sourceDirectory": "C:/Work/hello_world_mvp/windows/runner"
+  "cmake.sourceDirectory": "C:/Work/hello_world_mvp/windows/runner",
+  "java.configuration.updateBuildConfiguration": "automatic"
 }
