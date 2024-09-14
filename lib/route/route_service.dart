@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/auth/view/login_screen.dart';
 import 'package:hello_world_mvp/chat/model/room/room.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
@@ -135,6 +136,10 @@ class RouteService {
         GoRoute(
           path: '/job',
           builder: (context, state) => const JobScreen(),
+        ),
+        GoRoute(
+          path: '/login',
+          builder: (context, state) => const LoginScreen(),
         ),
         // 다른 라우트 정의...
       ],

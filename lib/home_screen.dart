@@ -98,27 +98,32 @@ class _HomeScreenState extends State<HomeScreen> {
             padding: EdgeInsets.all(paddingVal / 1.6),
             child: Column(
               children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 16),
-                  alignment: Alignment.topLeft,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "${tr("app_name")},",
-                        style: TextStyle(
-                          fontSize: 32 * paddingVal / 100,
-                          fontWeight: FontWeight.bold,
+                InkWell(
+                  onTap: () {
+                    context.push("/login");
+                  },
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 16),
+                    alignment: Alignment.topLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${tr("app_name")},",
+                          style: TextStyle(
+                            fontSize: 32 * paddingVal / 100,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        "Hello World",
-                        style: TextStyle(
-                          fontSize: 32 * paddingVal / 100,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          "Hello World",
+                          style: TextStyle(
+                            fontSize: 32 * paddingVal / 100,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Container(
