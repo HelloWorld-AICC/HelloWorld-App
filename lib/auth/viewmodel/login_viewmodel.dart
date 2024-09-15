@@ -11,8 +11,8 @@ class LoginVM extends ChangeNotifier {
         await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
             "283350122061-so9tmsluv514ctr9ccm50jrtdlmsht7k.apps.googleusercontent.com",
             // "gotoend:/home",
-            "https://www.gotoend.store",
-            // "https://www.gotoend.store/mvc/api/v1/google/code",
+            // "com.example.hello_world_mvp:/oauthredirect",
+            "https://www.gotoend.store/mvc/api/v1/google/code",
             scopes: ['openid', 'profile', 'email'],
             serviceConfiguration: const AuthorizationServiceConfiguration(
                 authorizationEndpoint:
@@ -20,23 +20,4 @@ class LoginVM extends ChangeNotifier {
                 tokenEndpoint:
                     "https://www.gotoend.store/mvc/v1/google/login")));
   }
-
-  // final _myRepo = MovieRepoImp();
-
-  // ApiResponse<MoviesMain> movieMain = ApiResponse.loading();
-
-  // void _setMovieMain(ApiResponse<MoviesMain> response) {
-  //   print("MARAJ :: $response");
-  //   movieMain = response;
-  //   notifyListeners();
-  // }
-
-  // Future<void> fetchMovies() async {
-  //   _setMovieMain(ApiResponse.loading());
-  //   _myRepo
-  //       .getMoviesList()
-  //       .then((value) => _setMovieMain(ApiResponse.completed(value)))
-  //       .onError((error, stackTrace) =>
-  //           _setMovieMain(ApiResponse.error(error.toString())));
-  // }
 }
