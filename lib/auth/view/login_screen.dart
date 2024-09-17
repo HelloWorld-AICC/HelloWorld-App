@@ -26,7 +26,7 @@ class LoginScreen extends StatelessWidget {
             body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 70),
+                // const SizedBox(height: 70),
                 const _Title(),
                 const SizedBox(height: 20),
                 Image.asset(
@@ -64,7 +64,7 @@ class _LoginWithGoogle extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<LoginVM>().authorize();
+        context.read<LoginVM>().signin();
       },
       child: Container(
           height: 35,

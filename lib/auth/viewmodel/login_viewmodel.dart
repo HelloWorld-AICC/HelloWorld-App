@@ -1,23 +1,24 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_appauth/flutter_appauth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginVM extends ChangeNotifier {
-  FlutterAppAuth _appAuth = const FlutterAppAuth();
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    // Optional clientId
+    // clientId: 'your-client_id.apps.googleusercontent.com',
+    scopes: <String>[
+      'email',
+      'https://www.googleapis.com/auth/contacts.readonly',
+    ],
+  );
 
-  AuthorizationTokenResponse? response;
+  GoogleSignInAccount? signInAccount;
 
-  Future<void> authorize() async {
-    final AuthorizationTokenResponse response =
-        await _appAuth.authorizeAndExchangeCode(AuthorizationTokenRequest(
-            "283350122061-so9tmsluv514ctr9ccm50jrtdlmsht7k.apps.googleusercontent.com",
-            // "gotoend:/home",
-            // "com.example.hello_world_mvp:/oauthredirect",
-            "https://www.gotoend.store/mvc/api/v1/google/code",
-            scopes: ['openid', 'profile', 'email'],
-            serviceConfiguration: const AuthorizationServiceConfiguration(
-                authorizationEndpoint:
-                    "https://accounts.google.com/o/oauth2/v2/auth",
-                tokenEndpoint:
-                    "https://www.gotoend.store/mvc/v1/google/login")));
+  Future<void> signin() async {
+    try {
+      signInAccount = await _googleSignIn.signIn();
+      print(signInAccount.toString());
+    } catch (error) {
+      print(error);
+    }
   }
 }
