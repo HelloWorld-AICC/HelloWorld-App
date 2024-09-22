@@ -1,16 +1,6 @@
-// import 'dart:developer';
-
-// import 'package:dio/dio.dart';
-// import 'package:easy_localization/easy_localization.dart'; // Import easy_localization
-// import 'package:flutter/material.dart';
-// import 'package:uni_links2/uni_links.dart';
-// import 'package:url_launcher/url_launcher.dart';
-
-// import '../service/auth_service.dart';
-
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world_mvp/auth/viewmodel/login_viewmodel.dart';
+import 'package:hello_world_mvp/injection.dart';
 import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -19,7 +9,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (context) => LoginVM(),
+      create: (context) => getIt<LoginVM>(),
       child: SafeArea(
         child: Scaffold(
             backgroundColor: Colors.white,

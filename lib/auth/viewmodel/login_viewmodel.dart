@@ -1,24 +1,17 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:injectable/injectable.dart';
 
+import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
+
+@injectable
 class LoginVM extends ChangeNotifier {
-  final GoogleSignIn _googleSignIn = GoogleSignIn(
-    // Optional clientId
-    // clientId: 'your-client_id.apps.googleusercontent.com',
-    scopes: <String>[
-      'email',
-      'https://www.googleapis.com/auth/contacts.readonly',
-    ],
-  );
+  final IAuthRepository repository;
 
-  GoogleSignInAccount? signInAccount;
+  LoginVM({required this.repository});
 
   Future<void> signin() async {
-    try {
-      signInAccount = await _googleSignIn.signIn();
-      print(signInAccount.toString());
-    } catch (error) {
-      print(error);
-    }
+    final successOrFailure = await repository.getAuthCodeFromGoogle();
   }
 }

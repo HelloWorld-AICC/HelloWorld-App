@@ -1,9 +1,12 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
+import 'package:hello_world_mvp/injection.dart';
+import 'package:hive/hive.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -70,6 +73,8 @@ void main() async {
   final prefs = await SharedPreferences.getInstance();
   prefs.setString('isFirstLaunch', 'true');
   prefs.setString('lastVersion', '0.1.0');
+
+  configureDependencies();
 
   // final Dio dio = Dio();
   // final AuthService authService = AuthService(
