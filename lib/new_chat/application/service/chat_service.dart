@@ -13,11 +13,16 @@ class ChatService {
   });
 
   Future<List<Message>> fetchMessages(String endpoint) async {
-    return await chatRepository.getMessages(baseUrl, endpoint, accessToken);
+    return await chatRepository.fetchMessages(baseUrl, endpoint, accessToken);
+  }
+
+  Future<List<Message>> getMessages() async {
+    return await chatRepository.getMessages();
   }
 
   Future<void> sendMessage(String endpoint, String message) async {
-    return await chatRepository.sendUserMessage(baseUrl, endpoint, message, accessToken);
+    return await chatRepository.sendUserMessage(
+        baseUrl, endpoint, message, accessToken);
   }
 
   Future<void> clearChat() async {

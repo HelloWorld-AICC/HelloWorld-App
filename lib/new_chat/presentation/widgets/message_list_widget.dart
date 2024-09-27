@@ -1,34 +1,49 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/new_chat/application/message/chat_message_bloc.dart';
 import 'package:hello_world_mvp/new_chat/application/message/chat_message_event.dart';
 import 'package:hello_world_mvp/new_chat/application/message/chat_message_state.dart';
 import 'package:hello_world_mvp/new_chat/application/session/chat_session_bloc.dart';
+import 'package:hello_world_mvp/new_chat/application/session/chat_session_event.dart';
 import 'package:hello_world_mvp/new_chat/application/session/chat_session_state.dart';
 import 'package:hello_world_mvp/new_chat/domain/message.dart';
-
 
 class MessageListWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocListener<ChatSessionBloc, ChatSessionState>(
       listener: (context, sessionState) {
+        log("Session state: $sessionState");
+
         if (sessionState is NewSessionState) {
-          context.read<ChatMessageBloc>().add(const ChatMessageEvent.clearMessages());
+          context
+              .read<ChatSessionBloc>()
+              .add(const ChatSessionEvent.createNewSession());
+          log('New session created');
         } else if (sessionState is PrevSessionState) {
-          context.read<ChatMessageBloc>().add(const ChatMessageEvent.loadMessages());
+          context
+              .read<ChatSessionBloc>()
+              .add(const ChatSessionEvent.loadPrevSession());
+          log('Previous session loaded');
         }
       },
       child: BlocBuilder<ChatMessageBloc, ChatMessageState>(
         builder: (context, state) {
           return state.when(
-            loadSuccess: (messages) => ListView.builder(
-              itemCount: messages.length,
-              itemBuilder: (context, index) {
-                return _buildMessageItem(messages[index], context);
-              },
-            ),
-            loadInProgress: (m) => Center(child: CircularProgressIndicator()),
+            loadSuccess: (messages) {
+              log('Messages: $messages');
+
+              return ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return _buildMessageItem(messages[index], context);
+                },
+              );
+            },
+            loadInProgress: (m) =>
+                const Center(child: CircularProgressIndicator()),
             loadFailure: (m, error) => Center(child: Text('Error: $error')),
             initial: (m) => Container(),
           );
@@ -41,7 +56,8 @@ class MessageListWidget extends StatelessWidget {
     final isUser = message.sender == 'user';
 
     return Column(
-      crossAxisAlignment: isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),

@@ -64,7 +64,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return [
-      '/chat/$_recentRoomId', // Updated to include roomId
+      '/newChat',
+      //'/chat/$_recentRoomId', // Updated to include roomId
       '/callbot',
       '/resume',
       '/job',

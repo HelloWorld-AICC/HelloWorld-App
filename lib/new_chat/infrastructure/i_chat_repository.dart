@@ -10,15 +10,16 @@ import 'package:hello_world_mvp/new_chat/domain/message.dart';
 
 class IChatRepository implements ChatRepository {
   final List<Message> _messages = [];
-  final StreamController<List<Message>> _botMessageStreamController = StreamController<List<Message>>.broadcast();
+  final StreamController<List<Message>> _botMessageStreamController =
+      StreamController<List<Message>>.broadcast();
 
   final http.Client httpClient;
 
-  IChatRepository({http.Client? client})
-      : httpClient = client ?? http.Client();
+  IChatRepository({http.Client? client}) : httpClient = client ?? http.Client();
 
   @override
-  Future<List<Message>> getMessages(String baseUrl, String endpoint, String accessToken) async {
+  Future<List<Message>> fetchMessages(
+      String baseUrl, String endpoint, String accessToken) async {
     try {
       final response = await httpClient.get(
         Uri.parse('$baseUrl$endpoint'),
@@ -32,10 +33,12 @@ class IChatRepository implements ChatRepository {
         final Map<String, dynamic> data = json.decode(response.body);
         RoomDto roomDto = _parseRoomFromResponse(data);
         _messages.clear();
-        _messages.addAll(roomDto.chatLogs.map((logDto) => Message(
-          content: logDto.content,
-          sender: logDto.sender,
-        )).toList());
+        _messages.addAll(roomDto.chatLogs
+            .map((logDto) => Message(
+                  content: logDto.content,
+                  sender: logDto.sender,
+                ))
+            .toList());
         _addStreamedMessages();
         return _messages;
       } else {
@@ -46,6 +49,10 @@ class IChatRepository implements ChatRepository {
     }
   }
 
+  Future<List<Message>> getMessages() async {
+    return _messages;
+  }
+
   @override
   Future<void> clearMessages() {
     _messages.clear();
@@ -54,7 +61,8 @@ class IChatRepository implements ChatRepository {
   }
 
   @override
-  Future<void> sendUserMessage(String baseUrl, String endpoint, String message, String accessToken) async {
+  Future<void> sendUserMessage(String baseUrl, String endpoint, String message,
+      String accessToken) async {
     final String url = '$baseUrl$endpoint';
     final request = http.Request('POST', Uri.parse(url))
       ..headers['Accept'] = 'text/event-stream'
@@ -77,7 +85,8 @@ class IChatRepository implements ChatRepository {
             finalResponse.write('\n');
           } else {
             finalResponse.write(temp);
-            final botMessage = Message(content: finalResponse.toString(), sender: 'bot');
+            final botMessage =
+                Message(content: finalResponse.toString(), sender: 'bot');
 
             _messages.add(botMessage);
             _addStreamedMessages();
@@ -87,7 +96,8 @@ class IChatRepository implements ChatRepository {
         log("Error receiving stream data: $error");
       }, onDone: () {
         if (!_botMessageStreamController.isClosed) {
-          _botMessageStreamController.close(); // Ensure the stream is closed when done
+          _botMessageStreamController
+              .close(); // Ensure the stream is closed when done
         }
       });
     } catch (e) {
@@ -105,9 +115,9 @@ class IChatRepository implements ChatRepository {
     final roomId = response['roomId'] as String;
     final chatLogs = (response['chatLogs'] as List<dynamic>)
         .map((log) => ChatLogDTO(
-      content: log['content'] as String,
-      sender: log['sender'] as String,
-    ))
+              content: log['content'] as String,
+              sender: log['sender'] as String,
+            ))
         .toList();
 
     return RoomDto(
