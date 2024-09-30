@@ -29,24 +29,36 @@ class LoginScreen extends StatelessWidget {
               },
             ),
           ],
-          child: SafeArea(
-            child: Scaffold(
-                backgroundColor: Colors.white,
-                body: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // const SizedBox(height: 70),
-                    const _Title(),
-                    const SizedBox(height: 20),
-                    Image.asset(
-                      "assets/images/auth/login_main.png",
-                      width: double.infinity,
-                      fit: BoxFit.fitWidth,
-                    ),
-                    const SizedBox(height: 4),
-                    const _LoginButtonArea()
-                  ],
-                )),
+          child: Stack(
+            children: [
+              SafeArea(
+                child: Scaffold(
+                    backgroundColor: Colors.white,
+                    body: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // const SizedBox(height: 70),
+                        const _Title(),
+                        const SizedBox(height: 20),
+                        Image.asset(
+                          "assets/images/auth/login_main.png",
+                          width: double.infinity,
+                          fit: BoxFit.fitWidth,
+                        ),
+                        const SizedBox(height: 4),
+                        const _LoginButtonArea()
+                      ],
+                    )),
+              ),
+              BlocBuilder<LoginBloc, LoginState>(
+                builder: (context, state) {
+                  return state.isLoading
+                      ? const Positioned.fill(
+                          child: Center(child: CircularProgressIndicator()))
+                      : const SizedBox();
+                },
+              ),
+            ],
           ),
         );
       }),

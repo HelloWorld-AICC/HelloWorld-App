@@ -14,12 +14,13 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
   LoginBloc({required this.authRepository}) : super(LoginState.initial()) {
     on<SignInWithGoogle>((event, emit) async {
+      emit(LoginState.initial().copyWith(isLoading: true));
       final tokenOrFailure = await authRepository.getAuthCodeFromGoogle();
 
       emit(tokenOrFailure.fold((f) {
-        return state.copyWith(succeeded: false, failure: f);
+        return state.copyWith(succeeded: false, failure: f, isLoading: false);
       }, (success) {
-        return state.copyWith(succeeded: true);
+        return state.copyWith(succeeded: true, isLoading: false);
       }));
     });
   }
