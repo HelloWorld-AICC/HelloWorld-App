@@ -3,30 +3,30 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
+import 'package:hello_world_mvp/auth/domain/repository/i_token_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
-// import 'package:kc_user/infrastructure/hive/hive_provider.dart';
-// import 'package:kc_user/refactor-v1/env/env_manager.dart';
 
 @LazySingleton()
 class AuthenticatedHttpClient extends http.BaseClient {
-  // final HiveProvider hiveProvider;
+  final ITokenRepository tokenRepository;
 
-  // FirebasePerformance performance = FirebasePerformance.instance;
-
-  // TODO retry 할 일 있으면 고려해보기
-  // https://pub.dev/packages/http#retrying-requests
-  // AuthenticatedHttpClient({required this.hiveProvider});
+  AuthenticatedHttpClient({required this.tokenRepository});
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
-    // final accessToken = await hiveProvider.getAuthToken();
-    // final waitingToken = await hiveProvider.getWaitingToken();
-    // request.headers.putIfAbsent('x-access-token', () => accessToken);
-    // request.headers.putIfAbsent('x-waiting-token', () => waitingToken);
-    // debugPrint("[HEADER]: ${waitingToken.isEmpty} ${waitingToken}\n");
-    return request.send();
+    final tokens = await tokenRepository.getTokens();
+
+    return tokens.fold((f) {
+      return request.send();
+    }, (result) {
+      request.headers.putIfAbsent(
+          'accessToken', () => result.atk?.token.getOrCrash() ?? "");
+
+      return request.send();
+    });
   }
 
   void printRequestDebug(String type, Uri url,
@@ -89,16 +89,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
   @override
   Future<Response> get(Uri url, {Map<String, String>? headers}) async {
     printRequestDebug('GET', url, headers: headers);
-    // final HttpMetric metric =
-    //     performance.newHttpMetric(url.toString(), HttpMethod.Get);
-    // await metric.start();
-
     final response = await super.get(url, headers: headers);
-
-    // metric.responseContentType = response.headers['Content-Type'];
-    // metric.httpResponseCode = response.statusCode;
-    // metric.responsePayloadSize = response.contentLength;
-    // await metric.stop();
     printDebugResponse('GET', response);
 
     return response;
@@ -109,15 +100,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     printRequestDebug('POST', url,
         headers: headers, body: body, encoding: encoding);
-    // final HttpMetric metric =
-    //     performance.newHttpMetric(url.toString(), HttpMethod.Post);
-    // await metric.start();
     final response =
         await super.post(url, headers: headers, body: body, encoding: encoding);
-    // metric.responseContentType = response.headers['Content-Type'];
-    // metric.httpResponseCode = response.statusCode;
-    // metric.responsePayloadSize = response.contentLength;
-    // await metric.stop();
     printDebugResponse('POST', response);
     return response;
   }
@@ -127,15 +111,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     printRequestDebug('PUT', url,
         headers: headers, body: body, encoding: encoding);
-    // final HttpMetric metric =
-    //     performance.newHttpMetric(url.toString(), HttpMethod.Put);
-    // await metric.start();
     final response =
         await super.put(url, headers: headers, body: body, encoding: encoding);
-    // metric.responseContentType = response.headers['Content-Type'];
-    // metric.httpResponseCode = response.statusCode;
-    // metric.responsePayloadSize = response.contentLength;
-    // await metric.stop();
     printDebugResponse('PUT', response);
     return response;
   }
@@ -145,15 +122,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
       {Map<String, String>? headers, Object? body, Encoding? encoding}) async {
     printRequestDebug('PATCH', url,
         headers: headers, body: body, encoding: encoding);
-    // final HttpMetric metric =
-    //     performance.newHttpMetric(url.toString(), HttpMethod.Patch);
-    // await metric.start();
     final response = await super
         .patch(url, headers: headers, body: body, encoding: encoding);
-    // metric.responseContentType = response.headers['Content-Type'];
-    // metric.httpResponseCode = response.statusCode;
-    // metric.responsePayloadSize = response.contentLength;
-    // await metric.stop();
     printDebugResponse('PATCH', response);
     return response;
   }
@@ -164,16 +134,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
     printRequestDebug('DELETE', url,
         headers: headers, body: body, encoding: encoding);
 
-    // final HttpMetric metric =
-    //     performance.newHttpMetric(url.toString(), HttpMethod.Delete);
-    // await metric.start();
-
     final response = await super
         .delete(url, headers: headers, body: body, encoding: encoding);
-    // metric.responseContentType = response.headers['Content-Type'];
-    // metric.httpResponseCode = response.statusCode;
-    // metric.responsePayloadSize = response.contentLength;
-    // await metric.stop();
     printDebugResponse('DELETE', response);
     return response;
   }

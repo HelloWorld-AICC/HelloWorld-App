@@ -30,7 +30,7 @@ class FetchService {
 
   FetchService({required this.client});
 
-  Future<Either<NetworkFailure, ServerResponse>> request(
+  Future<Either<NetworkFailure, ServerResponse>>  request(
       {required HttpMethod method,
       String pathPrefix = "/api/v1",
       required String path,
@@ -41,7 +41,7 @@ class FetchService {
     final body = json.encode(bodyParam);
 
     //path
-    var realPath = "$pathPrefix$path";
+    var realPath = "/mvc$pathPrefix$path";
     pathParams?.forEach((key, value) {
       realPath = realPath.replaceFirst("{$key}", "$value");
     });
@@ -49,9 +49,9 @@ class FetchService {
     // debugPrint("CORE :: CORE_API :: request -> $realPath // $queryParams");
     //request
 
-    const String baseUrl = "https://www.gotoend.store/mvc";
+    const String authority = "www.gotoend.store";
 
-    final uri = Uri.https(baseUrl, path, queryParams);
+    final uri = Uri.https(authority, realPath, queryParams);
 
     Response response;
 

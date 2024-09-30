@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:go_router/go_router.dart';
-import 'package:hello_world_mvp/auth/view/login_screen.dart';
+import 'package:hello_world_mvp/auth/presentation/login_screen.dart';
 import 'package:hello_world_mvp/chat/model/room/room.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';

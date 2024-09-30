@@ -12,15 +12,12 @@ class AuthExternalProvider implements IAuthExternalProvider {
     final GoogleSignIn googleSignIn = GoogleSignIn(
       // serverClientId:
       //     "283350122061-8ppgu9tpteg5j2h9ouqtu87ov7vrvjjf.apps.googleusercontent.com",
+      // clientId:
+      //     "283350122061-so9tmsluv514ctr9ccm50jrtdlmsht7k.apps.googleusercontent.com",
+      // scopes: <String>['email', 'profile', 'openId'],
       // serverClientId:
       //     "283350122061-8ppgu9tpteg5j2h9ouqtu87ov7vrvjjf.apps.googleusercontent.com",
-      scopes: <String>[
-        'email',
-        'profile',
-        'openId',
-        'https://www.googleapis.com/auth/userinfo.email',
-        'https://www.googleapis.com/auth/contacts.readonly',
-      ],
+      scopes: <String>['email'],
     );
 
     late GoogleSignInAccount? signInAccount;

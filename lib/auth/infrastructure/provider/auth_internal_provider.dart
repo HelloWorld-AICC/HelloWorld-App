@@ -16,15 +16,18 @@ class AuthInternalProvider implements IAuthInternalProvider {
   Future<Either<Failure, List<TokenDto>>> getTokenWithGoogleCode(
       String code) async {
     final failureOrTokens = await _fetchService.request(
-        pathPrefix: "/api/v1",
-        path: "/google/login",
-        method: HttpMethod.get,
-        queryParams: {"code": code});
+      pathPrefix: "/api/v1",
+      path: "/google/login",
+      method: HttpMethod.get,
+      queryParams: {
+        "token": code,
+      },
+    );
 
     return failureOrTokens.fold((f) {
       return left(f);
     }, (response) {
-      final result = response.result as List<Map<String, dynamic>>;
+      final result = response.result['tokenList'] as List<Map<String, dynamic>>;
       return right(result.map((e) => TokenDto.fromJson(e)).toList());
     });
   }

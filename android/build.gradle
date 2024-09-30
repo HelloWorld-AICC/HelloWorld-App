@@ -1,4 +1,4 @@
-buildscript {
+    buildscript {
     ext.kotlin_version = "1.9.23"  // 최신 Kotlin 버전으로 변경
     repositories {
         google()

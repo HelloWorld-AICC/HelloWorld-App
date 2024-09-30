@@ -68,6 +68,7 @@ import 'route/route_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await EasyLocalization.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();

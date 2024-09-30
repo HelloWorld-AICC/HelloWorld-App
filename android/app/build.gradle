@@ -20,8 +20,15 @@ dependencies {
   // https://firebase.google.com/docs/android/setup#available-libraries
 }
 
-
 android {
+    signingConfigs {
+        debug {
+            storeFile file('/Users/jay/private/HelloWorld-App/android/dev.jks')
+            storePassword 'hworld'
+            keyPassword 'hworld'
+            keyAlias 'dev'
+        }
+    }
     namespace = "com.example.hello_world_mvp"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "26.1.10909125"
