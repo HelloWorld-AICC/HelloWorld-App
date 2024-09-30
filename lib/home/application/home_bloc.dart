@@ -9,7 +9,7 @@ import 'package:injectable/injectable.dart';
 part 'home_event.dart';
 part 'home_state.dart';
 
-@singleton
+@injectable
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final ITokenRepository tokenRepository;
 

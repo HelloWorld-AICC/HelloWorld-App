@@ -50,7 +50,7 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
-    gh.singleton<_i785.HomeBloc>(
+    gh.factory<_i785.HomeBloc>(
         () => _i785.HomeBloc(tokenRepository: gh<_i658.ITokenRepository>()));
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
@@ -64,7 +64,7 @@ extension GetItInjectableX on _i174.GetIt {
           authInternalProvider: gh<_i5.IAuthInternalProvider>(),
           authLocalProvider: gh<_i690.IAuthLocalProvider>(),
         ));
-    gh.singleton<_i317.LoginBloc>(
+    gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
     return this;
   }
