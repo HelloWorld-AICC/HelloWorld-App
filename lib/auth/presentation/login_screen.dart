@@ -23,7 +23,9 @@ class LoginScreen extends StatelessWidget {
               },
             ),
             BlocListener<LoginBloc, LoginState>(
-              listenWhen: (prev, cur) => prev.failure != cur.failure,
+              listenWhen: (prev, cur) {
+                return prev.failure != cur.failure;
+              },
               listener: (context, state) {
                 showToast(state.failure?.message ?? "알 수 없는 오류가 발생했습니다.");
               },

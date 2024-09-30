@@ -49,7 +49,7 @@ class ToastBloc extends Bloc<ToastEvent, ToastState> {
     );
 
     on<Reset>((event, emit) async {
-      emit(state.copyWith(message: null));
+      emit(ToastState.initial());
     });
   }
 }

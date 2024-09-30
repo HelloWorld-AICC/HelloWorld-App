@@ -187,9 +187,7 @@ class _MainAppState extends State<MainApp> {
         return MultiBlocListener(
           listeners: [
             BlocListener<ToastBloc, ToastState>(
-              listenWhen: (prev, cur) {
-                return prev.message != cur.message;
-              },
+              listenWhen: (prev, cur) => prev.message != cur.message,
               listener: (context, state) {
                 commonToastKey.currentState?.updateMessage(state.message);
               },
