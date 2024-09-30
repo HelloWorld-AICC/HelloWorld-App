@@ -11,7 +11,7 @@
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
-import 'auth/application/login_viewmodel.dart' as _i727;
+import 'auth/application/login_bloc.dart' as _i317;
 import 'auth/domain/repository/i_auth_repository.dart' as _i667;
 import 'auth/domain/repository/i_token_repository.dart' as _i658;
 import 'auth/infrastructure/provider/auth_external_provider.dart' as _i914;
@@ -27,7 +27,9 @@ import 'auth/infrastructure/repository/auth_repository.dart' as _i217;
 import 'auth/infrastructure/repository/token_repository.dart' as _i782;
 import 'fetch/authenticated_http_client.dart' as _i30;
 import 'fetch/fetch_service.dart' as _i1053;
+import 'home/application/home_bloc.dart' as _i785;
 import 'local_storage/local_storage_service.dart' as _i187;
+import 'toast/toast_bloc.dart' as _i301;
 
 extension GetItInjectableX on _i174.GetIt {
 // initializes the registration of main-scope dependencies inside of GetIt
@@ -41,12 +43,15 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
+    gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i690.IAuthLocalProvider>(
         () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
+    gh.lazySingleton<_i785.HomeBloc>(
+        () => _i785.HomeBloc(tokenRepository: gh<_i658.ITokenRepository>()));
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
             tokenRepository: gh<_i658.ITokenRepository>()));
@@ -59,8 +64,8 @@ extension GetItInjectableX on _i174.GetIt {
           authInternalProvider: gh<_i5.IAuthInternalProvider>(),
           authLocalProvider: gh<_i690.IAuthLocalProvider>(),
         ));
-    gh.factory<_i727.LoginVM>(
-        () => _i727.LoginVM(repository: gh<_i667.IAuthRepository>()));
+    gh.lazySingleton<_i317.LoginBloc>(
+        () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
     return this;
   }
 }

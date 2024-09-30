@@ -1,34 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:hello_world_mvp/auth/application/login_viewmodel.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/auth/application/login_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
-import 'package:provider/provider.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (context) => getIt<LoginVM>(),
-      child: SafeArea(
-        child: Scaffold(
-            backgroundColor: Colors.white,
-            body: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // const SizedBox(height: 70),
-                const _Title(),
-                const SizedBox(height: 20),
-                Image.asset(
-                  "assets/images/auth/login_main.png",
-                  width: double.infinity,
-                  fit: BoxFit.fitWidth,
-                ),
-                const SizedBox(height: 4),
-                const _LoginButtonArea()
-              ],
-            )),
-      ),
+    return BlocProvider(
+      create: (context) => getIt<LoginBloc>(),
+      child: Builder(builder: (context) {
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<LoginBloc, LoginState>(
+              listenWhen: (prev, cur) =>
+                  (prev.succeeded != cur.succeeded) && (cur.succeeded == true),
+              listener: (context, state) {
+                Navigator.of(context).pop();
+                showToast("로그인에 성공했습니다.");
+              },
+            ),
+            BlocListener<LoginBloc, LoginState>(
+              listenWhen: (prev, cur) => prev.failure != cur.failure,
+              listener: (context, state) {
+                showToast(state.failure?.message ?? "알 수 없는 오류가 발생했습니다.");
+              },
+            ),
+          ],
+          child: SafeArea(
+            child: Scaffold(
+                backgroundColor: Colors.white,
+                body: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // const SizedBox(height: 70),
+                    const _Title(),
+                    const SizedBox(height: 20),
+                    Image.asset(
+                      "assets/images/auth/login_main.png",
+                      width: double.infinity,
+                      fit: BoxFit.fitWidth,
+                    ),
+                    const SizedBox(height: 4),
+                    const _LoginButtonArea()
+                  ],
+                )),
+          ),
+        );
+      }),
     );
   }
 }
@@ -54,7 +75,7 @@ class _LoginWithGoogle extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.read<LoginVM>().signin();
+        context.read<LoginBloc>().add(SignInWithGoogle());
       },
       child: Container(
           height: 35,
