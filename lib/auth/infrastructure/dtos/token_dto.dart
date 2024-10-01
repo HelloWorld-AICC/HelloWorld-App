@@ -24,7 +24,7 @@ class TokenDto {
     return <String, dynamic>{
       'types': types,
       'token': token,
-      'tokenExpiresTime': tokenExpiresTime,
+      'tokenExpriresTime': tokenExpiresTime,
     };
   }
 
