@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/auth/application/login_bloc.dart';
@@ -20,7 +21,7 @@ class LoginScreen extends StatelessWidget {
                   (prev.succeeded != cur.succeeded) && (cur.succeeded == true),
               listener: (context, state) {
                 Navigator.of(context).pop();
-                showToast("로그인에 성공했습니다.");
+                showToast(tr('auth_success_login'));
               },
             ),
             BlocListener<LoginBloc, LoginState>(
@@ -31,7 +32,7 @@ class LoginScreen extends StatelessWidget {
                 if (state.failure is EmptyIdTokenFalure) {
                   // 사용자가 구글 로그인을 도중에 취소한 경우
                 } else {
-                  showToast(state.failure?.message ?? "알 수 없는 오류가 발생했습니다.");
+                  showToast(state.failure?.message ?? tr('app_unkown_errors'));
                 }
               },
             ),
@@ -131,12 +132,12 @@ class _Title extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(
+    return Padding(
+      padding: const EdgeInsets.symmetric(
         horizontal: 24,
       ),
-      child: Text("외국인 지원센터 AICC\nHello World",
-          style: TextStyle(
+      child: Text(tr("auth_login_titl"),
+          style: const TextStyle(
             color: Colors.black,
             fontSize: 24,
             fontWeight: FontWeight.w700,

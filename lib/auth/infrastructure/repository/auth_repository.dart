@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:dartz/dartz.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/auth/domain/model/token_set.dart';
 import 'package:hello_world_mvp/auth/infrastructure/provider/interface/i_auth_internal_provider.dart';
@@ -28,7 +29,7 @@ class AuthRepository implements IAuthRepository {
       final idToken = (await result.authentication).idToken;
 
       if (idToken == null) {
-        return left(const AuthFailure(message: "구글로 부터 받은 토큰이 null 입니다."));
+        return left(AuthFailure(message: tr("auth_account_is_null")));
       }
 
       if (idToken.isEmpty) {

@@ -159,5 +159,11 @@
   },
   "registered_date": "注册日期",
   "end_date": "结束日期",
-  "apply_button": "申请"
+  "apply_button": "申请",
+  "auth_success_login" : "登录成功。",
+  "auth_sign_in_with_google" : "使用Google登录",
+  "auth_login_title" : "外国人支援中心 AICC\nHello World",
+  "auth_account_is_null" : "GoogleSignInAccount为空。",
+  "auth_unknown_token_type" : "不存在的令牌类型。",
+  "app_unkown_error" : "发生了未知错误。"
 }
