@@ -1,9 +1,15 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
+import 'package:hello_world_mvp/injection.dart';
+import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
+import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -64,21 +70,25 @@ import 'route/route_service.dart';
 // }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await EasyLocalization.ensureInitialized();
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('isFirstLaunch', 'true');
-  prefs.setString('lastVersion', '0.1.0');
+    await EasyLocalization.ensureInitialized();
 
-  // final Dio dio = Dio();
-  // final AuthService authService = AuthService(
-  //   dio,
-  // );
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('isFirstLaunch', 'true');
+    prefs.setString('lastVersion', '0.1.0');
 
-  // isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
+    configureDependencies();
 
-  /*
+    // final Dio dio = Dio();
+    // final AuthService authService = AuthService(
+    //   dio,
+    // );
+
+    // isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
+
+    /*
   final TokenAuthenticator tokenAuthenticator = TokenAuthenticator(
     dio,
     'https://example.com/', // Base URL
@@ -89,43 +99,57 @@ void main() async {
   setupDio(dio, tokenAuthenticator);
   */
 
-  final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
-  RecentRoomService recentRoomService = RecentRoomService(
-    baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
-    userId: '1',
-    recentRoomProvider: recentRoomProvider,
-  );
-  final routeService = RouteService(
-    recentRoomService,
-    isUserLoggedIn:
-        Future.value(true), // Replace true with your actual login status check
-  );
+    final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
+    RecentRoomService recentRoomService = RecentRoomService(
+      baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
+      userId: '1',
+      recentRoomProvider: recentRoomProvider,
+    );
+    final routeService = RouteService(
+      recentRoomService,
+      isUserLoggedIn: Future.value(
+          true), // Replace true with your actual login status check
+    );
 
-  runApp(
-    EasyLocalization(
-      supportedLocales: const [
-        Locale('en', 'US'),
-        Locale('ko', 'KR'),
-        Locale('ja', 'JP'),
-        Locale('zh', 'CN'),
-        Locale('vi', 'VN'),
-      ],
-      path: 'assets/translations',
-      child: MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => LocaleProvider()),
-          ChangeNotifierProvider(create: (_) => RoomProvider()),
-          ChangeNotifierProvider(
-            create: (_) => RecentRoomProvider(),
-          ),
+    runApp(
+      EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ko', 'KR'),
+          Locale('ja', 'JP'),
+          Locale('zh', 'CN'),
+          Locale('vi', 'VN'),
         ],
-        child: MainApp(
-          // authService: authService,
-          routeService: routeService,
+        path: 'assets/translations',
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (_) => RoomProvider()),
+            ChangeNotifierProvider(
+              create: (_) => RecentRoomProvider(),
+            ),
+          ],
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<ToastBloc>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<LocaleBloc>(),
+              ),
+            ],
+            child: MainApp(
+              // authService: authService,
+              routeService: routeService,
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }, (error, stackTrace) async {
+    showToast(error.toString());
+    // await FlutterCrashlytics()
+    //     .reportCrash(error, stackTrace, forceCrash: false);
+  });
 }
 
 class MainApp extends StatefulWidget {
@@ -143,24 +167,71 @@ class MainApp extends StatefulWidget {
 }
 
 class _MainAppState extends State<MainApp> {
+  GlobalKey<CommonToastState> commonToastKey = GlobalKey<CommonToastState>();
+  late CommonToast commonToast = CommonToast(key: commonToastKey);
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      commonToast = CommonToast(
+        key: commonToastKey,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    log("[MainApp] Detected locale: ${context.locale}");
+    // log("[MainApp] Detected locale: ${context.locale}");
 
-    return Consumer<LocaleProvider>(
-      builder: (context, localeProvider, child) {
-        final locale = localeProvider.locale ?? context.locale;
-        // log("[MainApp] Applying locale: $locale");
-
-        // log("[MainApp] EasyLocalization locale: ${EasyLocalization.of(context)?.locale}");
-
-        return MaterialApp.router(
-          routerConfig: widget.routeService.router,
-          localizationsDelegates: context.localizationDelegates,
-          supportedLocales: context.supportedLocales,
-          locale: localeProvider.locale ?? context.locale,
+    return BlocBuilder<LocaleBloc, LocaleState>(
+      buildWhen: (previous, current) {
+        return previous.locale != current.locale;
+      },
+      builder: (context, state) {
+        final locale = state.locale ?? context.locale;
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<ToastBloc, ToastState>(
+              listenWhen: (prev, cur) => prev.message != cur.message,
+              listener: (context, state) {
+                commonToastKey.currentState?.updateMessage(state.message);
+              },
+            ),
+          ],
+          child: MaterialApp.router(
+            routerConfig: widget.routeService.router,
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: locale,
+            builder: (context, child) {
+              return ToastWrapper(
+                commonToast: commonToast,
+                widget: child,
+              );
+            },
+          ),
         );
       },
+    );
+  }
+}
+
+class ToastWrapper extends StatelessWidget {
+  const ToastWrapper({super.key, required this.commonToast, this.widget});
+
+  final CommonToast commonToast;
+  final Widget? widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Stack(
+        children: [
+          SafeArea(child: widget ?? const SizedBox()),
+          Positioned(top: 0, bottom: 0, left: 0, right: 0, child: commonToast),
+        ],
+      ),
     );
   }
 }

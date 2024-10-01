@@ -64,6 +64,8 @@
             <key>CFBundleURLSchemes</key>
             <array>
                 <string>myapp</string>
+				<!-- <string>com.example.hello_world_mvp</string> -->
+				<string>https://www.gotoend.store/mvc/api/v1/google/code</string>
             </array>
             <key>CFBundleURLName</key>
             <string>com.example.myapp</string>

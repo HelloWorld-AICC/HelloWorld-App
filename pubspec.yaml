@@ -23,11 +23,22 @@ dependencies:
   universal_html: ^2.2.4
   url_launcher: ^6.3.0
   cupertino_icons: ^1.0.2
+  google_sign_in: ^6.2.1
+  equatable: ^2.0.5
+  dartz: ^0.10.1
+  injectable: ^2.4.4
+  uuid: ^4.5.0
+  version: ^3.0.2
+  get_it: ^7.6.6
+  hive: ^2.2.3
+  flutter_bloc: ^8.1.6
+  rxdart: ^0.28.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  injectable_generator:
 
 flutter:
   uses-material-design: true
@@ -35,4 +46,5 @@ flutter:
   assets:
     - assets/translations/
     - assets/images/
+    - assets/images/auth/
     - assets/fonts/

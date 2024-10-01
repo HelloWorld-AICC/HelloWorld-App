@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/personal/service/preference_service.dart';
 import 'package:provider/provider.dart';
 
@@ -197,8 +198,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 ListTile(
                   title: Text(locale.toLanguageTag()),
                   onTap: () {
-                    Provider.of<LocaleProvider>(context, listen: false)
-                        .setLocale(locale);
+                    context.read<LocaleBloc>().add(SetLocale(locale: locale));
                     EasyLocalization.of(context)?.setLocale(locale);
                     Navigator.of(context).pop();
                   },

@@ -1,4 +1,5 @@
 {
   "cmake.sourceDirectory": "C:/Work/hello_world_mvp/windows/runner",
-  "java.configuration.updateBuildConfiguration": "automatic"
+  "java.configuration.updateBuildConfiguration": "automatic",
+  "dart.flutterSdkPath": ".fvm/versions/3.24.2"
 }
