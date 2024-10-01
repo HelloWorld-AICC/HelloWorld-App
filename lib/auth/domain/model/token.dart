@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hello_world_mvp/core/value_objects.dart';
 
@@ -10,7 +11,7 @@ enum TokenType {
     return TokenType.values.firstWhere(
         (element) => element.name.toUpperCase() == name.toUpperCase(),
         orElse: () {
-      throw ("존재하지 않는 토큰 타입입니다.");
+      throw (tr("auth_unknown_token_type"));
     });
   }
 }
