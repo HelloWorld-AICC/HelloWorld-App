@@ -27,7 +27,7 @@ class AuthInternalProvider implements IAuthInternalProvider {
     return failureOrTokens.fold((f) {
       return left(f);
     }, (response) {
-      final result = response.result['tokenList'] as List<Map<String, dynamic>>;
+      final result = response.result['tokenList'] as List<dynamic>;
       return right(result.map((e) => TokenDto.fromJson(e)).toList());
     });
   }

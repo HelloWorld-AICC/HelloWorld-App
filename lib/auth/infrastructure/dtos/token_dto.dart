@@ -32,7 +32,7 @@ class TokenDto {
     return TokenDto(
       types: map['types'] as String,
       token: map['token'] as String,
-      tokenExpiresTime: map['tokenExpiresTime'] as String,
+      tokenExpiresTime: map['tokenExpriresTime'] as String,
     );
   }
 }
