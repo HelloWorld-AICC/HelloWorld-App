@@ -136,7 +136,7 @@ class _Title extends StatelessWidget {
       padding: const EdgeInsets.symmetric(
         horizontal: 24,
       ),
-      child: Text(tr("auth_login_titl"),
+      child: Text(tr("auth_login_title"),
           style: const TextStyle(
             color: Colors.black,
             fontSize: 24,
