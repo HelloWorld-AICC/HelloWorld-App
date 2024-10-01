@@ -45,14 +45,4 @@ class AuthRepository implements IAuthRepository {
       });
     });
   }
-
-  @override
-  Future<Either<AuthFailure, TokenSet>> getTokens() async {
-    return (await authLocalProvider.getTokens()).fold((f) {
-      return left(const AuthFailure(message: ""));
-    }, (tokenList) {
-      return right(
-          TokenSet(tokens: tokenList.map((e) => e.toDomain()).toList()));
-    });
-  }
 }
