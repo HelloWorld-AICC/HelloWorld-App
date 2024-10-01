@@ -29,6 +29,7 @@ import 'fetch/authenticated_http_client.dart' as _i30;
 import 'fetch/fetch_service.dart' as _i1053;
 import 'home/application/home_bloc.dart' as _i785;
 import 'local_storage/local_storage_service.dart' as _i187;
+import 'locale/application/locale_bloc.dart' as _i487;
 import 'toast/toast_bloc.dart' as _i301;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -52,6 +53,8 @@ extension GetItInjectableX on _i174.GetIt {
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
     gh.factory<_i785.HomeBloc>(
         () => _i785.HomeBloc(tokenRepository: gh<_i658.ITokenRepository>()));
+    gh.factory<_i487.LocaleBloc>(
+        () => _i487.LocaleBloc(tokenRepository: gh<_i658.ITokenRepository>()));
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
             tokenRepository: gh<_i658.ITokenRepository>()));

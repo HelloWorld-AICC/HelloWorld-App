@@ -6,11 +6,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/home/application/home_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
+import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:provider/provider.dart';
 
 import 'chat/provider/recent_room_provider.dart';
 import 'chat/service/recent_room_service.dart';
-import 'locale/locale_provider.dart';
 import 'route/route_service.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -103,8 +103,8 @@ class _HomeScreenState extends State<HomeScreen> {
               context.push("/login");
             }
           },
-          child: Consumer<LocaleProvider>(
-            builder: (context, localeProvider, child) {
+          child: BlocBuilder<LocaleBloc, LocaleState>(
+            builder: (context, state) {
               final paddingVal = MediaQuery.of(context).size.height * 0.1;
 
               return Scaffold(

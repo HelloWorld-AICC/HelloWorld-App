@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -140,8 +141,9 @@ class _FirstLaunchScreenState extends State<FirstLaunchScreen> {
                   // context.read<LocaleProvider>().setLocale(_selectedLocale!);
                   // log("[FirstLaunchScreen-ConfirmButton] Selected locale: ${_selectedLocale!}");
 
-                  Provider.of<LocaleProvider>(context, listen: false)
-                      .setLocale(_selectedLocale!);
+                  context
+                      .read<LocaleBloc>()
+                      .add(SetLocale(locale: _selectedLocale!));
                   EasyLocalization.of(context)?.setLocale(_selectedLocale!);
 
                   WidgetsBinding.instance.addPostFrameCallback((_) {

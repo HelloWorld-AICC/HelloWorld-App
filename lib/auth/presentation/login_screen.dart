@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/auth/application/login_bloc.dart';
+import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 
@@ -27,7 +28,11 @@ class LoginScreen extends StatelessWidget {
                 return prev.failure != cur.failure;
               },
               listener: (context, state) {
-                showToast(state.failure?.message ?? "알 수 없는 오류가 발생했습니다.");
+                if (state.failure is EmptyIdTokenFalure) {
+                  // 사용자가 구글 로그인을 도중에 취소한 경우
+                } else {
+                  showToast(state.failure?.message ?? "알 수 없는 오류가 발생했습니다.");
+                }
               },
             ),
           ],
@@ -36,20 +41,23 @@ class LoginScreen extends StatelessWidget {
               SafeArea(
                 child: Scaffold(
                     backgroundColor: Colors.white,
-                    body: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // const SizedBox(height: 70),
-                        const _Title(),
-                        const SizedBox(height: 20),
-                        Image.asset(
-                          "assets/images/auth/login_main.png",
-                          width: double.infinity,
-                          fit: BoxFit.fitWidth,
-                        ),
-                        const SizedBox(height: 4),
-                        const _LoginButtonArea()
-                      ],
+                    body: SingleChildScrollView(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 70),
+                          const _Title(),
+                          const SizedBox(height: 20),
+                          Image.asset(
+                            "assets/images/auth/login_main.png",
+                            width: double.infinity,
+                            fit: BoxFit.fitWidth,
+                          ),
+                          const SizedBox(height: 4),
+                          const _LoginButtonArea()
+                        ],
+                      ),
                     )),
               ),
               BlocBuilder<LoginBloc, LoginState>(
@@ -73,7 +81,7 @@ class _LoginButtonArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
       child: Container(
           margin: const EdgeInsets.all(24),
           padding: const EdgeInsets.all(16),

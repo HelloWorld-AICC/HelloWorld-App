@@ -32,7 +32,7 @@ class AuthRepository implements IAuthRepository {
       }
 
       if (idToken.isEmpty) {
-        return left(const AuthFailure(message: "구글로 부터 받은 토큰이 빈문자열 입니다."));
+        return left(const EmptyIdTokenFalure());
       }
       //
       return (await authInternalProvider.getTokenWithGoogleCode(idToken))

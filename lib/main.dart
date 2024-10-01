@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
 import 'package:hello_world_mvp/injection.dart';
+import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:provider/provider.dart';
@@ -122,14 +123,20 @@ void main() async {
         path: 'assets/translations',
         child: MultiProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => LocaleProvider()),
             ChangeNotifierProvider(create: (_) => RoomProvider()),
             ChangeNotifierProvider(
               create: (_) => RecentRoomProvider(),
             ),
           ],
-          child: BlocProvider(
-            create: (context) => getIt<ToastBloc>(),
+          child: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => getIt<ToastBloc>(),
+              ),
+              BlocProvider(
+                create: (context) => getIt<LocaleBloc>(),
+              ),
+            ],
             child: MainApp(
               // authService: authService,
               routeService: routeService,
@@ -175,15 +182,14 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    log("[MainApp] Detected locale: ${context.locale}");
+    // log("[MainApp] Detected locale: ${context.locale}");
 
-    return Consumer<LocaleProvider>(
-      builder: (context, localeProvider, child) {
-        final locale = localeProvider.locale ?? context.locale;
-        // log("[MainApp] Applying locale: $locale");
-
-        // log("[MainApp] EasyLocalization locale: ${EasyLocalization.of(context)?.locale}");
-
+    return BlocBuilder<LocaleBloc, LocaleState>(
+      buildWhen: (previous, current) {
+        return previous.locale != current.locale;
+      },
+      builder: (context, state) {
+        final locale = state.locale ?? context.locale;
         return MultiBlocListener(
           listeners: [
             BlocListener<ToastBloc, ToastState>(
@@ -197,16 +203,35 @@ class _MainAppState extends State<MainApp> {
             routerConfig: widget.routeService.router,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
-            locale: localeProvider.locale ?? context.locale,
+            locale: locale,
             builder: (context, child) {
-              //CommonToast 하단 노란 두 줄 방지용
-              return Stack(
-                children: [child ?? const SizedBox(), commonToast],
+              return ToastWrapper(
+                commonToast: commonToast,
+                widget: child,
               );
             },
           ),
         );
       },
+    );
+  }
+}
+
+class ToastWrapper extends StatelessWidget {
+  const ToastWrapper({super.key, required this.commonToast, this.widget});
+
+  final CommonToast commonToast;
+  final Widget? widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Stack(
+        children: [
+          SafeArea(child: widget ?? const SizedBox()),
+          Positioned(top: 0, bottom: 0, left: 0, right: 0, child: commonToast),
+        ],
+      ),
     );
   }
 }
