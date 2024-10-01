@@ -36,7 +36,7 @@ class AuthLocalProvier implements IAuthLocalProvider {
     return tokensOrFailure.fold((f) {
       return left(LocalStorageFailure(message: f.message));
     }, (result) {
-      return right((result as List).map((e) => TokenDto.fromJson(e)).toList());
+      return right((result["tokens"] as List).map((e) => TokenDto.fromJson(e)).toList());
     });
   }
 }
