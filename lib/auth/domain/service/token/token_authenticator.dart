@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../route/route_service.dart';
+import '../../../../route/new_route_service.dart';
 
 class TokenAuthenticator {
   final Dio _dio;

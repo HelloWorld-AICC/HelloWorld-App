@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -8,66 +7,14 @@ import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/route/new_route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'auth/service/auth_service.dart';
 // import 'auth/service/token/token_authenticator.dart';
 import 'chat/provider/room_provider.dart';
-import 'locale/locale_provider.dart';
-import 'route/route_service.dart';
-
-// void setupDio(Dio dio, TokenAuthenticator tokenAuthenticator) {
-//   dio.interceptors.add(
-//     InterceptorsWrapper(
-//       onRequest:
-//           (RequestOptions options, RequestInterceptorHandler handler) async {
-//         final token = await tokenAuthenticator.fetchAccessToken();
-//         if (token != null) {
-//           options.headers['Authorization'] = 'Bearer $token';
-//         }
-//         handler.next(options);
-//       },
-//       onResponse:
-//           (Response response, ResponseInterceptorHandler handler) async {
-//         handler.next(response);
-//       },
-//       onError: (DioException e, ErrorInterceptorHandler handler) async {
-//         if (e.response?.statusCode == 401) {
-//           try {
-//             final newOptions = await tokenAuthenticator.authenticate(
-//               e.requestOptions,
-//               e.response!,
-//             );
-//             final newResponse = await dio.request(
-//               newOptions.path,
-//               options: Options(
-//                 method: newOptions.method,
-//                 headers: newOptions.headers,
-//               ),
-//             );
-//             handler.resolve(newResponse);
-//           } catch (error) {
-//             handler.reject(DioException(
-//               requestOptions: e.requestOptions,
-//               response: e.response,
-//               error: error,
-//             ));
-//           }
-//         } else {
-//           handler.reject(e);
-//         }
-//       },
-//     ),
-//   );
-// }
-
-// Future<bool> _checkUserLoggedIn(AuthService authService) async {
-//   final accessToken = await authService.fetchAccessToken();
-//   return accessToken != null;
-// }
 
 void main() async {
   runZonedGuarded(() async {
@@ -81,35 +28,13 @@ void main() async {
 
     configureDependencies();
 
-    // final Dio dio = Dio();
-    // final AuthService authService = AuthService(
-    //   dio,
-    // );
-
-    // isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
-
-    /*
-  final TokenAuthenticator tokenAuthenticator = TokenAuthenticator(
-    dio,
-    'https://example.com/', // Base URL
-    'token/refresh', // Token refresh URL
-    routeService,
-  );
-
-  setupDio(dio, tokenAuthenticator);
-  */
-
     final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
     RecentRoomService recentRoomService = RecentRoomService(
       baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
       userId: '1',
       recentRoomProvider: recentRoomProvider,
     );
-    final routeService = RouteService(
-      recentRoomService,
-      isUserLoggedIn: Future.value(
-          true), // Replace true with your actual login status check
-    );
+    final routeService = RouteService();
 
     runApp(
       EasyLocalization(
