@@ -9,19 +9,23 @@ part 'app_lifecycle_event.dart';
 part 'app_lifecycle_state.dart';
 
 @Injectable()
-class AppLifecycleBloc extends Bloc<AppLifecycleEvent, AppLifecycleState> {
+class CustomAppLifecycleBloc
+    extends Bloc<CustomAppLifecycleEvent, CustomAppLifecycleState> {
   final ChatSessionState chatSessionState;
 
-  AppLifecycleBloc(this.chatSessionState) : super(AppLifecycleState.initial()) {
-    on<AppResumed>(_onAppResumed);
-    on<AppPaused>(_onAppPaused);
+  CustomAppLifecycleBloc(this.chatSessionState)
+      : super(CustomAppLifecycleState.initial()) {
+    on<CustomAppResumed>(_onAppResumed);
+    on<CustomAppPaused>(_onAppPaused);
   }
 
-  void _onAppPaused(AppPaused event, Emitter<AppLifecycleState> emit) {
+  void _onAppPaused(
+      CustomAppPaused event, Emitter<CustomAppLifecycleState> emit) {
     emit(state.copyWith(isResumed: false));
   }
 
-  void _onAppResumed(AppResumed event, Emitter<AppLifecycleState> emit) {
+  void _onAppResumed(
+      CustomAppResumed event, Emitter<CustomAppLifecycleState> emit) {
     chatSessionState.copyWith(messages: []); // messages 초기화
     emit(state.copyWith(isResumed: true));
     print("세션을 초기화합니다.");

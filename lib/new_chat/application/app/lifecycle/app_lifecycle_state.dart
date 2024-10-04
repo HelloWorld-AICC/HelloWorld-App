@@ -1,20 +1,20 @@
 part of 'app_lifecycle_bloc.dart';
 
-class AppLifecycleState extends Equatable {
+class CustomAppLifecycleState extends Equatable {
   final bool isResumed;
 
-  const AppLifecycleState({required this.isResumed});
+  const CustomAppLifecycleState({required this.isResumed});
 
-  factory AppLifecycleState.initial() =>
-      const AppLifecycleState(isResumed: false);
+  factory CustomAppLifecycleState.initial() =>
+      const CustomAppLifecycleState(isResumed: false);
 
   @override
   List<Object?> get props => [isResumed];
 
-  AppLifecycleState copyWith({
+  CustomAppLifecycleState copyWith({
     bool? isResumed,
   }) {
-    return AppLifecycleState(
+    return CustomAppLifecycleState(
       isResumed: isResumed ?? this.isResumed,
     );
   }

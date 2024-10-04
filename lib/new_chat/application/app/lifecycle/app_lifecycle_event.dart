@@ -1,10 +1,10 @@
 part of 'app_lifecycle_bloc.dart';
 
-sealed class AppLifecycleEvent extends Equatable {
+sealed class CustomAppLifecycleEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
 
-final class AppPaused extends AppLifecycleEvent {}
+final class CustomAppPaused extends CustomAppLifecycleEvent {}
 
-final class AppResumed extends AppLifecycleEvent {}
+final class CustomAppResumed extends CustomAppLifecycleEvent {}

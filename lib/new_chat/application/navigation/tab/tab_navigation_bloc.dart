@@ -10,12 +10,11 @@ part 'tab_navigation_event.dart';
 part 'tab_navigation_state.dart';
 
 @Injectable()
-class ChatTabNavigationBloc
-    extends Bloc<TabNavigationEvent, TabNavigationState> {
+class TabNavigationBloc extends Bloc<TabNavigationEvent, TabNavigationState> {
   final ChatSessionBloc chatSessionBloc;
   final RoomIdBloc roomIdBloc;
 
-  ChatTabNavigationBloc(this.chatSessionBloc, this.roomIdBloc)
+  TabNavigationBloc(this.chatSessionBloc, this.roomIdBloc)
       : super(TabNavigationState.initial()) {
     on<TabChanged>(_onTabChanged);
   }

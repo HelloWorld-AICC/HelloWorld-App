@@ -8,14 +8,14 @@ import 'package:hello_world_mvp/home/application/home_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomePageState extends State<HomePage> {
   List<String> _getImages() {
     return [
       'assets/images/home_chat.png',
