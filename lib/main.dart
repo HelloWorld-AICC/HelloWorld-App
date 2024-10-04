@@ -3,18 +3,12 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
-import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/route/new_route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-// import 'auth/service/token/token_authenticator.dart';
-import 'chat/provider/room_provider.dart';
 
 void main() async {
   runZonedGuarded(() async {
@@ -27,13 +21,6 @@ void main() async {
     prefs.setString('lastVersion', '0.1.0');
 
     configureDependencies();
-
-    final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
-    RecentRoomService recentRoomService = RecentRoomService(
-      baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
-      userId: '1',
-      recentRoomProvider: recentRoomProvider,
-    );
     final routeService = RouteService();
 
     runApp(
@@ -46,26 +33,17 @@ void main() async {
           Locale('vi', 'VN'),
         ],
         path: 'assets/translations',
-        child: MultiProvider(
+        child: MultiBlocProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => RoomProvider()),
-            ChangeNotifierProvider(
-              create: (_) => RecentRoomProvider(),
+            BlocProvider(
+              create: (context) => getIt<ToastBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<LocaleBloc>(),
             ),
           ],
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => getIt<ToastBloc>(),
-              ),
-              BlocProvider(
-                create: (context) => getIt<LocaleBloc>(),
-              ),
-            ],
-            child: MainApp(
-              // authService: authService,
-              routeService: routeService,
-            ),
+          child: MainApp(
+            routeService: routeService,
           ),
         ),
       ),
@@ -107,8 +85,6 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    // log("[MainApp] Detected locale: ${context.locale}");
-
     return BlocBuilder<LocaleBloc, LocaleState>(
       buildWhen: (previous, current) {
         return previous.locale != current.locale;

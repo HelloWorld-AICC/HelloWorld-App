@@ -1,5 +1,5 @@
 {
-  "app_name": "外国支援センター AICC",
+  "app_name": "外国支援センター",
   "login_button": "ログイン",
   "select_language": "言語を選択してください",
   "lan_en": "英語",
@@ -160,10 +160,10 @@
   "registered_date": "登録日",
   "end_date": "終了日",
   "apply_button": "応募",
-  "auth_success_login" : "ログインに成功しました。",
-  "auth_sign_in_with_google" : "Googleでログイン",
-  "auth_login_title" : "外国人支援センター AICC\nHello World",
-  "auth_account_is_null" : "GoogleSignInAccountがnullです。",
-  "auth_unknown_token_type" : "存在しないトークンタイプです。",
-  "app_unkown_error" : "不明なエラーが発生しました。"
+  "auth_success_login": "ログインに成功しました。",
+  "auth_sign_in_with_google": "Googleでログイン",
+  "auth_login_title": "外国人支援センター AICC\nHello World",
+  "auth_account_is_null": "GoogleSignInAccountがnullです。",
+  "auth_unknown_token_type": "存在しないトークンタイプです。",
+  "app_unkown_error": "不明なエラーが発生しました。"
 }

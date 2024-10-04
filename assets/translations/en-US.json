@@ -1,5 +1,5 @@
 {
-  "app_name": "Foreign Support Center AICC",
+  "app_name": "Foreign Support Center",
   "login_button": "Login",
   "select_language": "Please select a language",
   "lan_en": "English",
@@ -160,10 +160,10 @@
   "registered_date": "Registered Date",
   "end_date": "End Date",
   "apply_button": "Apply",
-  "auth_success_login" : "Successfully logged in.",
-  "auth_sign_in_with_google" : "Login with Google",
-  "auth_login_title" : "외국인 지원센터 AICC\nHello World",
-  "auth_account_is_null" : "GoogleSignInAccount is null.",
-  "auth_unknown_token_type" : "The token type does not exist.",
-  "app_unkown_error" : "An unknown error occurred."
+  "auth_success_login": "Successfully logged in.",
+  "auth_sign_in_with_google": "Login with Google",
+  "auth_login_title": "외국인 지원센터 AICC\nHello World",
+  "auth_account_is_null": "GoogleSignInAccount is null.",
+  "auth_unknown_token_type": "The token type does not exist.",
+  "app_unkown_error": "An unknown error occurred."
 }

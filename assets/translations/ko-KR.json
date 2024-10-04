@@ -1,5 +1,5 @@
 {
-  "app_name": "외국인 노동자 지원센터 AICC",
+  "app_name": "외국인 노동자 지원센터",
   "login_button": "로그인",
   "select_language": "사용 가능한 언어를 골라주세요",
   "lan_en": "영어",
@@ -160,10 +160,10 @@
   "registered_date": "등록일",
   "end_date": "마감일",
   "apply_button": "지원하기",
-  "auth_success_login" : "로그인에 성공했습니다.",
-  "auth_sign_in_with_google" : "Google로 로그인",
-  "auth_login_title" : "외국인 지원센터 AICC\nHello World",
-  "auth_account_is_null" : "GoogleSignInAccount가 null입니다.",
-  "auth_unknown_token_type" : "존재하지 않는 토큰 타입입니다.",
-  "app_unkown_error" : "알 수 없는 오류가 발생했습니다."
+  "auth_success_login": "로그인에 성공했습니다.",
+  "auth_sign_in_with_google": "Google로 로그인",
+  "auth_login_title": "외국인 지원센터 AICC\nHello World",
+  "auth_account_is_null": "GoogleSignInAccount가 null입니다.",
+  "auth_unknown_token_type": "존재하지 않는 토큰 타입입니다.",
+  "app_unkown_error": "알 수 없는 오류가 발생했습니다."
 }
