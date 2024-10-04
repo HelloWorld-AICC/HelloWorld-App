@@ -10,7 +10,7 @@ import 'package:hello_world_mvp/personal/view/edit_profile_screen.dart';
 import '../call_bot_screen.dart';
 import '../chat/service/recent_room_service.dart';
 import '../chat/view/chat_screen.dart';
-import '../home_screen.dart';
+import '../home/presentation/home_screen.dart';
 import '../locale/first_launch_screen.dart';
 import '../personal/view/my_page_screen.dart';
 import '../resume/resume_screen.dart';

@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 
-import '../home_screen.dart';
+import '../home/presentation/home_screen.dart';
 
 class RouteService {
   // GoRouter getter
@@ -11,12 +12,11 @@ class RouteService {
         GoRoute(
           path: '/',
           builder: (BuildContext context, GoRouterState state) =>
-              const HomeScreen(),
+              const HomePage(),
         ),
         GoRoute(
           path: '/chat',
-          builder: (BuildContext context, GoRouterState state) =>
-              const HomeScreen(),
+          builder: (BuildContext context, GoRouterState state) => NewChatPage(),
         ),
       ],
     );

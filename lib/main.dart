@@ -10,6 +10,8 @@ import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'new_chat/application/set_up.dart';
+
 void main() async {
   runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
@@ -22,6 +24,8 @@ void main() async {
 
     configureDependencies();
     final routeService = RouteService();
+
+    setupServiceLocator();
 
     runApp(
       EasyLocalization(
