@@ -2,7 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../core/value_objects.dart';
 import '../../domain/failure/chat_failure.dart';
+import '../../domain/model/chat_log.dart';
 import '../../domain/service/chat/chat_service.dart';
 
 part 'chat_session_event.dart';
@@ -15,30 +17,42 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
   ChatSessionBloc({required this.chatService})
       : super(ChatSessionState.initial()) {
-    chatService.messageStream
-        .listen((message) => add(ReceiveMessageEvent(message: message)));
+    chatService.messageStream.listen((message) {
+      add(ReceiveMessageEvent(
+          message:
+              ChatLog(content: StringVO(message), sender: StringVO('bot'))));
+    });
 
     on<LoadChatSessionEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
-      try {
-        final messages = await chatService.fetchRecentMessages();
-        emit(state.copyWith(messages: messages, isLoading: false));
-      } catch (e) {
-        emit(state.copyWith(isLoading: false, errorMessage: e.toString()));
-      }
+      final result = await chatService.fetchRecentMessages();
+      emit(result.fold(
+        (failure) {
+          return state.copyWith(
+              isLoading: false, messages: [], failure: failure);
+        },
+        (room) {
+          return state.copyWith(
+            messages: [...room.chatLogs.getOrCrash(), ...state.messages],
+            isLoading: false,
+          );
+        },
+      ));
     });
 
-    // Handle SendMessageEvent
     on<SendMessageEvent>((event, emit) async {
-      try {
-        await chatService.sendMessage(event.message);
-        emit(state.copyWith(messages: [...state.messages, event.message]));
-      } catch (e) {
-        emit(state.copyWith(errorMessage: e.toString()));
-      }
+      final result =
+          await chatService.sendMessage(event.message.content.getOrCrash());
+      emit(result.fold(
+        (failure) {
+          return state.copyWith(messages: [], failure: failure);
+        },
+        (_) {
+          return state.copyWith(messages: [...state.messages, event.message]);
+        },
+      ));
     });
 
-    // Handle ReceiveMessageEvent
     on<ReceiveMessageEvent>((event, emit) {
       emit(state.copyWith(messages: [...state.messages, event.message]));
     });

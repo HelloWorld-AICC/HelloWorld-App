@@ -16,7 +16,7 @@ final class LoadChatSessionEvent extends ChatSessionEvent {
 
 final class SendMessageEvent extends ChatSessionEvent {
   final String roomId;
-  final String message;
+  final ChatLog message;
 
   SendMessageEvent({required this.roomId, required this.message});
 
@@ -25,7 +25,7 @@ final class SendMessageEvent extends ChatSessionEvent {
 }
 
 final class ReceiveMessageEvent extends ChatSessionEvent {
-  final String message;
+  final ChatLog message;
 
   ReceiveMessageEvent({required this.message});
 

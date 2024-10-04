@@ -13,6 +13,11 @@ class RouteService {
           builder: (BuildContext context, GoRouterState state) =>
               const HomeScreen(),
         ),
+        GoRoute(
+          path: '/chat',
+          builder: (BuildContext context, GoRouterState state) =>
+              const HomeScreen(),
+        ),
       ],
     );
   }

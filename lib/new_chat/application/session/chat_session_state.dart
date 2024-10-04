@@ -1,7 +1,7 @@
 part of 'chat_session_bloc.dart';
 
 class ChatSessionState extends Equatable {
-  final List<String> messages;
+  final List<ChatLog> messages;
   final bool isLoading;
   final ChatFailure? failure;
   final String? roomId;
@@ -19,7 +19,7 @@ class ChatSessionState extends Equatable {
       );
 
   ChatSessionState copyWith({
-    List<String>? messages,
+    List<ChatLog>? messages,
     bool? isLoading,
     ChatFailure? failure,
     String? roomId,

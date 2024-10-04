@@ -3,9 +3,9 @@ import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../../fetch/fetch_service.dart';
-import '../../../infrastructure/dtos/chat_log_dto.dart';
+import '../../../infrastructure/dtos/room_dto.dart';
 import '../../failure/chat_failure.dart';
-import '../../model/chat_log.dart';
+import '../../model/room.dart';
 import '../locator/service_locator.dart';
 
 @lazySingleton
@@ -16,7 +16,7 @@ class ChatService {
 
   Stream<String> get messageStream => _messageStreamController.stream;
 
-  Future<Either<ChatFailure, ChatLog>> fetchRecentMessages() async {
+  Future<Either<ChatFailure, Room>> fetchRecentMessages() async {
     final failureOrResponse = await _fetchService.request(
       method: HttpMethod.get,
       pathPrefix: '/chat',
@@ -26,7 +26,7 @@ class ChatService {
     return failureOrResponse.fold(
       (failure) => left(ChatFetchFailure(
           message: 'Failed to load messages: ${failure.message}')),
-      (response) => right(ChatLogDto.fromJson(response.result).toDomain()),
+      (response) => right(RoomDto.fromJson(response.result).toDomain()),
     );
   }
 
