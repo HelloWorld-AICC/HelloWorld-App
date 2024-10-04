@@ -47,8 +47,8 @@ extension GetItInjectableX on _i174.GetIt {
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
-    gh.lazySingleton<_i690.IAuthLocalProvider>(
-        () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
+    gh.lazySingleton<_i690.IAuthLocalProvider>(() =>
+        _i350.AuthLocalProvider(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
     gh.factory<_i785.HomeBloc>(

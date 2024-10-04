@@ -8,9 +8,10 @@ import 'package:hello_world_mvp/local_storage/local_storage_failure.dart';
 import 'package:hello_world_mvp/local_storage/local_storage_service.dart';
 
 @LazySingleton(as: IAuthLocalProvider)
-class AuthLocalProvier implements IAuthLocalProvider {
+class AuthLocalProvider implements IAuthLocalProvider {
   final LocalStorageService service;
-  AuthLocalProvier({
+
+  AuthLocalProvider({
     required this.service,
   });
 
@@ -36,7 +37,8 @@ class AuthLocalProvier implements IAuthLocalProvider {
     return tokensOrFailure.fold((f) {
       return left(LocalStorageFailure(message: f.message));
     }, (result) {
-      return right((result["tokens"] as List).map((e) => TokenDto.fromJson(e)).toList());
+      return right(
+          (result["tokens"] as List).map((e) => TokenDto.fromJson(e)).toList());
     });
   }
 }
