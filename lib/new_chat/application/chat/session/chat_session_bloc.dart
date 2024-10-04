@@ -2,10 +2,10 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../../core/value_objects.dart';
-import '../../domain/failure/chat_failure.dart';
-import '../../domain/model/chat_log.dart';
-import '../../domain/service/chat/chat_service.dart';
+import '../../../../core/value_objects.dart';
+import '../../../domain/failure/chat_failure.dart';
+import '../../../domain/model/chat_log.dart';
+import '../../../domain/service/chat/chat_service.dart';
 
 part 'chat_session_event.dart';
 

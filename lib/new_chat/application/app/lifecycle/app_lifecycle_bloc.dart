@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../session/chat_session_bloc.dart';
+import '../../chat/session/chat_session_bloc.dart';
 
 part 'app_lifecycle_event.dart';
 

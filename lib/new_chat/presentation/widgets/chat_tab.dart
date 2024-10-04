@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/core/value_objects.dart';
 
-import '../../application/navigation/roomId/room_id_bloc.dart';
-import '../../application/session/chat_session_bloc.dart';
+import '../../application/chat/roomId/room_id_bloc.dart';
+import '../../application/chat/session/chat_session_bloc.dart';
 import '../../domain/model/chat_log.dart';
 
 class ChatTab extends StatelessWidget {

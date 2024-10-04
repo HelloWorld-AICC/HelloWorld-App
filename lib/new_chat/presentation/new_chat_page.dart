@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/new_chat/domain/service/chat/chat_service.dart';
 import 'package:hello_world_mvp/new_chat/presentation/widgets/chat_tab.dart';
+import 'package:hello_world_mvp/new_chat/presentation/widgets/messages_list.dart';
 
 import '../../injection.dart';
 import '../application/app/lifecycle/app_lifecycle_bloc.dart';
 import '../application/app/init/app_init_bloc.dart';
-import '../application/navigation/roomId/room_id_bloc.dart';
-import '../application/navigation/tab/tab_navigation_bloc.dart';
-import '../application/session/chat_session_bloc.dart';
+import '../application/app/navigation/tab_navigation_bloc.dart';
+import '../application/chat/session/chat_session_bloc.dart';
 
 class NewChatPage extends StatelessWidget {
   final _chatService = ChatService();
@@ -31,8 +31,9 @@ class NewChatPage extends StatelessWidget {
         ),
       ],
       child: Scaffold(
-          // Your scaffold implementation
-          ),
+        body: _NewChatPageContent(),
+        bottomNavigationBar: CustomBottomNavigationBar(),
+      ),
     );
   }
 }
@@ -73,7 +74,22 @@ class _NewChatPageContentState extends State<_NewChatPageContent>
     return Scaffold(
       body: BlocBuilder<AppInitBloc, AppInitState>(
         builder: (context, initState) => initState.isFirstRun
-            ? Center(child: Text("초기 화면"))
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(child: MessageListWidget()),
+                  if (_isTyping) _buildTypingIndicator(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: _buildActionButtons(),
+                    ),
+                  ),
+                  _buildInputArea(),
+                ],
+              )
             : _buildContent(),
       ),
     );

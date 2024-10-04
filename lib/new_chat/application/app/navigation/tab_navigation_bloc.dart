@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
-import '../roomId/room_id_bloc.dart';
-import '../../session/chat_session_bloc.dart';
+import '../../chat/roomId/room_id_bloc.dart';
+import '../../chat/session/chat_session_bloc.dart';
 
 part 'tab_navigation_event.dart';
 
