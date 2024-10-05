@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/new_chat/domain/service/chat/chat_service.dart';
-import 'package:hello_world_mvp/new_chat/presentation/widgets/chat_tab.dart';
+import 'package:hello_world_mvp/new_chat/presentation/common/typing_indicator.dart';
 import 'package:hello_world_mvp/new_chat/presentation/widgets/messages_list.dart';
 
+import '../../core/value_objects.dart';
 import '../../injection.dart';
 import '../application/app/lifecycle/app_lifecycle_bloc.dart';
 import '../application/app/init/app_init_bloc.dart';
 import '../application/app/navigation/tab_navigation_bloc.dart';
 import '../application/chat/session/chat_session_bloc.dart';
+import '../application/chat/typing_state.dart';
+import '../domain/model/chat_log.dart';
+import 'common/chat_input_field.dart';
+import 'common/custom_bottom_navigation_bar.dart';
+import 'widgets/action_buttons.dart';
 
 class NewChatPage extends StatelessWidget {
-  final _chatService = ChatService();
-
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -45,6 +48,8 @@ class _NewChatPageContent extends StatefulWidget {
 
 class _NewChatPageContentState extends State<_NewChatPageContent>
     with WidgetsBindingObserver {
+  final TextEditingController _controller = TextEditingController();
+
   @override
   void initState() {
     super.initState();
@@ -73,70 +78,57 @@ class _NewChatPageContentState extends State<_NewChatPageContent>
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<AppInitBloc, AppInitState>(
-        builder: (context, initState) => initState.isFirstRun
-            ? Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(child: MessageListWidget()),
-                  if (_isTyping) _buildTypingIndicator(),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 20, right: 20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: _buildActionButtons(),
+          builder: (context, initState) => true //initState.isFirstRun
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(child: MessageListWidget()),
+                    if (context.watch<ChatSessionBloc>().state.typingState ==
+                        TypingState.typing)
+                      TypingIndicator(),
+                    BlocBuilder<CustomAppLifecycleBloc,
+                        CustomAppLifecycleState>(
+                      builder: (context, state) {
+                        if (state.isResumed) {
+                          return Expanded(
+                            child: ActionButtonsWidget(
+                              onButtonPressed: (selectedContent) {
+                                context
+                                    .read<CustomAppLifecycleBloc>()
+                                    .add(CustomAppPaused());
+
+                                // context.read<ChatSessionBloc>().add(SendMessageEvent(
+                                //   message: ChatLog(
+                                //     content: StringVO(selectedContent),
+                                //     sender: StringVO('user'),
+                                //   ),
+                                //   roomId: '',
+                                // ));
+                              },
+                            ),
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      },
                     ),
-                  ),
-                  _buildInputArea(),
-                ],
-              )
-            : _buildContent(),
-      ),
+                    _buildInputArea(),
+                  ],
+                )
+              : Text("") // _buildContent(),
+          ),
     );
   }
 
-  Widget _buildContent() => Column(
-        children: [
-          Expanded(
-            child: BlocBuilder<TabNavigationBloc, TabNavigationState>(
-              builder: (context, tabState) =>
-                  _buildCurrentTab(tabState.currentIndex),
-            ),
-          ),
-          CustomBottomNavigationBar(),
-        ],
-      );
-
-  Widget _buildCurrentTab(int index) => index == 1
-      ? BlocBuilder<ChatSessionBloc, ChatSessionState>(
-          builder: (context, chatState) {
-            if (chatState.isLoading) return CircularProgressIndicator();
-            if (chatState.failure != null)
-              return Text('Error: ${chatState.failure}');
-            return ChatTab();
-          },
-        )
-      : index == 0
-          ? Center(child: Text("홈 화면"))
-          : Center(child: Text("프로필 화면"));
-}
-
-class CustomBottomNavigationBar extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return BlocBuilder<TabNavigationBloc, TabNavigationState>(
-      builder: (context, tabState) {
-        return BottomNavigationBar(
-          currentIndex: tabState.currentIndex,
-          onTap: (index) => context
-              .read<TabNavigationBloc>()
-              .add(TabChanged(newIndex: index)),
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-            BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chat'),
-            BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-          ],
-        );
+  Widget _buildInputArea() {
+    return ChatInputField(
+      controller: _controller,
+      onSend: (message) {
+        context.read<ChatSessionBloc>().add(SendMessageEvent(
+              message:
+                  ChatLog(content: StringVO(message), sender: StringVO('user')),
+              roomId: 'new_chat',
+            ));
       },
     );
   }

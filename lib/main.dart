@@ -10,6 +10,7 @@ import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'new_chat/application/app/navigation/tab_navigation_bloc.dart';
 import 'new_chat/application/set_up.dart';
 
 void main() async {
@@ -44,6 +45,9 @@ void main() async {
             ),
             BlocProvider(
               create: (context) => getIt<LocaleBloc>(),
+            ),
+            BlocProvider<TabNavigationBloc>(
+              create: (context) => getIt<TabNavigationBloc>(),
             ),
           ],
           child: MainApp(

@@ -17,15 +17,21 @@ class TabNavigationBloc extends Bloc<TabNavigationEvent, TabNavigationState> {
   TabNavigationBloc(this.chatSessionBloc, this.roomIdBloc)
       : super(TabNavigationState.initial()) {
     on<TabChanged>(_onTabChanged);
+    on<ChatTabSelected>(_onChatTabSelected);
   }
 
   Future<void> _onTabChanged(
       TabChanged event, Emitter<TabNavigationState> emit) async {
     emit(state.copyWith(currentIndex: event.newIndex));
-
     if (event.newIndex == 1) {
       final roomId = roomIdBloc.state.roomId;
-      chatSessionBloc.add(LoadChatSessionEvent(roomId: roomId));
+      add(ChatTabSelected(roomId: roomId));
     }
+  }
+
+  Future<void> _onChatTabSelected(
+      ChatTabSelected event, Emitter<TabNavigationState> emit) async {
+    final roomId = event.roomId;
+    chatSessionBloc.add(LoadChatSessionEvent(roomId: roomId ?? 'new-chat'));
   }
 }

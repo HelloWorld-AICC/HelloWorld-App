@@ -22,8 +22,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
     return tokens.fold((f) {
       return request.send();
     }, (result) {
-      request.headers.putIfAbsent(
-          'accessToken', () => result.atk?.token.getOrCrash() ?? "");
+      request.headers
+          .putIfAbsent('user_id', () => result.atk?.token.getOrCrash() ?? "");
 
       return request.send();
     });

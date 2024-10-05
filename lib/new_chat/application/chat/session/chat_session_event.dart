@@ -18,7 +18,7 @@ final class SendMessageEvent extends ChatSessionEvent {
   final String roomId;
   final ChatLog message;
 
-  SendMessageEvent({required this.roomId, required this.message});
+  SendMessageEvent({this.roomId = "new-chat", required this.message});
 
   @override
   List<Object> get props => [roomId, message];

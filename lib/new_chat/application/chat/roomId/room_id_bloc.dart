@@ -8,7 +8,7 @@ part 'room_id_state.dart';
 
 @Injectable()
 class RoomIdBloc extends Bloc<RoomIdEvent, RoomIdState> {
-  RoomIdBloc() : super(const RoomIdState("new-chat")) {
+  RoomIdBloc() : super(const RoomIdState("new_chat")) {
     on<UpdateRoomIdEvent>(_onUpdateRoomId);
   }
 

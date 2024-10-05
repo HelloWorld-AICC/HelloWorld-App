@@ -13,7 +13,7 @@ class ServiceLocator {
 
   static final _fetchService = WebFluxFetchService(client: _client);
 
-  static FetchService getFetchService() {
+  static WebFluxFetchService getFetchService() {
     return _fetchService;
   }
 }

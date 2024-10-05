@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/home/application/home_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/new_chat/presentation/common/custom_bottom_navigation_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -150,6 +151,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
+                bottomNavigationBar: CustomBottomNavigationBar(),
               );
             },
           ),
