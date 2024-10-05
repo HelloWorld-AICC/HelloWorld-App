@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/new_chat/application/chat/typing_state.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../chat/session/chat_session_bloc.dart';
@@ -26,7 +27,8 @@ class CustomAppLifecycleBloc
 
   void _onAppResumed(
       CustomAppResumed event, Emitter<CustomAppLifecycleState> emit) {
-    chatSessionState.copyWith(messages: []); // messages 초기화
+    chatSessionState.copyWith(
+        messages: [], typingState: TypingState.notTyping); // messages 초기화
     emit(state.copyWith(isResumed: true));
     print("세션을 초기화합니다.");
   }

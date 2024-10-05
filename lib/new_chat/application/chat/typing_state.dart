@@ -1,0 +1,1 @@
+enum TypingState { typing, notTyping }

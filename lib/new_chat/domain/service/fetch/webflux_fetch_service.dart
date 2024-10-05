@@ -32,9 +32,10 @@ class WebFluxFetchService extends FetchService {
 
     const String authority = "www.gotoend.store";
     final uri = Uri.https(authority, realPath, queryParams);
-    
+
     return await super.request(
       method: method,
+      pathPrefix: "",
       path: path,
       bodyParam: bodyParam,
       pathParams: pathParams,

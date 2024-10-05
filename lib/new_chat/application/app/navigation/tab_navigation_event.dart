@@ -7,10 +7,18 @@ sealed class TabNavigationEvent extends Equatable {
 
 final class TabChanged extends TabNavigationEvent {
   final int newIndex;
-  final String? roomId;
 
-  TabChanged({required this.newIndex, this.roomId});
+  TabChanged({required this.newIndex});
 
   @override
-  List<Object?> get props => [newIndex, roomId];
+  List<Object?> get props => [newIndex];
+}
+
+final class ChatTabSelected extends TabNavigationEvent {
+  final String? roomId;
+
+  ChatTabSelected({this.roomId});
+
+  @override
+  List<Object?> get props => [roomId];
 }
