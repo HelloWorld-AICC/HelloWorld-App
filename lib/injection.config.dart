@@ -28,8 +28,11 @@ import 'auth/infrastructure/repository/token_repository.dart' as _i782;
 import 'fetch/authenticated_http_client.dart' as _i30;
 import 'fetch/fetch_service.dart' as _i1053;
 import 'home/application/home_bloc.dart' as _i785;
+import 'home/injection/home_register_module.dart' as _i443;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
+import 'locale/domain/localization_service.dart' as _i121;
+import 'route/application/route_bloc.dart' as _i1045;
 import 'toast/toast_bloc.dart' as _i301;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -43,8 +46,12 @@ extension GetItInjectableX on _i174.GetIt {
       environment,
       environmentFilter,
     );
+    final homeRegisterModule = _$HomeRegisterModule();
+    gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
     gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
+    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
+    gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i690.IAuthLocalProvider>(
@@ -72,3 +79,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$HomeRegisterModule extends _i443.HomeRegisterModule {}

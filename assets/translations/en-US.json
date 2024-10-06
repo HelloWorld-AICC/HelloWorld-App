@@ -1,4 +1,17 @@
 {
+  "bottom_navigation": {
+    "home": "Home",
+    "chat": "Chat Consultation",
+    "resume": "Resume Writing",
+    "call_bot": "Call Bot",
+    "consultation_center": "Consultation Center"
+  },
+  "home_grid": {
+    "chat": "Chat Consultation",
+    "call_bot": "Call Bot",
+    "resume": "Resume Writing",
+    "job": "Job Information"
+  },
   "app_name": "Foreign Support Center AICC",
   "login_button": "Login",
   "select_language": "Please select a language",
@@ -160,10 +173,10 @@
   "registered_date": "Registered Date",
   "end_date": "End Date",
   "apply_button": "Apply",
-  "auth_success_login" : "Successfully logged in.",
-  "auth_sign_in_with_google" : "Login with Google",
-  "auth_login_title" : "외국인 지원센터 AICC\nHello World",
-  "auth_account_is_null" : "GoogleSignInAccount is null.",
-  "auth_unknown_token_type" : "The token type does not exist.",
-  "app_unkown_error" : "An unknown error occurred."
+  "auth_success_login": "Successfully logged in.",
+  "auth_sign_in_with_google": "Login with Google",
+  "auth_login_title": "외국인 지원센터 AICC\nHello World",
+  "auth_account_is_null": "GoogleSignInAccount is null.",
+  "auth_unknown_token_type": "The token type does not exist.",
+  "app_unkown_error": "An unknown error occurred."
 }
