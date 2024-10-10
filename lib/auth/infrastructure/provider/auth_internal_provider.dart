@@ -10,6 +10,7 @@ import 'package:hello_world_mvp/fetch/fetch_service.dart';
 @LazySingleton(as: IAuthInternalProvider)
 class AuthInternalProvider implements IAuthInternalProvider {
   final FetchService _fetchService;
+
   AuthInternalProvider(this._fetchService);
 
   @override

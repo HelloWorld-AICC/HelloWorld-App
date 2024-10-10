@@ -10,6 +10,7 @@ import 'package:hello_world_mvp/local_storage/local_storage_service.dart';
 @LazySingleton(as: IAuthLocalProvider)
 class AuthLocalProvier implements IAuthLocalProvider {
   final LocalStorageService service;
+
   AuthLocalProvier({
     required this.service,
   });
@@ -36,7 +37,25 @@ class AuthLocalProvier implements IAuthLocalProvider {
     return tokensOrFailure.fold((f) {
       return left(LocalStorageFailure(message: f.message));
     }, (result) {
-      return right((result["tokens"] as List).map((e) => TokenDto.fromJson(e)).toList());
+      return right(
+          (result["tokens"] as List).map((e) => TokenDto.fromJson(e)).toList());
     });
+  }
+
+  Future<Either<LocalStorageFailure, bool>> checkIfTokenExpired() async {
+    final currentTime = DateTime.now().toUtc();
+    final tokensOrFailure = await service.read("userTokens");
+    return tokensOrFailure.fold(
+      (f) => left(LocalStorageFailure(message: f.message)),
+      (result) {
+        List<TokenDto> tokens = (result["tokens"] as List)
+            .map((e) => TokenDto.fromJson(e))
+            .toList();
+        TokenDto atk = tokens[0];
+        final isTokenExpired =
+            DateTime.parse(atk.tokenExpiresTime).isBefore(currentTime);
+        return right(isTokenExpired);
+      },
+    );
   }
 }

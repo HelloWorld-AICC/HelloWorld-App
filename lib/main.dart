@@ -4,12 +4,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'auth/presentation/login_screen.dart';
 import 'home/presentation/home_page.dart';
 
 void main() async {
@@ -42,6 +45,9 @@ void main() async {
             BlocProvider(
               create: (context) => getIt<LocaleBloc>(),
             ),
+            BlocProvider(
+              create: (context) => getIt<AppInitBloc>(),
+            )
           ],
           child: MainApp(),
         ),
@@ -66,11 +72,6 @@ class MainApp extends StatefulWidget {
 class _MainAppState extends State<MainApp> {
   GlobalKey<CommonToastState> commonToastKey = GlobalKey<CommonToastState>();
   late CommonToast commonToast = CommonToast(key: commonToastKey);
-
-  final GoRouter _router = GoRouter(routes: [
-    GoRoute(path: '/', builder: (context, state) => const HomePage()),
-    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
-  ]);
 
   @override
   void initState() {
@@ -98,9 +99,28 @@ class _MainAppState extends State<MainApp> {
                 commonToastKey.currentState?.updateMessage(state.message);
               },
             ),
+            BlocListener<AppInitBloc, AppInitState>(
+              listener: (context, state) => _handleNavigation(context, state),
+            ),
           ],
           child: MaterialApp.router(
-            routerConfig: _router,
+            routerConfig: GoRouter(
+              // initialLocation: '/login',
+              routes: [
+                GoRoute(
+                  path: '/',
+                  builder: (context, state) => const HomePage(),
+                ),
+                GoRoute(
+                    path: '/home',
+                    builder: (context, state) => const HomePage()),
+                GoRoute(
+                    path: '/login',
+                    builder: (context, state) => const LoginScreen()),
+                GoRoute(
+                    path: '/chat', builder: (context, state) => NewChatPage()),
+              ],
+            ),
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: locale,
@@ -114,6 +134,13 @@ class _MainAppState extends State<MainApp> {
         );
       },
     );
+  }
+
+  void _handleNavigation(BuildContext context, AppInitState state) {
+    final _router = GoRouter.of(context);
+    print('isFirstRun: ${state.isFirstRun}');
+    // state.isFirstRun ? _router.go('/login') : _router.go('/home');
+    true ? _router.go('/login') : _router.go('/home');
   }
 }
 

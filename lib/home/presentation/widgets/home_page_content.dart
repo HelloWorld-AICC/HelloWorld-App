@@ -8,18 +8,18 @@ import '../../../locale/domain/localization_service.dart';
 import '../../../route/domain/navigation_service.dart';
 import 'home_route_grid.dart';
 
+final Map<String, IconData> bottomNavItems = {
+  'bottom_navigation.chat': Icons.chat,
+  'bottom_navigation.resume': Icons.file_copy,
+  'bottom_navigation.home': Icons.home,
+  'bottom_navigation.call_bot': Icons.phone,
+  'bottom_navigation.consultation_center': Icons.support_agent,
+};
+
 class HomePageContent extends StatelessWidget {
   final LocalizationService localizationService;
   final List<String> imagesPath;
   final NavigationService navigationService;
-
-  final Map<String, IconData> bottomNavItems = {
-    'bottom_navigation.chat': Icons.chat,
-    'bottom_navigation.resume': Icons.file_copy,
-    'bottom_navigation.home': Icons.home,
-    'bottom_navigation.call_bot': Icons.phone,
-    'bottom_navigation.consultation_center': Icons.support_agent,
-  };
 
   HomePageContent({
     Key? key,
@@ -103,21 +103,17 @@ class HomePageContent extends StatelessWidget {
   }
 
   Widget _buildImageSection() {
-    return Stack(
-      children: [
-        Container(
-          alignment: Alignment.centerRight,
-          margin: EdgeInsets.only(bottom: 8),
-          child: SizedBox(
-            width: 250.0,
-            height: 300.0,
-            child: Image.asset(
-              'assets/images/home/Nice to meet you.png',
-              fit: BoxFit.contain,
-            ),
-          ),
+    return Container(
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(bottom: 8),
+      child: SizedBox(
+        width: 250.0,
+        height: 250.0,
+        child: Image.asset(
+          'assets/images/home/Nice to meet you.png',
+          fit: BoxFit.contain,
         ),
-      ],
+      ),
     );
   }
 }

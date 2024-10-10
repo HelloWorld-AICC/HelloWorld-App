@@ -1,6 +1,6 @@
 part of 'route_bloc.dart';
 
-class RouteState extends Equatable {
+class RouteState {
   final int currentIndex;
   final String currentRoute;
 
@@ -11,13 +11,13 @@ class RouteState extends Equatable {
 
   factory RouteState.initial() {
     return RouteState(
-      currentIndex: 0,
+      currentIndex: 2,
       currentRoute: '/',
     );
   }
 
   @override
-  List<Object?> get props => [currentIndex];
+  List<Object?> get props => [];
 
   RouteState copyWith({int? currentIndex, String? currentRoute}) {
     return RouteState(

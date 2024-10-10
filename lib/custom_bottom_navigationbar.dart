@@ -17,6 +17,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
     return BlocBuilder<RouteBloc, RouteState>(
       builder: (context, routeState) {
+        print("current index: ${routeState.currentIndex}");
+
         return BottomNavigationBar(
           currentIndex: routeState.currentIndex,
           onTap: (index) {
@@ -29,7 +31,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           },
           items: _getBottomNavItems(localizationService),
           backgroundColor: Colors.transparent,
-          selectedItemColor: Colors.blue,
+          selectedItemColor: Color(0xff4B7BF5),
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
         );
