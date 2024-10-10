@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/presentation/login_screen.dart';
 import 'home/presentation/home_page.dart';
+import 'new_chat/application/session/chat_session_bloc.dart';
 
 void main() async {
   runZonedGuarded(() async {
@@ -51,7 +52,10 @@ void main() async {
             ),
             BlocProvider(
               create: (context) => getIt<RouteBloc>(),
-            )
+            ),
+            BlocProvider(
+              create: (context) => getIt<ChatSessionBloc>(),
+            ),
           ],
           child: MainApp(),
         ),
