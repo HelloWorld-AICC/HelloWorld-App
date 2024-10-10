@@ -8,6 +8,7 @@ import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
+import 'package:hello_world_mvp/route/application/route_bloc.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,6 +48,9 @@ void main() async {
             ),
             BlocProvider(
               create: (context) => getIt<AppInitBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<RouteBloc>(),
             )
           ],
           child: MainApp(),

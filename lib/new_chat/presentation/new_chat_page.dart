@@ -13,9 +13,6 @@ class NewChatPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => getIt<RouteBloc>(),
-        ),
-        BlocProvider(
           create: (context) => getIt<ChatSessionBloc>(),
         ),
         BlocProvider(

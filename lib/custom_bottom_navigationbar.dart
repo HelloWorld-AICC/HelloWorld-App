@@ -27,11 +27,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
             context
                 .read<RouteBloc>()
                 .add(RouteChanged(newIndex: index, newRoute: selectedRoute));
-            context.push(selectedRoute);
+            Future.delayed(Duration(milliseconds: 100), () {
+              context.push(selectedRoute);
+            });
           },
           items: _getBottomNavItems(localizationService),
           backgroundColor: Colors.transparent,
-          selectedItemColor: Color(0xff4B7BF5),
+          selectedItemColor: const Color(0xff4B7BF5),
           unselectedItemColor: Colors.grey,
           showUnselectedLabels: true,
         );

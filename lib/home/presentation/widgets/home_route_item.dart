@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../route/application/route_bloc.dart';
 import '../../../route/domain/navigation_service.dart';
 
 class HomeRouteItem extends StatelessWidget {
@@ -22,6 +24,9 @@ class HomeRouteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        context
+            .read<RouteBloc>()
+            .add(RouteChanged(newIndex: index, newRoute: path));
         navigationService.navigateTo(path);
       },
       child: Container(

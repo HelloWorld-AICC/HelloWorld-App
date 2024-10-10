@@ -17,7 +17,7 @@ class RouteState {
   }
 
   @override
-  List<Object?> get props => [];
+  List<Object?> get props => [currentIndex, currentRoute];
 
   RouteState copyWith({int? currentIndex, String? currentRoute}) {
     return RouteState(

@@ -42,9 +42,6 @@ class _HomePageState extends State<HomePage> {
         BlocProvider<LocaleBloc>(
           create: (context) => getIt<LocaleBloc>(), // LocaleBloc 추가
         ),
-        BlocProvider<RouteBloc>(
-          create: (context) => getIt<RouteBloc>(), // RouteBloc 추가
-        ),
       ],
       child: Builder(
         builder: (context) {

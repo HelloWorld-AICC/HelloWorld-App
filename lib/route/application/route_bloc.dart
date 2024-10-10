@@ -20,8 +20,10 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
 
   Future<void> _onRouteChanged(
       RouteChanged event, Emitter<RouteState> emit) async {
-    emit(state.copyWith(currentIndex: event.newIndex));
-    emit(state.copyWith(currentRoute: event.newRoute));
+    emit(state.copyWith(
+      currentIndex: event.newIndex,
+      currentRoute: event.newRoute,
+    ));
     print("naviagtion to ${event.newRoute}");
     // if (event.newIndex == 1) {
     //   final roomId = activeChatRoomBloc.state.roomId;

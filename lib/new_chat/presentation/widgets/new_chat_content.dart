@@ -76,6 +76,7 @@ class NewChatContentState extends State<NewChatContent>
               child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
                 bloc: context.read<ChatSessionBloc>(),
                 builder: (context, state) {
+                  print('messages: ${state.messages.map((e) => e.content)}');
                   return MessageListWidget(messages: state.messages ?? []);
                 },
               ),
