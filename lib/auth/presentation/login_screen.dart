@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/auth/application/login_bloc.dart';
 import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/injection.dart';
@@ -20,7 +21,8 @@ class LoginScreen extends StatelessWidget {
               listenWhen: (prev, cur) =>
                   (prev.succeeded != cur.succeeded) && (cur.succeeded == true),
               listener: (context, state) {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                GoRouter.of(context).go('/home');
                 showToast(tr('auth_success_login'));
               },
             ),

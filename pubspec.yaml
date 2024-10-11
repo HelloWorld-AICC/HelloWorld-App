@@ -47,4 +47,5 @@ flutter:
     - assets/translations/
     - assets/images/
     - assets/images/auth/
+    - assets/images/home/
     - assets/fonts/
