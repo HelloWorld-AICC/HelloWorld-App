@@ -33,6 +33,7 @@ dependencies:
   hive: ^2.2.3
   flutter_bloc: ^8.1.6
   rxdart: ^0.28.0
+  flutter_svg: ^2.0.10+1
 
 dev_dependencies:
   flutter_test:
@@ -47,4 +48,7 @@ flutter:
     - assets/translations/
     - assets/images/
     - assets/images/auth/
+    - assets/images/common/
+    - assets/images/home/bottom_navigation_bar/
+    - assets/images/mypage/
     - assets/fonts/

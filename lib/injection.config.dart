@@ -30,6 +30,12 @@ import 'fetch/fetch_service.dart' as _i1053;
 import 'home/application/home_bloc.dart' as _i785;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
+import 'mypage/application/mypage/mypage_bloc.dart' as _i52;
+import 'mypage/domain/repository/i_mypage_repository.dart' as _i40;
+import 'mypage/infrastructure/provider/interface/i_mypage_internal_provider.dart'
+    as _i737;
+import 'mypage/infrastructure/provider/mypage_internal_provider.dart' as _i824;
+import 'mypage/infrastructure/repository/mypage_repository.dart' as _i1052;
 import 'toast/toast_bloc.dart' as _i301;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -67,8 +73,14 @@ extension GetItInjectableX on _i174.GetIt {
           authInternalProvider: gh<_i5.IAuthInternalProvider>(),
           authLocalProvider: gh<_i690.IAuthLocalProvider>(),
         ));
+    gh.lazySingleton<_i737.IMypageInternalProvider>(
+        () => _i824.MypageInternalProvider(gh<_i1053.FetchService>()));
+    gh.lazySingleton<_i40.IMypageRepository>(() => _i1052.MypageRepository(
+        mypageProvider: gh<_i737.IMypageInternalProvider>()));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
+    gh.factory<_i52.MypageBloc>(
+        () => _i52.MypageBloc(myPageRepository: gh<_i40.IMypageRepository>()));
     return this;
   }
 }
