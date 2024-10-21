@@ -22,8 +22,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
     return tokens.fold((f) {
       return request.send();
     }, (result) {
-      request.headers.putIfAbsent(
-          'accessToken', () => result.atk?.token.getOrCrash() ?? "");
+      request.headers.putIfAbsent('Authorization',
+          () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
 
       return request.send();
     });
@@ -49,6 +49,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
   void printDebugResponse(String type, Response response,
       {bool pretty = false}) {
     var result = "[API-RESPONSE] ${response.statusCode}";
+
+    debugPrint(response.body);
 
     if (response.request?.url != null) {
       result += '\t$type ${response.request?.url}\n';
