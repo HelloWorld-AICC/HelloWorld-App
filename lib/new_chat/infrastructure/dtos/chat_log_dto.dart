@@ -2,17 +2,17 @@ import '../../../core/value_objects.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
 
-class ChatLogDTO {
+class ChatLogDto {
   final String content;
   final String sender;
 
-  ChatLogDTO({
+  ChatLogDto({
     required this.content,
     required this.sender,
   });
 
-  factory ChatLogDTO.fromJson(Map<String, dynamic> json) {
-    return ChatLogDTO(
+  factory ChatLogDto.fromJson(Map<String, dynamic> json) {
+    return ChatLogDto(
       content: json['content'],
       sender: json['sender'],
     );

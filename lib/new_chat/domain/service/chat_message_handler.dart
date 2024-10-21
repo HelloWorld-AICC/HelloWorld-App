@@ -24,6 +24,7 @@ class ChatMessageHandler {
     return failureOrResponse.fold(
         (failure) => left(ChatSendFailure(message: "Failed to send message")),
         (response) {
+      print("response: $response");
       _messageStreamController.sink.add(message.getOrCrash());
       return right(unit);
     });

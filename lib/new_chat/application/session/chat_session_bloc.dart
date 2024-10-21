@@ -50,8 +50,11 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
     on<SendMessageEvent>((event, emit) async {
       state.messages.add(event.message);
       emit(state.copyWith(typingState: TypingIndicatorState.shown));
+      print("event.message: ${event.message}");
       final result = await chatService.send(
           StringVO(state.roomId), StringVO(event.message.content.getOrCrash()));
+      print("result: $result");
+      print("event.message: ${event.message}");
       emit(result.fold(
         (failure) {
           return state.copyWith(

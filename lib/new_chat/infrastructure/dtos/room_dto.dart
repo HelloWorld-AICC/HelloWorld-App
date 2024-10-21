@@ -4,7 +4,7 @@ import 'chat_log_dto.dart';
 
 class RoomDto {
   final String roomId;
-  final List<ChatLogDTO> chatLogs;
+  final List<ChatLogDto> chatLogs;
 
   RoomDto({
     required this.roomId,
@@ -15,7 +15,7 @@ class RoomDto {
     return RoomDto(
       roomId: json['roomId'],
       chatLogs: (json['chatLogs'] as List)
-          .map((e) => ChatLogDTO.fromJson(e))
+          .map((e) => ChatLogDto.fromJson(e))
           .toList(),
     );
   }

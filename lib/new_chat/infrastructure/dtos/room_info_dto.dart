@@ -1,17 +1,17 @@
 import '../../../core/value_objects.dart';
 import '../../domain/model/chat_room_info.dart';
 
-class RoomInfoDTO {
+class RoomInfoDto {
   String roomId;
   String title;
 
-  RoomInfoDTO({
+  RoomInfoDto({
     required this.roomId,
     required this.title,
   });
 
-  factory RoomInfoDTO.fromJson(Map<String, dynamic> json) {
-    return RoomInfoDTO(
+  factory RoomInfoDto.fromJson(Map<String, dynamic> json) {
+    return RoomInfoDto(
       roomId: json['roomId'],
       title: json['title'],
     );
