@@ -63,7 +63,7 @@ flutter:
           weight: 500
         - asset: assets/fonts/SB-AggroOTF-Light.otf
           weight: 300
-        - family: SB AggroOTF
+
     - family: Pretendard
       fonts:
         - asset: assets/fonts/pretendard/Pretendard-Black.otf
