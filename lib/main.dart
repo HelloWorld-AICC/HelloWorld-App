@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
-import 'package:hello_world_mvp/mypage/presentation/mypage_screen.dart';
+import 'package:hello_world_mvp/mypage/profile/presentation/mypage_screen.dart';
 import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';

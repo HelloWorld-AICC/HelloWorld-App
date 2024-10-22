@@ -4,11 +4,11 @@ import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/auth/domain/model/token_set.dart';
 import 'package:hello_world_mvp/auth/domain/repository/i_token_repository.dart';
 import 'package:hello_world_mvp/auth/infrastructure/provider/interface/i_auth_local_provider.dart';
-import 'package:hello_world_mvp/mypage/domain/failure/mypage_failure.dart';
-import 'package:hello_world_mvp/mypage/domain/model/my_info.dart';
-import 'package:hello_world_mvp/mypage/domain/repository/i_mypage_repository.dart';
+import 'package:hello_world_mvp/mypage/profile/domain/failure/mypage_failure.dart';
+import 'package:hello_world_mvp/mypage/profile/domain/model/my_info.dart';
+import 'package:hello_world_mvp/mypage/profile/domain/repository/i_mypage_repository.dart';
 
-import 'package:hello_world_mvp/mypage/infrastructure/provider/interface/i_mypage_internal_provider.dart';
+import 'package:hello_world_mvp/mypage/profile/infrastructure/provider/interface/i_mypage_internal_provider.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: IMypageRepository)

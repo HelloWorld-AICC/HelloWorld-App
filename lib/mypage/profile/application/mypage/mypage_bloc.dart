@@ -2,9 +2,9 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
-import 'package:hello_world_mvp/mypage/domain/failure/mypage_failure.dart';
-import 'package:hello_world_mvp/mypage/domain/model/my_info.dart';
-import 'package:hello_world_mvp/mypage/domain/repository/i_mypage_repository.dart';
+import 'package:hello_world_mvp/mypage/profile/domain/failure/mypage_failure.dart';
+import 'package:hello_world_mvp/mypage/profile/domain/model/my_info.dart';
+import 'package:hello_world_mvp/mypage/profile/domain/repository/i_mypage_repository.dart';
 
 import 'package:injectable/injectable.dart';
 
