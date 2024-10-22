@@ -53,3 +53,13 @@ flutter:
     - assets/images/mypage/
     - assets/images/home/
     - assets/fonts/
+
+  fonts:
+    - family: SB AggroOTF
+      fonts:
+        - asset: assets/fonts/SB-AggroOTF-Bold.otf
+          weight: 700
+        - asset: assets/fonts/SB-AggroOTF-Medium.otf
+          weight: 500
+        - asset: assets/fonts/SB-AggroOTF-Light.otf
+          weight: 300
