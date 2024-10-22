@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../locale/application/locale_bloc.dart';
@@ -81,20 +82,33 @@ class HomePageContent extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "HelloWorld",
+                style: TextStyle(
+                  fontFamily: "SB AggroOTF",
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500,
+                  color: Color(0xFF002E4F),
+                ),
+              ),
+              SvgPicture.asset(
+                "assets/images/home/profile_icon.svg",
+                width: 20,
+                height: 18,
+              ),
+            ],
+          ),
           Text(
             "${tr("app_name")},",
             style: const TextStyle(
               fontSize: 16,
               color: Color(0xFF10498E),
-            ),
-          ),
-          const Text(
-            "HelloWorld",
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF002E4F),
             ),
           ),
         ],
