@@ -100,7 +100,7 @@ class HomePageContent extends StatelessWidget {
               ),
               InkWell(
                 onTap: () {
-                  context.push('/mypage');
+                  context.push('/mypage-menu');
                 },
                 child: SvgPicture.asset(
                   "assets/images/home/profile_icon.svg",

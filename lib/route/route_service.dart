@@ -7,7 +7,7 @@ import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
 import 'package:hello_world_mvp/consultation_history/presntation/consultation_history_screen.dart';
 import 'package:hello_world_mvp/job/job_screen.dart';
-import 'package:hello_world_mvp/mypage/profile/presentation/mypage_screen.dart';
+import 'package:hello_world_mvp/mypage/menu/presentation/mypage_menu_screen.dart';
 import 'package:hello_world_mvp/personal/view/edit_profile_screen.dart';
 
 import '../call_bot_screen.dart';
@@ -144,8 +144,8 @@ class RouteService {
           builder: (context, state) => const LoginScreen(),
         ),
         GoRoute(
-          path: '/mypage',
-          builder: (context, state) => const MypageScreen(),
+          path: '/mypage-menu',
+          builder: (context, state) => const MypageMenuScreen(),
         ),
         GoRoute(
           path: '/consultation-history',

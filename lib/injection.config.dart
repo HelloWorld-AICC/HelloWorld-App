@@ -33,12 +33,12 @@ import 'init/application/app_init_bloc.dart' as _i775;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
 import 'locale/domain/localization_service.dart' as _i121;
-import 'mypage/profile/application/mypage/mypage_bloc.dart' as _i52;
-import 'mypage/profile/domain/repository/i_mypage_repository.dart' as _i40;
-import 'mypage/profile/infrastructure/provider/interface/i_mypage_internal_provider.dart'
+import 'mypage/menu/application/mypage/mypage_bloc.dart' as _i52;
+import 'mypage/menu/domain/repository/i_mypage_repository.dart' as _i40;
+import 'mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider.dart'
     as _i737;
-import 'mypage/profile/infrastructure/provider/mypage_internal_provider.dart' as _i824;
-import 'mypage/profile/infrastructure/repository/mypage_repository.dart' as _i1052;
+import 'mypage/menu/infrastructure/provider/mypage_internal_provider.dart' as _i824;
+import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i1052;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;

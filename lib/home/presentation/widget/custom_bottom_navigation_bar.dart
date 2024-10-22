@@ -23,7 +23,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
             ),
             _BottomNavigationItem(
               onTap: () {
-                context.push("/mypage");
+                context.push("/mypage-menu");
               },
               iconPath: "assets/images/home/bottom_navigation_bar/mypage.svg",
             ),
