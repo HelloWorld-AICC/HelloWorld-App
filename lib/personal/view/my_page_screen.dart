@@ -82,7 +82,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 ],
               ),
             ),
-          ),
+          ),  
           // Your Scaffold properties
           bottomNavigationBar: BottomNavigationBar(
             items: <BottomNavigationBarItem>[

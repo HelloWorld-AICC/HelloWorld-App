@@ -6,7 +6,12 @@ class HomeState extends Equatable {
 
   const HomeState({required this.needSignIn});
 
-  factory HomeState.initial() => const HomeState(needSignIn: null);
+  factory HomeState.initial() => const HomeState(
+        needSignIn: null,
+      );
+
+  @override
+  List<Object?> get props => [needSignIn];
 
   HomeState copyWith({
     bool? needSignIn,
@@ -15,7 +20,4 @@ class HomeState extends Equatable {
       needSignIn: needSignIn ?? this.needSignIn,
     );
   }
-
-  @override
-  List<Object?> get props => [needSignIn];
 }
