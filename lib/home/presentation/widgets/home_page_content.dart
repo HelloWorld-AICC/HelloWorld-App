@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../locale/application/locale_bloc.dart';
@@ -97,10 +98,15 @@ class HomePageContent extends StatelessWidget {
                   color: Color(0xFF002E4F),
                 ),
               ),
-              SvgPicture.asset(
-                "assets/images/home/profile_icon.svg",
-                width: 20,
-                height: 18,
+              InkWell(
+                onTap: () {
+                  context.push('/mypage');
+                },
+                child: SvgPicture.asset(
+                  "assets/images/home/profile_icon.svg",
+                  width: 20,
+                  height: 18,
+                ),
               ),
             ],
           ),
