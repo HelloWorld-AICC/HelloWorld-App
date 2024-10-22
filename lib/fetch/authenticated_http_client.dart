@@ -24,7 +24,6 @@ class AuthenticatedHttpClient extends http.BaseClient {
     }, (result) {
       request.headers.putIfAbsent('Authorization',
           () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
-      request.headers.putIfAbsent('id', () => "11");
 
       return request.send();
     });
