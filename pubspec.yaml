@@ -51,4 +51,5 @@ flutter:
     - assets/images/common/
     - assets/images/home/bottom_navigation_bar/
     - assets/images/mypage/
+    - assets/images/home/
     - assets/fonts/

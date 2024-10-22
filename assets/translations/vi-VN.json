@@ -1,4 +1,17 @@
 {
+  "bottom_navigation": {
+    "home": "Trang chủ",
+    "chat": "Tư vấn trò chuyện",
+    "resume": "Viết hồ sơ",
+    "call_bot": "Bot gọi",
+    "consultation_center": "Trung tâm tư vấn"
+  },
+  "home_grid": {
+    "chat_consultation": "Tư vấn qua chat",
+    "call_bot": "Gọi Bot",
+    "resume_writing": "Viết hồ sơ",
+    "job_information": "Thông tin việc làm"
+  },
   "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
   "login_button": "Đăng nhập",
   "select_language": "Vui lòng chọn ngôn ngữ",
@@ -160,10 +173,10 @@
   "registered_date": "Ngày đăng ký",
   "end_date": "Ngày kết thúc",
   "apply_button": "Nộp đơn",
-  "auth_success_login" : "Đăng nhập thành công. ",
-  "auth_sign_in_with_google" : "Đăng nhập bằng Google",
-  "auth_login_title" : "Trung tâm hỗ trợ người nước ngoài AICC\nHello World",
-  "auth_account_is_null" : "GoogleSignInAccount là null.",
-  "auth_unknown_token_type" : "Loại mã thông báo không tồn tại.",
-  "app_unkown_error" : "Đã xảy ra lỗi không xác định."
+  "auth_success_login": "Đăng nhập thành công. ",
+  "auth_sign_in_with_google": "Đăng nhập bằng Google",
+  "auth_login_title": "Trung tâm hỗ trợ người nước ngoài AICC\nHello World",
+  "auth_account_is_null": "GoogleSignInAccount là null.",
+  "auth_unknown_token_type": "Loại mã thông báo không tồn tại.",
+  "app_unkown_error": "Đã xảy ra lỗi không xác định."
 }

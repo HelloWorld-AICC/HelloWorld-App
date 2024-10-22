@@ -1,73 +1,21 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
-import 'package:hello_world_mvp/chat/service/recent_room_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
+import 'package:hello_world_mvp/route/application/route_bloc.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
-import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// import 'auth/service/auth_service.dart';
-// import 'auth/service/token/token_authenticator.dart';
-import 'chat/provider/room_provider.dart';
-import 'locale/locale_provider.dart';
-import 'route/route_service.dart';
-
-// void setupDio(Dio dio, TokenAuthenticator tokenAuthenticator) {
-//   dio.interceptors.add(
-//     InterceptorsWrapper(
-//       onRequest:
-//           (RequestOptions options, RequestInterceptorHandler handler) async {
-//         final token = await tokenAuthenticator.fetchAccessToken();
-//         if (token != null) {
-//           options.headers['Authorization'] = 'Bearer $token';
-//         }
-//         handler.next(options);
-//       },
-//       onResponse:
-//           (Response response, ResponseInterceptorHandler handler) async {
-//         handler.next(response);
-//       },
-//       onError: (DioException e, ErrorInterceptorHandler handler) async {
-//         if (e.response?.statusCode == 401) {
-//           try {
-//             final newOptions = await tokenAuthenticator.authenticate(
-//               e.requestOptions,
-//               e.response!,
-//             );
-//             final newResponse = await dio.request(
-//               newOptions.path,
-//               options: Options(
-//                 method: newOptions.method,
-//                 headers: newOptions.headers,
-//               ),
-//             );
-//             handler.resolve(newResponse);
-//           } catch (error) {
-//             handler.reject(DioException(
-//               requestOptions: e.requestOptions,
-//               response: e.response,
-//               error: error,
-//             ));
-//           }
-//         } else {
-//           handler.reject(e);
-//         }
-//       },
-//     ),
-//   );
-// }
-
-// Future<bool> _checkUserLoggedIn(AuthService authService) async {
-//   final accessToken = await authService.fetchAccessToken();
-//   return accessToken != null;
-// }
+import 'auth/presentation/login_screen.dart';
+import 'home/presentation/home_page.dart';
+import 'new_chat/application/session/chat_session_bloc.dart';
 
 void main() async {
   runZonedGuarded(() async {
@@ -81,36 +29,6 @@ void main() async {
 
     configureDependencies();
 
-    // final Dio dio = Dio();
-    // final AuthService authService = AuthService(
-    //   dio,
-    // );
-
-    // isUserLoggedIn() async => (await authService.fetchAccessToken()) != null;
-
-    /*
-  final TokenAuthenticator tokenAuthenticator = TokenAuthenticator(
-    dio,
-    'https://example.com/', // Base URL
-    'token/refresh', // Token refresh URL
-    routeService,
-  );
-
-  setupDio(dio, tokenAuthenticator);
-  */
-
-    final RecentRoomProvider recentRoomProvider = RecentRoomProvider();
-    RecentRoomService recentRoomService = RecentRoomService(
-      baseUrl: 'http://15.165.84.103:8082/chat/recent-room',
-      userId: '1',
-      recentRoomProvider: recentRoomProvider,
-    );
-    final routeService = RouteService(
-      recentRoomService,
-      isUserLoggedIn: Future.value(
-          true), // Replace true with your actual login status check
-    );
-
     runApp(
       EasyLocalization(
         supportedLocales: const [
@@ -121,27 +39,25 @@ void main() async {
           Locale('vi', 'VN'),
         ],
         path: 'assets/translations',
-        child: MultiProvider(
+        child: MultiBlocProvider(
           providers: [
-            ChangeNotifierProvider(create: (_) => RoomProvider()),
-            ChangeNotifierProvider(
-              create: (_) => RecentRoomProvider(),
+            BlocProvider(
+              create: (context) => getIt<ToastBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<LocaleBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<AppInitBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<RouteBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<ChatSessionBloc>(),
             ),
           ],
-          child: MultiBlocProvider(
-            providers: [
-              BlocProvider(
-                create: (context) => getIt<ToastBloc>(),
-              ),
-              BlocProvider(
-                create: (context) => getIt<LocaleBloc>(),
-              ),
-            ],
-            child: MainApp(
-              // authService: authService,
-              routeService: routeService,
-            ),
-          ),
+          child: MainApp(),
         ),
       ),
     );
@@ -153,13 +69,8 @@ void main() async {
 }
 
 class MainApp extends StatefulWidget {
-  // final AuthService authService;
-  final RouteService routeService;
-
   const MainApp({
     super.key,
-    // required this.authService,
-    required this.routeService,
   });
 
   @override
@@ -182,8 +93,6 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
-    // log("[MainApp] Detected locale: ${context.locale}");
-
     return BlocBuilder<LocaleBloc, LocaleState>(
       buildWhen: (previous, current) {
         return previous.locale != current.locale;
@@ -198,9 +107,28 @@ class _MainAppState extends State<MainApp> {
                 commonToastKey.currentState?.updateMessage(state.message);
               },
             ),
+            BlocListener<AppInitBloc, AppInitState>(
+              listener: (context, state) => _handleNavigation(context, state),
+            ),
           ],
           child: MaterialApp.router(
-            routerConfig: widget.routeService.router,
+            routerConfig: GoRouter(
+              // initialLocation: '/login',
+              routes: [
+                GoRoute(
+                  path: '/',
+                  builder: (context, state) => const HomePage(),
+                ),
+                GoRoute(
+                    path: '/home',
+                    builder: (context, state) => const HomePage()),
+                GoRoute(
+                    path: '/login',
+                    builder: (context, state) => const LoginScreen()),
+                GoRoute(
+                    path: '/chat', builder: (context, state) => NewChatPage()),
+              ],
+            ),
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: locale,
@@ -214,6 +142,13 @@ class _MainAppState extends State<MainApp> {
         );
       },
     );
+  }
+
+  void _handleNavigation(BuildContext context, AppInitState state) {
+    final _router = GoRouter.of(context);
+    print('isFirstRun: ${state.isFirstRun}');
+    // state.isFirstRun ? _router.go('/login') : _router.go('/home');
+    true ? _router.go('/login') : _router.go('/home');
   }
 }
 
