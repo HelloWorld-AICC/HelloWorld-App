@@ -5,7 +5,9 @@ import 'package:hello_world_mvp/auth/presentation/login_screen.dart';
 import 'package:hello_world_mvp/chat/model/room/room.dart';
 import 'package:hello_world_mvp/chat/provider/recent_room_provider.dart';
 import 'package:hello_world_mvp/chat/view/chat_screen_reopened.dart';
+import 'package:hello_world_mvp/consultation_history/presntation/consultation_history_screen.dart';
 import 'package:hello_world_mvp/job/job_screen.dart';
+import 'package:hello_world_mvp/mypage/menu/presentation/mypage_menu_screen.dart';
 import 'package:hello_world_mvp/personal/view/edit_profile_screen.dart';
 
 import '../call_bot_screen.dart';
@@ -140,6 +142,14 @@ class RouteService {
         GoRoute(
           path: '/login',
           builder: (context, state) => const LoginScreen(),
+        ),
+        GoRoute(
+          path: '/mypage-menu',
+          builder: (context, state) => const MypageMenuScreen(),
+        ),
+        GoRoute(
+          path: '/consultation-history',
+          builder: (context, state) => const ConsultationHistoryScreen(),
         ),
         // 다른 라우트 정의...
       ],

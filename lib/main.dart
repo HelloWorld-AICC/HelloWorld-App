@@ -7,6 +7,8 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/mypage/edit_profile/presentation/edit_profile_screen.dart';
+import 'package:hello_world_mvp/mypage/menu/presentation/mypage_menu_screen.dart';
 import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
@@ -128,6 +130,14 @@ class _MainAppState extends State<MainApp> {
                     builder: (context, state) => const LoginScreen()),
                 GoRoute(
                     path: '/chat', builder: (context, state) => NewChatPage()),
+                GoRoute(
+                  path: '/mypage-menu',
+                  builder: (context, state) => const MypageMenuScreen(),
+                ),
+                GoRoute(
+                  path: '/edit-profile',
+                  builder: (context, state) => const EditProfileScreen(),
+                ),
               ],
             ),
             localizationsDelegates: context.localizationDelegates,
