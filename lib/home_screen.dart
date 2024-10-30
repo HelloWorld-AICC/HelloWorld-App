@@ -3,8 +3,10 @@ import 'dart:developer';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/home/application/home_bloc.dart';
+import 'package:hello_world_mvp/home/presentation/widget/custom_bottom_navigation_bar.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:provider/provider.dart';
@@ -266,6 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
+                bottomNavigationBar: CustomBottomNavigationBar(),
               );
             },
           ),
