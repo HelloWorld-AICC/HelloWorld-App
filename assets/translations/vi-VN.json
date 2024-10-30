@@ -7,10 +7,13 @@
     "consultation_center": "Trung tâm tư vấn"
   },
   "home_grid": {
-    "chat_consultation": "Tư vấn qua chat",
+    "chat": "Tư vấn qua chat",
     "call_bot": "Gọi Bot",
-    "resume_writing": "Viết hồ sơ",
-    "job_information": "Thông tin việc làm"
+    "resume": "Viết hồ sơ",
+    "job": "Thông tin việc làm"
+  },
+  "splash_page": {
+    "language_select": "Chọn ngôn ngữ"
   },
   "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
   "login_button": "Đăng nhập",

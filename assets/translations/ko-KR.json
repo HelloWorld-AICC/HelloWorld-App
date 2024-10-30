@@ -7,10 +7,13 @@
     "consultation_center": "상담 센터"
   },
   "home_grid": {
-    "chat_consultation": "채팅 상담",
+    "chat": "채팅 상담",
     "call_bot": "콜봇",
-    "resume_writing": "이력서 작성",
-    "job_information": "채용정보"
+    "resume": "이력서 작성",
+    "job": "채용정보"
+  },
+  "splash_page": {
+    "language_select": "언어 선택"
   },
   "app_name": "외국인 노동자 지원센터 AICC",
   "login_button": "로그인",

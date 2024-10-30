@@ -37,6 +37,8 @@ import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
 import 'new_chat/domain/service/chat_message_handler.dart' as _i718;
+import 'new_chat/infrastructure/providers/chat_rooms_info_provider.dart'
+    as _i925;
 import 'new_chat/infrastructure/repository/chat_repository.dart' as _i605;
 import 'new_chat/infrastructure/repository/chat_rooms_info_repository.dart'
     as _i779;
@@ -55,10 +57,13 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final homeRegisterModule = _$HomeRegisterModule();
+    gh.factory<_i775.AppInitBloc>(() => _i775.AppInitBloc());
+    gh.factory<_i487.LocaleBloc>(() => _i487.LocaleBloc());
     gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
     gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
+    gh.factory<_i925.ChatRoomsInfoProvider>(
+        () => _i925.ChatRoomsInfoProvider());
     gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
-    gh.factory<_i775.AppInitBloc>(() => _i775.AppInitBloc());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
     gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
     gh.lazySingleton<_i141.IAuthExternalProvider>(
@@ -69,8 +74,6 @@ extension GetItInjectableX on _i174.GetIt {
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
     gh.factory<_i785.HomeBloc>(
         () => _i785.HomeBloc(tokenRepository: gh<_i658.ITokenRepository>()));
-    gh.factory<_i487.LocaleBloc>(
-        () => _i487.LocaleBloc(tokenRepository: gh<_i658.ITokenRepository>()));
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
             tokenRepository: gh<_i658.ITokenRepository>()));
@@ -80,10 +83,13 @@ extension GetItInjectableX on _i174.GetIt {
         _i261.ChatFetchService(client: gh<_i30.AuthenticatedHttpClient>()));
     gh.lazySingleton<_i5.IAuthInternalProvider>(
         () => _i877.AuthInternalProvider(gh<_i1053.FetchService>()));
+    gh.factory<_i779.ChatRoomsInfoRepository>(
+        () => _i779.ChatRoomsInfoRepository(
+              gh<_i261.ChatFetchService>(),
+              gh<_i925.ChatRoomsInfoProvider>(),
+            ));
     gh.factory<_i605.ChatRepository>(
         () => _i605.ChatRepository(gh<_i261.ChatFetchService>()));
-    gh.factory<_i779.ChatRoomsInfoRepository>(
-        () => _i779.ChatRoomsInfoRepository(gh<_i261.ChatFetchService>()));
     gh.lazySingleton<_i667.IAuthRepository>(() => _i217.AuthRepository(
           authExternalProvider: gh<_i141.IAuthExternalProvider>(),
           authInternalProvider: gh<_i5.IAuthInternalProvider>(),

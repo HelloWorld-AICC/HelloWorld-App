@@ -7,8 +7,10 @@ sealed class LocaleEvent extends Equatable {
 
 final class SetLocale extends LocaleEvent {
   final Locale locale;
-  SetLocale({required this.locale});
+  final int index;
+
+  SetLocale({required this.locale, required this.index});
 
   @override
-  List<Object> get props => [locale];
+  List<Object> get props => [locale, index];
 }

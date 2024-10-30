@@ -12,6 +12,9 @@
     "resume": "履歴書作成",
     "job": "仕事情報"
   },
+  "splash_page": {
+    "language_select": "言語を選択してください"
+  },
   "app_name": "外国支援センター AICC",
   "login_button": "ログイン",
   "select_language": "言語を選択してください",

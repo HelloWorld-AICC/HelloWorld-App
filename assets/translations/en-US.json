@@ -12,6 +12,9 @@
     "resume": "Resume Writing",
     "job": "Job Information"
   },
+  "splash_page": {
+    "language_select": "Select Language"
+  },
   "app_name": "Foreign Support Center AICC",
   "login_button": "Login",
   "select_language": "Please select a language",

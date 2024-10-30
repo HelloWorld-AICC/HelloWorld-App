@@ -7,10 +7,13 @@
     "consultation_center": "咨询中心"
   },
   "home_grid": {
-    "chat_consultation": "聊天咨询",
+    "chat": "聊天咨询",
     "call_bot": "呼叫机器人",
-    "resume_writing": "简历撰写",
-    "job_information": "工作信息"
+    "resume": "简历撰写",
+    "job": "工作信息"
+  },
+  "splash_page": {
+    "language_select": "选择语言"
   },
   "app_name": "外国支持中心 AICC",
   "login_button": "登录",

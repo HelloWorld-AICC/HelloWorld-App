@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/presentation/login_screen.dart';
 import 'home/presentation/home_page.dart';
+import 'init/presentation/splash_page.dart';
 import 'new_chat/application/session/chat_session_bloc.dart';
 
 void main() async {
@@ -113,11 +114,11 @@ class _MainAppState extends State<MainApp> {
           ],
           child: MaterialApp.router(
             routerConfig: GoRouter(
-              // initialLocation: '/login',
+              initialLocation: '/',
               routes: [
                 GoRoute(
                   path: '/',
-                  builder: (context, state) => const HomePage(),
+                  builder: (context, state) => SplashPage(),
                 ),
                 GoRoute(
                     path: '/home',
@@ -146,9 +147,12 @@ class _MainAppState extends State<MainApp> {
 
   void _handleNavigation(BuildContext context, AppInitState state) {
     final _router = GoRouter.of(context);
-    print('isFirstRun: ${state.isFirstRun}');
-    // state.isFirstRun ? _router.go('/login') : _router.go('/home');
-    true ? _router.go('/login') : _router.go('/home');
+
+    if (state.isFirstRun) {
+      _router.go('/login');
+    } else {
+      _router.go('/home');
+    }
   }
 }
 
