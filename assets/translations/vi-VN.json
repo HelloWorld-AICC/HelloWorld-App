@@ -3,14 +3,30 @@
     "home": "Trang chủ",
     "chat": "Tư vấn trò chuyện",
     "resume": "Viết hồ sơ",
-    "call_bot": "Bot gọi",
+    "community": "Cộng đồng",
     "consultation_center": "Trung tâm tư vấn"
   },
   "home_grid": {
-    "chat": "Tư vấn qua chat",
-    "call_bot": "Gọi Bot",
-    "resume": "Viết hồ sơ",
-    "job": "Thông tin việc làm"
+    "center": {
+      "title": "Trung Tâm Tư Vấn Trực Tiếp",
+      "subtitle": "Tìm các trung tâm tư vấn trực tiếp gần đây"
+    },
+    "community": {
+      "title": "Cộng Đồng",
+      "subtitle": "Không gian để kết nối với lao động nước ngoài khác"
+    },
+    "resume": {
+      "title": "Viết CV",
+      "subtitle": "Tạo CV của riêng bạn dễ dàng bằng AI"
+    },
+    "chat": {
+      "title": "Tư Vấn Trực Tuyến",
+      "subtitle": "Tư vấn trò chuyện trực tuyến 24/7 về các mối quan tâm của bạn"
+    },
+    "call_bot": {
+      "title": "Call Bot",
+      "subtitle": "Call bot 24/7 lắng nghe những lo lắng của bạn"
+    }
   },
   "splash_page": {
     "language_select": "Chọn ngôn ngữ"

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -5,17 +7,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../custom_bottom_navigationbar.dart';
+import '../../../design_system/hello_colors.dart';
 import '../../../locale/application/locale_bloc.dart';
 import '../../../locale/domain/localization_service.dart';
 import '../../../route/domain/navigation_service.dart';
 import 'home_route_grid.dart';
 
-final Map<String, IconData> bottomNavItems = {
-  'bottom_navigation.chat': Icons.chat,
-  'bottom_navigation.resume': Icons.file_copy,
-  'bottom_navigation.home': Icons.home,
-  'bottom_navigation.call_bot': Icons.phone,
-  'bottom_navigation.consultation_center': Icons.support_agent,
+final Map<String, ImageIcon> bottomNavItems = {
+  'bottom_navigation.chat':
+      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
+  'bottom_navigation.resume':
+      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
+  'bottom_navigation.home':
+      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
+  'bottom_navigation.community':
+      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
+  'bottom_navigation.consultation_center':
+      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
 };
 
 class HomePageContent extends StatelessWidget {
@@ -30,15 +38,50 @@ class HomePageContent extends StatelessWidget {
     required this.navigationService,
   }) : super(key: key);
 
+  final routeBoxItems = {
+    "center": {
+      "title": "home_grid.center.title",
+      "subTitle": "home_grid.center.subtitle",
+      "imgPath": "assets/images/home/grid_view/offline_center.png",
+      "bottom_index": 4,
+      "isBeta": false,
+    },
+    "community": {
+      "title": "home_grid.community.title",
+      "subTitle": "home_grid.community.subtitle",
+      "imgPath": "assets/images/home/grid_view/community.png",
+      "bottom_index": 3,
+      "isBeta": false,
+    },
+    "resume": {
+      "title": "home_grid.resume.title",
+      "subTitle": "home_grid.resume.subtitle",
+      "imgPath": "assets/images/home/grid_view/resume.png",
+      "bottom_index": 1,
+      "isBeta": true,
+    },
+    "chat": {
+      "title": "home_grid.chat.title",
+      "subTitle": "home_grid.chat.subtitle",
+      "imgPath": "assets/images/home/grid_view/chat.png",
+      "bottom_index": 0,
+      "isBeta": false,
+    },
+    "call_bot": {
+      "title": "home_grid.call_bot.title",
+      "subTitle": "home_grid.call_bot.subtitle",
+      "imgPath": "assets/images/home/grid_view/call_bot.png",
+      "bottom_index": 2,
+      "isBeta": true,
+    },
+  };
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocaleBloc, LocaleState>(
       builder: (context, state) {
-        final paddingVal = MediaQuery.of(context).size.height * 0.1;
-
         return Scaffold(
           body: Container(
-            padding: EdgeInsets.only(top: paddingVal / 2),
             decoration: const BoxDecoration(
               gradient: LinearGradient(
                 colors: [
@@ -51,20 +94,55 @@ class HomePageContent extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(paddingVal / 3),
-              child: Column(
+              padding: EdgeInsets.all(20),
+              child: Stack(
                 children: [
-                  _buildHeader(context),
-                  _buildImageSection(),
-                  HomeRouteGrid(
-                    images: imagesPath,
-                    items: localizationService.getTranslatedTexts([
-                      'home_grid.chat',
-                      'home_grid.call_bot',
-                      'home_grid.resume',
-                      'home_grid.job',
-                    ]),
-                    navigationService: navigationService,
+                  Stack(
+                    children: [
+                      Positioned(
+                        top: 80,
+                        child: Padding(
+                          padding: const EdgeInsets.all(30),
+                          child: ClipRect(
+                            child: Align(
+                              alignment: Alignment.topCenter,
+                              heightFactor: 0.5,
+                              child: Image.asset(
+                                'assets/images/home/nice_to_meet_you_with_sphere.png',
+                                fit: BoxFit.cover,
+                                width: MediaQuery.of(context).size.width / 0.9,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 80,
+                        child: ClipRect(
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
+                            child: Container(
+                              width: MediaQuery.of(context).size.width,
+                              height: MediaQuery.of(context).size.height,
+                              decoration: BoxDecoration(
+                                color: Colors.grey.withOpacity(0.01), // 배경색
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Positioned(
+                    top: 10,
+                    child: _buildHeader(context),
+                  ),
+                  Positioned(
+                    top: 300,
+                    child: HomeRouteGrid(
+                      items: routeBoxItems,
+                      navigationService: navigationService,
+                    ),
                   ),
                 ],
               ),
@@ -87,17 +165,18 @@ class HomePageContent extends StatelessWidget {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Text(
-                "HelloWorld",
+                "Hello World",
                 style: TextStyle(
                   fontFamily: "SB AggroOTF",
-                  fontSize: 24,
-                  fontWeight: FontWeight.w500,
-                  color: Color(0xFF002E4F),
+                  fontSize: 32,
+                  fontWeight: FontWeight.w900,
+                  color: HelloColors.mainColor2,
                 ),
               ),
+              SizedBox(width: MediaQuery.of(context).size.width / 2.5),
               InkWell(
                 onTap: () {
                   context.push('/mypage-menu');
@@ -113,26 +192,13 @@ class HomePageContent extends StatelessWidget {
           Text(
             "${tr("app_name")},",
             style: const TextStyle(
-              fontSize: 16,
-              color: Color(0xFF10498E),
+              fontFamily: "SB AggroOTF",
+              fontSize: 14,
+              fontWeight: FontWeight.w200,
+              color: HelloColors.subTextColor,
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildImageSection() {
-    return Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.only(bottom: 8),
-      child: SizedBox(
-        width: 250.0,
-        height: 250.0,
-        child: Image.asset(
-          'assets/images/home/Nice to meet you.png',
-          fit: BoxFit.contain,
-        ),
       ),
     );
   }

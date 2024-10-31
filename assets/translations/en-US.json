@@ -3,14 +3,30 @@
     "home": "Home",
     "chat": "Chat Consultation",
     "resume": "Resume Writing",
-    "call_bot": "Call Bot",
+    "community": "Community",
     "consultation_center": "Consultation Center"
   },
   "home_grid": {
-    "chat": "Chat Consultation",
-    "call_bot": "Call Bot",
-    "resume": "Resume Writing",
-    "job": "Job Information"
+    "center": {
+      "title": "Offline Counseling Center",
+      "subtitle": "Find nearby offline counseling centers"
+    },
+    "community": {
+      "title": "Community",
+      "subtitle": "A space to connect with other foreign workers"
+    },
+    "resume": {
+      "title": "Resume Writing",
+      "subtitle": "Easily create your own resume with AI"
+    },
+    "chat": {
+      "title": "Chat Counseling",
+      "subtitle": "24/7 online chat counseling for your concerns"
+    },
+    "call_bot": {
+      "title": "Call Bot",
+      "subtitle": "24/7 call bot for listening to your concerns"
+    }
   },
   "splash_page": {
     "language_select": "Select Language"

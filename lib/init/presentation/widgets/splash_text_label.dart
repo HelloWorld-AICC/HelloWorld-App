@@ -36,9 +36,10 @@ class SplashTextLabel extends StatelessWidget {
           child: Text(
             text,
             style: TextStyle(
-              color: Color(0xff6D9CD5),
+              fontFamily: "SB AggroOTF",
               fontSize: 16,
               fontWeight: FontWeight.bold,
+              color: Color(0xff6D9CD5),
             ),
           ),
         ),

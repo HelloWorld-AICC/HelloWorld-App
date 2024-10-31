@@ -3,6 +3,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/language_selection_widget.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart';
 
@@ -45,8 +46,8 @@ class _SplashPageState extends State<SplashPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, Object> selectedLanguage = languages[0];
-    int selectedIndex = 0;
+    Map<String, Object> selectedLanguage;
+    int selectedIndex;
 
     return SafeArea(
       child: Scaffold(
@@ -58,20 +59,11 @@ class _SplashPageState extends State<SplashPage> {
               Container(
                 decoration: const BoxDecoration(
                   color: Color(0xffECF6FE),
-                  // gradient: LinearGradient(
-                  //   colors: [
-                  //     Color(0xFFD1E6FF),
-                  //     Color(0xFFDDEDFF),
-                  //     Color(0xFFFFFFFF),
-                  //   ],
-                  //   begin: Alignment.topCenter,
-                  //   end: Alignment.bottomCenter,
-                  // ),
                 ),
               ),
               // 큰 원
               Positioned(
-                bottom: -MediaQuery.of(context).size.height / 5,
+                bottom: -MediaQuery.of(context).size.height / 6,
                 left: MediaQuery.of(context).size.width / 2 - 400,
                 child: ClipOval(
                   child: BackdropFilter(
@@ -79,13 +71,26 @@ class _SplashPageState extends State<SplashPage> {
                     child: Container(
                       width: 800,
                       height: 800,
-                      color: Colors.white,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            colors: [
+                              HelloColors.white.withOpacity(0.8),
+                              HelloColors.mainBlue.withOpacity(0.01),
+                            ],
+                            stops: const [
+                              0.2,
+                              0.8
+                            ],
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter),
+                      ),
                     ),
                   ),
                 ),
               ),
+
               Positioned(
-                top: MediaQuery.of(context).size.height / 5,
+                top: MediaQuery.of(context).size.height / 8,
                 left: MediaQuery.of(context).size.width / 2 - 100,
                 child: Column(
                   children: [
@@ -98,13 +103,13 @@ class _SplashPageState extends State<SplashPage> {
                     ),
                     const SizedBox(height: 20),
                     // SplashTextLabel(text: tr("splash_page.language_select")),
-                    SplashTextLabel(text: "Select language"),
+                    SplashTextLabel(text: "언어 선택"),
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
               Positioned(
-                top: MediaQuery.of(context).size.height / 2,
+                top: MediaQuery.of(context).size.height / 2.3,
                 left: 0,
                 right: 0,
                 child: Padding(
@@ -144,22 +149,57 @@ class _SplashPageState extends State<SplashPage> {
                 left: MediaQuery.of(context).size.width / 1.5,
                 right: 0,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                  child: IconButton(
-                      onPressed: () {
-                        context.read<RouteBloc>().add(
-                              RouteChanged(
-                                newIndex: 2,
-                                newRoute: '/home',
-                              ),
-                            );
+                  padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                  child: GestureDetector(
+                    onTap: () async {
+                      // 비동기 호출 전 필요한 값을 저장
+                      final localeBloc = context.read<LocaleBloc>();
+                      final routeBloc = context.read<RouteBloc>();
+                      final selectedLocale = localeBloc.state.locale;
+                      final selectedIndex = localeBloc.state.selectedIndex;
+
+                      debugPrint("selectedLocale: $selectedLocale");
+                      debugPrint("selectedIndex: $selectedIndex");
+
+                      if (selectedIndex == 0 && mounted) {
+                        localeBloc.add(SetLocale(
+                            locale: selectedLocale ?? Locale('en', 'US'),
+                            index: selectedIndex ?? 0));
+
+                        await context
+                            .setLocale(selectedLocale ?? Locale('en', 'US'));
+                        await Future.delayed(Duration(milliseconds: 100));
+                      }
+
+                      if (mounted) {
+                        routeBloc.add(
+                          RouteChanged(
+                            newIndex: 2,
+                            newRoute: '/home',
+                          ),
+                        );
                         context.push('/home');
-                      },
-                      icon: Icon(
-                        Icons.arrow_circle_right,
-                        size: 60,
-                        color: Color(0xffB7D3F6),
-                      )),
+                      }
+                    },
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 60,
+                          height: 60,
+                          decoration: const BoxDecoration(
+                            color: Color(0xffB7D3F6),
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.arrow_forward_rounded,
+                          size: 45,
+                          color: HelloColors.white,
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],

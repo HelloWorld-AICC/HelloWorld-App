@@ -1,23 +1,35 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../design_system/hello_colors.dart';
 import '../../../route/application/route_bloc.dart';
 import '../../../route/domain/navigation_service.dart';
 
 class HomeRouteItem extends StatelessWidget {
-  final int index;
-  final String assetName;
-  final String itemName;
-  final String path;
+  final String title;
+  final String subTitle;
+  final String imgPath;
+  final int bottomIndex;
   final NavigationService navigationService;
+  final String routePath;
+  final Alignment imgAlign;
+  final double imgWidth;
+  final double imgHeight;
+  final bool isBeta;
 
   HomeRouteItem({
     Key? key,
-    required this.index,
-    required this.assetName,
-    required this.itemName,
-    required this.path,
     required this.navigationService,
+    required this.title,
+    required this.subTitle,
+    required this.imgPath,
+    required this.bottomIndex,
+    required this.routePath,
+    required this.imgWidth,
+    required this.imgHeight,
+    required this.isBeta,
+    required this.imgAlign,
   }) : super(key: key);
 
   @override
@@ -26,15 +38,16 @@ class HomeRouteItem extends StatelessWidget {
       onTap: () {
         context
             .read<RouteBloc>()
-            .add(RouteChanged(newIndex: index, newRoute: path));
-        navigationService.navigateTo(path);
+            .add(RouteChanged(newIndex: bottomIndex, newRoute: routePath));
+        navigationService.navigateTo("/$routePath");
       },
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(15.0),
           border: Border.all(
-            color: const Color(0xFF6D9CD5).withOpacity(0.3),
+            color: const Color(0xFFE2E2E2), // 적용할 stroke 색상
+            width: 1.0, // stroke 두께
           ),
           boxShadow: [
             BoxShadow(
@@ -45,53 +58,50 @@ class HomeRouteItem extends StatelessWidget {
             ),
           ],
         ),
-        child: Padding(
-          padding: EdgeInsets.all(3.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Container(
-                width: double.infinity,
-                alignment: Alignment.topRight,
-                child: Container(
-                  width: 60,
-                  height: 60,
-                  child: Align(
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        assetName,
-                        width: 100.0,
-                        height: 100.0,
-                        fit: BoxFit.contain,
-                      ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontFamily: "SB AggroOTF",
+                      fontSize: 12,
+                      fontWeight: FontWeight.w900,
+                      color: isBeta
+                          ? HelloColors.subTextColor
+                          : HelloColors.mainColor1,
                     ),
-                  ),
+                  ).tr(),
+                  const SizedBox(height: 3),
+                  Text(
+                    subTitle,
+                    style: TextStyle(
+                      fontFamily: "SB AggroOTF",
+                      fontSize: 6,
+                      fontWeight: FontWeight.normal,
+                      color: isBeta
+                          ? HelloColors.subTextColor
+                          : HelloColors.mainColor1,
+                    ),
+                  ).tr(),
+                ],
+              ),
+            ),
+            Expanded(
+              child: Container(
+                alignment: imgAlign,
+                child: Image.asset(
+                  imgPath,
+                  fit: BoxFit.fitWidth,
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-                child: Text(
-                  itemName,
-                  style: const TextStyle(
-                    color: Color(0xFF6D9CD5),
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 2.0),
-                child: Text(
-                  itemName,
-                  style: const TextStyle(
-                    color: Color(0xFF6D9CD5),
-                    fontSize: 12,
-                  ),
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

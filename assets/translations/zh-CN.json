@@ -3,14 +3,30 @@
     "home": "主页",
     "chat": "聊天咨询",
     "resume": "简历撰写",
-    "call_bot": "呼叫机器人",
+    "community": "社区",
     "consultation_center": "咨询中心"
   },
   "home_grid": {
-    "chat": "聊天咨询",
-    "call_bot": "呼叫机器人",
-    "resume": "简历撰写",
-    "job": "工作信息"
+    "center": {
+      "title": "线下咨询中心",
+      "subtitle": "寻找附近的线下咨询中心"
+    },
+    "community": {
+      "title": "社区",
+      "subtitle": "一个可以与其他外国工人交流的空间"
+    },
+    "resume": {
+      "title": "简历撰写",
+      "subtitle": "使用AI轻松撰写属于自己的简历"
+    },
+    "chat": {
+      "title": "在线聊天咨询",
+      "subtitle": "24小时随时倾听您的烦恼的在线聊天咨询"
+    },
+    "call_bot": {
+      "title": "电话机器人",
+      "subtitle": "24小时倾听您烦恼的在线电话机器人"
+    }
   },
   "splash_page": {
     "language_select": "选择语言"
