@@ -3,14 +3,33 @@
     "home": "ホーム",
     "chat": "チャット相談",
     "resume": "履歴書作成",
-    "call_bot": "コールボット",
+    "community": "コミュニティ",
     "consultation_center": "相談センター"
   },
   "home_grid": {
-    "chat": "チャット相談",
-    "call_bot": "コールボット",
-    "resume": "履歴書作成",
-    "job": "仕事情報"
+    "center": {
+      "title": "オフライン相談センター",
+      "subtitle": "近くのオフライン相談センターを探す"
+    },
+    "community": {
+      "title": "コミュニティ",
+      "subtitle": "他の外国人労働者と交流できるスペース"
+    },
+    "resume": {
+      "title": "履歴書作成",
+      "subtitle": "AIで簡単に作成する自分だけの履歴書"
+    },
+    "chat": {
+      "title": "チャット相談",
+      "subtitle": "24時間悩みを聞いてくれるオンラインチャット相談"
+    },
+    "call_bot": {
+      "title": "コールボット",
+      "subtitle": "24時間悩みを聞いてくれるオンラインコールボット"
+    }
+  },
+  "splash_page": {
+    "language_select": "言語を選択してください"
   },
   "app_name": "外国支援センター AICC",
   "login_button": "ログイン",

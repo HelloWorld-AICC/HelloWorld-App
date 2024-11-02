@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
@@ -24,7 +25,7 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       currentIndex: event.newIndex,
       currentRoute: event.newRoute,
     ));
-    print("naviagtion to ${event.newRoute}");
+    debugPrint("naviagtion to ${event.newRoute}");
     // if (event.newIndex == 1) {
     //   final roomId = activeChatRoomBloc.state.roomId;
     //   add(ChatSelected(roomId: roomId));

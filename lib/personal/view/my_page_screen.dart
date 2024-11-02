@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import '../../chat/provider/recent_room_provider.dart';
 import '../../chat/service/recent_room_service.dart';
 import '../../locale/locale_provider.dart';
+import '../../route/application/route_bloc.dart';
 import '../../route/route_service.dart';
 import '../model/user.dart';
 import '../model/user_preferences.dart';
@@ -82,7 +83,7 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 ],
               ),
             ),
-          ),  
+          ),
           // Your Scaffold properties
           bottomNavigationBar: BottomNavigationBar(
             items: <BottomNavigationBarItem>[
@@ -198,7 +199,9 @@ class _MyPageScreenState extends State<MyPageScreen> {
                 ListTile(
                   title: Text(locale.toLanguageTag()),
                   onTap: () {
-                    context.read<LocaleBloc>().add(SetLocale(locale: locale));
+                    context.read<LocaleBloc>().add(SetLocale(
+                        locale: locale,
+                        index: context.read<RouteBloc>().state.currentIndex));
                     EasyLocalization.of(context)?.setLocale(locale);
                     Navigator.of(context).pop();
                   },

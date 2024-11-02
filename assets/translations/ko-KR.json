@@ -3,16 +3,35 @@
     "home": "홈",
     "chat": "채팅 상담",
     "resume": "이력서 작성",
-    "call_bot": "콜봇",
+    "community": "커뮤니티",
     "consultation_center": "상담 센터"
   },
   "home_grid": {
-    "chat_consultation": "채팅 상담",
-    "call_bot": "콜봇",
-    "resume_writing": "이력서 작성",
-    "job_information": "채용정보"
+    "center": {
+      "title": "오프라인 상담센터",
+      "subtitle": "내 주변에 오프라인 상담센터 찾아보기"
+    },
+    "community": {
+      "title": "커뮤니티",
+      "subtitle": "다른 외국인 근로자와 소통할 수 있는 공간"
+    },
+    "resume": {
+      "title": "자기소개서 작성",
+      "subtitle": "AI로 간편하게 작성하는 나만의 자기소개서"
+    },
+    "chat": {
+      "title": "채팅 상담",
+      "subtitle": "24시간 고민을 들어주는 온라인 채팅 상담"
+    },
+    "call_bot": {
+      "title": "콜봇",
+      "subtitle": "24시간 고민을 들어주는 온라인 콜봇"
+    }
   },
-  "app_name": "외국인 노동자 지원센터 AICC",
+  "splash_page": {
+    "language_select": "언어 선택"
+  },
+  "app_name": "외국인 근로자를 위한 맞춤형 지원 플랫폼",
   "login_button": "로그인",
   "select_language": "사용 가능한 언어를 골라주세요",
   "lan_en": "영어",

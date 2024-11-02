@@ -14,7 +14,6 @@ import '../call_bot_screen.dart';
 import '../chat/service/recent_room_service.dart';
 import '../chat/view/chat_screen.dart';
 import '../home_screen.dart';
-import '../locale/first_launch_screen.dart';
 import '../personal/view/my_page_screen.dart';
 import '../resume/resume_screen.dart';
 import 'check_initialization.dart';
@@ -87,10 +86,6 @@ class RouteService {
         GoRoute(
           path: '/',
           builder: (context, state) => const HomeScreen(), // 기본 홈 화면
-        ),
-        GoRoute(
-          path: '/firstLaunch',
-          builder: (context, state) => const FirstLaunchScreen(),
         ),
         // GoRoute(
         //   path: '/login',
