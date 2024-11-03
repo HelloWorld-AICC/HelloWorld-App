@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_room_info.dart';
 import 'package:hello_world_mvp/new_chat/domain/service/chat_fetch_service.dart';
@@ -66,15 +68,27 @@ class ChatRepository implements IChatRepository {
     });
   }
 
-  Future<Either<ChatFailure, Unit>> sendMessage(
-      StringVO roomId, StringVO message) async {
-    final failureOrResponse = await _fetchService.request(
-        method: HttpMethod.post,
-        pathPrefix: '/webflux',
-        path: '/chat/ask',
-        queryParams: {'roomId': roomId.getOrCrash()});
+  Future<Either<ChatFailure, Stream<String>>> sendMessage(
+    StringVO roomId,
+    StringVO message,
+  ) async {
+    final failureOrResponse = await _fetchService.streamedRequest(
+      method: HttpMethod.post,
+      pathPrefix: '/webflux',
+      path: '/chat/ask',
+      bodyParam: {'content': message.getOrCrash()},
+      queryParams: {'roomId': roomId.getOrCrash()},
+    );
+
     return failureOrResponse.fold(
-        (failure) => left(ChatSendFailure(message: "Failed to send message")),
-        (response) => right(unit));
+      (failure) => left(ChatSendFailure(message: "Failed to send message")),
+      (streamedResponse) {
+        final lineStream = streamedResponse.stream
+            .transform(utf8.decoder)
+            .transform(LineSplitter());
+
+        return right(lineStream);
+      },
+    );
   }
 }

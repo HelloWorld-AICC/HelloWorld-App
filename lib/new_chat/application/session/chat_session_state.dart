@@ -8,36 +8,38 @@ class ChatSessionState extends Equatable {
   final ChatFailure? failure;
 
   const ChatSessionState({
+    required this.roomId,
     required this.messages,
     required this.isLoading,
-    required this.roomId,
     required this.typingState,
     this.failure,
   });
 
   factory ChatSessionState.initial() => ChatSessionState(
-        roomId: "new-chat",
+        roomId: null,
         messages: [],
-        isLoading: false,
+        isLoading: true,
         typingState: TypingIndicatorState.hidden,
+        failure: null,
       );
 
   ChatSessionState copyWith({
     List<ChatMessage>? messages,
     bool? isLoading,
-    ChatFailure? failure,
     String? roomId,
     TypingIndicatorState? typingState,
+    ChatFailure? failure,
   }) {
     return ChatSessionState(
+      roomId: roomId ?? this.roomId,
       messages: messages ?? this.messages,
       isLoading: isLoading ?? this.isLoading,
-      failure: failure,
-      roomId: roomId ?? this.roomId,
       typingState: typingState ?? this.typingState,
+      failure: failure ?? this.failure,
     );
   }
 
   @override
-  List<Object?> get props => [messages, isLoading, failure, roomId];
+  List<Object?> get props =>
+      [roomId, messages, isLoading, typingState, failure];
 }

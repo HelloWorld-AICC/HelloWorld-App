@@ -25,6 +25,22 @@ class NewChatContentState extends State<NewChatContent>
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final chatSessionBloc = context.read<ChatSessionBloc>();
+      if (chatSessionBloc.state.roomId == null &&
+          chatSessionBloc.state.isLoading) {
+        printInColor('Loading chat session', color: red);
+        context.read<ChatSessionBloc>().add(
+              LoadChatSessionEvent(roomId: 'new_chat'),
+            );
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
@@ -72,13 +88,24 @@ class NewChatContentState extends State<NewChatContent>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Expanded(
-              child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
-                bloc: context.read<ChatSessionBloc>(),
-                builder: (context, state) {
-                  print('messages: ${state.messages.map((e) => e.content)}');
-                  return MessageListWidget(messages: state.messages ?? []);
-                },
+            BlocListener<ChatSessionBloc, ChatSessionState>(
+              listener: (context, state) {
+                // if (state.roomId == null) {
+                //   printInColor('Loading chat session', color: red);
+                //   context.read<ChatSessionBloc>().add(
+                //       LoadChatSessionEvent(roomId: state.roomId ?? 'new_chat'));
+                // }
+              },
+              child: Expanded(
+                child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
+                  builder: (context, state) {
+                    final messageStream =
+                        context.read<ChatSessionBloc>().messagesStream;
+                    return MessageListWidget(
+                      messageStream: messageStream,
+                    );
+                  },
+                ),
               ),
             ),
             if (context.watch<ChatSessionBloc>().state.typingState ==
@@ -104,9 +131,20 @@ class NewChatContentState extends State<NewChatContent>
         context.read<ChatSessionBloc>().add(SendMessageEvent(
             message: ChatMessage(
                 sender: Sender.user, content: StringVO(_controller.text))));
+        printInColor('Sent message in buildInputArea: ${_controller.text}',
+            color: blue);
         _controller.clear();
       },
       controller: _controller,
     );
   }
 }
+
+void printInColor(String message, {String color = '\x1B[37m'}) {
+  print('$color$message\x1B[0m'); // 메시지를 색상 코드와 함께 출력
+}
+
+const String red = '\x1B[31m';
+const String green = '\x1B[32m';
+const String yellow = '\x1B[33m';
+const String blue = '\x1B[34m';

@@ -17,7 +17,7 @@ class ChatDrawerState extends Equatable {
         loading: false,
         isDrawerOpen: false,
         chatRoomInfoList: [],
-        selectedRoomId: 'new-chat');
+        selectedRoomId: 'new_chat');
   }
 
   ChatDrawerState copyWith(

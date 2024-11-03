@@ -75,4 +75,41 @@ class ChatFetchService extends FetchService {
 
     return right(serverResponse);
   }
+
+  Future<Either<NetworkFailure, http.StreamedResponse>> streamedRequest({
+    required HttpMethod method,
+    String pathPrefix = "",
+    required String path,
+    Map<String, dynamic>? bodyParam,
+    Map<String, dynamic>? queryParams,
+  }) async {
+    var realPath = "$pathPrefix$path";
+
+    const String authority = "www.gotoend.store";
+    final uri = Uri.https(authority, realPath, queryParams);
+
+    final request = http.Request(
+      method.toString().split('.').last.toUpperCase(),
+      uri,
+    )..headers.addAll(_baseHeaders);
+
+    if (bodyParam != null) {
+      request.body = json.encode(bodyParam);
+    }
+
+    try {
+      final streamedResponse = await client.send(request);
+      return right(streamedResponse);
+    } on SocketException catch (e) {
+      return left(NetworkFailure.socketError(e));
+    } on http.ClientException catch (e) {
+      return left(NetworkFailure.clientError(e));
+    } on HttpException catch (e) {
+      return left(NetworkFailure.httpError(e));
+    } on FormatException catch (e) {
+      return left(NetworkFailure.formatError(e));
+    } catch (e) {
+      return left(NetworkFailure.unknownError(e));
+    }
+  }
 }
