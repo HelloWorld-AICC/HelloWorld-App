@@ -2,42 +2,44 @@ part of 'chat_session_bloc.dart';
 
 class ChatSessionState extends Equatable {
   final String? roomId;
-  final Stream<List<ChatMessage>> messageStream;
+  final List<ChatMessage> messages;
   final bool isLoading;
   final TypingIndicatorState typingState;
   final ChatFailure? failure;
 
   const ChatSessionState({
-    required this.messageStream,
-    required this.isLoading,
     required this.roomId,
+    required this.messages,
+    required this.isLoading,
     required this.typingState,
     this.failure,
   });
 
   factory ChatSessionState.initial() => ChatSessionState(
-        messageStream: Stream.empty(),
         roomId: null,
+        messages: [],
         isLoading: true,
         typingState: TypingIndicatorState.hidden,
+        failure: null,
       );
 
   ChatSessionState copyWith({
-    Stream<List<ChatMessage>>? messageStream,
+    List<ChatMessage>? messages,
     bool? isLoading,
-    ChatFailure? failure,
     String? roomId,
     TypingIndicatorState? typingState,
+    ChatFailure? failure,
   }) {
     return ChatSessionState(
-      messageStream: messageStream ?? this.messageStream,
-      isLoading: isLoading ?? this.isLoading,
-      failure: failure,
       roomId: roomId ?? this.roomId,
+      messages: messages ?? this.messages,
+      isLoading: isLoading ?? this.isLoading,
       typingState: typingState ?? this.typingState,
+      failure: failure ?? this.failure,
     );
   }
 
   @override
-  List<Object?> get props => [messageStream, isLoading, failure, roomId];
+  List<Object?> get props =>
+      [roomId, messages, isLoading, typingState, failure];
 }

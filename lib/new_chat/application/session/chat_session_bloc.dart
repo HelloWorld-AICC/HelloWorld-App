@@ -22,57 +22,55 @@ part 'chat_session_state.dart';
 @injectable
 class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
   final ChatRepository chatRepository;
+  final StreamController<List<ChatMessage>> _messageStreamController =
+      StreamController.broadcast();
+
+  Stream<List<ChatMessage>> get messagesStream =>
+      _messageStreamController.stream;
 
   ChatSessionBloc({required this.chatRepository})
       : super(ChatSessionState.initial()) {
-    // initialize();
-
     on<LoadChatSessionEvent>((event, emit) async {
-      emit(
-        state.copyWith(
-          isLoading: false,
-          typingState: TypingIndicatorState.hidden,
-          // messages: Stream.value([
-          //   ChatMessage(
-          //       sender: Sender.bot,
-          //       content: StringVO('Hello! How can I help you?'))
-          // ])),
-          messageStream: Stream.empty(),
-        ),
-      );
+      emit(state.copyWith(isLoading: true));
+      try {
+        if (event.roomId == 'new_chat') {
+          return;
+        }
+        final failureOrChatRoom =
+            await chatRepository.getRoomById(StringVO(event.roomId));
 
-      // if (event.roomId != 'new_chat') {
-      //   final result = await chatRepository.getRoomById(StringVO(event.roomId));
-      //   emit(
-      //     result.fold(
-      //       (failure) => state.copyWith(
-      //         isLoading: false,
-      //         messages: [],
-      //         failure: failure,
-      //         typingState: TypingIndicatorState.hidden,
-      //       ),
-      //       (chatRoom) => state.copyWith(
-      //         messages: chatRoom.messages,
-      //         isLoading: false,
-      //         typingState: TypingIndicatorState.hidden,
-      //       ),
-      //     ),
-      //   );
-      // }
+        failureOrChatRoom.fold(
+          (failure) {
+            emit(state.copyWith(
+              isLoading: false,
+              failure: failure,
+            ));
+          },
+          (chatRoom) {
+            _messageStreamController.add(chatRoom.messages);
+            emit(state.copyWith(
+              isLoading: false,
+              roomId: chatRoom.roomId.getOrCrash(),
+            ));
+          },
+        );
+      } catch (error) {
+        emit(state.copyWith(
+            isLoading: false, failure: ChatFailure(message: error.toString())));
+      }
     });
 
     on<SendMessageEvent>((event, emit) async {
       printInColor(
           'Sending message event started: ${event.message.content.getOrCrash()}',
           color: blue);
-      List<ChatMessage> currentMessages = [];
-      currentMessages = await state.messageStream.first;
 
-      final updatedMessages = [...currentMessages, event.message];
-      emit(state.copyWith(
-        messageStream: Stream.value(updatedMessages),
-        typingState: TypingIndicatorState.shown,
-      ));
+      final currentMessages = await _messageStreamController.stream.first;
+
+      final updatedMessages = List<ChatMessage>.from(currentMessages)
+        ..add(event.message);
+      _messageStreamController.add(updatedMessages);
+      emit(state.copyWith(typingState: TypingIndicatorState.shown));
 
       final failureOrStream = await chatRepository.sendMessage(
           StringVO(event.roomId), StringVO(event.message.content.toString()));
@@ -91,32 +89,29 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
             (line) {
               if (line.startsWith('data:')) {
                 var temp = line.substring(5).trim();
-                if (temp.isEmpty) {
-                  temp = ' ';
-                }
+                if (temp.isEmpty) temp = ' ';
+
                 if (line.startsWith('data:Room ID: ')) {
                   emit(state.copyWith(
-                    roomId: temp,
-                    typingState: TypingIndicatorState.shown,
-                  ));
-                } else if (temp == 'data:') {
-                  finalResponse.write('\n');
+                      roomId: temp, typingState: TypingIndicatorState.shown));
                 } else {
-                  finalResponse.write(temp);
+                  // Bot 메시지 처리
+                  if (temp == 'data:') {
+                    finalResponse.write('\n');
+                  } else {
+                    finalResponse.write(temp);
+                  }
+
+                  final botMessage = ChatMessage(
+                    sender: Sender.bot,
+                    content: StringVO(finalResponse.toString()),
+                  );
+
+                  final updatedMessages =
+                      List<ChatMessage>.from(currentMessages)..add(botMessage);
+                  _messageStreamController.add(updatedMessages);
+                  emit(state.copyWith(typingState: TypingIndicatorState.shown));
                 }
-
-                final botMessage = ChatMessage(
-                  sender: Sender.bot,
-                  content: StringVO(finalResponse.toString()),
-                );
-
-                final updatedMessages = List<ChatMessage>.from(currentMessages)
-                  ..add(botMessage);
-
-                emit(state.copyWith(
-                  messageStream: Stream.value(updatedMessages),
-                  typingState: TypingIndicatorState.shown,
-                ));
               }
             },
             onDone: () {
@@ -134,20 +129,23 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
     });
 
     on<ReceiveMessageEvent>((event, emit) async {
-      final currentMessages = await state.messageStream.first;
+      final currentMessages = await _messageStreamController.stream.first;
 
-      final updatedMessages = [...currentMessages, event.message];
-      emit(state.copyWith(
-        messageStream: Stream.value(updatedMessages),
-        typingState: TypingIndicatorState.hidden,
-      ));
+      final updatedMessages = List<ChatMessage>.from(currentMessages)
+        ..add(event.message);
+      _messageStreamController.add(updatedMessages);
+      emit(state.copyWith(typingState: TypingIndicatorState.hidden));
     });
 
     on<ClearMessagesEvent>((event, emit) {
-      emit(state.copyWith(
-        messageStream: Stream.empty(),
-        typingState: TypingIndicatorState.hidden,
-      ));
+      _messageStreamController.add([]); // Clear messages
+      emit(state.copyWith(typingState: TypingIndicatorState.hidden));
     });
+  }
+
+  @override
+  Future<void> close() {
+    _messageStreamController.close(); // StreamController 닫기
+    return super.close();
   }
 }

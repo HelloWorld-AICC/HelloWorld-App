@@ -100,7 +100,7 @@ class NewChatContentState extends State<NewChatContent>
                 child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
                   builder: (context, state) {
                     final messageStream =
-                        context.read<ChatSessionBloc>().state.messageStream;
+                        context.read<ChatSessionBloc>().messagesStream;
                     return MessageListWidget(
                       messageStream: messageStream,
                     );
