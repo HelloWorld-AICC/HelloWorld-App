@@ -44,7 +44,6 @@ import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i936;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
-import 'new_chat/domain/service/chat_message_handler.dart' as _i718;
 import 'new_chat/infrastructure/providers/chat_rooms_info_provider.dart'
     as _i925;
 import 'new_chat/infrastructure/repository/chat_repository.dart' as _i605;
@@ -107,14 +106,10 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i810.ChatDrawerBloc(gh<_i779.ChatRoomsInfoRepository>()));
     gh.lazySingleton<_i665.IMypageInternalProvider>(
         () => _i487.MypageInternalProvider(gh<_i1053.FetchService>()));
+    gh.factory<_i659.ChatSessionBloc>(() =>
+        _i659.ChatSessionBloc(chatRepository: gh<_i605.ChatRepository>()));
     gh.lazySingleton<_i392.IMypageRepository>(() => _i936.MypageRepository(
         mypageProvider: gh<_i665.IMypageInternalProvider>()));
-    gh.factory<_i718.ChatMessageHandler>(
-        () => _i718.ChatMessageHandler(gh<_i605.ChatRepository>()));
-    gh.factory<_i659.ChatSessionBloc>(() => _i659.ChatSessionBloc(
-          chatService: gh<_i718.ChatMessageHandler>(),
-          chatRepository: gh<_i605.ChatRepository>(),
-        ));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i835.EditProfileBloc>(() =>

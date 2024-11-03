@@ -20,59 +20,64 @@ class CustomBottomNavigationBar extends StatelessWidget {
       builder: (context, routeState) {
         return FractionallySizedBox(
           heightFactor: 0.1,
-          child: Theme(
-            data: Theme.of(context).copyWith(
-              canvasColor: HelloColors.white,
-              tooltipTheme: TooltipThemeData(
-                textStyle: TextStyle(
-                  fontSize: 8,
-                  color: Colors.white,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.8),
-                  borderRadius: BorderRadius.circular(4),
+          child: Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: Theme(
+              data: Theme.of(context).copyWith(
+                canvasColor: HelloColors.white,
+                tooltipTheme: TooltipThemeData(
+                  textStyle: TextStyle(
+                    fontSize: 8,
+                    color: Colors.white,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.8),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
                 ),
               ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Row(
-                  children: items.keys.map((key) {
-                    final index = items.keys.toList().indexOf(key);
-                    return Expanded(
-                      child: Align(
-                        alignment: Alignment.center,
-                        child: index == routeState.currentIndex
-                            ? Container(
-                                width: 40,
-                                height: 4,
-                                color: Color(0xff4B7BF5),
-                              )
-                            : SizedBox(width: 40),
-                      ),
-                    );
-                  }).toList(),
-                ),
-                BottomNavigationBar(
-                  currentIndex: routeState.currentIndex,
-                  onTap: (index) {
-                    final selectedKey = items.keys.elementAt(index);
-                    final selectedRoute = '/${selectedKey.split('.').last}';
-                    context.read<RouteBloc>().add(
-                        RouteChanged(newIndex: index, newRoute: selectedRoute));
-                    Future.delayed(Duration(milliseconds: 100), () {
-                      context.push(selectedRoute);
-                    });
-                  },
-                  items: _getBottomNavItems(localizationService),
-                  backgroundColor: HelloColors.white,
-                  selectedItemColor: Color(0xff4B7BF5),
-                  unselectedItemColor: Colors.grey,
-                  showUnselectedLabels: true,
-                  elevation: 0,
-                ),
-              ],
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    children: items.keys.map((key) {
+                      final index = items.keys.toList().indexOf(key);
+                      return Expanded(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: index == routeState.currentIndex
+                              ? Container(
+                                  width: 40,
+                                  height: 4,
+                                  color: Color(0xff4B7BF5),
+                                )
+                              : SizedBox(width: 40),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                  BottomNavigationBar(
+                    currentIndex: routeState.currentIndex,
+                    onTap: (index) {
+                      final selectedKey = items.keys.elementAt(index);
+                      final selectedRoute = '/${selectedKey.split('.').last}';
+                      context.read<RouteBloc>().add(RouteChanged(
+                          newIndex: index, newRoute: selectedRoute));
+                      Future.delayed(Duration(milliseconds: 100), () {
+                        context.push(selectedRoute);
+                      });
+                    },
+                    items: _getBottomNavItems(localizationService),
+                    backgroundColor: HelloColors.white,
+                    selectedItemColor: Color(0xff4B7BF5),
+                    unselectedItemColor: Colors.grey,
+                    showUnselectedLabels: true,
+                    elevation: 0,
+                  ),
+                ],
+              ),
             ),
           ),
         );

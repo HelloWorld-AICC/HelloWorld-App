@@ -1,21 +1,34 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
 
 class MessageListWidget extends StatelessWidget {
-  List<ChatMessage> messages = [];
+  final Stream<List<ChatMessage>> messageStream;
 
-  MessageListWidget({Key? key, required this.messages}) : super(key: key);
+  const MessageListWidget({
+    Key? key,
+    required this.messageStream,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      controller: ScrollController(),
-      itemCount: messages.length,
-      itemBuilder: (context, index) {
-        return MessageBubble(
-          message: messages[index].content.getOrCrash(),
-          isUser: messages[index].sender == Sender.user,
+    return StreamBuilder<List<ChatMessage>>(
+      stream: messageStream,
+      builder: (context, snapshot) {
+        final messages = snapshot.data ?? [];
+
+        return ListView.builder(
+          controller: ScrollController(),
+          itemCount: messages.length,
+          itemBuilder: (context, index) {
+            return MessageBubble(
+              messageStream: Stream.value(
+                  StringBuffer(messages[index].content.getOrCrash())),
+              isUser: messages[index].sender == Sender.user,
+            );
+          },
         );
       },
     );
@@ -23,38 +36,50 @@ class MessageListWidget extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  final String message;
+  final Stream<StringBuffer> messageStream;
   final bool isUser;
 
   const MessageBubble({
     Key? key,
-    required this.message,
+    required this.messageStream,
     required this.isUser,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment:
-          isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-          margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-          constraints: BoxConstraints(
-            maxWidth: MediaQuery.of(context).size.width * 0.7,
-          ),
-          decoration: _bubbleDecoration(),
-          child: Text(
-            message,
-            style: TextStyle(
-              color: isUser ? Colors.white : Color(0xff002E4F),
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
+    return StreamBuilder<StringBuffer>(
+      stream: messageStream,
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return const SizedBox();
+        }
+
+        final message = snapshot.data!;
+        // debugPrint("[MessageBubble] message: $message");
+
+        return Column(
+          crossAxisAlignment:
+              isUser ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              constraints: BoxConstraints(
+                maxWidth: MediaQuery.of(context).size.width * 0.7,
+              ),
+              decoration: _bubbleDecoration(),
+              child: Text(
+                message.toString(),
+                style: TextStyle(
+                  color: isUser ? Colors.white : const Color(0xff002E4F),
+                  fontSize: 16,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 
