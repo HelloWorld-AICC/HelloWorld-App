@@ -61,16 +61,11 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
     });
 
     on<SendMessageEvent>((event, emit) async {
-      printInColor(
-          'Sending message event started: ${event.message.content.getOrCrash()}',
-          color: blue);
-
-      final currentMessages = await _messageStreamController.stream.first;
-
-      final updatedMessages = List<ChatMessage>.from(currentMessages)
+      final updatedMessages = List<ChatMessage>.from(state.messages)
         ..add(event.message);
       _messageStreamController.add(updatedMessages);
-      emit(state.copyWith(typingState: TypingIndicatorState.shown));
+      emit(state.copyWith(
+          typingState: TypingIndicatorState.shown, messages: updatedMessages));
 
       final failureOrStream = await chatRepository.sendMessage(
           StringVO(event.roomId), StringVO(event.message.content.toString()));
@@ -107,8 +102,8 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
                     content: StringVO(finalResponse.toString()),
                   );
 
-                  final updatedMessages =
-                      List<ChatMessage>.from(currentMessages)..add(botMessage);
+                  final updatedMessages = List<ChatMessage>.from(state.messages)
+                    ..add(botMessage);
                   _messageStreamController.add(updatedMessages);
                   emit(state.copyWith(typingState: TypingIndicatorState.shown));
                 }
