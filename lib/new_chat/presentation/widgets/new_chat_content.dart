@@ -5,6 +5,7 @@ import 'package:hello_world_mvp/new_chat/presentation/widgets/typing_indicator.d
 
 import '../../../core/value_objects.dart';
 import '../../../custom_bottom_navigationbar.dart';
+import '../../../design_system/hello_colors.dart';
 import '../../../home/presentation/widgets/home_page_content.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
@@ -52,7 +53,8 @@ class NewChatContentState extends State<NewChatContent>
         title: Text(
           tr('chat_title'),
           style: TextStyle(
-            color: const Color(0xFF6D9CD5),
+            color: HelloColors.subTextColor,
+            fontFamily: "SB AggroOTF",
             fontWeight: FontWeight.bold,
             fontSize: 20,
           ),
@@ -60,9 +62,9 @@ class NewChatContentState extends State<NewChatContent>
         leading: IconButton(
           icon: Icon(
             Icons.list_rounded,
-            color: Color(0xFF6D9CD5),
+            color: HelloColors.subTextColor,
           ),
-          color: const Color(0xff002E4F),
+          color: HelloColors.subTextColor,
           onPressed: () {
             // context
             //     .read<RouteBloc>()
@@ -75,7 +77,7 @@ class NewChatContentState extends State<NewChatContent>
           IconButton(
             icon: Icon(
               Icons.add,
-              color: Color(0xFF6D9CD5),
+              color: HelloColors.subTextColor,
             ),
             onPressed: () {
               context.read<ChatSessionBloc>().add(ClearMessagesEvent());

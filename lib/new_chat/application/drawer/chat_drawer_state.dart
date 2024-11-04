@@ -23,12 +23,13 @@ class ChatDrawerState extends Equatable {
   ChatDrawerState copyWith(
       {bool? loading,
       bool? isDrawerOpen,
+      String? selectedRoomId,
       List<ChatRoomInfo>? chatRoomInfoList}) {
     return ChatDrawerState(
       loading: loading ?? this.loading,
       isDrawerOpen: isDrawerOpen ?? this.isDrawerOpen,
       chatRoomInfoList: chatRoomInfoList ?? this.chatRoomInfoList,
-      selectedRoomId: selectedRoomId,
+      selectedRoomId: selectedRoomId ?? 'new_chat',
     );
   }
 
