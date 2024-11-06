@@ -23,7 +23,9 @@ class EditProfileScreen extends StatelessWidget {
             child: MypageBackgroundGradient(
               child: Column(
                 children: [
-                  MyPageTitle(onTapConfirm: () {}),
+                  MyPageTitle(onTapConfirm: () {
+                    context.read<EditProfileBloc>().add(Submit());
+                  }),
                   const SizedBox(height: 30),
                   MyProfile(
                     userImg: null,
@@ -43,10 +45,10 @@ class EditProfileScreen extends StatelessWidget {
                             fontWeight: FontWeight.w500,
                           )),
                       const SizedBox(height: 16),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
+                          const Text(
                             "닉네임 변경",
                             style: TextStyle(
                               fontFamily: HelloFonts.pretendard,
@@ -55,13 +57,34 @@ class EditProfileScreen extends StatelessWidget {
                               fontWeight: FontWeight.w500,
                             ),
                           ),
-                          Text("Song Taeseop",
-                              style: TextStyle(
-                                fontFamily: HelloFonts.pretendard,
-                                fontSize: 12,
-                                color: HelloColors.gray,
-                                fontWeight: FontWeight.w500,
-                              ))
+                          Expanded(
+                            child:
+                                BlocBuilder<EditProfileBloc, EditProfileState>(
+                              builder: (context, state) {
+                                return TextField(
+                                  controller: TextEditingController(
+                                      text:
+                                          state.myInfo?.name ?? "No Nickname"),
+                                  onChanged: (value) {
+                                    context
+                                        .read<EditProfileBloc>()
+                                        .add(NicknameChanged(nickname: value));
+                                  },
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                    fontFamily: HelloFonts.pretendard,
+                                    fontSize: 12,
+                                    color: HelloColors.gray,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  decoration: const InputDecoration(
+                                    enabledBorder: InputBorder.none,
+                                    focusedBorder: InputBorder.none,
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 20),

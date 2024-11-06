@@ -26,5 +26,11 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
         return state.copyWith(myInfo: myInfo, isLoading: false);
       }));
     });
+
+    on<NicknameChanged>((event, emit) {
+      emit(state.copyWith(
+        newNickname: event.nickname,
+      ));
+    });
   }
 }

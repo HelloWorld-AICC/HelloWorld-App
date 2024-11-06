@@ -33,12 +33,14 @@ import 'init/application/app_init_bloc.dart' as _i775;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
 import 'locale/domain/localization_service.dart' as _i121;
-import 'mypage/menu/application/mypage/mypage_bloc.dart' as _i52;
-import 'mypage/menu/domain/repository/i_mypage_repository.dart' as _i40;
+import 'mypage/edit_profile/application/edit_profile_bloc.dart' as _i835;
+import 'mypage/menu/application/mypage/mypage_bloc.dart' as _i876;
+import 'mypage/menu/domain/repository/i_mypage_repository.dart' as _i392;
 import 'mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider.dart'
-    as _i737;
-import 'mypage/menu/infrastructure/provider/mypage_internal_provider.dart' as _i824;
-import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i1052;
+    as _i665;
+import 'mypage/menu/infrastructure/provider/mypage_internal_provider.dart'
+    as _i487;
+import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i936;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
@@ -104,10 +106,10 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i810.ChatDrawerBloc>(
         () => _i810.ChatDrawerBloc(gh<_i779.ChatRoomsInfoRepository>()));
-    gh.lazySingleton<_i737.IMypageInternalProvider>(
-        () => _i824.MypageInternalProvider(gh<_i1053.FetchService>()));
-    gh.lazySingleton<_i40.IMypageRepository>(() => _i1052.MypageRepository(
-        mypageProvider: gh<_i737.IMypageInternalProvider>()));
+    gh.lazySingleton<_i665.IMypageInternalProvider>(
+        () => _i487.MypageInternalProvider(gh<_i1053.FetchService>()));
+    gh.lazySingleton<_i392.IMypageRepository>(() => _i936.MypageRepository(
+        mypageProvider: gh<_i665.IMypageInternalProvider>()));
     gh.factory<_i718.ChatMessageHandler>(
         () => _i718.ChatMessageHandler(gh<_i605.ChatRepository>()));
     gh.factory<_i659.ChatSessionBloc>(() => _i659.ChatSessionBloc(
@@ -116,8 +118,10 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
-    gh.factory<_i52.MypageBloc>(
-        () => _i52.MypageBloc(myPageRepository: gh<_i40.IMypageRepository>()));
+    gh.factory<_i835.EditProfileBloc>(() =>
+        _i835.EditProfileBloc(myPageRepository: gh<_i392.IMypageRepository>()));
+    gh.factory<_i876.MypageBloc>(() =>
+        _i876.MypageBloc(myPageRepository: gh<_i392.IMypageRepository>()));
     return this;
   }
 }

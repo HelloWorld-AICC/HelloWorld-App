@@ -1,6 +1,6 @@
 class MyInfo {
   final String name;
-  final String userImg;
+  final String? userImg;
 
-  MyInfo({required this.name, required this.userImg});
+  MyInfo({required this.name, this.userImg});
 }
