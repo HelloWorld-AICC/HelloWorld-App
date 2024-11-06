@@ -39,10 +39,9 @@ class MyProfile extends StatelessWidget {
                     ),
                     child: CircleAvatar(
                       radius: 50.0,
-                      // backgroundImage: NetworkImage(userImg ?? ""),
                       backgroundImage:
-                          Image.network("https://picsum.photos/300/300").image,
-                      backgroundColor: Colors.red,
+                          userImg != null ? NetworkImage(userImg ?? "") : null,
+                      backgroundColor: Colors.grey,
                     ),
                   ),
                 ),
