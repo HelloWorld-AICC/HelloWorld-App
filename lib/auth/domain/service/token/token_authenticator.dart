@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../../route/route_service.dart';
+import '../../../../route/domain/route_service.dart';
 
 class TokenAuthenticator {
   final Dio _dio;
@@ -12,7 +12,11 @@ class TokenAuthenticator {
   final RouteService _routeService;
 
   TokenAuthenticator(
-      this._dio, this._baseUrl, this._tokenRefreshUrl, this._routeService);
+    this._dio,
+    this._baseUrl,
+    this._tokenRefreshUrl,
+    this._routeService,
+  );
 
   Future<RequestOptions> authenticate(
       RequestOptions requestOptions, Response response) async {
