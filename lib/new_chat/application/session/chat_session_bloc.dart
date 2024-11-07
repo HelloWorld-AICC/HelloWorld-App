@@ -172,7 +172,10 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
     on<ClearMessagesEvent>((event, emit) {
       _messageStreamController.add([]); // Clear messages
-      emit(state.copyWith(typingState: TypingIndicatorState.hidden));
+      emit(state.copyWith(
+          roomId: null,
+          isLoading: false,
+          typingState: TypingIndicatorState.hidden));
     });
   }
 

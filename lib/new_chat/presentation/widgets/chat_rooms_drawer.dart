@@ -68,12 +68,16 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
 
   Widget _buildDrawerHeader(BuildContext context) {
     return DrawerHeader(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.transparent),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'Chatting Room',
             style: const TextStyle(
+              fontFamily: 'SB AggroOTF',
               color: HelloColors.subTextColor,
               fontSize: 24,
               fontWeight: FontWeight.bold,

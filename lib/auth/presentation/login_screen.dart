@@ -43,22 +43,50 @@ class LoginScreen extends StatelessWidget {
             children: [
               SafeArea(
                 child: Scaffold(
-                    backgroundColor: Colors.white,
+                    backgroundColor: Color(0xffECF6FE),
                     body: SingleChildScrollView(
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 70),
-                          const _Title(),
-                          const SizedBox(height: 20),
-                          Image.asset(
-                            "assets/images/auth/login_main.png",
+                          // const SizedBox(height: 70),
+                          // const _Title(),
+                          // const SizedBox(height: 20),
+                          Container(
                             width: double.infinity,
-                            fit: BoxFit.fitWidth,
+                            height: MediaQuery.of(context).size.height,
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: MediaQuery.of(context).size.height * 0.2,
+                                  left:
+                                      MediaQuery.of(context).size.width * 0.15,
+                                  child: Image.asset(
+                                    "assets/images/common/sphere.png",
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.7,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                  top: MediaQuery.of(context).size.height * 0.4,
+                                  left: MediaQuery.of(context).size.width * 0.3,
+                                  child: Image.asset(
+                                    "assets/images/home/hello_world_title.png",
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                Positioned(
+                                    bottom: MediaQuery.of(context).size.height *
+                                        0.25,
+                                    left: 0,
+                                    right: 0,
+                                    child: const _LoginButtonArea()),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 4),
-                          const _LoginButtonArea()
                         ],
                       ),
                     )),
@@ -84,12 +112,10 @@ class _LoginButtonArea extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Flexible(
-      child: Container(
-          margin: const EdgeInsets.all(24),
-          padding: const EdgeInsets.all(16),
-          child: const Center(child: _LoginWithGoogle())),
-    );
+    return Container(
+        margin: const EdgeInsets.all(24),
+        padding: const EdgeInsets.all(16),
+        child: const Center(child: _LoginWithGoogle()));
   }
 }
 
@@ -105,11 +131,13 @@ class _LoginWithGoogle extends StatelessWidget {
       child: Container(
           height: 35,
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(
-                width: 1,
-                color: const Color(0xFFEBEBEB),
-              )),
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(
+              width: 1,
+              color: const Color(0xFFEBEBEB),
+            ),
+            color: Color(0xFFEBEBEB),
+          ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
