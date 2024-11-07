@@ -41,22 +41,24 @@ class CustomBottomNavigationBar extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: items.keys.map((key) {
-                      final index = items.keys.toList().indexOf(key);
-                      return Expanded(
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: index == routeState.currentIndex
-                              ? Container(
-                                  width: 40,
-                                  height: 4,
-                                  color: Color(0xff4B7BF5),
-                                )
-                              : SizedBox(width: 40),
-                        ),
-                      );
-                    }).toList(),
+                  Expanded(
+                    child: Row(
+                      children: items.keys.map((key) {
+                        final index = items.keys.toList().indexOf(key);
+                        return Expanded(
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: index == routeState.currentIndex
+                                ? Container(
+                                    width: 40,
+                                    height: 4,
+                                    color: Color(0xff4B7BF5),
+                                  )
+                                : SizedBox(width: 40),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                   BottomNavigationBar(
                     currentIndex: routeState.currentIndex,

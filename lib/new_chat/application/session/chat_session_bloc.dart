@@ -30,10 +30,17 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
   ChatSessionBloc({required this.chatRepository})
       : super(ChatSessionState.initial()) {
+    on<ChangeRoomIdEvent>((event, emit) {
+      emit(state.copyWith(roomId: event.roomId));
+    });
+
     on<LoadChatSessionEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
       try {
-        if (event.roomId == 'new_chat') {
+        final roomId = state.roomId;
+
+        if (roomId == 'new_chat') {
+          emit(state.copyWith(isLoading: false));
           return;
         }
         final failureOrChatRoom =
@@ -63,12 +70,18 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
     on<SendMessageEvent>((event, emit) async {
       final updatedMessages = List<ChatMessage>.from(state.messages)
         ..add(event.message);
+
+      final userMessage = event.message.content.value.fold(
+        (l) => ChatSendFailure(message: "Failed to send user message"),
+        (r) => r,
+      );
+      printInColor("message: $userMessage", color: red);
       _messageStreamController.add(updatedMessages);
       emit(state.copyWith(
           typingState: TypingIndicatorState.shown, messages: updatedMessages));
 
       final failureOrStream = await chatRepository.sendMessage(
-          StringVO(event.roomId), StringVO(event.message.content.toString()));
+          StringVO(event.roomId), StringVO(userMessage as String));
 
       await failureOrStream.fold(
         (failure) {
@@ -82,6 +95,11 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
           final subscription = lineStream.listen(
             (line) {
+              printInColor(
+                line,
+                color: green,
+              );
+
               if (line.startsWith('data:')) {
                 var temp = line.substring(5).trim();
                 if (temp.isEmpty) temp = ' ';

@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:hello_world_mvp/new_chat/presentation/widgets/typing_indicator.dart';
 
 import '../../../core/value_objects.dart';
@@ -10,6 +11,7 @@ import '../../../home/presentation/widgets/home_page_content.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
+import 'chat_guide_widget.dart';
 import 'chat_input_field.dart';
 import 'chat_rooms_drawer.dart';
 import 'message_list_widget.dart';
@@ -24,6 +26,8 @@ class NewChatContentState extends State<NewChatContent>
   final TextEditingController _controller = TextEditingController();
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  bool isKeyboardVisible = false;
 
   @override
   void initState() {
@@ -43,101 +47,132 @@ class NewChatContentState extends State<NewChatContent>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.white,
-      appBar: AppBar(
+    String? roomId = context.read<ChatSessionBloc>().state.roomId;
+
+    return SafeArea(
+      child: Scaffold(
+        key: _scaffoldKey,
+        resizeToAvoidBottomInset: false,
         backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Text(
-          tr('chat_title'),
-          style: TextStyle(
-            color: HelloColors.subTextColor,
-            fontFamily: "SB AggroOTF",
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          title: Text(
+            tr('chat_title'),
+            style: TextStyle(
+              color: HelloColors.subTextColor,
+              fontFamily: "SB AggroOTF",
+              fontWeight: FontWeight.bold,
+              fontSize: 20,
+            ),
           ),
-        ),
-        leading: IconButton(
-          icon: Icon(
-            Icons.list_rounded,
-            color: HelloColors.subTextColor,
-          ),
-          color: HelloColors.subTextColor,
-          onPressed: () {
-            // context
-            //     .read<RouteBloc>()
-            //     .add(RouteChanged(newIndex: 0, newRoute: '/home'));
-            // Navigator.of(context).pop();
-            _scaffoldKey.currentState?.openDrawer();
-          },
-        ),
-        actions: [
-          IconButton(
+          leading: IconButton(
             icon: Icon(
-              Icons.add,
+              Icons.list_rounded,
               color: HelloColors.subTextColor,
             ),
+            color: HelloColors.subTextColor,
             onPressed: () {
-              context.read<ChatSessionBloc>().add(ClearMessagesEvent());
+              // context
+              //     .read<RouteBloc>()
+              //     .add(RouteChanged(newIndex: 0, newRoute: '/home'));
+              // Navigator.of(context).pop();
+              _scaffoldKey.currentState?.openDrawer();
             },
           ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            BlocListener<ChatSessionBloc, ChatSessionState>(
-              listener: (context, state) {
-                // if (state.roomId == null) {
-                //   printInColor('Loading chat session', color: red);
-                //   context.read<ChatSessionBloc>().add(
-                //       LoadChatSessionEvent(roomId: state.roomId ?? 'new_chat'));
-                // }
-              },
-              child: Expanded(
-                child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
-                  builder: (context, state) {
-                    final messageStream =
-                        context.read<ChatSessionBloc>().messagesStream;
-                    return MessageListWidget(
-                      messageStream: messageStream,
-                    );
-                  },
-                ),
+          actions: [
+            IconButton(
+              icon: Icon(
+                Icons.add,
+                color: HelloColors.subTextColor,
               ),
+              onPressed: () {
+                context.read<ChatSessionBloc>().add(ClearMessagesEvent());
+              },
             ),
-            if (context.watch<ChatSessionBloc>().state.typingState ==
-                TypingIndicatorState.shown)
-              TypingIndicator(),
-            // Expanded(
-            //   child: ActionButtonsWidget(
-            //     onButtonPressed: (selectedContent) {},
-            //   ),
-            // ),
-            _buildInputArea(),
           ],
         ),
+        body: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              BlocListener<ChatSessionBloc, ChatSessionState>(
+                listener: (context, state) {
+                  // if (state.roomId == null) {
+                  //   printInColor('Loading chat session', color: red);
+                  //   context.read<ChatSessionBloc>().add(
+                  //       LoadChatSessionEvent(roomId: state.roomId ?? 'new_chat'));
+                  // }
+                },
+                child: Expanded(
+                  child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
+                    builder: (context, state) {
+                      if (state.roomId == null) {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                            left: 10,
+                            right: 100,
+                            bottom: 350,
+                          ),
+                          child: ChatGuideWidget(),
+                        );
+                      } else {
+                        final messageStream =
+                            context.read<ChatSessionBloc>().messagesStream;
+                        return MessageListWidget(
+                          messageStream: messageStream,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              ),
+              if (context.watch<ChatSessionBloc>().state.typingState ==
+                  TypingIndicatorState.shown)
+                TypingIndicator(),
+              // Expanded(
+              //   child: ActionButtonsWidget(
+              //     onButtonPressed: (selectedContent) {},
+              //   ),
+              // ),
+              _buildInputArea(roomId),
+            ],
+          ),
+        ),
+        bottomNavigationBar: Visibility(
+          visible: !isKeyboardVisible,
+          child: CustomBottomNavigationBar(items: bottomNavItems),
+        ),
+        drawer: ChatRoomsDrawer(),
       ),
-      bottomNavigationBar: CustomBottomNavigationBar(items: bottomNavItems),
-      drawer: ChatRoomsDrawer(),
     );
   }
 
-  Widget _buildInputArea() {
-    return ChatInputField(
-      sendMessage: () {
-        context.read<ChatSessionBloc>().add(SendMessageEvent(
-            message: ChatMessage(
-                sender: Sender.user, content: StringVO(_controller.text))));
-        printInColor('Sent message in buildInputArea: ${_controller.text}',
-            color: blue);
-        _controller.clear();
-      },
-      controller: _controller,
+  Widget _buildInputArea(String? roomId) {
+    return BlocListener<ChatSessionBloc, ChatSessionState>(
+      listener: (context, state) {},
+      child: ChatInputField(
+        sendMessage: () {
+          context.read<ChatSessionBloc>().add(SendMessageEvent(
+              message: ChatMessage(
+                  sender: Sender.user, content: StringVO(_controller.text))));
+          _controller.clear();
+          setState(() {
+            isKeyboardVisible = false;
+          });
+        },
+        tapped: () {
+          setState(() {
+            isKeyboardVisible = true;
+            context
+                .read<ChatSessionBloc>()
+                .add(ChangeRoomIdEvent(roomId: 'new_chat'));
+          });
+        },
+        controller: _controller,
+      ),
     );
   }
 }

@@ -51,6 +51,7 @@ flutter:
     - assets/images/auth/
     - assets/images/home/
     - assets/images/home/grid_view/
+    - assets/images/chat/
     - assets/fonts/
     - assets/icons/
     - assets/icons/grey/

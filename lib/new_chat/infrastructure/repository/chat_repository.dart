@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
+import 'package:hello_world_mvp/fetch/authenticated_http_client.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_room_info.dart';
 import 'package:hello_world_mvp/new_chat/domain/service/chat_fetch_service.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/dtos/chat_log_dto.dart';
@@ -18,6 +19,8 @@ import '../dtos/room_dto.dart';
 @LazySingleton(as: IChatRepository)
 class ChatRepository implements IChatRepository {
   final ChatFetchService _fetchService;
+
+  AuthenticatedHttpClient get client => _fetchService.client;
 
   ChatRepository(this._fetchService);
 
@@ -78,6 +81,16 @@ class ChatRepository implements IChatRepository {
       path: '/chat/ask',
       bodyParam: {'content': message.getOrCrash()},
       queryParams: {'roomId': roomId.getOrCrash()},
+    );
+
+    client.printRequestDebug(
+      'POST',
+      Uri(
+        path: '/webflux/chat/ask',
+        queryParameters: {'roomId': roomId.getOrCrash()},
+      ),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: {'content': message.getOrCrash(), 'roomId': roomId.getOrCrash()},
     );
 
     return failureOrResponse.fold(

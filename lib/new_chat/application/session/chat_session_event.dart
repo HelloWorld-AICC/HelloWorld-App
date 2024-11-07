@@ -5,20 +5,23 @@ sealed class ChatSessionEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class LoadChatSessionEvent extends ChatSessionEvent {
+final class ChangeRoomIdEvent extends ChatSessionEvent {
   final String roomId;
 
-  LoadChatSessionEvent({required this.roomId});
+  ChangeRoomIdEvent({required this.roomId});
+}
 
-  @override
-  List<Object> get props => [roomId];
+final class LoadChatSessionEvent extends ChatSessionEvent {
+  final String? roomId;
+
+  LoadChatSessionEvent({required this.roomId});
 }
 
 final class SendMessageEvent extends ChatSessionEvent {
   final String roomId;
   final ChatMessage message;
 
-  SendMessageEvent({this.roomId = "new-chat", required this.message});
+  SendMessageEvent({this.roomId = "new_chat", required this.message});
 
   @override
   List<Object> get props => [roomId, message];
