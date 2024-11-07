@@ -158,9 +158,6 @@ class _SplashPageState extends State<SplashPage> {
                       final selectedLocale = localeBloc.state.locale;
                       final selectedIndex = localeBloc.state.selectedIndex;
 
-                      debugPrint("selectedLocale: $selectedLocale");
-                      debugPrint("selectedIndex: $selectedIndex");
-
                       if (selectedIndex == 0 && mounted) {
                         localeBloc.add(SetLocale(
                             locale: selectedLocale ?? Locale('en', 'US'),
@@ -178,7 +175,8 @@ class _SplashPageState extends State<SplashPage> {
                             newRoute: '/home',
                           ),
                         );
-                        context.push('/home');
+                        context.push('/terms-of-service');
+                        // context.push('/home');
                       }
                     },
                     child: Stack(
