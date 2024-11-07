@@ -129,9 +129,9 @@ class NewChatContentState extends State<NewChatContent>
                   ),
                 ),
               ),
-              if (context.watch<ChatSessionBloc>().state.typingState ==
-                  TypingIndicatorState.shown)
-                TypingIndicator(),
+              // if (context.watch<ChatSessionBloc>().state.typingState ==
+              //     TypingIndicatorState.shown)
+              //   TypingIndicator(),
               // Expanded(
               //   child: ActionButtonsWidget(
               //     onButtonPressed: (selectedContent) {},
