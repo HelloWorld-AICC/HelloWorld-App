@@ -20,6 +20,6 @@ class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
     final prefs = await SharedPreferences.getInstance();
     final hasRunBefore = prefs.getBool('isFirstRun') ?? true;
     if (hasRunBefore) await prefs.setBool('isFirstRun', false);
-    emit(state.copyWith(isFirstRun: hasRunBefore));
+    emit(state.copyWith(isFirstRun: false));
   }
 }

@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
+import 'package:hello_world_mvp/fetch/authenticated_http_client.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_room_info.dart';
 import 'package:hello_world_mvp/new_chat/domain/service/chat_fetch_service.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/dtos/chat_log_dto.dart';
+import 'package:hello_world_mvp/new_chat/presentation/widgets/new_chat_content.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
@@ -16,6 +20,8 @@ import '../dtos/room_dto.dart';
 @LazySingleton(as: IChatRepository)
 class ChatRepository implements IChatRepository {
   final ChatFetchService _fetchService;
+
+  AuthenticatedHttpClient get client => _fetchService.client;
 
   ChatRepository(this._fetchService);
 
@@ -66,15 +72,39 @@ class ChatRepository implements IChatRepository {
     });
   }
 
-  Future<Either<ChatFailure, Unit>> sendMessage(
-      StringVO roomId, StringVO message) async {
-    final failureOrResponse = await _fetchService.request(
-        method: HttpMethod.post,
-        pathPrefix: '/webflux',
-        path: '/chat/ask',
-        queryParams: {'roomId': roomId.getOrCrash()});
+  Future<Either<ChatFailure, Stream<String>>> sendMessage(
+    StringVO roomId,
+    StringVO message,
+  ) async {
+    final failureOrResponse = await _fetchService.streamedRequest(
+      method: HttpMethod.post,
+      pathPrefix: '/webflux',
+      path: '/chat/ask',
+      bodyParam: {'content': message.getOrCrash()},
+      queryParams: {'roomId': roomId.getOrCrash()},
+    );
+
+    client.printRequestDebug(
+      'POST',
+      Uri(
+        path: '/webflux/chat/ask',
+        queryParameters: {'roomId': roomId.getOrCrash()},
+      ),
+      headers: {"Content-Type": "application/json; charset=utf-8"},
+      body: {'content': message.getOrCrash(), 'roomId': roomId.getOrCrash()},
+    );
+
     return failureOrResponse.fold(
-        (failure) => left(ChatSendFailure(message: "Failed to send message")),
-        (response) => right(unit));
+      (failure) => left(ChatSendFailure(message: "Failed to send message")),
+      (streamedResponse) {
+        final lineStream = streamedResponse.stream
+            .transform(utf8.decoder)
+            .transform(LineSplitter());
+        printInColor("linestream in chat_repository: ${lineStream.runtimeType}",
+            color: red);
+
+        return right(lineStream);
+      },
+    );
   }
 }
