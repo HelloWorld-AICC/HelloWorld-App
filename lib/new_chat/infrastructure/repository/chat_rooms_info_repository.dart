@@ -29,14 +29,10 @@ class ChatRoomsInfoRepository implements IChatRoomsInfoRepository {
       (f) => left(
           ChatRoomsInfoFetchFailure(message: "Failed to fetch rooms info")),
       (response) {
-        final chatRoomsInfo = (response.result as List).map((e) {
+        final chatRoomsInfo = (response.result["result"] as List).map((e) {
           final roomInfoDto = RoomInfoDto.fromJson(e as Map<String, dynamic>);
           return roomInfoDto;
         }).toList();
-
-        printInColor(
-            'ChatRoomsInfoRepository: getChatRoomsInfo: chatRoomsInfo: $chatRoomsInfo',
-            color: 'green');
 
         final eitherResult =
             _chatRoomsInfoProvider.setChatRoomsInfo(chatRoomsInfo);

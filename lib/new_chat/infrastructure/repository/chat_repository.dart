@@ -5,6 +5,7 @@ import 'package:hello_world_mvp/fetch/authenticated_http_client.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_room_info.dart';
 import 'package:hello_world_mvp/new_chat/domain/service/chat_fetch_service.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/dtos/chat_log_dto.dart';
+import 'package:hello_world_mvp/new_chat/presentation/widgets/new_chat_content.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
@@ -99,6 +100,8 @@ class ChatRepository implements IChatRepository {
         final lineStream = streamedResponse.stream
             .transform(utf8.decoder)
             .transform(LineSplitter());
+        printInColor("linestream in chat_repository: ${lineStream.runtimeType}",
+            color: red);
 
         return right(lineStream);
       },

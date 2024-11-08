@@ -4,6 +4,7 @@ import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_rooms_in
 import 'package:injectable/injectable.dart';
 
 import '../../domain/model/chat_room_info.dart';
+import '../../presentation/widgets/new_chat_content.dart';
 import '../session/chat_session_bloc.dart';
 
 part 'chat_drawer_event.dart';

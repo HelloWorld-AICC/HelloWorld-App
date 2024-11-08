@@ -87,7 +87,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
       ChatMessage? botMessage;
 
-      await failureOrStream.fold(
+      final streamed_response = await failureOrStream.fold(
         (failure) {
           printInColor(failure.message, color: red);
           emit(state.copyWith(
@@ -96,15 +96,14 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
           ));
         },
         (lineStream) async {
+          printInColor(
+              "lineStream: $lineStream, isEmpty: ${lineStream.isEmpty}, first data: ${lineStream.first}",
+              color: red);
           final finalResponse = StringBuffer();
-          printInColor("lineStream: $lineStream", color: green);
 
           final subscription = lineStream.listen(
             (line) {
-              printInColor(
-                line,
-                color: green,
-              );
+              printInColor("raw data is, $line", color: green);
 
               if (line.startsWith('data:')) {
                 var temp = line.substring(5).trim();
@@ -157,6 +156,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
               ));
             },
           );
+          subscription.cancel();
         },
       );
     });

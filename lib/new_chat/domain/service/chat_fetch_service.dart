@@ -10,6 +10,7 @@ import '../../../fetch/authenticated_http_client.dart';
 import '../../../fetch/fetch_service.dart';
 import '../../../fetch/network_failure.dart';
 import '../../../fetch/server_response.dart';
+import '../../presentation/widgets/new_chat_content.dart';
 
 @singleton
 class ChatFetchService extends FetchService {
@@ -70,6 +71,15 @@ class ChatFetchService extends FetchService {
       return left(NetworkFailure.unknownError(e));
     }
 
+    if (jsonDecode(utf8.decode(response.bodyBytes)).runtimeType ==
+        List<dynamic>) {
+      return right(ServerResponse(
+        isSuccess: true,
+        code: "200",
+        message: "Success",
+        result: {"result": jsonDecode(utf8.decode(response.bodyBytes))},
+      ));
+    }
     final ServerResponse serverResponse =
         ServerResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
 
