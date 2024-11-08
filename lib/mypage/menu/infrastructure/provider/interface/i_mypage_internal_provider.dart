@@ -4,4 +4,6 @@ import 'package:hello_world_mvp/mypage/menu/infrastructure/dtos/my_info_dto.dart
 
 abstract class IMypageInternalProvider {
   Future<Either<Failure, MyInfoDto>> getMyInfo();
+
+  Future<Either<Failure, Unit>> modifyMyProfile();
 }

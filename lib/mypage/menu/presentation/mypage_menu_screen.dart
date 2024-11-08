@@ -49,7 +49,9 @@ class _Body extends StatelessWidget {
         BlocBuilder<MypageBloc, MypageState>(
           builder: (context, state) {
             return MyProfile(
-                userImg: state.myInfo?.userImg, name: state.myInfo?.name);
+                selectedImage: null,
+                userImg: state.myInfo?.userImg,
+                name: state.myInfo?.name);
           },
         ),
         const SizedBox(height: 36),

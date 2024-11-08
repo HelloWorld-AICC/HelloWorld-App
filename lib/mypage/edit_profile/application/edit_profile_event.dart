@@ -26,3 +26,5 @@ final class NicknameChanged extends EditProfileEvent {
   @override
   List<Object> get props => [nickname];
 }
+
+final class SelectImage extends EditProfileEvent {}

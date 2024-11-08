@@ -26,4 +26,19 @@ class MypageInternalProvider implements IMypageInternalProvider {
       return right(MyInfoDto.fromJson(response.result));
     });
   }
+
+  @override
+  Future<Either<Failure, Unit>> modifyMyProfile() async {
+    final failureOrTokens = await _fetchService.request(
+      pathPrefix: "",
+      path: "/myPage/setProfile",
+      method: HttpMethod.post,
+    );
+
+    return failureOrTokens.fold((f) {
+      return left(f);
+    }, (response) {
+      return right(unit);
+    });
+  }
 }

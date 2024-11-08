@@ -8,6 +8,7 @@ import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gra
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_title.dart';
 import 'package:hello_world_mvp/mypage/edit_profile/application/edit_profile_bloc.dart';
+import 'package:hello_world_mvp/mypage/edit_profile/presentation/language_flag.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -41,10 +42,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       context.read<EditProfileBloc>().add(Submit());
                     }),
                     const SizedBox(height: 30),
-                    MyProfile(
-                      userImg: null,
-                      name: null,
-                      onTapEditImage: () {},
+                    BlocBuilder<EditProfileBloc, EditProfileState>(
+                      builder: (context, state) {
+                        return MyProfile(
+                          selectedImage: state.selectedProfileImage,
+                          userImg: null,
+                          name: null,
+                          onTapEditImage: () {
+                            context.read<EditProfileBloc>().add(SelectImage());
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(height: 36),
                     MypageBox(
@@ -111,44 +119,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: 14),
-                        // GridView.count(
-                        //   primary: false,
-                        //   padding: EdgeInsets.zero,
-                        //   crossAxisCount: 4,
-                        //   children: <Widget>[
-                        //     Container(
-                        //       padding: const EdgeInsets.all(8),
-                        //       color: Colors.teal[100],
-                        //       child: const Text(
-                        //           "He'd have you all unravel at the"),
-                        //     ),
-                        //     Container(
-                        //       padding: const EdgeInsets.all(8),
-                        //       color: Colors.teal[200],
-                        //       child: const Text('Heed not the rabble'),
-                        //     ),
-                        //     Container(
-                        //       padding: const EdgeInsets.all(8),
-                        //       color: Colors.teal[300],
-                        //       child: const Text('Sound of screams but the'),
-                        //     ),
-                        //     Container(
-                        //       padding: const EdgeInsets.all(8),
-                        //       color: Colors.teal[400],
-                        //       child: const Text('Who scream'),
-                        //     ),
-                        //     Container(
-                        //       padding: const EdgeInsets.all(8),
-                        //       color: Colors.teal[500],
-                        //       child: const Text('Revolution is coming...'),
-                        //     ),
-                        //     Container(
-                        //       padding: const EdgeInsets.all(8),
-                        //       color: Colors.teal[600],
-                        //       child: const Text('Revolution, they...'),
-                        //     ),
-                        //   ],
-                        // ),
+                        Container(
+                          height: 200,
+                          child: GridView.count(
+                            primary: false,
+                            padding: EdgeInsets.zero,
+                            crossAxisCount: 4,
+                            children: <Widget>[
+                              LanguageFlag(
+                                lanagaue: Language.korean,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.chinese,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.vietnamese,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.japanese,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.english,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ))
                   ],
@@ -159,14 +154,5 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
       }),
     );
-  }
-}
-
-class LanguageItem extends StatelessWidget {
-  const LanguageItem({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
   }
 }

@@ -28,4 +28,14 @@ class MypageRepository implements IMypageRepository {
       return right(result.toDomain());
     });
   }
+
+  @override
+  Future<Either<MypageFailure, Unit>> setProfile() async {
+    final myInfoOrFailure = await mypageProvider.modifyMyProfile();
+
+    return myInfoOrFailure.fold((f) => left(MypageFailure(message: f.message)),
+        (result) {
+      return right(unit);
+    });
+  }
 }

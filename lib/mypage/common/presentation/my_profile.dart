@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
+import 'package:image_picker/image_picker.dart';
 
 class MyProfile extends StatelessWidget {
   final String? userImg;
   final String? name;
   final Function? onTapEditImage;
+  final XFile? selectedImage;
   const MyProfile(
       {super.key,
       required this.userImg,
       required this.name,
+      required this.selectedImage,
       this.onTapEditImage});
 
   @override
@@ -39,8 +44,11 @@ class MyProfile extends StatelessWidget {
                     ),
                     child: CircleAvatar(
                       radius: 50.0,
-                      backgroundImage:
-                          userImg != null ? NetworkImage(userImg ?? "") : null,
+                      backgroundImage: selectedImage != null
+                          ? Image.file(File(selectedImage!.path)).image
+                          : userImg != null
+                              ? NetworkImage(userImg ?? "")
+                              : null,
                       backgroundColor: Colors.grey,
                     ),
                   ),
