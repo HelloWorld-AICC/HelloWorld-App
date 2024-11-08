@@ -9,99 +9,111 @@ import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_title.dart';
 import 'package:hello_world_mvp/mypage/edit_profile/application/edit_profile_bloc.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
+
+  @override
+  State<EditProfileScreen> createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  final TextEditingController _controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => getIt<EditProfileBloc>()..add(GetMyInfo()),
       child: Builder(builder: (context) {
-        return Scaffold(
-          backgroundColor: HelloColors.white,
-          body: SingleChildScrollView(
-            child: MypageBackgroundGradient(
-              child: Column(
-                children: [
-                  MyPageTitle(onTapConfirm: () {
-                    context.read<EditProfileBloc>().add(Submit());
-                  }),
-                  const SizedBox(height: 30),
-                  MyProfile(
-                    userImg: null,
-                    name: null,
-                    onTapEditImage: () {},
-                  ),
-                  const SizedBox(height: 36),
-                  MypageBox(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text("프로필 변경",
-                          style: TextStyle(
-                            fontFamily: HelloFonts.pretendard,
-                            fontSize: 12,
-                            color: HelloColors.mainColor1,
-                            fontWeight: FontWeight.w500,
-                          )),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            "닉네임 변경",
+        return BlocListener<EditProfileBloc, EditProfileState>(
+          listenWhen: (prev, next) {
+            return prev.myInfo == null && next.myInfo != null;
+          },
+          listener: (context, state) {
+            _controller.text = state.myInfo?.name ?? "No Nickname";
+          },
+          child: Scaffold(
+            backgroundColor: HelloColors.white,
+            body: SingleChildScrollView(
+              child: MypageBackgroundGradient(
+                child: Column(
+                  children: [
+                    MyPageTitle(onTapConfirm: () {
+                      context.read<EditProfileBloc>().add(Submit());
+                    }),
+                    const SizedBox(height: 30),
+                    MyProfile(
+                      userImg: null,
+                      name: null,
+                      onTapEditImage: () {},
+                    ),
+                    const SizedBox(height: 36),
+                    MypageBox(
+                        child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text("프로필 변경",
                             style: TextStyle(
                               fontFamily: HelloFonts.pretendard,
-                              color: HelloColors.subTextColor,
                               fontSize: 12,
+                              color: HelloColors.mainColor1,
                               fontWeight: FontWeight.w500,
+                            )),
+                        const SizedBox(height: 16),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const Text(
+                              "닉네임 변경",
+                              style: TextStyle(
+                                fontFamily: HelloFonts.pretendard,
+                                color: HelloColors.subTextColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          Expanded(
-                            child:
-                                BlocBuilder<EditProfileBloc, EditProfileState>(
-                              builder: (context, state) {
-                                return TextField(
-                                  controller: TextEditingController(
-                                      text:
-                                          state.myInfo?.name ?? "No Nickname"),
-                                  onChanged: (value) {
-                                    context
-                                        .read<EditProfileBloc>()
-                                        .add(NicknameChanged(nickname: value));
-                                  },
-                                  textAlign: TextAlign.end,
-                                  style: const TextStyle(
-                                    fontFamily: HelloFonts.pretendard,
-                                    fontSize: 12,
-                                    color: HelloColors.gray,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                  decoration: const InputDecoration(
-                                    enabledBorder: InputBorder.none,
-                                    focusedBorder: InputBorder.none,
-                                  ),
-                                );
-                              },
+                            Expanded(
+                              child: BlocBuilder<EditProfileBloc,
+                                  EditProfileState>(
+                                builder: (context, state) {
+                                  return TextField(
+                                    controller: _controller,
+                                    onChanged: (value) {
+                                      context.read<EditProfileBloc>().add(
+                                          NicknameChanged(nickname: value));
+                                    },
+                                    textAlign: TextAlign.end,
+                                    style: const TextStyle(
+                                      fontFamily: HelloFonts.pretendard,
+                                      fontSize: 12,
+                                      color: HelloColors.gray,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                    decoration: const InputDecoration(
+                                      enabledBorder: InputBorder.none,
+                                      focusedBorder: InputBorder.none,
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 20),
-                      Container(height: 1, color: const Color(0xFFE6E6E6)),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "언어 변경",
-                        style: TextStyle(
-                          fontFamily: HelloFonts.pretendard,
-                          color: HelloColors.subTextColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
+                          ],
                         ),
-                      )
-                    ],
-                  ))
-                ],
+                        const SizedBox(height: 20),
+                        Container(height: 1, color: const Color(0xFFE6E6E6)),
+                        const SizedBox(height: 20),
+                        const Text(
+                          "언어 변경",
+                          style: TextStyle(
+                            fontFamily: HelloFonts.pretendard,
+                            color: HelloColors.subTextColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
+                    ))
+                  ],
+                ),
               ),
             ),
           ),
