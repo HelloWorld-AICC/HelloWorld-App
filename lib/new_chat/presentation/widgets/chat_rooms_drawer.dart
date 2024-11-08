@@ -1,17 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../design_system/hello_colors.dart';
 import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 
-class ChatRoomsDrawer extends StatelessWidget {
+class ChatRoomsDrawer extends StatefulWidget {
   const ChatRoomsDrawer({Key? key}) : super(key: key);
+
+  @override
+  State<ChatRoomsDrawer> createState() => _ChatRoomsDrawerState();
+}
+
+class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
+  @override
+  void initState() {
+    super.initState();
+    // Dispatch OpenDrawerEvent when the widget is first built.
+    context.read<ChatDrawerBloc>().add(OpenDrawerEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ChatDrawerBloc, ChatDrawerState>(
       builder: (context, state) {
         return Drawer(
+          backgroundColor: HelloColors.white,
           child: ListView(
             padding: EdgeInsets.zero,
             children: [
@@ -24,15 +38,17 @@ class ChatRoomsDrawer extends StatelessWidget {
                     title: Text(
                       room.title.getOrCrash(),
                       style: const TextStyle(
+                          fontFamily: "SB AggroOTF",
                           fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                          color: Color(0xff002E4F)),
+                          fontSize: 12,
+                          color: HelloColors.mainColor2),
                     ),
                     subtitle: Text(
                       room.roomId.getOrCrash(),
                       style: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xff002E4F),
+                        fontFamily: "SB AggroOTF",
+                        fontSize: 8,
+                        color: HelloColors.mainColor2,
                       ),
                     ),
                     selected: state.selectedRoomId == room.roomId,
@@ -52,19 +68,26 @@ class ChatRoomsDrawer extends StatelessWidget {
 
   Widget _buildDrawerHeader(BuildContext context) {
     return DrawerHeader(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.transparent),
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Chat Rooms',
+            'Chatting Room',
             style: const TextStyle(
-              color: Color(0xff6D9CD5),
+              fontFamily: 'SB AggroOTF',
+              color: HelloColors.subTextColor,
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),
           IconButton(
-            icon: const Icon(Icons.add, color: Color(0xff6D9CD5)),
+            icon: const Icon(
+              Icons.add,
+              color: HelloColors.subTextColor,
+            ),
             onPressed: () {
               context.read<ChatSessionBloc>().add(ClearMessagesEvent());
             },

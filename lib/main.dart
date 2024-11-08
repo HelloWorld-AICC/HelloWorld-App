@@ -11,12 +11,14 @@ import 'package:hello_world_mvp/mypage/edit_profile/presentation/edit_profile_sc
 import 'package:hello_world_mvp/mypage/menu/presentation/mypage_menu_screen.dart';
 import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart';
+import 'package:hello_world_mvp/route/domain/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/presentation/login_screen.dart';
 import 'home/presentation/home_page.dart';
+import 'init/presentation/splash_page.dart';
 import 'new_chat/application/session/chat_session_bloc.dart';
 
 void main() async {
@@ -114,31 +116,7 @@ class _MainAppState extends State<MainApp> {
             ),
           ],
           child: MaterialApp.router(
-            routerConfig: GoRouter(
-              // initialLocation: '/login',
-              routes: [
-                GoRoute(
-                  path: '/',
-                  builder: (context, state) => const HomePage(),
-                ),
-                GoRoute(
-                    path: '/home',
-                    builder: (context, state) => const HomePage()),
-                GoRoute(
-                    path: '/login',
-                    builder: (context, state) => const LoginScreen()),
-                GoRoute(
-                    path: '/chat', builder: (context, state) => NewChatPage()),
-                GoRoute(
-                  path: '/mypage-menu',
-                  builder: (context, state) => const MypageMenuScreen(),
-                ),
-                GoRoute(
-                  path: '/edit-profile',
-                  builder: (context, state) => const EditProfileScreen(),
-                ),
-              ],
-            ),
+            routerConfig: getIt<RouteService>().router,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: locale,
@@ -156,9 +134,12 @@ class _MainAppState extends State<MainApp> {
 
   void _handleNavigation(BuildContext context, AppInitState state) {
     final _router = GoRouter.of(context);
-    print('isFirstRun: ${state.isFirstRun}');
-    // state.isFirstRun ? _router.go('/login') : _router.go('/home');
-    true ? _router.go('/login') : _router.go('/home');
+
+    if (state.isFirstRun) {
+      _router.go('/login');
+    } else {
+      _router.go('/home');
+    }
   }
 }
 

@@ -4,6 +4,8 @@ import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_rooms_in
 import 'package:injectable/injectable.dart';
 
 import '../../domain/model/chat_room_info.dart';
+import '../../presentation/widgets/new_chat_content.dart';
+import '../session/chat_session_bloc.dart';
 
 part 'chat_drawer_event.dart';
 
@@ -12,8 +14,9 @@ part 'chat_drawer_state.dart';
 @injectable
 class ChatDrawerBloc extends Bloc<ChatDrawerEvent, ChatDrawerState> {
   final ChatRoomsInfoRepository _chatRoomsInfoRepository;
+  final ChatSessionBloc _chatSessionBloc;
 
-  ChatDrawerBloc(this._chatRoomsInfoRepository)
+  ChatDrawerBloc(this._chatRoomsInfoRepository, this._chatSessionBloc)
       : super(ChatDrawerState.initial()) {
     on<OpenDrawerEvent>((event, emit) async {
       final result = await _chatRoomsInfoRepository.getChatRoomsInfo();
@@ -45,6 +48,11 @@ class ChatDrawerBloc extends Bloc<ChatDrawerEvent, ChatDrawerState> {
 
     on<StopLoadingEvent>((event, emit) {
       emit(state.copyWith(loading: false));
+    });
+
+    on<SelectRoomEvent>((event, emit) {
+      _chatSessionBloc.add(LoadChatSessionEvent(roomId: event.roomId));
+      emit(state.copyWith(selectedRoomId: event.roomId));
     });
   }
 }

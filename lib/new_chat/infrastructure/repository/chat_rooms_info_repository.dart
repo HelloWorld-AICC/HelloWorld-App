@@ -6,6 +6,7 @@ import '../../domain/failure/chat_failure.dart';
 import '../../domain/model/chat_room_info.dart';
 import '../../domain/repository/i_chat_rooms_info_repository.dart';
 import '../../domain/service/chat_fetch_service.dart';
+import '../../presentation/widgets/new_chat_content.dart';
 import '../dtos/room_info_dto.dart';
 import '../providers/chat_rooms_info_provider.dart';
 
@@ -28,7 +29,7 @@ class ChatRoomsInfoRepository implements IChatRoomsInfoRepository {
       (f) => left(
           ChatRoomsInfoFetchFailure(message: "Failed to fetch rooms info")),
       (response) {
-        final chatRoomsInfo = (response.result as List).map((e) {
+        final chatRoomsInfo = (response.result["result"] as List).map((e) {
           final roomInfoDto = RoomInfoDto.fromJson(e as Map<String, dynamic>);
           return roomInfoDto;
         }).toList();
