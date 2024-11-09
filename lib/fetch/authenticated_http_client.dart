@@ -1,9 +1,10 @@
 // Dart imports:
 import 'dart:convert';
 import 'dart:io';
+import 'package:async/async.dart';
+import 'package:path/path.dart';
 
 import 'package:flutter/cupertino.dart';
-import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
 import 'package:hello_world_mvp/auth/domain/repository/i_token_repository.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -140,5 +141,43 @@ class AuthenticatedHttpClient extends http.BaseClient {
         .delete(url, headers: headers, body: body, encoding: encoding);
     printDebugResponse('DELETE', response);
     return response;
+  }
+
+  Future<Response> upload(
+    Uri url,
+    File file, {
+    Map<String, String>? headers,
+    Object? body,
+    Encoding? encoding,
+  }) async {
+    final tokens = await tokenRepository.getTokens();
+
+    return await tokens.fold((f) {
+      return Response("액세스 토큰이 존재하지 않습니다.", 403);
+    }, (result) async {
+      final Map<String, String> newHeaders = headers ?? {};
+
+      newHeaders.putIfAbsent('Authorization',
+          () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
+
+      var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
+      var length = await file.length();
+
+      var request = http.MultipartRequest("POST", url);
+      var multipartFile = http.MultipartFile('file', stream, length,
+          filename: basename(file.path));
+      //contentType: new MediaType('image', 'png'));
+
+      request.headers.addAll(newHeaders);
+      request.files.add(multipartFile);
+      var response = await request.send();
+      printRequestDebug('UPLOAD', url,
+          headers: headers, body: body, encoding: encoding);
+      var responseData = await response.stream.toBytes();
+      var responseString = String.fromCharCodes(responseData);
+      printDebugResponse(
+          'UPLOAD', Response(responseString, response.statusCode));
+      return Response(responseString, response.statusCode);
+    });
   }
 }

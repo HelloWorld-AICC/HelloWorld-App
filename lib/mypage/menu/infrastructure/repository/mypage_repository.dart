@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/auth/domain/model/token_set.dart';
@@ -30,8 +32,8 @@ class MypageRepository implements IMypageRepository {
   }
 
   @override
-  Future<Either<MypageFailure, Unit>> setProfile() async {
-    final myInfoOrFailure = await mypageProvider.modifyMyProfile();
+  Future<Either<MypageFailure, Unit>> setProfile(File file) async {
+    final myInfoOrFailure = await mypageProvider.modifyMyProfile(file);
 
     return myInfoOrFailure.fold((f) => left(MypageFailure(message: f.message)),
         (result) {

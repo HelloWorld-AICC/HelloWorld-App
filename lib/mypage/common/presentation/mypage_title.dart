@@ -5,8 +5,10 @@ import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 
 class MyPageTitle extends StatelessWidget {
+  final bool isConfirmActivated;
   final Function? onTapConfirm;
-  const MyPageTitle({super.key, this.onTapConfirm});
+  const MyPageTitle(
+      {super.key, this.onTapConfirm, this.isConfirmActivated = false});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,9 @@ class MyPageTitle extends StatelessWidget {
                 height: 20,
                 padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 6),
                 decoration: BoxDecoration(
-                  color: HelloColors.subTextColor,
+                  color: isConfirmActivated
+                      ? HelloColors.subTextColor
+                      : HelloColors.gray,
                   borderRadius: BorderRadius.circular(6.0),
                 ),
                 child: SvgPicture.asset(

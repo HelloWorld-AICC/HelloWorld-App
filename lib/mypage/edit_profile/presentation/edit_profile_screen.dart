@@ -25,22 +25,41 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return BlocProvider(
       create: (context) => getIt<EditProfileBloc>()..add(GetMyInfo()),
       child: Builder(builder: (context) {
-        return BlocListener<EditProfileBloc, EditProfileState>(
-          listenWhen: (prev, next) {
-            return prev.myInfo == null && next.myInfo != null;
-          },
-          listener: (context, state) {
-            _controller.text = state.myInfo?.name ?? "No Nickname";
-          },
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<EditProfileBloc, EditProfileState>(
+              listenWhen: (prev, next) {
+                return prev.myInfo == null && next.myInfo != null;
+              },
+              listener: (context, state) {
+                _controller.text = state.myInfo?.name ?? "No Nickname";
+              },
+            ),
+            BlocListener<EditProfileBloc, EditProfileState>(
+              listenWhen: (prev, next) {
+                return prev.isSuccess == false && next.isSuccess == true;
+              },
+              listener: (context, state) {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
           child: Scaffold(
             backgroundColor: HelloColors.white,
             body: SingleChildScrollView(
               child: MypageBackgroundGradient(
                 child: Column(
                   children: [
-                    MyPageTitle(onTapConfirm: () {
-                      context.read<EditProfileBloc>().add(Submit());
-                    }),
+                    BlocBuilder<EditProfileBloc, EditProfileState>(
+                      builder: (context, state) {
+                        return MyPageTitle(
+                            isConfirmActivated:
+                                state.selectedProfileImage != null,
+                            onTapConfirm: () {
+                              context.read<EditProfileBloc>().add(Submit());
+                            });
+                      },
+                    ),
                     const SizedBox(height: 30),
                     BlocBuilder<EditProfileBloc, EditProfileState>(
                       builder: (context, state) {

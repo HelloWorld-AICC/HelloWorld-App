@@ -18,7 +18,8 @@ enum HttpMethod {
   post,
   delete,
   put,
-  patch;
+  patch,
+  file;
 }
 
 @singleton
@@ -30,13 +31,16 @@ class FetchService {
 
   FetchService({required this.client});
 
-  Future<Either<NetworkFailure, ServerResponse>> request(
-      {required HttpMethod method,
-      String pathPrefix = "/api/v1",
-      required String path,
-      Map<String, dynamic>? bodyParam,
-      Map<String, dynamic>? pathParams,
-      Map<String, dynamic>? queryParams}) async {
+  Future<Either<NetworkFailure, ServerResponse>> request({
+    required HttpMethod method,
+    String pathPrefix = "/api/v1",
+    required String path,
+    Map<String, dynamic>? bodyParam,
+    Map<String, dynamic>? pathParams,
+    Map<String, dynamic>? queryParams,
+    File? file,
+  }) async {
+    assert(method == HttpMethod.file || file == null);
     //body
     final body = json.encode(bodyParam);
 
@@ -81,6 +85,14 @@ class FetchService {
         case HttpMethod.put:
           response = await client.put(
             uri,
+            headers: _baseHeaders,
+            body: body,
+          );
+          break;
+        case HttpMethod.file:
+          response = await client.upload(
+            uri,
+            file!,
             headers: _baseHeaders,
             body: body,
           );

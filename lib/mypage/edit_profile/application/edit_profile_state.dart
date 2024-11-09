@@ -7,6 +7,7 @@ class EditProfileState extends Equatable {
   final bool isLoading;
   final String? newNickname;
   final XFile? selectedProfileImage;
+  final bool isSuccess;
 
   const EditProfileState({
     required this.myInfo,
@@ -14,14 +15,17 @@ class EditProfileState extends Equatable {
     required this.isLoading,
     required this.newNickname,
     required this.selectedProfileImage,
+    required this.isSuccess,
   });
 
   factory EditProfileState.initial() => const EditProfileState(
-      myInfo: null,
-      failure: null,
-      isLoading: false,
-      newNickname: null,
-      selectedProfileImage: null);
+        myInfo: null,
+        failure: null,
+        isLoading: false,
+        newNickname: null,
+        selectedProfileImage: null,
+        isSuccess: false,
+      );
 
   @override
   List<Object?> get props => [
@@ -30,6 +34,7 @@ class EditProfileState extends Equatable {
         isLoading,
         newNickname,
         selectedProfileImage,
+        isSuccess,
       ];
 
   EditProfileState copyWith({
@@ -38,6 +43,7 @@ class EditProfileState extends Equatable {
     bool? isLoading,
     String? newNickname,
     XFile? selectedProfileImage,
+    bool? isSuccess,
   }) {
     return EditProfileState(
       myInfo: myInfo ?? this.myInfo,
@@ -45,6 +51,7 @@ class EditProfileState extends Equatable {
       isLoading: isLoading ?? this.isLoading,
       newNickname: newNickname ?? this.newNickname,
       selectedProfileImage: selectedProfileImage ?? this.selectedProfileImage,
+      isSuccess: isSuccess ?? this.isSuccess,
     );
   }
 }
