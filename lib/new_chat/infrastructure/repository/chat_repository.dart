@@ -76,6 +76,29 @@ class ChatRepository implements IChatRepository {
     StringVO roomId,
     StringVO message,
   ) async {
+    // final failureOrResponse = await _fetchService.request(
+    //   method: HttpMethod.post,
+    //   pathPrefix: '/webflux',
+    //   path: '/chat/ask',
+    //   bodyParam: {'content': message.getOrCrash()},
+    //   queryParams: {'roomId': roomId.getOrCrash()},
+    // );
+
+    // return failureOrResponse.fold(
+    //   (failure) => left(ChatSendFailure(message: "Failed to send message")),
+    //   (response) {
+    //     printInColor("response: $response", color: red);
+    //     printInColor("response result: ${response.result.toString()}",
+    //         color: red);
+    //     final List<String> chatMessages = response.result['chatLogs']
+    //         .map((log) => log['content'] as String)
+    //         .toList();
+    //
+    //     printInColor("chatMessages: $chatMessages", color: red);
+    //     return right(chatMessages);
+    //   },
+    // );
+
     final failureOrResponse = await _fetchService.streamedRequest(
       method: HttpMethod.post,
       pathPrefix: '/webflux',
@@ -97,11 +120,10 @@ class ChatRepository implements IChatRepository {
     return failureOrResponse.fold(
       (failure) => left(ChatSendFailure(message: "Failed to send message")),
       (streamedResponse) {
-        final lineStream = streamedResponse.stream
-            .transform(utf8.decoder)
-            .transform(LineSplitter());
-        printInColor("linestream in chat_repository: ${lineStream.runtimeType}",
-            color: red);
+        final broadcastStream = streamedResponse.stream.asBroadcastStream();
+
+        final lineStream =
+            broadcastStream.transform(utf8.decoder).transform(LineSplitter());
 
         return right(lineStream);
       },

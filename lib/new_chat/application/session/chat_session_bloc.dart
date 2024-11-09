@@ -87,7 +87,14 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
       ChatMessage? botMessage;
 
-      final streamed_response = await failureOrStream.fold(
+      // ChatMessage? botMessage = ChatMessage(
+      //   sender: Sender.bot,
+      //   content: StringVO(failureOrStream.toString()),
+      // );
+      // final temp = List<ChatMessage>.from(state.messages)..add(botMessage!);
+      // _messageStreamController.add(temp);
+
+      final streamed_response = failureOrStream.fold(
         (failure) {
           printInColor(failure.message, color: red);
           emit(state.copyWith(

@@ -109,7 +109,6 @@ class ChatFetchService extends FetchService {
 
     try {
       final streamedResponse = await client.send(request);
-      print("Sended request: $request");
       return right(streamedResponse);
     } on SocketException catch (e) {
       return left(NetworkFailure.socketError(e));
