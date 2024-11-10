@@ -46,13 +46,17 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     });
 
     on<Submit>((event, emit) async {
-      if (state.selectedProfileImage == null) {
-        showToast("프로필 사진을 변경해주세요.");
+      if ((state.selectedProfileImage == null) && (state.newNickname == null)) {
+        showToast("변경할 내용을 입력해주세요.");
         return;
       }
 
-      final failureOrSuccess = await myPageRepository
-          .setProfile(File(state.selectedProfileImage!.path));
+      final failureOrSuccess = await myPageRepository.setProfile(
+        state.selectedProfileImage != null
+            ? File(state.selectedProfileImage!.path)
+            : null,
+        state.newNickname,
+      );
 
       emit(failureOrSuccess.fold((failure) => state.copyWith(failure: failure),
           (success) {

@@ -54,7 +54,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       builder: (context, state) {
                         return MyPageTitle(
                             isConfirmActivated:
-                                state.selectedProfileImage != null,
+                                state.selectedProfileImage != null ||
+                                    state.newNickname != null,
                             onTapConfirm: () {
                               context.read<EditProfileBloc>().add(Submit());
                             });
@@ -65,8 +66,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       builder: (context, state) {
                         return MyProfile(
                           selectedImage: state.selectedProfileImage,
-                          userImg: null,
-                          name: null,
+                          userImg: state.myInfo?.userImg,
+                          name: state.myInfo?.name,
                           onTapEditImage: () {
                             context.read<EditProfileBloc>().add(SelectImage());
                           },
@@ -144,7 +145,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             primary: false,
                             padding: EdgeInsets.zero,
                             crossAxisCount: 4,
-                            children: <Widget>[
+                            children: const <Widget>[
                               LanguageFlag(
                                 lanagaue: Language.korean,
                               ),

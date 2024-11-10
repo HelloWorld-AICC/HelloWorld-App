@@ -32,8 +32,10 @@ class MypageRepository implements IMypageRepository {
   }
 
   @override
-  Future<Either<MypageFailure, Unit>> setProfile(File file) async {
-    final myInfoOrFailure = await mypageProvider.modifyMyProfile(file);
+  Future<Either<MypageFailure, Unit>> setProfile(
+      File? file, String? nickname) async {
+    final myInfoOrFailure =
+        await mypageProvider.modifyMyProfile(file, nickname);
 
     return myInfoOrFailure.fold((f) => left(MypageFailure(message: f.message)),
         (result) {

@@ -8,6 +8,7 @@ import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/my_profile.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
+import 'package:hello_world_mvp/mypage/common/presentation/mypage_menu.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_title.dart';
 import 'package:hello_world_mvp/mypage/menu/application/mypage/mypage_bloc.dart';
 
@@ -58,7 +59,7 @@ class _Body extends StatelessWidget {
         MypageBox(
             child: Column(
           children: [
-            _MyPageMenu(
+            MypageMenu(
               title: "프로필",
               description: "프로필 변경",
               onTap: () {
@@ -66,7 +67,7 @@ class _Body extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            _MyPageMenu(
+            MypageMenu(
               title: "상담",
               description: "채팅 상담 요약 확인하기",
               onTap: () {
@@ -74,7 +75,7 @@ class _Body extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            _MyPageMenu(
+            MypageMenu(
               title: "이력서 / 자기소개서",
               description: "생성된 이력서 / 자기소개서 확인하기",
               onTap: () {
@@ -82,7 +83,7 @@ class _Body extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            _MyPageMenu(
+            MypageMenu(
               title: "커뮤니티",
               description: "작성한 커뮤니티 게시글 / 댓글 확인하기",
               onTap: () {
@@ -90,11 +91,11 @@ class _Body extends StatelessWidget {
               },
             ),
             const SizedBox(height: 24),
-            _MyPageMenu(
+            MypageMenu(
               title: "기타",
               description: "계정 및 정보",
               onTap: () {
-                context.push('/consultation-history');
+                context.push('/account');
               },
             ),
           ],
@@ -124,55 +125,6 @@ class _Title extends StatelessWidget {
             fontSize: 18,
             fontWeight: FontWeight.w700,
           )),
-    );
-  }
-}
-
-class _MyPageMenu extends StatelessWidget {
-  final String title;
-  final String description;
-  final Function onTap;
-  const _MyPageMenu({
-    required this.title,
-    required this.description,
-    required this.onTap,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () => onTap(),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(title,
-              style: const TextStyle(
-                fontFamily: "Pretendard",
-                color: HelloColors.mainColor1,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-              )),
-          const SizedBox(height: 12),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(description,
-                  style: const TextStyle(
-                    fontFamily: "Pretendard",
-                    color: HelloColors.subTextColor,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  )),
-              SvgPicture.asset(
-                "assets/images/mypage/right_arrow.svg",
-                width: 6.5,
-                height: 10,
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }

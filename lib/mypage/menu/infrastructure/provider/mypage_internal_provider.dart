@@ -30,13 +30,16 @@ class MypageInternalProvider implements IMypageInternalProvider {
   }
 
   @override
-  Future<Either<Failure, Unit>> modifyMyProfile(File file) async {
+  Future<Either<Failure, Unit>> modifyMyProfile(
+      File? file, String? nickname) async {
     final failureOrTokens = await _fetchService.request(
-      pathPrefix: "",
-      path: "/myPage/setProfile",
-      method: HttpMethod.file,
-      file: file,
-    );
+        pathPrefix: "",
+        path: "/myPage/setProfile",
+        method: HttpMethod.file,
+        file: file,
+        bodyParam: {
+          "nickName": nickname,
+        });
 
     return failureOrTokens.fold((f) {
       return left(f);

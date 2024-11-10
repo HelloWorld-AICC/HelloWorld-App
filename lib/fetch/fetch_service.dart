@@ -92,7 +92,7 @@ class FetchService {
         case HttpMethod.file:
           response = await client.upload(
             uri,
-            file!,
+            file,
             headers: _baseHeaders,
             body: body,
           );

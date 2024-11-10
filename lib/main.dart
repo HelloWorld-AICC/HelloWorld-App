@@ -100,7 +100,7 @@ class _MainAppState extends State<MainApp> {
     return BlocBuilder<LocaleBloc, LocaleState>(
       buildWhen: (previous, current) {
         return previous.locale != current.locale;
-      },  
+      },
       builder: (context, state) {
         final locale = state.locale ?? context.locale;
         return MultiBlocListener(

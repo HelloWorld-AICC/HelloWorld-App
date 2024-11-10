@@ -145,7 +145,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
 
   Future<Response> upload(
     Uri url,
-    File file, {
+    File? file, {
     Map<String, String>? headers,
     Object? body,
     Encoding? encoding,
@@ -160,16 +160,21 @@ class AuthenticatedHttpClient extends http.BaseClient {
       newHeaders.putIfAbsent('Authorization',
           () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
 
-      var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
-      var length = await file.length();
-
       var request = http.MultipartRequest("POST", url);
-      var multipartFile = http.MultipartFile('file', stream, length,
-          filename: basename(file.path));
-      //contentType: new MediaType('image', 'png'));
 
       request.headers.addAll(newHeaders);
-      request.files.add(multipartFile);
+
+      if (file != null) {
+        var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
+        var length = await file.length();
+
+        var multipartFile = http.MultipartFile('file', stream, length,
+            filename: basename(file.path));
+        request.files.add(multipartFile);
+      }
+
+      //contentType: new MediaType('image', 'png'));
+
       var response = await request.send();
       printRequestDebug('UPLOAD', url,
           headers: headers, body: body, encoding: encoding);
