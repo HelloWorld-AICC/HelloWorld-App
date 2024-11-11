@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/injection.dart';
+import 'package:hello_world_mvp/mypage/account/presentation/widgets/signout_dialog.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_menu.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/my_profile.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
@@ -59,7 +60,9 @@ class _Body extends StatelessWidget {
             MypageMenu(
               title: "계정",
               description: "로그아웃",
-              onTap: () {},
+              onTap: () {
+                showSignOutDailog(context);
+              },
             ),
             const SizedBox(height: 24),
             MypageMenu(
