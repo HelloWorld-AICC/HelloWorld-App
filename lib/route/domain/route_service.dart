@@ -24,7 +24,8 @@ class RouteService {
           context.read<AppInitBloc>().add(CheckAppFirstRun());
           final isFirstRun = context.read<AppInitBloc>().state.isFirstRun;
           printInColor("isFirstRun: $isFirstRun", color: blue);
-          return isFirstRun ? SplashPage() : const LoginScreen();
+          // return isFirstRun ? SplashPage() : const LoginScreen();
+          return isFirstRun ? SplashPage() : const HomePage();
         },
       ),
       GoRoute(

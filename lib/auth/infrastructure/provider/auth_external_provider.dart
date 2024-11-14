@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/auth/infrastructure/provider/interface/i_auth_external_provider.dart';
 import 'package:hello_world_mvp/fetch/external_failure.dart';
 import 'package:hello_world_mvp/fetch/failure.dart';

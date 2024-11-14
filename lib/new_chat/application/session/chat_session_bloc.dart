@@ -103,12 +103,12 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
           ));
         },
         (lineStream) async {
-          printInColor(
-              "lineStream: $lineStream, isEmpty: ${lineStream.isEmpty}, first data: ${lineStream.first}",
-              color: red);
           final finalResponse = StringBuffer();
 
-          final subscription = lineStream.listen(
+          final subscription = lineStream
+              // .transform(Utf8Decoder())
+              .transform(LineSplitter())
+              .listen(
             (line) {
               printInColor("raw data is, $line", color: green);
 
@@ -118,7 +118,9 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
                 if (line.startsWith('data:Room ID: ')) {
                   emit(state.copyWith(
-                      roomId: temp, typingState: TypingIndicatorState.shown));
+                    roomId: temp,
+                    typingState: TypingIndicatorState.shown,
+                  ));
                 } else {
                   if (temp == 'data:') {
                     finalResponse.write('\n');
@@ -137,30 +139,22 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
                           ..add(botMessage!);
                     _messageStreamController.add(updatedMessages);
                     emit(state.copyWith(
-                        typingState: TypingIndicatorState.shown));
+                      typingState: TypingIndicatorState.shown,
+                    ));
                   } else {
                     final updatedMessages =
                         List<ChatMessage>.from(state.messages)
                           ..removeLast()
-                          ..add(botMessage!
-                            ..copyWith(
-                                content: StringVO(finalResponse.toString())));
+                          ..add(botMessage!.copyWith(
+                            content: StringVO(finalResponse.toString()),
+                          ));
                     _messageStreamController.add(updatedMessages);
                     emit(state.copyWith(
-                        typingState: TypingIndicatorState.shown));
+                      typingState: TypingIndicatorState.shown,
+                    ));
                   }
                 }
               }
-            },
-            onDone: () {
-              emit(state.copyWith(
-                  typingState: TypingIndicatorState.hidden, isLoading: false));
-            },
-            onError: (error) {
-              emit(state.copyWith(
-                failure: ChatSendFailure(message: error.toString()),
-                typingState: TypingIndicatorState.hidden,
-              ));
             },
           );
           subscription.cancel();
@@ -182,7 +176,8 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
       emit(state.copyWith(
           roomId: null,
           isLoading: false,
-          typingState: TypingIndicatorState.hidden));
+          typingState: TypingIndicatorState.hidden,
+          messages: []));
     });
   }
 

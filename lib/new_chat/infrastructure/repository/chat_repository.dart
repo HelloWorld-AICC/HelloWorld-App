@@ -99,6 +99,18 @@ class ChatRepository implements IChatRepository {
     //   },
     // );
 
+    final testResponse = await _fetchService.request(
+      method: HttpMethod.get,
+      pathPrefix: '/webflux',
+      path: '/user/',
+    );
+
+    testResponse.fold(
+        (l) => printInColor("error: $l", color: red),
+        (r) => printInColor(
+            "isSuccess: ${r.isSuccess}, message: ${r.message}, status code: ${r.code}, result: ${r.result}",
+            color: red));
+
     final failureOrResponse = await _fetchService.streamedRequest(
       method: HttpMethod.post,
       pathPrefix: '/webflux',
@@ -107,25 +119,15 @@ class ChatRepository implements IChatRepository {
       queryParams: {'roomId': roomId.getOrCrash()},
     );
 
-    client.printRequestDebug(
-      'POST',
-      Uri(
-        path: '/webflux/chat/ask',
-        queryParameters: {'roomId': roomId.getOrCrash()},
-      ),
-      headers: {"Content-Type": "application/json; charset=utf-8"},
-      body: {'content': message.getOrCrash(), 'roomId': roomId.getOrCrash()},
-    );
-
     return failureOrResponse.fold(
       (failure) => left(ChatSendFailure(message: "Failed to send message")),
       (streamedResponse) {
-        final broadcastStream = streamedResponse.stream.asBroadcastStream();
-
-        final lineStream =
-            broadcastStream.transform(utf8.decoder).transform(LineSplitter());
-
-        return right(lineStream);
+        final broadcastStream = streamedResponse.asBroadcastStream();
+        return right(broadcastStream);
+        // final lineStream =
+        //     broadcastStream.transform(utf8.decoder).transform(LineSplitter());
+        //
+        // return right(lineStream);
       },
     );
   }
