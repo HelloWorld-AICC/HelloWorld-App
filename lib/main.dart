@@ -1,39 +1,52 @@
-import 'dart:async';
-
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
-import 'package:hello_world_mvp/mypage/edit_profile/presentation/edit_profile_screen.dart';
-import 'package:hello_world_mvp/mypage/menu/presentation/mypage_menu_screen.dart';
-import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart';
 import 'package:hello_world_mvp/route/domain/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'auth/presentation/login_screen.dart';
-import 'home/presentation/home_page.dart';
-import 'init/presentation/splash_page.dart';
 import 'new_chat/application/session/chat_session_bloc.dart';
 
 void main() async {
-  runZonedGuarded(() async {
-    WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
-    await EasyLocalization.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
 
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString('isFirstLaunch', 'true');
-    prefs.setString('lastVersion', '0.1.0');
+  final prefs = await SharedPreferences.getInstance();
+  prefs.setString('isFirstLaunch', 'true');
+  prefs.setString('lastVersion', '0.1.0');
 
-    configureDependencies();
+  configureDependencies();
 
-    runApp(
+  FlutterError.onError = (errorDetails) {
+    showToast(errorDetails.exceptionAsString());
+  };
+
+  PlatformDispatcher.instance.onError = (error, stack) {
+    showToast(error.toString());
+    return true;
+  };
+
+  await SentryFlutter.init(
+    (options) {
+      options.dsn =
+          'https://e59673dcfb84f5fcff7d288377b07ca9@o4508302669512704.ingest.us.sentry.io/4508302674231296';
+      // // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+      // // We recommend adjusting this value in production.
+      // options.tracesSampleRate = 1.0;
+      // // The sampling rate for profiling is relative to tracesSampleRate
+      // // Setting to 1.0 will profile 100% of sampled transactions:
+      // options.profilesSampleRate = 1.0;
+    },
+    appRunner: () => runApp(
       EasyLocalization(
         supportedLocales: const [
           Locale('en', 'US'),
@@ -64,12 +77,8 @@ void main() async {
           child: MainApp(),
         ),
       ),
-    );
-  }, (error, stackTrace) async {
-    showToast(error.toString());
-    // await FlutterCrashlytics()
-    //     .reportCrash(error, stackTrace, forceCrash: false);
-  });
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {
@@ -135,7 +144,7 @@ class _MainAppState extends State<MainApp> {
   void _handleNavigation(BuildContext context, AppInitState state) {
     final _router = GoRouter.of(context);
 
-    if (state.isFirstRun) {   
+    if (state.isFirstRun) {
       _router.go('/login');
     } else {
       _router.go('/home');
