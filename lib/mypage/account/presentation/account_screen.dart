@@ -64,32 +64,32 @@ class _Body extends StatelessWidget {
                 showSignOutDailog(context);
               },
             ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              description: "탈퇴하기",
-              onTap: () {},
-            ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              title: "HelloWorld 정보",
-              description: "앱 버전",
-              onTap: () {},
-            ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              description: "서비스 이용약관",
-              onTap: () {},
-            ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              description: "개인정보 처리방침",
-              onTap: () {},
-            ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              description: "오픈소스 라이선스",
-              onTap: () {},
-            )
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   description: "탈퇴하기",
+            //   onTap: () {},
+            // ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   title: "HelloWorld 정보",
+            //   description: "앱 버전",
+            //   onTap: () {},
+            // ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   description: "서비스 이용약관",
+            //   onTap: () {},
+            // ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   description: "개인정보 처리방침",
+            //   onTap: () {},
+            // ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   description: "오픈소스 라이선스",
+            //   onTap: () {},
+            // )
           ],
         )),
       ],

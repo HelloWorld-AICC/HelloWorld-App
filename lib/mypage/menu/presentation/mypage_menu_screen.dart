@@ -66,30 +66,30 @@ class _Body extends StatelessWidget {
                 context.push('/edit-profile');
               },
             ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              title: "상담",
-              description: "채팅 상담 요약 확인하기",
-              onTap: () {
-                context.push('/consultation-history');
-              },
-            ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              title: "이력서 / 자기소개서",
-              description: "생성된 이력서 / 자기소개서 확인하기",
-              onTap: () {
-                context.push('/consultation-history');
-              },
-            ),
-            const SizedBox(height: 24),
-            MypageMenu(
-              title: "커뮤니티",
-              description: "작성한 커뮤니티 게시글 / 댓글 확인하기",
-              onTap: () {
-                context.push('/consultation-history');
-              },
-            ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   title: "상담",
+            //   description: "채팅 상담 요약 확인하기",
+            //   onTap: () {
+            //     context.push('/consultation-history');
+            //   },
+            // ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   title: "이력서 / 자기소개서",
+            //   description: "생성된 이력서 / 자기소개서 확인하기",
+            //   onTap: () {
+            //     context.push('/consultation-history');
+            //   },
+            // ),
+            // const SizedBox(height: 24),
+            // MypageMenu(
+            //   title: "커뮤니티",
+            //   description: "작성한 커뮤니티 게시글 / 댓글 확인하기",
+            //   onTap: () {
+            //     context.push('/consultation-history');
+            //   },
+            // ),
             const SizedBox(height: 24),
             MypageMenu(
               title: "기타",
