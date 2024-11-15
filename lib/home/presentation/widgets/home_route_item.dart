@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import '../../../design_system/hello_colors.dart';
 import '../../../route/application/route_bloc.dart';
@@ -36,6 +37,13 @@ class HomeRouteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        if (routePath == "center" ||
+            routePath == "community" ||
+            routePath == "resume" ||
+            routePath == "call_bot") {
+          showToast("미구현 기능입니다.");
+          return;
+        }
         context
             .read<RouteBloc>()
             .add(RouteChanged(newIndex: bottomIndex, newRoute: routePath));
