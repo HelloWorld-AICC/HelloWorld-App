@@ -147,7 +147,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
     Uri url,
     File? file, {
     Map<String, String>? headers,
-    Object? body,
+    Map<String, dynamic>? body,
     Encoding? encoding,
   }) async {
     final tokens = await tokenRepository.getTokens();
@@ -160,9 +160,18 @@ class AuthenticatedHttpClient extends http.BaseClient {
       newHeaders.putIfAbsent('Authorization',
           () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
 
-      var request = http.MultipartRequest("POST", url);
+      var request = http.MultipartRequest("PATCH", url);
 
       request.headers.addAll(newHeaders);
+
+      late Map<String, String> convertedMap;
+
+      if (body != null) {
+        convertedMap = body
+            .map((key, value) => MapEntry(key, value?.toString() ?? "null"));
+      }
+
+      request.fields.addAll(convertedMap);
 
       if (file != null) {
         var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));

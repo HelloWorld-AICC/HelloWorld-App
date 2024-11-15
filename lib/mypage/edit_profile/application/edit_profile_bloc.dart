@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/bus/bus.dart';
+import 'package:hello_world_mvp/mypage/common/application/mypage_messages.dart';
 
 import 'package:hello_world_mvp/mypage/menu/domain/failure/mypage_failure.dart';
 import 'package:hello_world_mvp/mypage/menu/domain/model/my_info.dart';
@@ -17,8 +19,9 @@ part 'edit_profile_state.dart';
 @injectable
 class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   final IMypageRepository myPageRepository;
+  final Bus bus;
 
-  EditProfileBloc({required this.myPageRepository})
+  EditProfileBloc({required this.myPageRepository, required this.bus})
       : super(EditProfileState.initial()) {
     on<GetMyInfo>((event, emit) async {
       emit(EditProfileState.initial().copyWith(isLoading: true));
@@ -60,6 +63,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
 
       emit(failureOrSuccess.fold((failure) => state.copyWith(failure: failure),
           (success) {
+        bus.publish(ProfileUpdatedMessage());
         return state.copyWith(isSuccess: true);
       }));
     });

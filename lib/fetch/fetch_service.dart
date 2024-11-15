@@ -94,7 +94,7 @@ class FetchService {
             uri,
             file,
             headers: _baseHeaders,
-            body: body,
+            body: bodyParam,
           );
           break;
         default:

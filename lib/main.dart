@@ -135,7 +135,7 @@ class _MainAppState extends State<MainApp> {
   void _handleNavigation(BuildContext context, AppInitState state) {
     final _router = GoRouter.of(context);
 
-    if (state.isFirstRun) {
+    if (state.isFirstRun) {   
       _router.go('/login');
     } else {
       _router.go('/home');

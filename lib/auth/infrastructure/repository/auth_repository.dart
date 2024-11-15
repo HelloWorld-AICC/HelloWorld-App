@@ -52,6 +52,17 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
+  Future<Either<AuthFailure, Unit>> signOut() async {
+    return ((await authExternalProvider.signOut())
+        .fold((f) => left(AuthFailure(message: f.message)), (result) async {
+      return (await authLocalProvider.deleteTokens())
+          .fold((f) => left(AuthFailure(message: f.message)), (result) {
+        return right(unit);
+      });
+    }));
+  }
+
+  @override
   Future<Either<AuthFailure, Unit>> refreshAccessTokenIfNeeded(
       List<TokenDto> tokenDtos) async {
     final eitherTokenExpired = await authLocalProvider.checkIfTokenExpired();
