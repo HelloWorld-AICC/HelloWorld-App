@@ -158,6 +158,7 @@ class HomePageContent extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
+      width: MediaQuery.of(context).size.width - 40,
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -176,15 +177,21 @@ class HomePageContent extends StatelessWidget {
                   color: HelloColors.mainColor2,
                 ),
               ),
-              SizedBox(width: MediaQuery.of(context).size.width / 2.5),
               InkWell(
                 onTap: () {
                   context.push('/mypage-menu');
                 },
-                child: SvgPicture.asset(
-                  "assets/images/home/profile_icon.svg",
-                  width: 20,
-                  height: 18,
+                child: Container(
+                  width: 44,
+                  height: 44,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: SvgPicture.asset(
+                      "assets/images/home/profile_icon.svg",
+                      width: 20,
+                      height: 18,
+                    ),
+                  ),
                 ),
               ),
             ],

@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:hello_world_mvp/mypage/menu/infrastructure/dtos/my_info_dto.dart';
 import 'package:hello_world_mvp/mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider.dart';
@@ -24,6 +26,26 @@ class MypageInternalProvider implements IMypageInternalProvider {
       return left(f);
     }, (response) {
       return right(MyInfoDto.fromJson(response.result));
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> modifyMyProfile(
+      File? file, String? nickname) async {
+    final failureOrTokens = await _fetchService.request(
+      pathPrefix: "",
+      path: "/myPage/setProfile",
+      method: HttpMethod.file,
+      file: file,
+      bodyParam: {
+        "nickName": nickname,
+      },
+    );
+
+    return failureOrTokens.fold((f) {
+      return left(f);
+    }, (response) {
+      return right(unit);
     });
   }
 }

@@ -4,4 +4,6 @@ import 'package:hello_world_mvp/fetch/failure.dart';
 
 abstract class IAuthExternalProvider {
   Future<Either<Failure, GoogleSignInAccount>> signInWithGoogle();
+
+  Future<Either<Failure, Unit>> signOut();
 }

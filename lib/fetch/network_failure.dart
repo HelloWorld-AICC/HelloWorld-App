@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:hello_world_mvp/fetch/failure.dart';
@@ -30,6 +29,10 @@ class NetworkFailure extends Failure {
   NetworkFailure.formatError(FormatException e)
       : info = 'Format Error : ${e.message} ${e.source} ${e.offset}',
         super(message: "인터넷 연결이 원활하지 않습니다. 네트워크 상태를 확인해주세요. (포맷 오류)");
+
+  NetworkFailure.authError(Response r)
+      : info = 'Auth Error : ${r.statusCode}',
+        super(message: "권한이 없습니다.");
 
   NetworkFailure.unknownError(Object e)
       : info = e.toString(),

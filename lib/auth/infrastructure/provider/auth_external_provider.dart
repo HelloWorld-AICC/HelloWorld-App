@@ -30,4 +30,19 @@ class AuthExternalProvider implements IAuthExternalProvider {
 
     return right(signInAccount);
   }
+
+  @override
+  Future<Either<Failure, Unit>> signOut() async {
+    final GoogleSignIn googleSignIn = GoogleSignIn(
+      scopes: <String>['email'],
+    );
+
+    try {
+      await googleSignIn.signOut();
+    } catch (error) {
+      return left(ExternalFailure(message: error.toString()));
+    }
+
+    return right(unit);
+  }
 }

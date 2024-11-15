@@ -25,6 +25,7 @@ import 'auth/infrastructure/provider/interface/i_auth_local_provider.dart'
     as _i690;
 import 'auth/infrastructure/repository/auth_repository.dart' as _i217;
 import 'auth/infrastructure/repository/token_repository.dart' as _i782;
+import 'bus/bus.dart' as _i461;
 import 'fetch/authenticated_http_client.dart' as _i30;
 import 'fetch/fetch_service.dart' as _i1053;
 import 'home/application/home_bloc.dart' as _i785;
@@ -33,6 +34,7 @@ import 'init/application/app_init_bloc.dart' as _i775;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
 import 'locale/domain/localization_service.dart' as _i121;
+import 'mypage/account/application/signout_bloc.dart' as _i598;
 import 'mypage/edit_profile/application/edit_profile_bloc.dart' as _i835;
 import 'mypage/menu/application/mypage/mypage_bloc.dart' as _i876;
 import 'mypage/menu/domain/repository/i_mypage_repository.dart' as _i392;
@@ -66,15 +68,16 @@ extension GetItInjectableX on _i174.GetIt {
     );
     final homeRegisterModule = _$HomeRegisterModule();
     gh.factory<_i775.AppInitBloc>(() => _i775.AppInitBloc());
+    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
     gh.factory<_i487.LocaleBloc>(() => _i487.LocaleBloc());
     gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
-    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
+    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.factory<_i925.ChatRoomsInfoProvider>(
         () => _i925.ChatRoomsInfoProvider());
-    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
     gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
     gh.lazySingleton<_i807.RouteService>(() => _i807.RouteService());
+    gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i690.IAuthLocalProvider>(
@@ -116,10 +119,16 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
-    gh.factory<_i835.EditProfileBloc>(() =>
-        _i835.EditProfileBloc(myPageRepository: gh<_i392.IMypageRepository>()));
-    gh.factory<_i876.MypageBloc>(() =>
-        _i876.MypageBloc(myPageRepository: gh<_i392.IMypageRepository>()));
+    gh.factory<_i598.SignOutBloc>(
+        () => _i598.SignOutBloc(authRepository: gh<_i667.IAuthRepository>()));
+    gh.factory<_i835.EditProfileBloc>(() => _i835.EditProfileBloc(
+          myPageRepository: gh<_i392.IMypageRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
+    gh.factory<_i876.MypageBloc>(() => _i876.MypageBloc(
+          myPageRepository: gh<_i392.IMypageRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
     return this;
   }
 }

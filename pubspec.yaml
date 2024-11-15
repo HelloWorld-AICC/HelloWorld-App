@@ -1,7 +1,7 @@
 name: hello_world_mvp
 description: "A new Flutter project."
 publish_to: "none"
-version: 0.1.0
+version: 0.1.1
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
@@ -35,6 +35,7 @@ dependencies:
   rxdart: ^0.28.0
   flutter_svg: ^2.0.10+1
   country_icons: ^3.0.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
@@ -53,7 +54,39 @@ flutter:
     - assets/images/home/grid_view/
     - assets/images/chat/
     - assets/images/common/
+    - assets/images/mypage/
     - assets/fonts/
     - assets/icons/
     - assets/icons/grey/
     - assets/icons/blue/
+
+  fonts:
+    - family: SB AggroOTF
+      fonts:
+        - asset: assets/fonts/SB-AggroOTF-Bold.otf
+          weight: 700
+        - asset: assets/fonts/SB-AggroOTF-Medium.otf
+          weight: 500
+        - asset: assets/fonts/SB-AggroOTF-Light.otf
+          weight: 300
+
+    - family: Pretendard
+      fonts:
+        - asset: assets/fonts/pretendard/Pretendard-Black.otf
+          weight: 900
+        - asset: assets/fonts/pretendard/Pretendard-ExtraBold.otf
+          weight: 800
+        - asset: assets/fonts/pretendard/Pretendard-Bold.otf
+          weight: 700
+        - asset: assets/fonts/pretendard/Pretendard-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/pretendard/Pretendard-Medium.otf
+          weight: 500
+        - asset: assets/fonts/pretendard/Pretendard-Regular.otf
+          weight: 400
+        - asset: assets/fonts/pretendard/Pretendard-Light.otf
+          weight: 300
+        - asset: assets/fonts/pretendard/Pretendard-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/pretendard/Pretendard-Thin.otf
+          weight: 100

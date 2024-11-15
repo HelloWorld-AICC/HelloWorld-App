@@ -9,6 +9,7 @@ import 'package:hello_world_mvp/new_chat/domain/model/chat_message.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_repository.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/value_objects.dart';
 import '../../domain/chat_enums.dart';
@@ -27,6 +28,8 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
   Stream<List<ChatMessage>> get messagesStream =>
       _messageStreamController.stream;
+
+  
 
   ChatSessionBloc({required this.chatRepository})
       : super(ChatSessionState.initial()) {
@@ -86,7 +89,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
           StringVO(event.roomId), StringVO(userMessage as String));
 
       ChatMessage? botMessage;
-
+      
       final streamed_response = await failureOrStream.fold(
         (failure) {
           printInColor(failure.message, color: red);

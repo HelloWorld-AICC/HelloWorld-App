@@ -18,7 +18,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       emit(tokenOrFailure.fold((f) {
         return state.copyWith(needSignIn: true);
       }, (tokenSet) {
-        if (tokenSet.atk != null) {
+        if (tokenSet.atk != null &&
+            tokenSet.rtk!.tokenExpiresTime
+                .getOrCrash()
+                .isAfter(DateTime.now())) {
           return state.copyWith(needSignIn: false);
         } else {
           return state.copyWith(needSignIn: true);

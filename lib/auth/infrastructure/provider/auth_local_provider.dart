@@ -31,6 +31,17 @@ class AuthLocalProvier implements IAuthLocalProvider {
   }
 
   @override
+  Future<Either<LocalStorageFailure, Unit>> deleteTokens() async {
+    final successOrFailure = await service.remove(userTokensKey);
+
+    return successOrFailure.fold((f) {
+      return left(LocalStorageFailure(message: f.message));
+    }, (result) {
+      return right(unit);
+    });
+  }
+
+  @override
   Future<Either<LocalStorageFailure, List<TokenDto>>> getTokens() async {
     final tokensOrFailure = await service.read(userTokensKey);
 

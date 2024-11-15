@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import 'locale/domain/localization_service.dart';
 import 'route/application/route_bloc.dart';
@@ -65,6 +66,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     onTap: (index) {
                       final selectedKey = items.keys.elementAt(index);
                       final selectedRoute = '/${selectedKey.split('.').last}';
+
+                      if (selectedRoute == "/consultation_center" ||
+                          selectedRoute == "/community" ||
+                          selectedRoute == "/resume") {
+                        showToast("미구현된 기능입니다.");
+                        return;
+                      }
                       context.read<RouteBloc>().add(RouteChanged(
                           newIndex: index, newRoute: selectedRoute));
                       Future.delayed(Duration(milliseconds: 100), () {

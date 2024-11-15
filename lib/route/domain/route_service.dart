@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../auth/presentation/login_screen.dart';
@@ -46,6 +47,10 @@ class RouteService {
       GoRoute(
         path: '/mypage-menu',
         builder: (context, state) => const MypageMenuScreen(),
+      ),
+      GoRoute(
+        path: '/account',
+        builder: (context, state) => const AccountScreen(),
       ),
       GoRoute(
         path: '/edit-profile',

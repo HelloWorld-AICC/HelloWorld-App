@@ -18,7 +18,8 @@ enum HttpMethod {
   post,
   delete,
   put,
-  patch;
+  patch,
+  file;
 }
 
 @singleton
@@ -30,13 +31,16 @@ class FetchService {
 
   FetchService({required this.client});
 
-  Future<Either<NetworkFailure, ServerResponse>>  request(
-      {required HttpMethod method,
-      String pathPrefix = "/api/v1",
-      required String path,
-      Map<String, dynamic>? bodyParam,
-      Map<String, dynamic>? pathParams,
-      Map<String, dynamic>? queryParams}) async {
+  Future<Either<NetworkFailure, ServerResponse>> request({
+    required HttpMethod method,
+    String pathPrefix = "/api/v1",
+    required String path,
+    Map<String, dynamic>? bodyParam,
+    Map<String, dynamic>? pathParams,
+    Map<String, dynamic>? queryParams,
+    File? file,
+  }) async {
+    assert(method == HttpMethod.file || file == null);
     //body
     final body = json.encode(bodyParam);
 
@@ -85,6 +89,14 @@ class FetchService {
             body: body,
           );
           break;
+        case HttpMethod.file:
+          response = await client.upload(
+            uri,
+            file,
+            headers: _baseHeaders,
+            body: bodyParam,
+          );
+          break;
         default:
           response = await client.get(
             uri,
@@ -102,6 +114,27 @@ class FetchService {
       return left(NetworkFailure.formatError(e));
     } catch (e) {
       return left(NetworkFailure.unknownError(e));
+    }
+
+    switch (response.statusCode) {
+      case 400:
+      // throw FetchException(
+      //     400, 'Bad Request: The server could not understand the request.');
+      case 401:
+      // throw FetchException(
+      //     401, 'Unauthorized: Access is denied due to invalid credentials.');
+      case 403:
+        return left(NetworkFailure.authError(response));
+      // case 404:
+      //   throw FetchException(
+      //       404, 'Not Found: The requested resource could not be found.');
+      // case 500:
+      //   throw FetchException(
+      //       500, 'Internal Server Error: An error occurred on the server.');
+      // case 503:
+      //   throw FetchException(
+      //       503, 'Service Unavailable: The server is currently unavailable.');
+      default:
     }
 
     final ServerResponse serverResponse =
