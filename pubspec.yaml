@@ -36,6 +36,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   country_icons: ^3.0.0
   image_picker: ^1.1.2
+  sentry_flutter: ^8.10.1
 
 dev_dependencies:
   flutter_test:
