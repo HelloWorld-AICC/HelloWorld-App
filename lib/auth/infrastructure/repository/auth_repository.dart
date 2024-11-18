@@ -52,27 +52,24 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<Either<AuthFailure, Unit>> refreshAccessTokenIfNeeded(
-      List<TokenDto> tokenDtos) async {
-    final eitherTokenExpired = await authLocalProvider.checkIfTokenExpired();
+  Future<Either<AuthFailure, Unit>> signOut() async {
+    return (await authLocalProvider.deleteTokens()).fold(
+      (f) => left(AuthFailure(message: f.message)),
+      (_) => right(unit),
+    );
+  }
 
-    return eitherTokenExpired
-        .fold((f) => left(AuthFailure(message: "Token이 만료되었습니다.")),
-            (isTokenExpired) async {
-      if (!isTokenExpired) {
-        return right(unit);
-      }
-      final rtk = TokenSet(tokens: tokenDtos.map((e) => e.toDomain()).toList())
-          .rtk
-          ?.token;
-      return optionOf(rtk)
-          .toEither(() => AuthFailure(message: "RTK가 없습니다."))
-          .fold(
-            (f) => left(AuthFailure(message: f.message)),
-            (rtk) async =>
-                await _refreshTokenWithGoogleSignIn(rtk.getOrCrash()),
-          );
-    });
+  @override
+  Future<Either<AuthFailure, Unit>> refreshAccessTokenIfNeeded() async {
+    final eitherTokenExpired = await authLocalProvider.checkIfTokenExpired();
+    final tokenExpired = eitherTokenExpired.getOrElse(() => false);
+    if (tokenExpired) {
+      final rtkOrFailed = await authLocalProvider.getTokens();
+      return rtkOrFailed.fold((f) => left(AuthFailure(message: f.message)),
+          (rtk) async => await _refreshTokenWithGoogleSignIn(rtk.first.token));
+    } else {
+      return right(unit);
+    }
   }
 
   Future<Either<AuthFailure, Unit>> _refreshTokenWithGoogleSignIn(

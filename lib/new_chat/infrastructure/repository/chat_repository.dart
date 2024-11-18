@@ -99,18 +99,6 @@ class ChatRepository implements IChatRepository {
     //   },
     // );
 
-    final testResponse = await _fetchService.request(
-      method: HttpMethod.get,
-      pathPrefix: '/webflux',
-      path: '/user/',
-    );
-
-    testResponse.fold(
-        (l) => printInColor("error: $l", color: red),
-        (r) => printInColor(
-            "isSuccess: ${r.isSuccess}, message: ${r.message}, status code: ${r.code}, result: ${r.result}",
-            color: red));
-
     final failureOrResponse = await _fetchService.streamedRequest(
       method: HttpMethod.post,
       pathPrefix: '/webflux',

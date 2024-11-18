@@ -42,6 +42,7 @@ class AuthLocalProvier implements IAuthLocalProvider {
     });
   }
 
+  @override
   Future<Either<LocalStorageFailure, bool>> checkIfTokenExpired() async {
     final currentTime = DateTime.now().toUtc();
     final tokensOrFailure = await service.read("userTokens");
@@ -57,5 +58,15 @@ class AuthLocalProvier implements IAuthLocalProvider {
         return right(isTokenExpired);
       },
     );
+  }
+
+  @override
+  Future<Either<LocalStorageFailure, Unit>> deleteTokens() async {
+    final successOrFailure = await service.delete(userTokensKey);
+    return successOrFailure.fold((f) {
+      return left(LocalStorageFailure(message: f.message));
+    }, (result) {
+      return right(unit);
+    });
   }
 }

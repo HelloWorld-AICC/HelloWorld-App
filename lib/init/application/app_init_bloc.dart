@@ -17,9 +17,9 @@ class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
     CheckAppFirstRun event,
     Emitter<AppInitState> emit,
   ) async {
+    print("Checking if app has run before");
     final prefs = await SharedPreferences.getInstance();
-    final hasRunBefore = prefs.getBool('isFirstRun') ?? true;
-    if (hasRunBefore) await prefs.setBool('isFirstRun', false);
+    await prefs.setBool('isFirstRun', false);
     emit(state.copyWith(isFirstRun: false));
   }
 }

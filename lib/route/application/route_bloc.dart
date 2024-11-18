@@ -16,6 +16,22 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       )
       : super(RouteState.initial()) {
     on<RouteChanged>(_onRouteChanged);
+    on<RouteEventHome>((event, emit) async {
+      emit(state.copyWith(
+        currentIndex: 2,
+        currentRoute: '/home',
+      ));
+    });
+    on<RouteEventLogin>((event, emit) async {
+      emit(state.copyWith(
+        currentRoute: '/login',
+      ));
+    });
+    on<RouteEventSplash>((event, emit) async {
+      emit(state.copyWith(
+        currentRoute: '/splash',
+      ));
+    });
     // on<ChatSelected>(_onChatSelected);
   }
 

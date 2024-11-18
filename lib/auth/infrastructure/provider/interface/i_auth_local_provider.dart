@@ -8,4 +8,6 @@ abstract class IAuthLocalProvider {
   Future<Either<LocalStorageFailure, List<TokenDto>>> getTokens();
 
   Future<Either<LocalStorageFailure, bool>> checkIfTokenExpired();
+
+  Future<Either<LocalStorageFailure, Unit>> deleteTokens();
 }

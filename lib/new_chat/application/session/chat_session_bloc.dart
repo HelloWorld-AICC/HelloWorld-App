@@ -7,7 +7,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_message.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_repository.dart';
-import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
@@ -72,10 +71,9 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
         ..add(event.message);
 
       final userMessage = event.message.content.value.fold(
-        (l) => ChatSendFailure(message: "Failed to send user message"),
+        (l) => ChatSendFailure(message: "Failed to add user message to stream"),
         (r) => r,
       );
-      printInColor("message: $userMessage", color: red);
       _messageStreamController.add(updatedMessages);
       emit(state.copyWith(
           typingState: TypingIndicatorState.shown,
@@ -100,6 +98,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
           emit(state.copyWith(
             failure: ChatSendFailure(message: "Failed to send message"),
             typingState: TypingIndicatorState.hidden,
+            isLoading: false,
           ));
         },
         (lineStream) async {

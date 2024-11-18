@@ -12,6 +12,7 @@ import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
 import 'auth/application/login_bloc.dart' as _i317;
+import 'auth/application/status/auth_status_bloc.dart' as _i157;
 import 'auth/domain/repository/i_auth_repository.dart' as _i667;
 import 'auth/domain/repository/i_token_repository.dart' as _i658;
 import 'auth/infrastructure/provider/auth_external_provider.dart' as _i914;
@@ -74,7 +75,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
     gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
-    gh.lazySingleton<_i807.RouteService>(() => _i807.RouteService());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i690.IAuthLocalProvider>(
@@ -86,6 +86,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
             tokenRepository: gh<_i658.ITokenRepository>()));
+    gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
+          tokenRepository: gh<_i658.ITokenRepository>(),
+          appInitBloc: gh<_i775.AppInitBloc>(),
+        ));
     gh.singleton<_i1053.FetchService>(
         () => _i1053.FetchService(client: gh<_i30.AuthenticatedHttpClient>()));
     gh.singleton<_i261.ChatFetchService>(() =>
@@ -103,6 +107,10 @@ extension GetItInjectableX on _i174.GetIt {
           authExternalProvider: gh<_i141.IAuthExternalProvider>(),
           authInternalProvider: gh<_i5.IAuthInternalProvider>(),
           authLocalProvider: gh<_i690.IAuthLocalProvider>(),
+        ));
+    gh.lazySingleton<_i807.RouteService>(() => _i807.RouteService(
+          gh<_i775.AppInitBloc>(),
+          gh<_i157.AuthStatusBloc>(),
         ));
     gh.lazySingleton<_i665.IMypageInternalProvider>(
         () => _i487.MypageInternalProvider(gh<_i1053.FetchService>()));

@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/auth/application/status/auth_status_bloc.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
@@ -16,6 +17,7 @@ import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'auth/application/login_bloc.dart';
 import 'auth/presentation/login_screen.dart';
 import 'home/presentation/home_page.dart';
 import 'init/presentation/splash_page.dart';
@@ -59,6 +61,9 @@ void main() async {
             ),
             BlocProvider(
               create: (context) => getIt<ChatSessionBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<AuthStatusBloc>(),
             ),
           ],
           child: MainApp(),
@@ -111,8 +116,13 @@ class _MainAppState extends State<MainApp> {
                 commonToastKey.currentState?.updateMessage(state.message);
               },
             ),
-            BlocListener<AppInitBloc, AppInitState>(
-              listener: (context, state) => _handleNavigation(context, state),
+            BlocListener<AuthStatusBloc, AuthStatusState>(
+              listener: (context, state) {
+                if (state.isSignedIn != null) {
+                  print(
+                      'AuthStatusBloc state updated: isSignedIn=${state.isSignedIn}, isFirstRun=${state.isFirstRun}');
+                }
+              },
             ),
           ],
           child: MaterialApp.router(
@@ -130,16 +140,6 @@ class _MainAppState extends State<MainApp> {
         );
       },
     );
-  }
-
-  void _handleNavigation(BuildContext context, AppInitState state) {
-    final _router = GoRouter.of(context);
-
-    if (state.isFirstRun) {
-      _router.go('/login');
-    } else {
-      _router.go('/home');
-    }
   }
 }
 

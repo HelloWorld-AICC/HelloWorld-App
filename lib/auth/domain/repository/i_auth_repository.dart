@@ -6,6 +6,7 @@ import '../../infrastructure/dtos/token_dto.dart';
 abstract class IAuthRepository {
   Future<Either<AuthFailure, Unit>> getAuthCodeFromGoogle();
 
-  Future<Either<AuthFailure, Unit>> refreshAccessTokenIfNeeded(
-      List<TokenDto> tokenDtos);
+  Future<Either<AuthFailure, Unit>> refreshAccessTokenIfNeeded();
+
+  Future<Either<AuthFailure, Unit>> signOut();
 }

@@ -36,4 +36,14 @@ class LocalStorageService {
       return right(json.decode(value));
     }
   }
+
+  Future<Either<LocalStorageFailure, bool>> delete(String key) async {
+    final prefs = await SharedPreferences.getInstance();
+    final isSuccess = await prefs.remove(key);
+    if (isSuccess) {
+      return right(true);
+    } else {
+      return left(const LocalStorageFailure(message: "로컬 스토리지 삭제에 실패했습니다."));
+    }
+  }
 }
