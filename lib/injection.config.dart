@@ -84,11 +84,13 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
-    gh.factory<_i785.HomeBloc>(
-        () => _i785.HomeBloc(tokenRepository: gh<_i658.ITokenRepository>()));
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
             tokenRepository: gh<_i658.ITokenRepository>()));
+    gh.factory<_i785.HomeBloc>(() => _i785.HomeBloc(
+          tokenRepository: gh<_i658.ITokenRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
     gh.singleton<_i1053.FetchService>(
         () => _i1053.FetchService(client: gh<_i30.AuthenticatedHttpClient>()));
     gh.singleton<_i261.ChatFetchService>(() =>

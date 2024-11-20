@@ -4,9 +4,15 @@ import 'dart:io';
 
 import 'package:dartz/dartz.dart';
 import 'package:flutter/material.dart';
+import 'package:hello_world_mvp/auth/infrastructure/provider/auth_local_provider.dart';
+import 'package:hello_world_mvp/bus/bus.dart';
 import 'package:hello_world_mvp/fetch/authenticated_http_client.dart';
 import 'package:hello_world_mvp/fetch/network_failure.dart';
 import 'package:hello_world_mvp/fetch/server_response.dart';
+import 'package:hello_world_mvp/home/application/home_messages.dart';
+import 'package:hello_world_mvp/injection.dart';
+import 'package:hello_world_mvp/local_storage/local_storage_service.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
@@ -124,6 +130,10 @@ class FetchService {
       // throw FetchException(
       //     401, 'Unauthorized: Access is denied due to invalid credentials.');
       case 403:
+        await LocalStorageService().remove(AuthLocalProvier.userTokensKey);
+
+        getIt<Bus>().publish(AuthFailedMessage());
+        showToast("로그인이 필요합니다.");
         return left(NetworkFailure.authError(response));
       // case 404:
       //   throw FetchException(
