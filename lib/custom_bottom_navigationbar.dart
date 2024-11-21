@@ -7,6 +7,19 @@ import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'locale/domain/localization_service.dart';
 import 'route/application/route_bloc.dart';
 
+final Map<String, ImageIcon> bottomNavItems = {
+  'bottom_navigation.chat':
+      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
+  'bottom_navigation.resume':
+      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
+  'bottom_navigation.home':
+      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
+  'bottom_navigation.community':
+      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
+  'bottom_navigation.center':
+      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
+};
+
 class CustomBottomNavigationBar extends StatelessWidget {
   final Map<String, ImageIcon> items;
 
