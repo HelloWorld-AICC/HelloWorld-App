@@ -120,7 +120,7 @@ class _MainAppState extends State<MainApp> {
               listener: (context, state) {
                 if (state.isSignedIn != null) {
                   print(
-                      'AuthStatusBloc state updated: isSignedIn=${state.isSignedIn}, isFirstRun=${state.isFirstRun}');
+                      'main :: build :: AuthStatusBloc state updated: isSignedIn=${state.isSignedIn}, isFirstRun=${state.isFirstRun}');
                 }
               },
             ),

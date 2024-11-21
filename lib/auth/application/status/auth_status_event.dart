@@ -11,3 +11,10 @@ final class CheckAuthStatus extends AuthStatusEvent {
   @override
   List<Object> get props => [];
 }
+
+final class MarkSignedIn extends AuthStatusEvent {
+  MarkSignedIn();
+
+  @override
+  List<Object> get props => [];
+}

@@ -11,6 +11,7 @@ part 'app_init_state.dart';
 class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
   AppInitBloc() : super(AppInitState.initial()) {
     on<CheckAppFirstRun>(_onCheckAppFirstRun);
+    on<MarkSplashDone>(_onCheckSplashDone);
   }
 
   Future<void> _onCheckAppFirstRun(
@@ -21,5 +22,12 @@ class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isFirstRun', false);
     emit(state.copyWith(isFirstRun: false));
+  }
+
+  Future<void> _onCheckSplashDone(
+    MarkSplashDone event,
+    Emitter<AppInitState> emit,
+  ) async {
+    emit((state.copyWith(isSplashComplete: true)));
   }
 }

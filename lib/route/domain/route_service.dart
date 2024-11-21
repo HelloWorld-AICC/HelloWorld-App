@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/center/presentation/center_screen.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../auth/application/status/auth_status_bloc.dart';
@@ -16,14 +18,14 @@ import '../application/bloc_refresh_notifier.dart';
 @LazySingleton()
 @Injectable()
 class RouteService {
-  final AppInitBloc appInitBloc;
-  final AuthStatusBloc authStatusBloc;
-
   late final GoRouter router;
 
   bool _hasRedirected = false;
 
-  RouteService(this.appInitBloc, this.authStatusBloc) {
+  RouteService() {
+    // blocRefreshNotifier = BlocRefreshNotifier(authStatusBloc.stream);
+    // print('RouteService :: Stream has been initialized');
+
     router = GoRouter(
       initialLocation: '/',
       routes: [
@@ -59,13 +61,24 @@ class RouteService {
           path: '/terms-of-service',
           builder: (context, state) => TermsOfServicePage(),
         ),
+        GoRoute(
+          path: '/center',
+          builder: (context, state) => CenterScreen(),
+        )
       ],
       redirect: (context, state) {
-        final isFirstRun = appInitBloc.state.isFirstRun;
-        final isSignedIn = authStatusBloc.state.isSignedIn;
+        final isFirstRun = context.read<AppInitBloc>().state.isFirstRun;
+        final isSignedIn = context.read<AuthStatusBloc>().state.isSignedIn;
+        final isSplashComplete =
+            context.read<AppInitBloc>().state.isSplashComplete;
+
         print(
-            'Redirected, hasRedirected: $_hasRedirected, isFirstRun: $isFirstRun, isSignedIn: $isSignedIn');
-        
+            'Redirected, hasRedirected: $_hasRedirected, isFirstRun: $isFirstRun, isSignedIn: $isSignedIn, isSplashComplete: $isSplashComplete');
+
+        if (_hasRedirected &&
+            !isFirstRun &&
+            isSplashComplete &&
+            isSignedIn == null) return '/login';
         if (_hasRedirected) return null;
 
         if (isSignedIn == null) {
@@ -81,7 +94,16 @@ class RouteService {
           return '/login';
         }
       },
-      refreshListenable: BlocRefreshNotifier(authStatusBloc.stream),
+      // refreshListenable: blocRefreshNotifier,
     );
+    // blocRefreshNotifier.cancelSubscription();
+  }
+
+  void redirectToLoginPage() {
+    router.go('/login');
+  }
+
+  void redirectToHomePage() {
+    router.go('/home');
   }
 }
