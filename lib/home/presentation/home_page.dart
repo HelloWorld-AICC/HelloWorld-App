@@ -51,7 +51,7 @@ class _HomePageState extends State<HomePage> {
             },
             listener: (context, state) {
               if ((state.needSignIn ?? false) == true) {
-                context.push("/login");
+                context.replace("/login");
               }
             },
             child: HomePageContent(
