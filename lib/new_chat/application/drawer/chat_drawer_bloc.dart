@@ -4,6 +4,7 @@ import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_rooms_in
 import 'package:injectable/injectable.dart';
 
 import '../../domain/model/chat_room_info.dart';
+import '../../presentation/widgets/new_chat_content.dart';
 import '../session/chat_session_bloc.dart';
 
 part 'chat_drawer_event.dart';
@@ -15,10 +16,8 @@ class ChatDrawerBloc extends Bloc<ChatDrawerEvent, ChatDrawerState> {
   final ChatRoomsInfoRepository _chatRoomsInfoRepository;
   final ChatSessionBloc _chatSessionBloc;
 
-  ChatDrawerBloc(
-    this._chatRoomsInfoRepository,
-    this._chatSessionBloc,
-  ) : super(ChatDrawerState.initial()) {
+  ChatDrawerBloc(this._chatRoomsInfoRepository, this._chatSessionBloc)
+      : super(ChatDrawerState.initial()) {
     on<OpenDrawerEvent>((event, emit) async {
       final result = await _chatRoomsInfoRepository.getChatRoomsInfo();
       emit(result.fold(
@@ -40,12 +39,7 @@ class ChatDrawerBloc extends Bloc<ChatDrawerEvent, ChatDrawerState> {
     });
 
     on<CloseDrawerEvent>((event, emit) {
-      emit(state.copyWith(
-        isDrawerOpen: false,
-        selectedRoomId: event.selectedRoomId,
-      ));
-      print(
-          "ChatDrawerBloc :: CloseDrawerEvent : roomId=${event.selectedRoomId}");
+      emit(state.copyWith(isDrawerOpen: false));
     });
 
     on<StartLoadingEvent>((event, emit) {
