@@ -32,6 +32,8 @@ class ChatFetchService extends FetchService {
     const String authority = "www.gotoend.store";
     final uri = Uri.https(authority, realPath, queryParams);
 
+    print("API CALL [${method.name}] $uri");
+
     http.Response response;
     final body = json.encode(bodyParam);
 
@@ -84,7 +86,7 @@ class ChatFetchService extends FetchService {
       isSuccess: true,
       message: 'Success',
       code: '200',
-      result: jsonData,
+      result: {"result": jsonData},
     );
 
     final pathAndQuery = uri.toString().replaceAll(
