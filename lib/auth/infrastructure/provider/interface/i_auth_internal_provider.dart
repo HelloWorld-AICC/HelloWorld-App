@@ -4,4 +4,6 @@ import 'package:hello_world_mvp/fetch/failure.dart';
 
 abstract class IAuthInternalProvider {
   Future<Either<Failure, List<TokenDto>>> getTokenWithGoogleCode(String code);
+
+  Future<Either<Failure, Unit>> withdraw();
 }

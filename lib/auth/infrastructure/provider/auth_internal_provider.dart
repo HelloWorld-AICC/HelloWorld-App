@@ -32,4 +32,19 @@ class AuthInternalProvider implements IAuthInternalProvider {
       return right(result.map((e) => TokenDto.fromJson(e)).toList());
     });
   }
+
+  @override
+  Future<Either<Failure, Unit>> withdraw() async {
+    final failureOrTokens = await _fetchService.request(
+      pathPrefix: "/api/v1",
+      path: "/myPage/delete",
+      method: HttpMethod.delete,
+    );
+
+    return failureOrTokens.fold((f) {
+      return left(f);
+    }, (response) {
+      return right(unit);
+    });
+  }
 }

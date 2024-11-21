@@ -64,11 +64,12 @@ class _Body extends StatelessWidget {
                 showSignOutDailog(context);
               },
             ),
-            // const SizedBox(height: 24),
-            // MypageMenu(
-            //   description: "탈퇴하기",
-            //   onTap: () {},
-            // ),
+            MypageMenu(
+              description: "탈퇴하기",
+              onTap: () {
+                context.push("/withdraw");
+              },
+            ),
             // const SizedBox(height: 24),
             // MypageMenu(
             //   title: "HelloWorld 정보",

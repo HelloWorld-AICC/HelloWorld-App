@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
+import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../auth/presentation/login_screen.dart';
@@ -59,6 +60,10 @@ class RouteService {
       GoRoute(
         path: '/terms-of-service',
         builder: (context, state) => TermsOfServicePage(),
+      ),
+      GoRoute(
+        path: '/withdraw',
+        builder: (context, state) => const WithdrawScreen(),
       )
     ],
   );

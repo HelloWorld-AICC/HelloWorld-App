@@ -90,7 +90,6 @@ class _Body extends StatelessWidget {
             //     context.push('/consultation-history');
             //   },
             // ),
-            const SizedBox(height: 24),
             MypageMenu(
               title: "기타",
               description: "계정 및 정보",
