@@ -11,10 +11,11 @@ final class ChangeRoomIdEvent extends ChatSessionEvent {
   ChangeRoomIdEvent({required this.roomId});
 }
 
-final class LoadChatSessionEvent extends ChatSessionEvent {
-  final String? roomId;
+final class ChangeLoadingEvent extends ChatSessionEvent {
+  final bool isLoading;
+  final ChatFailure? failure;
 
-  LoadChatSessionEvent({required this.roomId});
+  ChangeLoadingEvent({required this.isLoading, required this.failure});
 }
 
 final class SendMessageEvent extends ChatSessionEvent {
@@ -27,15 +28,25 @@ final class SendMessageEvent extends ChatSessionEvent {
   List<Object> get props => [roomId, message];
 }
 
-final class ReceiveMessageEvent extends ChatSessionEvent {
-  final ChatMessage message;
+final class UpdateMessagesEvent extends ChatSessionEvent {
+  final List<ChatMessage> messages;
+  final bool isLoading;
+  final ChatFailure? failure;
 
-  ReceiveMessageEvent({required this.message});
-
-  @override
-  List<Object> get props => [message];
+  UpdateMessagesEvent(
+      {required this.messages, required this.isLoading, required this.failure});
 }
 
-class ClearMessagesEvent extends ChatSessionEvent {
-  ClearMessagesEvent();
+final class LoadChatSessionEvent extends ChatSessionEvent {
+  final String? roomId;
+
+  LoadChatSessionEvent({required this.roomId});
+}
+
+final class ClearChatSessionEvent extends ChatSessionEvent {}
+
+final class SetTypingEvent extends ChatSessionEvent {
+  final bool isTyping;
+
+  SetTypingEvent({required this.isTyping});
 }

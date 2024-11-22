@@ -1,14 +1,21 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/chat_session_handler.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_parse_service.dart';
 
 import '../../../core/value_objects.dart';
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
+import '../../../home/presentation/widgets/home_page_content.dart';
+import '../../../injection.dart';
 import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
+import '../../domain/service/stream/streamed_chat_service.dart';
 import 'chat_guide_widget.dart';
 import 'chat_input_field.dart';
 import 'chat_rooms_drawer.dart';
@@ -22,144 +29,197 @@ class NewChatContent extends StatefulWidget {
 class NewChatContentState extends State<NewChatContent>
     with WidgetsBindingObserver {
   final TextEditingController _controller = TextEditingController();
+
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   bool isKeyboardVisible = false;
+
+  late final StreamedChatParseService parseService;
+  late final Stream<List<ChatMessage>> messageStream;
 
   @override
   void initState() {
     super.initState();
+
+    parseService = StreamedChatParseService();
+    messageStream = parseService.messageStream;
+
+    messageStream.listen(
+      (messages) async {
+        print(
+            'NewChatContent :: messageStream :: messages.length=${messages.length}');
+        final parseService = StreamedChatParseService();
+        for (final message in messages) {
+          parseService.addMessage(message);
+        }
+      },
+      onError: (error) {
+        print('Error: $error');
+      },
+      onDone: () {
+        print('Done');
+      },
+    );
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final chatSessionBloc = context.read<ChatSessionBloc>();
       if (chatSessionBloc.state.roomId == null &&
           chatSessionBloc.state.isLoading) {
         print('NewChatContent :: initState : LoadChatSessionEvent');
-        chatSessionBloc.add(
-          LoadChatSessionEvent(roomId: 'new_chat'),
-        );
+        chatSessionBloc.add(LoadChatSessionEvent(roomId: 'new_chat'));
       }
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    String? roomId = context.read<ChatSessionBloc>().state.roomId;
+    StreamedChatParseService parseService = StreamedChatParseService();
+
     return BlocBuilder<ChatSessionBloc, ChatSessionState>(
-      builder: (context, state) {
-        print("NewChatContent :: messagesStream : ${state.messagesStream}");
-        return SafeArea(
-          child: Scaffold(
-            key: _scaffoldKey,
-            resizeToAvoidBottomInset: false,
+        builder: (context, state) {
+      return SafeArea(
+        child: Scaffold(
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: false,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
             backgroundColor: Colors.white,
-            appBar: _buildAppBar(state),
-            body: _buildBody(state),
-            bottomNavigationBar: Visibility(
-              visible: !isKeyboardVisible,
-              child: CustomBottomNavigationBar(items: bottomNavItems),
-            ),
-            drawer: ChatRoomsDrawer(),
-            onDrawerChanged: (isOpen) {
-              if (!isOpen) {
-                final selectedRoomId =
-                    context.read<ChatDrawerBloc>().state.selectedRoomId;
-                context
-                    .read<ChatDrawerBloc>()
-                    .add(CloseDrawerEvent(selectedRoomId: selectedRoomId));
-                context
-                    .read<ChatSessionBloc>()
-                    .add(ChangeRoomIdEvent(roomId: selectedRoomId));
-              }
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  AppBar _buildAppBar(ChatSessionState state) {
-    return AppBar(
-      backgroundColor: Colors.white,
-      centerTitle: true,
-      title: Text(
-        tr('chat_title'),
-        style: TextStyle(
-          color: HelloColors.subTextColor,
-          fontFamily: "SB AggroOTF",
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
-      ),
-      leading: IconButton(
-        icon: Icon(
-          Icons.list_rounded,
-          color: HelloColors.subTextColor,
-        ),
-        onPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
-      ),
-      actions: [
-        IconButton(
-          icon: Icon(
-            Icons.add,
-            color: HelloColors.subTextColor,
-          ),
-          onPressed: () {
-            context.read<ChatSessionBloc>().add(ClearMessagesEvent());
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildBody(ChatSessionState state) {
-    if (state.roomId == null || state.roomId == 'new_chat') {
-      return Padding(
-        padding: const EdgeInsets.only(
-          top: 10,
-          left: 10,
-          right: 100,
-          bottom: 350,
-        ),
-        child: ChatGuideWidget(),
-      );
-    } else {
-      print("NewChatContent :: roomId : ${state.roomId}");
-      print("NewChatContent :: messages : ${state.messages}");
-      print("NewChatContent :: messagesStream : ${state.messagesStream}");
-      return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: MessageListWidget(
-                messageStream: state.messagesStream,
+            centerTitle: true,
+            title: Text(
+              tr('chat_title'),
+              style: TextStyle(
+                color: HelloColors.subTextColor,
+                fontFamily: "SB AggroOTF",
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
               ),
             ),
-            _buildInputArea(state.roomId),
-          ],
+            leading: IconButton(
+              icon: Icon(
+                Icons.list_rounded,
+                color: HelloColors.subTextColor,
+              ),
+              color: HelloColors.subTextColor,
+              onPressed: () {
+                // context
+                //     .read<RouteBloc>()
+                //     .add(RouteChanged(newIndex: 0, newRoute: '/home'));
+                // Navigator.of(context).pop();
+                _scaffoldKey.currentState?.openDrawer();
+              },
+            ),
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: HelloColors.subTextColor,
+                ),
+                onPressed: () {
+                  context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
+                },
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                BlocListener<ChatSessionBloc, ChatSessionState>(
+                  listener: (context, state) {
+                    // if (state.roomId == null) {
+                    //   printInColor('Loading chat session', color: red);
+                    //   context.read<ChatSessionBloc>().add(
+                    //       LoadChatSessionEvent(roomId: state.roomId ?? 'new_chat'));
+                    // }
+                  },
+                  child: Expanded(
+                    child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
+                      builder: (context, state) {
+                        print(
+                            'NewChatContent :: ChatSessionBloc :: builder :: roomId=${state.roomId}');
+                        if (state.roomId == null) {
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                              top: 10,
+                              left: 10,
+                              right: 100,
+                              bottom: 350,
+                            ),
+                            child: ChatGuideWidget(),
+                          );
+                        } else {
+                          return MessageListWidget(
+                            messageStream: messageStream,
+                            roomId: state.roomId,
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ),
+                // if (context.watch<ChatSessionBloc>().state.typingState ==
+                //     TypingIndicatorState.shown)
+                //   TypingIndicator(),
+                // Expanded(
+                //   child: ActionButtonsWidget(
+                //     onButtonPressed: (selectedContent) {},
+                //   ),
+                // ),
+                _buildInputArea(roomId),
+              ],
+            ),
+          ),
+          bottomNavigationBar: Visibility(
+            visible: !isKeyboardVisible,
+            child: CustomBottomNavigationBar(items: bottomNavItems),
+          ),
+          drawer: ChatRoomsDrawer(),
+          onDrawerChanged: (isOpen) {
+            if (!isOpen) {
+              final selectedRoomId =
+                  context.read<ChatDrawerBloc>().state.selectedRoomId;
+              context
+                  .read<ChatDrawerBloc>()
+                  .add(CloseDrawerEvent(selectedRoomId: selectedRoomId));
+              context
+                  .read<ChatSessionBloc>()
+                  .add(ChangeRoomIdEvent(roomId: selectedRoomId));
+            }
+          },
         ),
       );
-    }
+    });
   }
 
   Widget _buildInputArea(String? roomId) {
-    return ChatInputField(
-      sendMessage: () {
-        context.read<ChatSessionBloc>().add(SendMessageEvent(
-            message: ChatMessage(
-                sender: Sender.user, content: StringVO(_controller.text))));
-        _controller.clear();
-        setState(() {
-          isKeyboardVisible = false;
-        });
-      },
-      tapped: () {
-        setState(() {
-          isKeyboardVisible = true;
-        });
-      },
-      controller: _controller,
+    return BlocListener<ChatSessionBloc, ChatSessionState>(
+      listener: (context, state) {},
+      child: ChatInputField(
+        sendMessage: () {
+          parseService.addMessage(ChatMessage(
+              sender: Sender.user, content: StringVO(_controller.text)));
+          print("User message: ${_controller.text}");
+
+          context.read<ChatSessionBloc>().add(SendMessageEvent(
+              message: ChatMessage(
+                  sender: Sender.user, content: StringVO(_controller.text))));
+          _controller.clear();
+          setState(() {
+            isKeyboardVisible = false;
+          });
+        },
+        tapped: () {
+          setState(() {
+            isKeyboardVisible = true;
+            // context
+            //     .read<ChatSessionBloc>()
+            //     .add(ChangeRoomIdEvent(roomId: 'new_chat'));
+          });
+        },
+        controller: _controller,
+      ),
     );
   }
 }

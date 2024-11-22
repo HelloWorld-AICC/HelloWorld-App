@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../fetch/authenticated_http_client.dart';
 import '../../../fetch/fetch_service.dart';
@@ -132,7 +133,21 @@ class ChatFetchService extends FetchService {
 
       if (streamedResponse.statusCode == 200) {
         final stream = streamedResponse.stream.transform(utf8.decoder);
-        return right(stream);
+        final subject = PublishSubject<String>();
+
+        stream.listen(
+          (event) {
+            subject.add(event);
+          },
+          onError: (error) {
+            subject.addError(error);
+          },
+          onDone: () {
+            subject.close();
+          },
+        );
+
+        return right(subject.stream);
       } else {
         printInColor("Failed with status code ${streamedResponse.statusCode}",
             color: red);

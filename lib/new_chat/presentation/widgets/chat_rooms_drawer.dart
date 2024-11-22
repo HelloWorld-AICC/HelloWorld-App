@@ -89,7 +89,7 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
               color: HelloColors.subTextColor,
             ),
             onPressed: () {
-              context.read<ChatSessionBloc>().add(ClearMessagesEvent());
+              context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
             },
           ),
         ],

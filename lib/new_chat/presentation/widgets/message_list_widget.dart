@@ -2,24 +2,36 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_parse_service.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_service.dart';
+import '../../../injection.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
 
-class MessageListWidget extends StatelessWidget {
+class MessageListWidget extends StatefulWidget {
   final Stream<List<ChatMessage>> messageStream;
+  final roomId;
 
   const MessageListWidget({
     Key? key,
     required this.messageStream,
+    required this.roomId,
   }) : super(key: key);
 
   @override
+  State<MessageListWidget> createState() => _MessageListWidgetState();
+}
+
+class _MessageListWidgetState extends State<MessageListWidget> {
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ChatMessage>>(
-      stream: messageStream,
+      stream: widget.messageStream,
       builder: (context, snapshot) {
         final messages = snapshot.data ?? [];
+
+        print("New data received: ${messages.length}");
 
         return ListView.builder(
           controller: ScrollController(),

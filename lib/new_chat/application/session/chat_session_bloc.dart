@@ -6,183 +6,103 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_message.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_parse_service.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_service.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_repository.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/failure/chat_failure.dart';
-import '../../presentation/widgets/new_chat_content.dart';
+import '../../domain/service/stream/chat_session_handler.dart';
 
 part 'chat_session_event.dart';
 
 part 'chat_session_state.dart';
 
 @injectable
-class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
+class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState>
+    implements ChatSessionHandler {
   final ChatRepository chatRepository;
-  final StreamController<List<ChatMessage>> _messageStreamController =
-      StreamController.broadcast();
+  final StreamedChatService streamedChatService;
 
-  Stream<List<ChatMessage>> get messagesStream =>
-      _messageStreamController.stream;
-
-  ChatSessionBloc({required this.chatRepository})
-      : super(ChatSessionState.initial()) {
+  ChatSessionBloc({
+    required this.chatRepository,
+    required this.streamedChatService,
+  }) : super(ChatSessionState.initial()) {
     on<ChangeRoomIdEvent>((event, emit) {
       emit(state.copyWith(roomId: event.roomId));
     });
 
+    on<SendMessageEvent>((event, emit) async {
+      final failureOrResponse = await streamedChatService.sendUserRequest(
+          event.message, state.roomId ?? 'new_chat');
+    });
+
     on<LoadChatSessionEvent>((event, emit) async {
       emit(state.copyWith(isLoading: true));
-      try {
-        final roomId = state.roomId;
+      emit(state.copyWith(roomId: event.roomId));
+      final roomId = state.roomId;
 
-        if (roomId == 'new_chat') {
-          emit(state.copyWith(isLoading: false));
-          return;
-        }
-        final failureOrChatRoom =
-            await chatRepository.getRoomById(StringVO(event.roomId));
-
-        failureOrChatRoom.fold(
-          (failure) {
-            emit(state.copyWith(
-              isLoading: false,
-              failure: failure,
-            ));
-          },
-          (chatRoom) {
-            _messageStreamController.add(chatRoom.messages);
-            emit(state.copyWith(
-              isLoading: false,
-              roomId: chatRoom.roomId.getOrCrash(),
-            ));
-          },
-        );
-      } catch (error) {
-        emit(state.copyWith(
-            isLoading: false, failure: ChatFailure(message: error.toString())));
+      if (roomId == 'new_chat' || roomId == null) {
+        print("ChatSessionBloc :: LoadChatSessionEvent : roomId is null");
+        emit(state.copyWith(isLoading: false));
+        return;
       }
+      final failureOrChatRoom =
+          await chatRepository.getRoomById(StringVO(event.roomId));
+      print("ChatSessionBloc :: LoadChatSessionEvent : roomId=$roomId");
+
+      streamedChatService.addChatLogs(failureOrChatRoom);
     });
 
-    on<SendMessageEvent>((event, emit) async {
-      final updatedMessages = List<ChatMessage>.from(state.messages)
-        ..add(event.message);
-
-      final userMessage = event.message.content.value.fold(
-        (l) => ChatSendFailure(message: "Failed to add user message to stream"),
-        (r) => r,
-      );
-      _messageStreamController.add(updatedMessages);
+    on<SetTypingEvent>((event, emit) {
       emit(state.copyWith(
-          typingState: TypingIndicatorState.shown,
-          messages: updatedMessages,
-          isLoading: true));
-
-      final failureOrStream = await chatRepository.sendMessage(
-          StringVO(event.roomId), StringVO(userMessage as String));
-
-      ChatMessage? botMessage;
-
-      // ChatMessage? botMessage = ChatMessage(
-      //   sender: Sender.bot,
-      //   content: StringVO(failureOrStream.toString()),
-      // );
-      // final temp = List<ChatMessage>.from(state.messages)..add(botMessage!);
-      // _messageStreamController.add(temp);
-
-      final streamed_response = failureOrStream.fold(
-        (failure) {
-          printInColor(failure.message, color: red);
-          emit(state.copyWith(
-            failure: ChatSendFailure(message: "Failed to send message"),
-            typingState: TypingIndicatorState.hidden,
-            isLoading: false,
-          ));
-        },
-        (lineStream) async {
-          final finalResponse = StringBuffer();
-
-          final subscription = lineStream
-              // .transform(Utf8Decoder())
-              .transform(LineSplitter())
-              .listen(
-            (line) {
-              printInColor("raw data is, $line", color: green);
-
-              if (line.startsWith('data:')) {
-                var temp = line.substring(5).trim();
-                if (temp.isEmpty) temp = ' ';
-
-                if (line.startsWith('data:Room ID: ')) {
-                  emit(state.copyWith(
-                    roomId: temp,
-                    typingState: TypingIndicatorState.shown,
-                  ));
-                } else {
-                  if (temp == 'data:') {
-                    finalResponse.write('\n');
-                  } else {
-                    finalResponse.write(temp);
-                  }
-
-                  if (botMessage == null) {
-                    botMessage = ChatMessage(
-                      sender: Sender.bot,
-                      content: StringVO(finalResponse.toString()),
-                    );
-
-                    final updatedMessages =
-                        List<ChatMessage>.from(state.messages)
-                          ..add(botMessage!);
-                    _messageStreamController.add(updatedMessages);
-                    emit(state.copyWith(
-                      typingState: TypingIndicatorState.shown,
-                    ));
-                  } else {
-                    final updatedMessages =
-                        List<ChatMessage>.from(state.messages)
-                          ..removeLast()
-                          ..add(botMessage!.copyWith(
-                            content: StringVO(finalResponse.toString()),
-                          ));
-                    _messageStreamController.add(updatedMessages);
-                    emit(state.copyWith(
-                      typingState: TypingIndicatorState.shown,
-                    ));
-                  }
-                }
-              }
-            },
-          );
-          subscription.cancel();
-        },
-      );
+          typingState: event.isTyping
+              ? TypingIndicatorState.shown
+              : TypingIndicatorState.hidden));
     });
 
-    on<ReceiveMessageEvent>((event, emit) async {
-      final currentMessages = await _messageStreamController.stream.first;
-
-      final updatedMessages = List<ChatMessage>.from(currentMessages)
-        ..add(event.message);
-      _messageStreamController.add(updatedMessages);
-      emit(state.copyWith(typingState: TypingIndicatorState.hidden));
+    on<ClearChatSessionEvent>((event, emit) {
+      print("ChatSessionBloc :: ClearChatSessionEvent");
+      streamedChatService.clearChatLogs();
+      emit(state.copyWith(messages: []));
     });
 
-    on<ClearMessagesEvent>((event, emit) {
-      _messageStreamController.add([]); // Clear messages
+    on<UpdateMessagesEvent>((event, emit) {
       emit(state.copyWith(
-          roomId: null,
-          isLoading: false,
-          typingState: TypingIndicatorState.hidden,
-          messages: []));
+        messages: event.messages,
+        isLoading: event.isLoading,
+        failure: event.failure,
+      ));
     });
   }
 
   @override
-  Future<void> close() {
-    _messageStreamController.close(); // StreamController 닫기
-    return super.close();
+  void updateMessages({
+    required List<ChatMessage> messages,
+    bool isLoading = false,
+    ChatFailure? failure,
+  }) {
+    add(UpdateMessagesEvent(
+      messages: messages,
+      isLoading: isLoading,
+      failure: failure,
+    ));
+  }
+
+  @override
+  void updateRoomId({required String roomId}) {
+    add(ChangeRoomIdEvent(roomId: roomId));
+  }
+
+  @override
+  void setLoading({required bool isLoading, ChatFailure? failure}) {
+    add(ChangeLoadingEvent(isLoading: isLoading, failure: failure));
+  }
+
+  @override
+  List<ChatMessage> getMessages() {
+    return state.messages;
   }
 }

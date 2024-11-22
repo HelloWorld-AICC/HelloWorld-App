@@ -57,6 +57,7 @@ class ChatDrawerBloc extends Bloc<ChatDrawerEvent, ChatDrawerState> {
     });
 
     on<SelectRoomEvent>((event, emit) {
+      print("ChatDrawerBloc :: SelectRoomEvent : roomId=${event.roomId}");
       _chatSessionBloc.add(LoadChatSessionEvent(roomId: event.roomId));
       emit(state.copyWith(selectedRoomId: event.roomId));
     });

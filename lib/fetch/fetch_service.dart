@@ -30,7 +30,7 @@ class FetchService {
 
   FetchService({required this.client});
 
-  Future<Either<NetworkFailure, ServerResponse>>  request(
+  Future<Either<NetworkFailure, ServerResponse>> request(
       {required HttpMethod method,
       String pathPrefix = "/api/v1",
       required String path,
@@ -46,7 +46,7 @@ class FetchService {
       realPath = realPath.replaceFirst("{$key}", "$value");
     });
 
-    // debugPrint("CORE :: CORE_API :: request -> $realPath // $queryParams");
+    debugPrint("CORE :: CORE_API :: request -> $realPath // $queryParams");
     //request
 
     const String authority = "www.gotoend.store";
