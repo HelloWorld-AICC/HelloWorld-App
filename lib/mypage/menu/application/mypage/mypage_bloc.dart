@@ -7,9 +7,9 @@ import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
 import 'package:hello_world_mvp/bus/bus.dart';
 import 'package:hello_world_mvp/bus/bus_message.dart';
 import 'package:hello_world_mvp/mypage/common/application/mypage_messages.dart';
-import 'package:hello_world_mvp/mypage/menu/domain/failure/mypage_failure.dart';
-import 'package:hello_world_mvp/mypage/menu/domain/model/my_info.dart';
-import 'package:hello_world_mvp/mypage/menu/domain/repository/i_mypage_repository.dart';
+import 'package:hello_world_mvp/mypage/common/domain/failure/mypage_failure.dart';
+import 'package:hello_world_mvp/mypage/common/domain/model/my_info.dart';
+import 'package:hello_world_mvp/mypage/common/domain/repository/i_mypage_repository.dart';
 
 import 'package:injectable/injectable.dart';
 

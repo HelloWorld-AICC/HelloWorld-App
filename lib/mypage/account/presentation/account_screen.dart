@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/widgets/signout_dialog.dart';
+import 'package:hello_world_mvp/mypage/app_version/application/app_version_bloc.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_menu.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/my_profile.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
@@ -70,8 +71,20 @@ class _Body extends StatelessWidget {
                 context.push("/withdraw");
               },
             ),
-            MypageMenu(
-                title: "HelloWorld 정보", description: "앱 버전", value: "1.1.0"),
+            BlocProvider<AppVersionBloc>(
+              create: (context) =>
+                  getIt<AppVersionBloc>()..add(GetAppVersion()),
+              child: Builder(builder: (context) {
+                return BlocBuilder<AppVersionBloc, AppVersionState>(
+                  builder: (context, state) {
+                    return MypageMenu(
+                        title: "HelloWorld 정보",
+                        description: "앱 버전",
+                        value: state.appVersion);
+                  },
+                );
+              }),
+            ),
             MypageMenu(
               description: "서비스 이용약관",
               onTap: () {
