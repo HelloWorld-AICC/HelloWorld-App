@@ -10,4 +10,6 @@ abstract class IAuthRepository {
 
   Future<Either<AuthFailure, Unit>> refreshAccessTokenIfNeeded(
       List<TokenDto> tokenDtos);
+
+  Future<Either<AuthFailure, Unit>> withdraw();
 }
