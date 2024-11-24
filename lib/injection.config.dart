@@ -43,6 +43,7 @@ import 'mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider
 import 'mypage/menu/infrastructure/provider/mypage_internal_provider.dart'
     as _i487;
 import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i936;
+import 'mypage/withdraw/application/withdraw_bloc.dart' as _i501;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
@@ -123,6 +124,8 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i598.SignOutBloc>(
         () => _i598.SignOutBloc(authRepository: gh<_i667.IAuthRepository>()));
+    gh.factory<_i501.WithdrawBloc>(
+        () => _i501.WithdrawBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i835.EditProfileBloc>(() => _i835.EditProfileBloc(
           myPageRepository: gh<_i392.IMypageRepository>(),
           bus: gh<_i461.Bus>(),
