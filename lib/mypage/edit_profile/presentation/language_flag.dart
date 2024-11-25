@@ -1,42 +1,55 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
-import 'package:hello_world_mvp/init/presentation/splash_page.dart';
-import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 
 enum Language {
   korean(
-      flagAssetPath: "icons/flags/png100px/kr.png",
-      languageCode: "en",
-      contryCode: "US"),
+      flagAssetPath: "assets/images/common/flags/korean.png",
+      offFlagAssetPath: "assets/images/common/flags/korean_off.png",
+      languageCode: "ko",
+      contryCode: "KR",
+      languageName: "한국어"),
   chinese(
-      flagAssetPath: "icons/flags/png100px/cn.png",
-      languageCode: "zh",
-      contryCode: "CN"),
+    flagAssetPath: "assets/images/common/flags/chinese.png",
+    offFlagAssetPath: "assets/images/common/flags/chinese_off.png",
+    languageCode: "zh",
+    contryCode: "CN",
+    languageName: "中文",
+  ),
   vietnamese(
-      flagAssetPath: "icons/flags/png100px/vn.png",
+      flagAssetPath: "assets/images/common/flags/vietnamese.png",
+      offFlagAssetPath: "assets/images/common/flags/vietnamese_off.png",
       languageCode: "vi",
-      contryCode: "VN"),
+      contryCode: "VN",
+      languageName: "Tiếng Việt"),
   japanese(
-      flagAssetPath: "icons/flags/png100px/jp.png",
-      languageCode: "ja",
-      contryCode: "JP"),
+    flagAssetPath: "assets/images/common/flags/japanese.png",
+    offFlagAssetPath: "assets/images/common/flags/japanese_off.png",
+    languageCode: "ja",
+    contryCode: "JP",
+    languageName: "日本語",
+  ),
   english(
-    flagAssetPath: "icons/flags/png100px/us.png",
+    flagAssetPath: "assets/images/common/flags/english.png",
+    offFlagAssetPath: "assets/images/common/flags/english_off.png",
     languageCode: "en",
     contryCode: "US",
+    languageName: "English",
   );
 
   final String flagAssetPath;
+  final String offFlagAssetPath;
   final String languageCode;
   final String contryCode;
+  final String languageName;
 
   const Language({
     required this.flagAssetPath,
+    required this.offFlagAssetPath,
     required this.languageCode,
     required this.contryCode,
+    required this.languageName,
   });
 }
 
@@ -49,6 +62,8 @@ class LanguageFlag extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = context.locale;
+
     return InkWell(
       onTap: () async {
         await context
@@ -70,11 +85,14 @@ class LanguageFlag extends StatelessWidget {
                   ),
                   borderRadius: BorderRadius.circular(4.0),
                 ),
-                child: Image.asset(lanagaue.flagAssetPath,
-                    package: 'country_icons'),
+                child: Image.asset(
+                  locale.languageCode == lanagaue.languageCode
+                      ? lanagaue.flagAssetPath
+                      : lanagaue.offFlagAssetPath,
+                ),
               ),
               const SizedBox(height: 4),
-              Text(lanagaue.name,
+              Text(lanagaue.languageName,
                   style: const TextStyle(
                     color: HelloColors.subTextColor,
                     fontFamily: HelloFonts.pretendard,
