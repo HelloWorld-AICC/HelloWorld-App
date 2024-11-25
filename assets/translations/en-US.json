@@ -211,5 +211,18 @@
   "mypage_terms_title": "Terms of Service",
   "mypage_terms_body": "Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service",
   "mypage_withdraw_title": "Delete Account",
-  "mypage_withdraw_body": "Are you sure you want to delete your account? This action"
+  "mypage_withdraw_body": "Are you sure you want to delete your account? This action",
+  "mypage_withdraw_confirm_button" : "Withdraw",
+  "mypage_menu_edit_profile_title" : "Profile",
+  "mypage_menu_edit_profile_description" : "Edit Profile",
+  "mypage_menu_etc" : "Etc",
+  "mypage_menu_account_and_info" : "Account and Info",
+  "mypage_account_account" : "Account",
+  "mypage_account_logout" : "Logout",
+  "mypage_account_withdraw" : "Withdraw",
+  "mypage_account_helloWorld" : "HelloWorld",
+  "mypage_account_infomation" : "Information",
+  "mypage_account_appversion" : "App Version",
+  "mypage_account_terms" : "Terms of Service",
+  "mypage_account_privacy_policy":  "Privacy Policy"
 }

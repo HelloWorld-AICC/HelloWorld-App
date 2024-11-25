@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -59,14 +60,14 @@ class _Body extends StatelessWidget {
             child: Column(
           children: [
             MypageMenu(
-              title: "계정",
-              description: "로그아웃",
+              title: context.tr("mypage_account_account"),
+              description: context.tr("mypage_account_logout"),
               onTap: () {
                 showSignOutDailog(context);
               },
             ),
             MypageMenu(
-              description: "탈퇴하기",
+              description: context.tr("mypage_account_withdraw"),
               onTap: () {
                 context.push("/withdraw");
               },
@@ -78,21 +79,22 @@ class _Body extends StatelessWidget {
                 return BlocBuilder<AppVersionBloc, AppVersionState>(
                   builder: (context, state) {
                     return MypageMenu(
-                        title: "HelloWorld 정보",
-                        description: "앱 버전",
+                        title:
+                            "${context.tr('mypage_account_helloWorld')} ${context.tr('mypage_account_infomation')}",
+                        description: context.tr("mypage_account_appversion"),
                         value: state.appVersion);
                   },
                 );
               }),
             ),
             MypageMenu(
-              description: "서비스 이용약관",
+              description: context.tr("mypage_account_terms"),
               onTap: () {
                 context.push("/term");
               },
             ),
             MypageMenu(
-              description: "개인정보 처리방침",
+              description: context.tr("mypage_account_privacy_policy"),
               onTap: () {
                 context.push("/privacy-policy");
               },

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -60,8 +61,8 @@ class _Body extends StatelessWidget {
             child: Column(
           children: [
             MypageMenu(
-              title: "프로필",
-              description: "프로필 변경",
+              title: context.tr("mypage_menu_edit_profile_title"),
+              description: context.tr("mypage_menu_edit_profile_description"),
               onTap: () {
                 context.push('/edit-profile');
               },
@@ -91,8 +92,8 @@ class _Body extends StatelessWidget {
             //   },
             // ),
             MypageMenu(
-              title: "기타",
-              description: "계정 및 정보",
+              title: context.tr("mypage_menu_etc"),
+              description: context.tr("mypage_menu_account_and_info"),
               onTap: () {
                 context.push('/account');
               },
