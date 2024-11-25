@@ -22,12 +22,12 @@ class PrivacyPolicyScreen extends StatelessWidget {
               const SizedBox(height: 36),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                child: const Text("mypage_privacy_policy",
-                    style: TextStyle(
+                child: Text(context.tr("mypage_privacy_policy"),
+                    style: const TextStyle(
                       fontFamily: HelloFonts.sbAggroOTF,
                       fontSize: 12,
                       color: HelloColors.mainColor2,
-                    )).tr(),
+                    )),
               ),
               const _Body(),
             ],
@@ -51,14 +51,14 @@ class _Body extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text("mypage_privacy_policy_body",
-                style: TextStyle(
+            Text(context.tr("mypage_privacy_policy_body"),
+                style: const TextStyle(
                   fontSize: 12,
                   fontFamily: HelloFonts.sbAggroOTF,
                   color: HelloColors.subTextColor,
                   fontWeight: FontWeight.w400,
                   height: 16 / 12,
-                )).tr()
+                ))
           ],
         )),
         const SizedBox(height: 24),

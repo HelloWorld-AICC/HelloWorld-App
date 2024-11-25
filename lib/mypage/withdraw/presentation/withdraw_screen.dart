@@ -78,24 +78,24 @@ class _Body extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "mypage_withdraw_title",
-              style: TextStyle(
+            Text(
+              context.tr("mypage_withdraw_title"),
+              style: const TextStyle(
                 fontFamily: "Pretendard",
                 color: HelloColors.mainColor1,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
-            ).tr(),
+            ),
             const SizedBox(height: 20),
-            const Text("mypage_withdraw_body",
-                style: TextStyle(
+            Text(context.tr("mypage_withdraw_body"),
+                style: const TextStyle(
                   fontSize: 12,
                   fontFamily: HelloFonts.sbAggroOTF,
                   color: HelloColors.subTextColor,
                   fontWeight: FontWeight.w400,
                   height: 16 / 12,
-                )).tr(),
+                )),
           ],
         )),
         const SizedBox(height: 24),
@@ -124,15 +124,15 @@ class WithdrawButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Center(
-            child: const Text(
-              "mypage_withdraw_confirm_button",
-              style: TextStyle(
+            child: Text(
+              context.tr("mypage_withdraw_confirm_button"),
+              style: const TextStyle(
                 fontFamily: HelloFonts.sbAggroOTF,
                 fontSize: 12,
                 height: 12 / 12,
                 color: HelloColors.subTextColor,
               ),
-            ).tr(),
+            ),
           )),
     );
   }

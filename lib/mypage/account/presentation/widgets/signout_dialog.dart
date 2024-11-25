@@ -49,14 +49,14 @@ Future<void> showSignOutDailog(BuildContext context) async {
                               width: 50.5,
                               height: 50.5),
                           const SizedBox(height: 27),
-                          const Text("mypage_signout_dialog",
-                              style: TextStyle(
+                          Text(context.tr("mypage_signout_dialog"),
+                              style: const TextStyle(
                                 color: HelloColors.mainBlue,
                                 fontFamily: HelloFonts.sbAggroOTF,
                                 fontSize: 12,
                                 height: 20 / 12,
                                 letterSpacing: 0.12,
-                              )).tr(),
+                              )),
                           const SizedBox(height: 26),
                           Row(
                             children: [
@@ -72,15 +72,15 @@ Future<void> showSignOutDailog(BuildContext context) async {
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
                                     child: Center(
-                                      child: const Text(
-                                        "cancel_button",
-                                        style: TextStyle(
+                                      child: Text(
+                                        context.tr("cancel_button"),
+                                        style: const TextStyle(
                                           color: HelloColors.gray,
                                           fontFamily: HelloFonts.sbAggroOTF,
                                           fontSize: 12,
                                           height: 1.0,
                                         ),
-                                      ).tr(),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -98,13 +98,13 @@ Future<void> showSignOutDailog(BuildContext context) async {
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
                                     child: Center(
-                                      child: const Text("confirm_button",
-                                          style: TextStyle(
+                                      child: Text(context.tr("confirm_button"),
+                                          style: const TextStyle(
                                             color: HelloColors.subTextColor,
                                             fontFamily: HelloFonts.sbAggroOTF,
                                             fontSize: 12,
                                             height: 1.0,
-                                          )).tr(),
+                                          )),
                                     ),
                                   ),
                                 ),

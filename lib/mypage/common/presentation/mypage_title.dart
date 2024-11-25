@@ -29,16 +29,16 @@ class MyPageTitle extends StatelessWidget {
               height: 24,
             ),
           ),
-          const Text(
-            "mypage_title",
-            style: TextStyle(
+          Text(
+            context.tr("mypage_title"),
+            style: const TextStyle(
               fontFamily: HelloFonts.sbAggroOTF,
               color: HelloColors.subTextColor,
               fontSize: 16,
               fontWeight: FontWeight.w400,
               height: 1.0,
             ),
-          ).tr(),
+          ),
           if (onTapConfirm != null)
             InkWell(
               onTap: () => onTapConfirm!(),

@@ -111,7 +111,7 @@ class _MainAppState extends State<MainApp> {
         return previous.locale != current.locale;
       },
       builder: (context, state) {
-        final locale = state.locale ?? context.locale;
+        final locale = context.locale;
         return MultiBlocListener(
           listeners: [
             BlocListener<ToastBloc, ToastState>(
