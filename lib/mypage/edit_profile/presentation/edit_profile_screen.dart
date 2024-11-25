@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
@@ -79,26 +80,26 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("프로필 변경",
+                        const Text("mypage_edit_profile",
                             style: TextStyle(
                               fontFamily: HelloFonts.pretendard,
                               fontSize: 12,
                               color: HelloColors.mainColor1,
                               fontWeight: FontWeight.w500,
-                            )),
+                            )).tr(),
                         const SizedBox(height: 16),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text(
-                              "닉네임 변경",
+                              "mypage_change_nickname",
                               style: TextStyle(
                                 fontFamily: HelloFonts.pretendard,
                                 color: HelloColors.subTextColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
-                            ),
+                            ).tr(),
                             Expanded(
                               child: BlocBuilder<EditProfileBloc,
                                   EditProfileState>(
@@ -130,14 +131,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Container(height: 1, color: const Color(0xFFE6E6E6)),
                         const SizedBox(height: 20),
                         const Text(
-                          "언어 변경",
+                          "mypage_change_language",
                           style: TextStyle(
                             fontFamily: HelloFonts.pretendard,
                             color: HelloColors.subTextColor,
                             fontSize: 12,
                             fontWeight: FontWeight.w500,
                           ),
-                        ),
+                        ).tr(),
                         const SizedBox(height: 14),
                         Container(
                           height: 200,

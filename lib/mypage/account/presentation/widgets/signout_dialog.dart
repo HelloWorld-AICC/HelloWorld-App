@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,14 +49,14 @@ Future<void> showSignOutDailog(BuildContext context) async {
                               width: 50.5,
                               height: 50.5),
                           const SizedBox(height: 27),
-                          const Text("로그아웃을 하시겠습니까?",
+                          const Text("mypage_signout_dialog",
                               style: TextStyle(
                                 color: HelloColors.mainBlue,
                                 fontFamily: HelloFonts.sbAggroOTF,
                                 fontSize: 12,
                                 height: 20 / 12,
                                 letterSpacing: 0.12,
-                              )),
+                              )).tr(),
                           const SizedBox(height: 26),
                           Row(
                             children: [
@@ -70,16 +71,16 @@ Future<void> showSignOutDailog(BuildContext context) async {
                                       color: const Color(0xFFEBEBEB),
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    child: const Center(
-                                      child: Text(
-                                        "취소",
+                                    child: Center(
+                                      child: const Text(
+                                        "cancel_button",
                                         style: TextStyle(
                                           color: HelloColors.gray,
                                           fontFamily: HelloFonts.sbAggroOTF,
                                           fontSize: 12,
                                           height: 1.0,
                                         ),
-                                      ),
+                                      ).tr(),
                                     ),
                                   ),
                                 ),
@@ -96,14 +97,14 @@ Future<void> showSignOutDailog(BuildContext context) async {
                                       color: HelloColors.mainBlue,
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    child: const Center(
-                                      child: Text("확인",
+                                    child: Center(
+                                      child: const Text("confirm_button",
                                           style: TextStyle(
                                             color: HelloColors.subTextColor,
                                             fontFamily: HelloFonts.sbAggroOTF,
                                             fontSize: 12,
                                             height: 1.0,
-                                          )),
+                                          )).tr(),
                                     ),
                                   ),
                                 ),

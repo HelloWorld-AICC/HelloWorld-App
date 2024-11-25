@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +30,7 @@ class MyPageTitle extends StatelessWidget {
             ),
           ),
           const Text(
-            "MyPage",
+            "mypage_title",
             style: TextStyle(
               fontFamily: HelloFonts.sbAggroOTF,
               color: HelloColors.subTextColor,
@@ -37,7 +38,7 @@ class MyPageTitle extends StatelessWidget {
               fontWeight: FontWeight.w400,
               height: 1.0,
             ),
-          ),
+          ).tr(),
           if (onTapConfirm != null)
             InkWell(
               onTap: () => onTapConfirm!(),

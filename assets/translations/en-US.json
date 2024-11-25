@@ -39,6 +39,7 @@
   "lan_ja": "Japanese",
   "lan_zh": "Chinese",
   "lan_vi": "Vietnamese",
+  "cancel_button" : "Cancel",
   "confirm_button": "Confirm",
   "chat_consultation": "Chat Consultation",
   "call_bot": "Call Bot",
@@ -197,5 +198,18 @@
   "auth_login_title": "외국인 지원센터 AICC\nHello World",
   "auth_account_is_null": "GoogleSignInAccount is null.",
   "auth_unknown_token_type": "The token type does not exist.",
-  "app_unkown_error": "An unknown error occurred."
+  "app_unkown_error": "An unknown error occurred.",
+
+  "mypage_signout_dialog": "Would you like to sign out?",
+  "mypage_no_profile": "No Profile",
+  "mypage_title": "MyPage",
+  "mypage_edit_profile": "Edit Profile",
+  "mypage_change_nickname": "Change Nickname", 
+  "mypage_change_language": "Change Language",
+  "mypage_privacy_policy": "Privacy Policy",
+  "mypage_privacy_policy_body": "Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy Privacy Policy",
+  "mypage_terms_title": "Terms of Service",
+  "mypage_terms_body": "Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service Terms of Service",
+  "mypage_withdraw_title": "Delete Account",
+  "mypage_withdraw_body": "Are you sure you want to delete your account? This action"
 }

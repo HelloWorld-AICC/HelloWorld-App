@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,29 +74,28 @@ class _Body extends StatelessWidget {
           },
         ),
         const SizedBox(height: 36),
-        const MypageBox(
+        MypageBox(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "탈퇴하기",
+            const Text(
+              "mypage_withdraw_title",
               style: TextStyle(
                 fontFamily: "Pretendard",
                 color: HelloColors.mainColor1,
                 fontSize: 12,
                 fontWeight: FontWeight.w600,
               ),
-            ),
-            SizedBox(height: 20),
-            Text(
-                "PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? PM님..! 탈퇴하기 내용은 뭐하고 써야하나요..? ",
+            ).tr(),
+            const SizedBox(height: 20),
+            const Text("mypage_withdraw_body",
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: HelloFonts.sbAggroOTF,
                   color: HelloColors.subTextColor,
                   fontWeight: FontWeight.w400,
                   height: 16 / 12,
-                ))
+                )).tr(),
           ],
         )),
         const SizedBox(height: 24),
@@ -123,16 +123,16 @@ class WithdrawButton extends StatelessWidget {
             color: HelloColors.mainBlue,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: const Center(
-            child: Text(
-              "탈퇴하기",
+          child: Center(
+            child: const Text(
+              "mypage_withdraw_confirm_button",
               style: TextStyle(
                 fontFamily: HelloFonts.sbAggroOTF,
                 fontSize: 12,
                 height: 12 / 12,
                 color: HelloColors.subTextColor,
               ),
-            ),
+            ).tr(),
           )),
     );
   }

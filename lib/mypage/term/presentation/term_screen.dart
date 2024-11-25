@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
@@ -10,25 +11,25 @@ class TermScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor: HelloColors.white,
       body: SingleChildScrollView(
         child: MypageBackgroundGradient(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              MyPageTitle(),
-              SizedBox(height: 36),
+              const MyPageTitle(),
+              const SizedBox(height: 36),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 25.0),
-                child: Text("서비스 이용약관",
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: const Text("mypage_terms_title",
                     style: TextStyle(
                       fontFamily: HelloFonts.sbAggroOTF,
                       fontSize: 12,
                       color: HelloColors.mainColor2,
-                    )),
+                    )).tr(),
               ),
-              _Body(),
+              const _Body(),
             ],
           ),
         ),
@@ -42,26 +43,25 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         MypageBox(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-                "서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관 서비스 이용약관",
+            const Text("mypage_terms_body",
                 style: TextStyle(
                   fontSize: 12,
                   fontFamily: HelloFonts.sbAggroOTF,
                   color: HelloColors.subTextColor,
                   fontWeight: FontWeight.w400,
                   height: 16 / 12,
-                ))
+                )).tr()
           ],
         )),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
       ],
     );
   }
