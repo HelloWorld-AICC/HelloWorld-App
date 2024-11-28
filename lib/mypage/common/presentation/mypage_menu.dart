@@ -5,17 +5,22 @@ import 'package:hello_world_mvp/design_system/hello_colors.dart';
 class MypageMenu extends StatelessWidget {
   final String? title;
   final String description;
-  final Function onTap;
-  const MypageMenu({
+  final Function? onTap;
+  final String? value;
+  MypageMenu({
+    super.key,
     this.title,
     required this.description,
-    required this.onTap,
-  });
+    this.onTap,
+    this.value,
+  }) {
+    assert(!(onTap != null && value != null));
+  }
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () => onTap(),
+      onTap: () => onTap?.call(),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 12.0),
         child: Column(
@@ -42,11 +47,20 @@ class MypageMenu extends StatelessWidget {
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     )),
-                SvgPicture.asset(
-                  "assets/images/mypage/right_arrow.svg",
-                  width: 6.5,
-                  height: 10,
-                ),
+                if (onTap != null)
+                  SvgPicture.asset(
+                    "assets/images/mypage/right_arrow.svg",
+                    width: 6.5,
+                    height: 10,
+                  ),
+                if (value != null)
+                  Text(value ?? "",
+                      style: const TextStyle(
+                        fontFamily: "Pretendard",
+                        color: HelloColors.subTextColor,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      )),
               ],
             ),
           ],

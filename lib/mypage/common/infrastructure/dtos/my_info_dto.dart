@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:hello_world_mvp/mypage/menu/domain/model/my_info.dart';
+import 'package:hello_world_mvp/mypage/common/domain/model/my_info.dart';
 
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class MyInfoDto {

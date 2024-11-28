@@ -1,6 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
+import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
+import 'package:hello_world_mvp/mypage/term/presentation/term_screen.dart';
 import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
 import 'package:injectable/injectable.dart';
 
@@ -64,6 +66,14 @@ class RouteService {
       GoRoute(
         path: '/withdraw',
         builder: (context, state) => const WithdrawScreen(),
+      ),
+      GoRoute(
+        path: '/term',
+        builder: (context, state) => const TermScreen(),
+      ),
+      GoRoute(
+        path: '/privacy-policy',
+        builder: (context, state) => const PrivacyPolicyScreen(),
       )
     ],
   );

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
@@ -108,7 +109,7 @@ class MyProfile extends StatelessWidget {
             ),
             child: Center(
               child: Text(
-                name ?? "No Profile",
+                name ?? "mypage_no_profile".tr(),
                 style: const TextStyle(
                   fontFamily: HelloFonts.pretendard,
                   fontSize: 12,

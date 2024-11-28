@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
@@ -28,9 +29,9 @@ class MyPageTitle extends StatelessWidget {
               height: 24,
             ),
           ),
-          const Text(
-            "MyPage",
-            style: TextStyle(
+          Text(
+            context.tr("mypage_title"),
+            style: const TextStyle(
               fontFamily: HelloFonts.sbAggroOTF,
               color: HelloColors.subTextColor,
               fontSize: 16,

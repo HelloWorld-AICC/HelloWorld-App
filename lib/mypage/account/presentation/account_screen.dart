@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/widgets/signout_dialog.dart';
+import 'package:hello_world_mvp/mypage/app_version/application/app_version_bloc.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_menu.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/my_profile.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
@@ -58,34 +60,45 @@ class _Body extends StatelessWidget {
             child: Column(
           children: [
             MypageMenu(
-              title: "계정",
-              description: "로그아웃",
+              title: context.tr("mypage_account_account"),
+              description: context.tr("mypage_account_logout"),
               onTap: () {
                 showSignOutDailog(context);
               },
             ),
             MypageMenu(
-              description: "탈퇴하기",
+              description: context.tr("mypage_account_withdraw"),
               onTap: () {
                 context.push("/withdraw");
               },
             ),
-            // const SizedBox(height: 24),
-            // MypageMenu(
-            //   title: "HelloWorld 정보",
-            //   description: "앱 버전",
-            //   onTap: () {},
-            // ),
-            // const SizedBox(height: 24),
-            // MypageMenu(
-            //   description: "서비스 이용약관",
-            //   onTap: () {},
-            // ),
-            // const SizedBox(height: 24),
-            // MypageMenu(
-            //   description: "개인정보 처리방침",
-            //   onTap: () {},
-            // ),
+            BlocProvider<AppVersionBloc>(
+              create: (context) =>
+                  getIt<AppVersionBloc>()..add(GetAppVersion()),
+              child: Builder(builder: (context) {
+                return BlocBuilder<AppVersionBloc, AppVersionState>(
+                  builder: (context, state) {
+                    return MypageMenu(
+                        title:
+                            "${context.tr('mypage_account_helloWorld')} ${context.tr('mypage_account_infomation')}",
+                        description: context.tr("mypage_account_appversion"),
+                        value: state.appVersion);
+                  },
+                );
+              }),
+            ),
+            MypageMenu(
+              description: context.tr("mypage_account_terms"),
+              onTap: () {
+                context.push("/term");
+              },
+            ),
+            MypageMenu(
+              description: context.tr("mypage_account_privacy_policy"),
+              onTap: () {
+                context.push("/privacy-policy");
+              },
+            ),
             // const SizedBox(height: 24),
             // MypageMenu(
             //   description: "오픈소스 라이선스",
