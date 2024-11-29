@@ -44,9 +44,9 @@ class FetchService {
     Map<String, dynamic>? bodyParam,
     Map<String, dynamic>? pathParams,
     Map<String, dynamic>? queryParams,
-    File? file,
+    List<File>? files,
   }) async {
-    assert(method == HttpMethod.file || file == null);
+    assert(method == HttpMethod.file || files == null);
     //body
     final body = json.encode(bodyParam);
 
@@ -98,7 +98,7 @@ class FetchService {
         case HttpMethod.file:
           response = await client.upload(
             uri,
-            file,
+            files,
             headers: _baseHeaders,
             body: bodyParam,
           );

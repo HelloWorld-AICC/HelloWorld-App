@@ -20,7 +20,7 @@ final Map<String, ImageIcon> bottomNavItems = {
       ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
   'bottom_navigation.home':
       ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
-  'bottom_navigation.community':
+  'bottom_navigation.community/board':
       ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
   'bottom_navigation.consultation_center':
       ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),

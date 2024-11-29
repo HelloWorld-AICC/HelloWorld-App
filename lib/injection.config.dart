@@ -26,6 +26,15 @@ import 'auth/infrastructure/provider/interface/i_auth_local_provider.dart'
 import 'auth/infrastructure/repository/auth_repository.dart' as _i217;
 import 'auth/infrastructure/repository/token_repository.dart' as _i782;
 import 'bus/bus.dart' as _i461;
+import 'community/common/domain/repository/i_community_repository.dart'
+    as _i307;
+import 'community/common/infrastructure/provider/community_internal_provider.dart'
+    as _i480;
+import 'community/common/infrastructure/provider/interface/i_community_internal_provider.dart'
+    as _i188;
+import 'community/common/infrastructure/repository/community_repository.dart'
+    as _i996;
+import 'community/create_post/application/create_post_bloc.dart' as _i115;
 import 'fetch/authenticated_http_client.dart' as _i30;
 import 'fetch/fetch_service.dart' as _i1053;
 import 'home/application/home_bloc.dart' as _i785;
@@ -43,6 +52,7 @@ import 'mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider
 import 'mypage/menu/infrastructure/provider/mypage_internal_provider.dart'
     as _i487;
 import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i936;
+import 'mypage/withdraw/application/withdraw_bloc.dart' as _i501;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
@@ -109,20 +119,28 @@ extension GetItInjectableX on _i174.GetIt {
           authInternalProvider: gh<_i5.IAuthInternalProvider>(),
           authLocalProvider: gh<_i690.IAuthLocalProvider>(),
         ));
+    gh.lazySingleton<_i188.ICommunityInternalProvider>(
+        () => _i480.CommunityInternalProvider(gh<_i1053.FetchService>()));
     gh.lazySingleton<_i665.IMypageInternalProvider>(
         () => _i487.MypageInternalProvider(gh<_i1053.FetchService>()));
     gh.factory<_i659.ChatSessionBloc>(() =>
         _i659.ChatSessionBloc(chatRepository: gh<_i605.ChatRepository>()));
     gh.lazySingleton<_i392.IMypageRepository>(() => _i936.MypageRepository(
         mypageProvider: gh<_i665.IMypageInternalProvider>()));
+    gh.lazySingleton<_i307.ICommunityRepository>(() =>
+        _i996.CommunityRepository(gh<_i188.ICommunityInternalProvider>()));
     gh.factory<_i810.ChatDrawerBloc>(() => _i810.ChatDrawerBloc(
           gh<_i779.ChatRoomsInfoRepository>(),
           gh<_i659.ChatSessionBloc>(),
         ));
+    gh.factory<_i115.CreatePostBloc>(() => _i115.CreatePostBloc(
+        communityRepository: gh<_i307.ICommunityRepository>()));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i598.SignOutBloc>(
         () => _i598.SignOutBloc(authRepository: gh<_i667.IAuthRepository>()));
+    gh.factory<_i501.WithdrawBloc>(
+        () => _i501.WithdrawBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i835.EditProfileBloc>(() => _i835.EditProfileBloc(
           myPageRepository: gh<_i392.IMypageRepository>(),
           bus: gh<_i461.Bus>(),

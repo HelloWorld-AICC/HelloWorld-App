@@ -68,7 +68,6 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       final selectedRoute = '/${selectedKey.split('.').last}';
 
                       if (selectedRoute == "/consultation_center" ||
-                          selectedRoute == "/community" ||
                           selectedRoute == "/resume") {
                         showToast("미구현된 기능입니다.");
                         return;

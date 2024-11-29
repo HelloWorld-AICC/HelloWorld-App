@@ -145,7 +145,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
 
   Future<Response> upload(
     Uri url,
-    File? file, {
+    List<File>? files, {
     Map<String, String>? headers,
     Map<String, dynamic>? body,
     Encoding? encoding,
@@ -173,13 +173,15 @@ class AuthenticatedHttpClient extends http.BaseClient {
 
       request.fields.addAll(convertedMap);
 
-      if (file != null) {
-        var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
-        var length = await file.length();
+      if (files != null) {
+        for (var file in files) {
+          var stream = http.ByteStream(DelegatingStream.typed(file.openRead()));
+          var length = await file.length();
 
-        var multipartFile = http.MultipartFile('file', stream, length,
-            filename: basename(file.path));
-        request.files.add(multipartFile);
+          var multipartFile = http.MultipartFile('file', stream, length,
+              filename: basename(file.path));
+          request.files.add(multipartFile);
+        }
       }
 
       //contentType: new MediaType('image', 'png'));

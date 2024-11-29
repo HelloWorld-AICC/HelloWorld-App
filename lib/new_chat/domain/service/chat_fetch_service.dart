@@ -29,7 +29,7 @@ class ChatFetchService extends FetchService {
       Map<String, dynamic>? bodyParam,
       Map<String, dynamic>? pathParams,
       Map<String, dynamic>? queryParams,
-      File? file}) async {
+      List<File>? files}) async {
     var realPath = "$pathPrefix$path";
     pathParams?.forEach((key, value) {
       realPath = realPath.replaceFirst("{$key}", "$value");

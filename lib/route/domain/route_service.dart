@@ -1,5 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/community/board/presentation/community_board.dart';
+import 'package:hello_world_mvp/community/create_post/presentation/create_post_page.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
 import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
 import 'package:injectable/injectable.dart';
@@ -64,6 +66,14 @@ class RouteService {
       GoRoute(
         path: '/withdraw',
         builder: (context, state) => const WithdrawScreen(),
+      ),
+      GoRoute(
+        path: '/community/board',
+        builder: (context, state) => const CommunityBoard(),
+      ),
+      GoRoute(
+        path: '/community/create-post',
+        builder: (context, state) => const CreatePostPage(),
       )
     ],
   );
