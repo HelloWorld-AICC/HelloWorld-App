@@ -72,7 +72,7 @@ class MessageBubble extends StatelessWidget {
 
             final message = snapshot.data!;
 
-            if (!isUser && state.typingState == TypingIndicatorState.shown) {
+            if (!isUser && state.isLoading) {
               return _buildBubble(context,
                   child: TweenAnimationBuilder<Color?>(
                     tween: ColorTween(

@@ -12,17 +12,14 @@ import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_reposito
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
-import '../../domain/chat_enums.dart';
 import '../../domain/failure/chat_failure.dart';
-import '../../domain/service/stream/chat_session_handler.dart';
 
 part 'chat_session_event.dart';
 
 part 'chat_session_state.dart';
 
 @injectable
-class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState>
-    implements ChatSessionHandler {
+class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
   final ChatRepository chatRepository;
   final StreamedChatService streamedChatService;
 
@@ -30,79 +27,45 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState>
     required this.chatRepository,
     required this.streamedChatService,
   }) : super(ChatSessionState.initial()) {
-    on<ChangeRoomIdEvent>((event, emit) {
-      emit(state.copyWith(roomId: event.roomId));
-    });
-
-    on<SendMessageEvent>((event, emit) async {
-      final failureOrResponse = await streamedChatService.sendUserRequest(
-          event.message, state.roomId ?? 'new_chat');
-    });
-
     on<LoadChatSessionEvent>((event, emit) async {
-      emit(state.copyWith(isLoading: true));
-      emit(state.copyWith(roomId: event.roomId));
+      emit(state.copyWith(roomId: event.roomId, isLoading: true));
       final roomId = state.roomId;
 
-      if (roomId == 'new_chat' || roomId == null) {
-        print("ChatSessionBloc :: LoadChatSessionEvent : roomId is null");
+      if (roomId == null || roomId == 'new_chat') {
+        print("불러올 채팅방 기록이 없습니다.");
         emit(state.copyWith(isLoading: false));
         return;
       }
       final failureOrChatRoom =
           await chatRepository.getRoomById(StringVO(event.roomId));
-      print("ChatSessionBloc :: LoadChatSessionEvent : roomId=$roomId");
 
+      print("BLOC에서 스트림 챗 서비스의 메모리 주소는 ${streamedChatService.hashCode}");
+      print(
+          "BLOC에서 스트림 컨트롤러의 메모리 주소는 ${streamedChatService.parseService.messageStream.hashCode}");
       streamedChatService.addChatLogs(failureOrChatRoom);
     });
 
-    on<SetTypingEvent>((event, emit) {
-      emit(state.copyWith(
-          typingState: event.isTyping
-              ? TypingIndicatorState.shown
-              : TypingIndicatorState.hidden));
-    });
-
-    on<ClearChatSessionEvent>((event, emit) {
-      print("ChatSessionBloc :: ClearChatSessionEvent");
-      streamedChatService.clearChatLogs();
-      emit(state.copyWith(messages: []));
+    on<ChangeRoomIdEvent>((event, emit) {
+      emit(state.copyWith(roomId: event.roomId));
     });
 
     on<UpdateMessagesEvent>((event, emit) {
       emit(state.copyWith(
         messages: event.messages,
+        failure: event.failure,
+      ));
+    });
+
+    on<ChangeLoadingEvent>((event, emit) {
+      emit(state.copyWith(
         isLoading: event.isLoading,
         failure: event.failure,
       ));
     });
-  }
 
-  @override
-  void updateMessages({
-    required List<ChatMessage> messages,
-    bool isLoading = false,
-    ChatFailure? failure,
-  }) {
-    add(UpdateMessagesEvent(
-      messages: messages,
-      isLoading: isLoading,
-      failure: failure,
-    ));
-  }
-
-  @override
-  void updateRoomId({required String roomId}) {
-    add(ChangeRoomIdEvent(roomId: roomId));
-  }
-
-  @override
-  void setLoading({required bool isLoading, ChatFailure? failure}) {
-    add(ChangeLoadingEvent(isLoading: isLoading, failure: failure));
-  }
-
-  @override
-  List<ChatMessage> getMessages() {
-    return state.messages;
+    on<ClearChatSessionEvent>((event, emit) {
+      streamedChatService.clearChatLogs();
+      emit(state.copyWith(messages: []));
+    });
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:dartz/dartz.dart';
 import 'package:hello_world_mvp/new_chat/domain/service/stream/chat_session_handler.dart';
 import 'package:injectable/injectable.dart';
+import 'package:synchronized/synchronized.dart';
 
 import '../../../../core/value_objects.dart';
 import '../../../../fetch/network_failure.dart';
@@ -13,162 +14,134 @@ import '../../failure/chat_failure.dart';
 import '../../model/chat_message.dart';
 import '../../model/chat_room.dart';
 
-final List<ChatMessage> tempMessages = [];
+final _lock = Lock();
 
 @injectable
+@lazySingleton
 class StreamedChatParseService {
-  // final ChatSessionBloc chatSessionBloc;
-  // final ChatSessionHandler chatSessionHandler;
+  final List<ChatMessage> _messages = [];
+  late String _roomId;
+
   final StreamController<List<ChatMessage>> _messageStreamController =
       StreamController<List<ChatMessage>>.broadcast();
 
-  Stream<List<ChatMessage>> get messageStream =>
-      _messageStreamController.stream;
+  get messageStream => _messageStreamController.stream;
 
-  addMessage(ChatMessage message) {
-    print("Current messages: ${tempMessages.map((e) => e.sender)}");
-    final updatedMessages = tempMessages..add(message);
-    _messageStreamController.add(updatedMessages);
+  Future<void> addMessage(ChatMessage message) async {
+    await _lock.synchronized(() async {
+      final updatedMessages = List<ChatMessage>.from(_messages)..add(message);
+      _messageStreamController.add(updatedMessages);
+    });
+    print(
+        "ParseService에서 스트림 컨트롤러의 메모리 주소는 ${_messageStreamController.hashCode}");
   }
 
-  addBotMessage(
-      Either<NetworkFailure, Stream<String>> failureOrResponse) async {
-    final chatSessionBloc = getIt<ChatSessionBloc>();
-    ChatMessage? botMessage;
+  Future<void> addBotMessage(
+      Either<NetworkFailure, Stream<String>> failureOrResponse,
+      Function onDone) async {
+    await _lock.synchronized(() async {
+      ChatMessage? botMessage;
 
-    final streamed_response = failureOrResponse.fold(
-      (failure) {
-        chatSessionBloc.add(
-          ChangeLoadingEvent(
-            isLoading: false,
-            failure: null,
-          ),
-        );
-      },
-      (lineStream) {
-        final finalResponse = StringBuffer();
+      final streamed_response = failureOrResponse.fold(
+        (failure) {
+          print("서버에서 응답을 받지 못했습니다: $failure");
+        },
+        (lineStream) {
+          final finalResponse = StringBuffer();
 
-        final subscription = lineStream
-            // .transform(Utf8Decoder())
-            // .transform(LineSplitter())
-            .listen((line) {
-          print('Received line: $line'); // 라인 수신 로그
+          final subscription = lineStream.listen((line) {
+            print('Received line: $line');
 
-          if (line.startsWith('data:')) {
-            var temp = line.substring(5).trim();
-            print('Processed temp: $temp'); // temp 값 로그
+            if (line.startsWith('data:')) {
+              var temp = line.substring(5).trim();
+              print('Processed temp: $temp');
 
-            if (temp.isEmpty) {
-              temp = ' ';
-              print('Temp was empty, setting to space');
-            }
-
-            if (line.startsWith('data:Room ID: ')) {
-              print('Room ID found: $temp');
-              chatSessionBloc.add(
-                ChangeRoomIdEvent(roomId: temp),
-              );
-            } else {
-              if (temp == 'data:') {
-                print('Data is empty, appending newline');
-                finalResponse.write('\n');
-              } else {
-                print('Appending content: $temp');
-                finalResponse.write(temp);
+              if (temp.isEmpty) {
+                temp = ' ';
+                print('Temp was empty, setting to space');
               }
 
-              if (botMessage == null) {
-                print('Creating new bot message');
-                botMessage = ChatMessage(
-                  sender: Sender.bot,
-                  content: StringVO(finalResponse.toString()),
-                );
-
-                final updatedMessages = tempMessages..add(botMessage!);
-                print('Updated messages (new bot message): $updatedMessages');
-                _messageStreamController.add(updatedMessages);
+              if (line.startsWith('data:Room ID: ')) {
+                print('Room ID found: $temp');
+                _roomId = temp;
               } else {
-                print('Updating bot message content');
-                final updatedMessages = [
-                  ...tempMessages.sublist(0, -1),
-                  botMessage!.copyWith(
+                if (temp == 'data:') {
+                  print('Data is empty, appending newline');
+                  finalResponse.write('\n');
+                } else {
+                  print('Appending content: $temp');
+                  finalResponse.write(temp);
+                }
+
+                if (botMessage == null) {
+                  print('Creating new bot message');
+                  botMessage = ChatMessage(
+                    sender: Sender.bot,
                     content: StringVO(finalResponse.toString()),
-                  )
-                ];
-                print(
-                    'Updated messages (modified bot message): $updatedMessages');
-                _messageStreamController.add(updatedMessages);
+                  );
 
-                chatSessionBloc.add(
-                  UpdateMessagesEvent(
-                    messages: updatedMessages,
-                    isLoading: false,
-                    failure: null,
-                  ),
-                );
+                  final updatedMessages = List<ChatMessage>.from(_messages)
+                    ..add(botMessage!);
+                  print('Updated messages (new bot message): $updatedMessages');
+                  _messageStreamController.add(updatedMessages);
+                } else {
+                  print('Updating bot message content');
+                  final _updatedMessages = List<ChatMessage>.from(_messages);
+                  if (_updatedMessages.isNotEmpty) {
+                    _updatedMessages.removeLast();
+                  }
+                  _updatedMessages.add(
+                    ChatMessage(
+                      sender: Sender.bot,
+                      content: StringVO(finalResponse.toString()),
+                    ),
+                  );
+                  print(
+                      'Updated messages (modified bot message): $_updatedMessages');
+                  _messageStreamController.add(_updatedMessages);
+                }
               }
             }
-          }
-        }, onDone: () {
-          print('Stream processing done');
+          }, onDone: onDone());
+
+          subscription.cancel();
+        },
+      );
+    });
+  }
+
+  Future<void> addChatLogs(
+      Either<ChatFailure, ChatRoom> failureOrChatRoom) async {
+    await _lock.synchronized(() async {
+      final chatSessionBloc = getIt<ChatSessionBloc>();
+
+      failureOrChatRoom.fold(
+        (failure) {
+          chatSessionBloc
+              .add(ChangeLoadingEvent(isLoading: false, failure: failure));
+        },
+        (chatRoom) {
+          final updatedMessages = List<ChatMessage>.from(_messages)
+            ..addAll(chatRoom.messages);
+          _messageStreamController.add(updatedMessages);
+          print('Updated messages: ${updatedMessages.map((e) => e.content)}');
+
           chatSessionBloc.add(
-            ChangeLoadingEvent(
+            UpdateMessagesEvent(
+              messages: updatedMessages,
               isLoading: false,
               failure: null,
             ),
           );
-        });
-
-        subscription.cancel();
-      },
-    );
+        },
+      );
+    });
   }
 
-  addChatLogs(Either<ChatFailure, ChatRoom> failureOrChatRoom) {
-    final chatSessionBloc = getIt<ChatSessionBloc>();
-
-    failureOrChatRoom.fold(
-      (failure) {
-        chatSessionBloc
-            .add(ChangeLoadingEvent(isLoading: false, failure: failure));
-        // chatSessionHandler.setLoading(isLoading: false, failure: failure);
-      },
-      (chatRoom) {
-        // _messageStreamController.add(chatRoom.messages);
-        // final updatedMessages =
-        //     List<ChatMessage>.from(chatSessionBloc.state.messages)
-        //       ..addAll(chatRoom.messages);
-        // chatSessionBloc.add(UpdateMessagesEvent(
-        //     messages: updatedMessages, isLoading: false, failure: null));
-        // final updatedMessages = [
-        //   ...chatSessionHandler.getMessages(),
-        //   ...chatRoom.messages
-        // ];
-        final updatedMessages = List<ChatMessage>.from(tempMessages)
-          ..addAll(chatRoom.messages);
-        _messageStreamController.add(updatedMessages);
-        print('Updated messages: ${updatedMessages.map((e) => e.content)}');
-
-        chatSessionBloc.add(
-          UpdateMessagesEvent(
-            messages: updatedMessages,
-            isLoading: false,
-            failure: null,
-          ),
-        );
-
-        // chatSessionHandler.updateMessages(
-        //   messages: updatedMessages,
-        //   isLoading: false,
-        //   failure: null,
-        // );
-      },
-    );
-  }
-
-  clearChatLogs() {
-    _messageStreamController.add([]);
-    // chatSessionHandler.updateMessages(messages: []);
-    tempMessages.clear();
+  Future<void> clearChatLogs() async {
+    await _lock.synchronized(() async {
+      _messageStreamController.add([]);
+      _messages.clear();
+    });
   }
 }

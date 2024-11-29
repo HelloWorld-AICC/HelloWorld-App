@@ -13,6 +13,7 @@ import '../../../fetch/server_response.dart';
 import '../../presentation/widgets/new_chat_content.dart';
 
 @singleton
+@injectable
 class ChatFetchService extends FetchService {
   ChatFetchService({required AuthenticatedHttpClient client})
       : super(client: client);
@@ -129,7 +130,6 @@ class ChatFetchService extends FetchService {
       final streamedResponse = await client.send(request);
       client.printRequestDebug('POST', uri,
           headers: request.headers, body: request.body);
-      printInColor("header: ${request.headers}", color: blue);
 
       if (streamedResponse.statusCode == 200) {
         final stream = streamedResponse.stream.transform(utf8.decoder);
@@ -149,8 +149,6 @@ class ChatFetchService extends FetchService {
 
         return right(subject.stream);
       } else {
-        printInColor("Failed with status code ${streamedResponse.statusCode}",
-            color: red);
         return left(NetworkFailure.httpError(HttpException(
             'Failed with status code ${streamedResponse.statusCode}')));
       }

@@ -3,18 +3,17 @@ import 'dart:async';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/new_chat/domain/service/stream/chat_session_handler.dart';
-import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_parse_service.dart';
 
 import '../../../core/value_objects.dart';
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
-import '../../../home/presentation/widgets/home_page_content.dart';
 import '../../../injection.dart';
 import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
+import '../../domain/service/chat_fetch_service.dart';
+import '../../domain/service/stream/streamed_chat_parse_service.dart';
 import '../../domain/service/stream/streamed_chat_service.dart';
 import 'chat_guide_widget.dart';
 import 'chat_input_field.dart';
@@ -34,38 +33,18 @@ class NewChatContentState extends State<NewChatContent>
 
   bool isKeyboardVisible = false;
 
-  late final StreamedChatParseService parseService;
-  late final Stream<List<ChatMessage>> messageStream;
+  late StreamedChatService streamedChatService;
 
   @override
   void initState() {
     super.initState();
 
-    parseService = StreamedChatParseService();
-    messageStream = parseService.messageStream;
-
-    messageStream.listen(
-      (messages) async {
-        print(
-            'NewChatContent :: messageStream :: messages.length=${messages.length}');
-        final parseService = StreamedChatParseService();
-        for (final message in messages) {
-          parseService.addMessage(message);
-        }
-      },
-      onError: (error) {
-        print('Error: $error');
-      },
-      onDone: () {
-        print('Done');
-      },
-    );
+    streamedChatService = getIt<StreamedChatService>();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final chatSessionBloc = context.read<ChatSessionBloc>();
       if (chatSessionBloc.state.roomId == null &&
           chatSessionBloc.state.isLoading) {
-        print('NewChatContent :: initState : LoadChatSessionEvent');
         chatSessionBloc.add(LoadChatSessionEvent(roomId: 'new_chat'));
       }
     });
@@ -74,10 +53,13 @@ class NewChatContentState extends State<NewChatContent>
   @override
   Widget build(BuildContext context) {
     String? roomId = context.read<ChatSessionBloc>().state.roomId;
-    StreamedChatParseService parseService = StreamedChatParseService();
 
     return BlocBuilder<ChatSessionBloc, ChatSessionState>(
         builder: (context, state) {
+      print("ChatContent에서 스트림 챗 서비스의 메모리 주소는 ${streamedChatService.hashCode}");
+      print(
+          "ChatContent에서 스트림 컨트롤러의 메모리 주소는 ${streamedChatService.parseService.messageStream.hashCode}");
+
       return SafeArea(
         child: Scaffold(
           key: _scaffoldKey,
@@ -126,37 +108,27 @@ class NewChatContentState extends State<NewChatContent>
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                BlocListener<ChatSessionBloc, ChatSessionState>(
-                  listener: (context, state) {
-                    // if (state.roomId == null) {
-                    //   printInColor('Loading chat session', color: red);
-                    //   context.read<ChatSessionBloc>().add(
-                    //       LoadChatSessionEvent(roomId: state.roomId ?? 'new_chat'));
-                    // }
-                  },
-                  child: Expanded(
-                    child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
-                      builder: (context, state) {
-                        print(
-                            'NewChatContent :: ChatSessionBloc :: builder :: roomId=${state.roomId}');
-                        if (state.roomId == null) {
-                          return Padding(
-                            padding: const EdgeInsets.only(
-                              top: 10,
-                              left: 10,
-                              right: 100,
-                              bottom: 350,
-                            ),
-                            child: ChatGuideWidget(),
-                          );
-                        } else {
-                          return MessageListWidget(
-                            messageStream: messageStream,
-                            roomId: state.roomId,
-                          );
-                        }
-                      },
-                    ),
+                Expanded(
+                  child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
+                    builder: (context, state) {
+                      if (state.roomId == "new_chat") {
+                        return Padding(
+                          padding: const EdgeInsets.only(
+                            top: 10,
+                            left: 10,
+                            right: 100,
+                            bottom: 350,
+                          ),
+                          child: ChatGuideWidget(),
+                        );
+                      } else {
+                        return MessageListWidget(
+                          messageStream:
+                              streamedChatService.parseService.messageStream,
+                          roomId: state.roomId,
+                        );
+                      }
+                    },
                   ),
                 ),
                 // if (context.watch<ChatSessionBloc>().state.typingState ==
@@ -167,7 +139,7 @@ class NewChatContentState extends State<NewChatContent>
                 //     onButtonPressed: (selectedContent) {},
                 //   ),
                 // ),
-                _buildInputArea(roomId),
+                _buildInputArea(roomId ?? 'new_chat'),
               ],
             ),
           ),
@@ -193,18 +165,29 @@ class NewChatContentState extends State<NewChatContent>
     });
   }
 
-  Widget _buildInputArea(String? roomId) {
+  Widget _buildInputArea(String roomId) {
     return BlocListener<ChatSessionBloc, ChatSessionState>(
       listener: (context, state) {},
       child: ChatInputField(
         sendMessage: () {
-          parseService.addMessage(ChatMessage(
-              sender: Sender.user, content: StringVO(_controller.text)));
-          print("User message: ${_controller.text}");
+          ChatMessage userMessage = ChatMessage(
+              sender: Sender.user, content: StringVO(_controller.text));
+          streamedChatService.parseService.addMessage(userMessage);
+          streamedChatService.sendUserRequest(
+            userMessage,
+            roomId,
+            onDone: () {
+              context
+                  .read<ChatSessionBloc>()
+                  .add(ChangeRoomIdEvent(roomId: roomId));
+            },
+          );
 
-          context.read<ChatSessionBloc>().add(SendMessageEvent(
-              message: ChatMessage(
-                  sender: Sender.user, content: StringVO(_controller.text))));
+          context.read<ChatSessionBloc>().add(UpdateMessagesEvent(messages: [
+                ...context.read<ChatSessionBloc>().state.messages,
+                userMessage
+              ], isLoading: false, failure: null));
+
           _controller.clear();
           setState(() {
             isKeyboardVisible = false;
@@ -223,12 +206,3 @@ class NewChatContentState extends State<NewChatContent>
     );
   }
 }
-
-void printInColor(String message, {String color = '\x1B[37m'}) {
-  print('$color$message\x1B[0m'); // 메시지를 색상 코드와 함께 출력
-}
-
-const String red = '\x1B[31m';
-const String green = '\x1B[32m';
-const String yellow = '\x1B[33m';
-const String blue = '\x1B[34m';

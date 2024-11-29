@@ -22,6 +22,9 @@ import 'auth/presentation/login_screen.dart';
 import 'home/presentation/home_page.dart';
 import 'init/presentation/splash_page.dart';
 import 'new_chat/application/session/chat_session_bloc.dart';
+import 'new_chat/domain/service/stream/streamed_chat_service.dart';
+import 'new_chat/domain/service/stream/streamed_chat_parse_service.dart';
+import 'new_chat/domain/service/chat_fetch_service.dart';
 
 void main() async {
   runZonedGuarded(() async {
@@ -34,6 +37,20 @@ void main() async {
     prefs.setString('lastVersion', '0.1.0');
 
     configureDependencies();
+
+    // getIt.registerLazySingleton<StreamedChatService>(() => StreamedChatService(
+    //       fetchService: getIt<ChatFetchService>(),
+    //       parseService: getIt<StreamedChatParseService>(),
+    //     ));
+
+    print("등록되었는지 확인: ${getIt.isRegistered<StreamedChatService>()}");
+    print("main에서 스트림 챗 서비스의 메모리 주소는 ${getIt<StreamedChatService>().hashCode}");
+    print(
+        "main에서 스트림 컨트롤러의 메모리 주소는 ${getIt<StreamedChatService>().parseService.messageStream.hashCode}");
+    print(
+        "초기에 체크한 CHatSessionBloc에서 스트림 챗 서비스의 메모리 주소는 ${getIt<StreamedChatService>().hashCode}");
+    print(
+        "초기에 체크한 ChatSessionBloc에서 스트림 컨트롤러의 메모리 주소는 ${getIt<StreamedChatService>().parseService.messageStream.hashCode}");
 
     runApp(
       EasyLocalization(
@@ -102,6 +119,15 @@ class _MainAppState extends State<MainApp> {
 
   @override
   Widget build(BuildContext context) {
+    print("등록되었는지 확인: ${getIt.isRegistered<StreamedChatService>()}");
+    print("main에서 스트림 챗 서비스의 메모리 주소는 ${getIt<StreamedChatService>().hashCode}");
+    print(
+        "main에서 스트림 컨트롤러의 메모리 주소는 ${getIt<StreamedChatService>().parseService.messageStream.hashCode}");
+    print(
+        "초기에 체크한 CHatSessionBloc에서 스트림 챗 서비스의 메모리 주소는 ${getIt<StreamedChatService>().hashCode}");
+    print(
+        "초기에 체크한 ChatSessionBloc에서 스트림 컨트롤러의 메모리 주소는 ${getIt<StreamedChatService>().parseService.messageStream.hashCode}");
+
     return BlocBuilder<LocaleBloc, LocaleState>(
       buildWhen: (previous, current) {
         return previous.locale != current.locale;

@@ -48,7 +48,6 @@ import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i936;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
 import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
-import 'new_chat/domain/service/stream/chat_session_handler.dart' as _i928;
 import 'new_chat/domain/service/stream/streamed_chat_parse_service.dart'
     as _i58;
 import 'new_chat/domain/service/stream/streamed_chat_service.dart' as _i1016;
@@ -57,7 +56,6 @@ import 'new_chat/infrastructure/providers/chat_rooms_info_provider.dart'
 import 'new_chat/infrastructure/repository/chat_repository.dart' as _i605;
 import 'new_chat/infrastructure/repository/chat_rooms_info_repository.dart'
     as _i779;
-import 'register_module.dart' as _i291;
 import 'route/application/route_bloc.dart' as _i1045;
 import 'route/domain/route_service.dart' as _i807;
 import 'toast/toast_bloc.dart' as _i301;
@@ -74,20 +72,17 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final homeRegisterModule = _$HomeRegisterModule();
-    final registerModule = _$RegisterModule();
     gh.factory<_i775.AppInitBloc>(() => _i775.AppInitBloc());
     gh.factory<_i487.LocaleBloc>(() => _i487.LocaleBloc());
     gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
     gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
+    gh.factory<_i58.StreamedChatParseService>(
+        () => _i58.StreamedChatParseService());
     gh.factory<_i925.ChatRoomsInfoProvider>(
         () => _i925.ChatRoomsInfoProvider());
     gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
-    gh.factory<_i58.StreamedChatParseService>(
-        () => _i58.StreamedChatParseService());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
     gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
-    gh.lazySingleton<_i928.ChatSessionHandler>(
-        () => registerModule.chatSessionHandler);
     gh.lazySingleton<_i807.RouteService>(() => _i807.RouteService());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
@@ -154,5 +149,3 @@ extension GetItInjectableX on _i174.GetIt {
 }
 
 class _$HomeRegisterModule extends _i443.HomeRegisterModule {}
-
-class _$RegisterModule extends _i291.RegisterModule {}

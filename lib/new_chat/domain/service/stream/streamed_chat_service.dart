@@ -24,7 +24,8 @@ class StreamedChatService {
   });
 
   Future<Either<NetworkFailure, Stream<String>>> sendUserRequest(
-      ChatMessage message, String roomId) async {
+      ChatMessage message, String roomId,
+      {required Function onDone}) async {
     final failureOrResponse = await fetchService.streamedRequest(
       method: HttpMethod.post,
       pathPrefix: '/webflux',
@@ -32,39 +33,37 @@ class StreamedChatService {
       bodyParam: {'content': message.content.getOrCrash().toString()},
       queryParams: {'roomId': roomId},
     );
-    print("StreamedChatService :: sendUserRequest : roomId=$roomId");
+    parseService.addBotMessage(failureOrResponse, onDone);
 
-    failureOrResponse.fold(
-      (failure) {
-        print("Request failed with failure: $failure");
-      },
-      (stream) {
-        stream.listen(
-          (data) {
-            print("Streamed data: $data");
-          },
-          onError: (error) {
-            print("Stream error: $error");
-          },
-          onDone: () {
-            parseService.addBotMessage(failureOrResponse);
-          },
-        );
-      },
-    );
+    // failureOrResponse.fold(
+    //   (failure) {
+    //     print("Request failed with failure: $failure");
+    //   },
+    //   (stream) {
+    //     stream.listen(
+    //       (data) {
+    //         print("Streamed data: $data");
+    //       },
+    //       onError: (error) {
+    //         print("Stream error: $error");
+    //       },
+    //       onDone: () {
+    //         parseService.addBotMessage(failureOrResponse);
+    //       },
+    //     );
+    //   },
+    // );
     return failureOrResponse;
   }
 
   addChatLogs(Either<ChatFailure, ChatRoom> failureOrChatRoom) {
     failureOrChatRoom.fold(
       (failure) {
-        print("Failed to get chat room: $failure");
+        print("채팅방 기록을 불러오는데 실패했습니다: $failure");
       },
       (chatRoom) {
         final messages = chatRoom.messages;
         for (final message in messages) {
-          print(
-              "StreamedChatService :: addChatLogs : message=${message.sender}");
           parseService.addMessage(message);
         }
       },
