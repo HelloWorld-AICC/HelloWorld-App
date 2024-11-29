@@ -32,7 +32,6 @@ class ChatRepository implements IChatRepository {
 
   @override
   Future<Either<ChatFailure, ChatRoom>> getRoomById(StringVO roomId) async {
-    print("ChatRepository :: getRoomById : roomId=${roomId.getOrCrash()}");
     final failureOrResponse = await _fetchService.request(
         method: HttpMethod.get,
         pathPrefix: '/webflux',

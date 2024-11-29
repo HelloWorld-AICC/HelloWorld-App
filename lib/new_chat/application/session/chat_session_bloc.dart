@@ -38,11 +38,25 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
       }
       final failureOrChatRoom =
           await chatRepository.getRoomById(StringVO(event.roomId));
-
-      print("BLOC에서 스트림 챗 서비스의 메모리 주소는 ${streamedChatService.hashCode}");
-      print(
-          "BLOC에서 스트림 컨트롤러의 메모리 주소는 ${streamedChatService.parseService.messageStream.hashCode}");
-      streamedChatService.addChatLogs(failureOrChatRoom);
+      List<ChatMessage> updatedMessages = failureOrChatRoom.fold(
+        (failure) {
+          emit(state.copyWith(
+            isLoading: false,
+            failure: failure,
+          ));
+          return [];
+        },
+        (chatRoom) {
+          return chatRoom.messages;
+        },
+      );
+      emit(state.copyWith(
+        isLoading: false,
+        messages: updatedMessages,
+      ));
+      // print(formatMessage(
+      //     "채팅방 기록을 불러왔습니다: ${updatedMessages.map((e) => e.toString())}", 150));
+      // streamedChatService.addChatLogs(failureOrChatRoom);
     });
 
     on<ChangeRoomIdEvent>((event, emit) {
@@ -68,4 +82,9 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
       emit(state.copyWith(messages: []));
     });
   }
+}
+
+String formatMessage(String text, int lineLength) {
+  final regExp = RegExp('.{1,$lineLength}'); // 1에서 lineLength 길이로 문자열을 나눔
+  return regExp.allMatches(text).map((match) => match.group(0)!).join('\n');
 }

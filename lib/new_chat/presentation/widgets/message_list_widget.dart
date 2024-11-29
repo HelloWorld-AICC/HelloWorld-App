@@ -135,3 +135,28 @@ class MessageBubble extends StatelessWidget {
     );
   }
 }
+
+class NoStreamMessageListWidget extends StatelessWidget {
+  final List<ChatMessage> messages;
+  final String? roomId;
+
+  const NoStreamMessageListWidget({
+    Key? key,
+    required this.messages,
+    required this.roomId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: messages.length,
+      itemBuilder: (context, index) {
+        return MessageBubble(
+          messageStream:
+              Stream.value(StringBuffer(messages[index].content.getOrCrash())),
+          isUser: messages[index].sender == Sender.user,
+        );
+      },
+    );
+  }
+}

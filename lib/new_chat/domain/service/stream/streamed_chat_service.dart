@@ -33,7 +33,7 @@ class StreamedChatService {
       bodyParam: {'content': message.content.getOrCrash().toString()},
       queryParams: {'roomId': roomId},
     );
-    parseService.addBotMessage(failureOrResponse, onDone);
+    // parseService.addBotMessage(failureOrResponse, onDone);
 
     // failureOrResponse.fold(
     //   (failure) {
@@ -56,7 +56,8 @@ class StreamedChatService {
     return failureOrResponse;
   }
 
-  addChatLogs(Either<ChatFailure, ChatRoom> failureOrChatRoom) {
+  addChatLogs(Either<ChatFailure, ChatRoom> failureOrChatRoom,
+      StreamController<ChatMessage> streamController) {
     failureOrChatRoom.fold(
       (failure) {
         print("채팅방 기록을 불러오는데 실패했습니다: $failure");

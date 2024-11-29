@@ -58,13 +58,13 @@ class ChatRoomsInfoRepository implements IChatRoomsInfoRepository {
               final Map<String, dynamic> titleMap = jsonDecode(titleJsonString);
               final content = titleMap['content'];
               parsedContent = content;
-              print('Parsed Content: $content');
+              // print('Parsed Content: $content');
             } catch (error) {
               print('Error parsing title JSON: $error');
             }
           }
 
-          print('Parsed are $parsedRoomId, $parsedContent');
+          // print('Parsed are $parsedRoomId, $parsedContent');
           return RoomInfoDto(
             roomId: parsedRoomId,
             title: parsedContent,

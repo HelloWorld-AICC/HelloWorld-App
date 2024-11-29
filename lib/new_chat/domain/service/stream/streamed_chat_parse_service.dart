@@ -32,8 +32,13 @@ class StreamedChatParseService {
       final updatedMessages = List<ChatMessage>.from(_messages)..add(message);
       _messageStreamController.add(updatedMessages);
     });
-    print(
-        "ParseService에서 스트림 컨트롤러의 메모리 주소는 ${_messageStreamController.hashCode}");
+  }
+
+  Future<void> addMessageToStream(ChatMessage message,
+      StreamController<ChatMessage> streamController) async {
+    await _lock.synchronized(() async {
+      streamController.add(message);
+    });
   }
 
   Future<void> addBotMessage(
