@@ -52,7 +52,6 @@ class FetchService {
     const String authority = "www.gotoend.store";
 
     final uri = Uri.https(authority, realPath, queryParams);
-
     Response response;
 
     try {

@@ -1,58 +1,16 @@
-import 'package:hello_world_mvp/center/domain/model/center.dart';
-
 import '../../../core/value_objects.dart';
+import '../../domain/model/center.dart';
 
 class CenterMapResDto {
-  String name;
-  CenterStatus centerStatus;
-  String closed;
-  String address;
-  String image;
-  double latitude;
-  double longitude;
+  final Center center;
 
-  CenterMapResDto(
-      {required this.name,
-      required this.centerStatus,
-      required this.closed,
-      required this.address,
-      required this.image,
-      required this.latitude,
-      required this.longitude});
+  CenterMapResDto({
+    required this.center,
+  });
 
   factory CenterMapResDto.fromJson(Map<String, dynamic> json) {
     return CenterMapResDto(
-      name: json['name'],
-      centerStatus: CenterStatus.values[json['centerStatus']],
-      closed: json['closed'],
-      address: json['address'],
-      image: json['image'],
-      latitude: json['latitude'],
-      longitude: json['longitude'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'centerStatus': centerStatus.index,
-      'closed': closed,
-      'address': address,
-      'image': image,
-      'latitude': latitude,
-      'longitude': longitude,
-    };
-  }
-
-  Center toDomain() {
-    return Center(
-      name: StringVO(name),
-      status: centerStatus,
-      closed: StringVO(closed),
-      address: StringVO(address),
-      image: StringVO(image),
-      latitude: DoubleVO(latitude),
-      longitude: DoubleVO(longitude),
+      center: Center.fromJson(json as Map<String, dynamic>),
     );
   }
 }

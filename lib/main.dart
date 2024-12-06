@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/auth/application/status/auth_status_bloc.dart';
+import 'package:hello_world_mvp/center/application/center_bloc.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
@@ -68,6 +69,12 @@ void main() async {
             BlocProvider(
               create: (context) => getIt<AuthStatusBloc>(),
             ),
+            BlocProvider(
+              create: (context) => getIt<LoginBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<CenterBloc>(),
+            )
           ],
           child: MainApp(),
         ),

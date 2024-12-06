@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:hello_world_mvp/center/domain/failure/center_failure.dart';
+import 'package:hello_world_mvp/center/infrastructure/dtos/center_map_res_dto.dart';
 import 'package:hello_world_mvp/center/infrastructure/dtos/center_map_res_list_dto.dart';
 import 'package:hello_world_mvp/fetch/fetch_service.dart';
 import 'package:injectable/injectable.dart';
@@ -22,34 +23,28 @@ class CenterRepository implements ICenterRepository {
     final failureOrResponse = await _fetchService.request(
       method: HttpMethod.get,
       pathPrefix: "",
-      path: '/center',
+      path: '/center/',
       queryParams: {
-        'latitude': latitude.getOrCrash(),
-        'longitude': longitude.getOrCrash(),
-        'page': page.getOrCrash(),
-        'size': size.getOrCrash(),
+        'latitude': latitude.getOrCrash().toString(),
+        'longitude': longitude.getOrCrash().toString(),
+        'page': page.getOrCrash().toString(),
+        'size': size.getOrCrash().toString(),
       },
     );
 
     return failureOrResponse.fold(
       (failure) {
+        print("[CenterRepository] getCenters: $failure");
         return Left(CenterFetchFailure(message: "센터 정보를 불러오는데 실패했습니다."));
       },
       (response) {
         try {
           List<Center> centers = [];
 
-          print("result: ${response.result}");
-          print(
-              "[CenterRepository] getCenters: ${response.result['centerMapList']}");
-
-          CenterMapResListDto.fromJson(response.result['centerMapList']
-                  as List<Map<String, dynamic>>)
-              .toDomain()
-              .forEach((center) {
-            centers.add(center.toDomain());
-          });
-          print("[CenterRepository] getCenters: $centers");
+          final centerListDto = CenterMapResListDto.fromJson(response.result);
+          for (var centerMap in centerListDto.centerMapList) {
+            centers.add(centerMap.center);
+          }
 
           return Right(centers);
         } catch (error) {

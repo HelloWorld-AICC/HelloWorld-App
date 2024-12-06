@@ -222,23 +222,27 @@ class NewChatContentState extends State<NewChatContent>
 
   Widget _buildInputArea(String roomId) {
     return BlocListener<ChatSessionBloc, ChatSessionState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        print("ChatSessionBloc state: ${state.toString()}");
+      },
       child: ChatInputField(
         sendMessage: () async {
+          if (_controller.text.isEmpty || _controller.text == " ") return;
+
+          final messageToSend = _controller.text;
           context.read<ChatSessionBloc>().add(UpdateMessagesEvent(messages: [
                 ...context.read<ChatSessionBloc>().state.messages,
                 ChatMessage(
-                    sender: Sender.user, content: StringVO(_controller.text))
+                    sender: Sender.user, content: StringVO(messageToSend))
               ], isLoading: true, failure: null));
 
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _scrollController.animateTo(
-              _scrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 300),
-              curve: Curves.easeOut,
-            );
-          });
-          _controller.clear();
+          // WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   _scrollController.animateTo(
+          //     _scrollController.position.maxScrollExtent,
+          //     duration: Duration(milliseconds: 300),
+          //     curve: Curves.easeOut,
+          //   );
+          // });
 
           const String authority = "www.gotoend.store";
           final queryParams = {'roomId': roomId};
@@ -247,10 +251,9 @@ class NewChatContentState extends State<NewChatContent>
           final request = http.Request("POST", uri);
 
           request.headers['accept'] = 'text/event-stream';
-          final bodyParams = {'content': _controller.text};
-          if (bodyParams != null) {
-            request.body = json.encode(bodyParams);
-          }
+          print("보내기 직전에 messagetoSend 값: $messageToSend");
+          final bodyParams = {'content': messageToSend};
+          request.body = json.encode(bodyParams);
 
           final streamedResponse =
               await getIt<AuthenticatedHttpClient>().send(request);
@@ -350,28 +353,10 @@ class NewChatContentState extends State<NewChatContent>
               }
             }
           }, onDone: () {
-            // print("onDone");
+            _controller.clear();
+            print("사용자 메시지와 봇 메시지 전송이 완료되었고, 스트림이 종료되었습니다.");
           });
 
-          ChatMessage userMessage = ChatMessage(
-              sender: Sender.user, content: StringVO(_controller.text));
-          streamedChatService.parseService.addMessage(userMessage);
-          streamedChatService.sendUserRequest(
-            userMessage,
-            roomId,
-            onDone: () {
-              context
-                  .read<ChatSessionBloc>()
-                  .add(ChangeRoomIdEvent(roomId: roomId));
-            },
-          );
-
-          context.read<ChatSessionBloc>().add(UpdateMessagesEvent(messages: [
-                ...context.read<ChatSessionBloc>().state.messages,
-                userMessage
-              ], isLoading: false, failure: null));
-
-          _controller.clear();
           setState(() {
             isKeyboardVisible = false;
           });
@@ -389,8 +374,3 @@ class NewChatContentState extends State<NewChatContent>
     );
   }
 }
-
-// String formatMessage(String text, int lineLength) {
-//   final regExp = RegExp('.{1,$lineLength}'); // 1에서 lineLength 길이로 문자열을 나눔
-//   return regExp.allMatches(text).map((match) => match.group(0)!).join('\n');
-// }
