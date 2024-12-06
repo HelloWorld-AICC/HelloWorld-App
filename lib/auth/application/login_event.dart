@@ -11,3 +11,17 @@ final class SignInWithGoogle extends LoginEvent {
   @override
   List<Object> get props => [];
 }
+
+final class SignOut extends LoginEvent {
+  SignOut();
+
+  @override
+  List<Object> get props => [];
+}
+
+final class RefreshAccessToken extends LoginEvent {
+  RefreshAccessToken();
+
+  @override
+  List<Object> get props => [];
+}

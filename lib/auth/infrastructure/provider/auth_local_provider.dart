@@ -53,6 +53,7 @@ class AuthLocalProvier implements IAuthLocalProvider {
     });
   }
 
+  @override
   Future<Either<LocalStorageFailure, bool>> checkIfTokenExpired() async {
     final currentTime = DateTime.now().toUtc();
     final tokensOrFailure = await service.read("userTokens");

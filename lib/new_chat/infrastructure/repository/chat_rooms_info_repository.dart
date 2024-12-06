@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dartz/dartz.dart';
 import 'package:injectable/injectable.dart';
 
@@ -29,9 +31,44 @@ class ChatRoomsInfoRepository implements IChatRoomsInfoRepository {
       (f) => left(
           ChatRoomsInfoFetchFailure(message: "Failed to fetch rooms info")),
       (response) {
-        final chatRoomsInfo = (response.result["result"] as List).map((e) {
-          final roomInfoDto = RoomInfoDto.fromJson(e as Map<String, dynamic>);
-          return roomInfoDto;
+        final chatRoomsInfo = (response.result['result'] as List).map((e) {
+          final Map<String, dynamic> eMap = e as Map<String, dynamic>;
+
+          final parsedRoomId = eMap['roomId'] as String;
+          var parsedContent = eMap['title'] as String;
+
+          if (eMap.containsKey('title') && eMap['title'] is String) {
+            var titleJsonString = eMap['title'] as String;
+
+            final jsonFixPattern =
+                RegExp(r'(?<=[{,])(\w+):'); // 속성 이름 앞에 따옴표 추가
+            titleJsonString =
+                titleJsonString.replaceAllMapped(jsonFixPattern, (match) {
+              return '"${match[1]}":';
+            });
+
+            if (!titleJsonString.endsWith('"')) {
+              titleJsonString += '"';
+            }
+            if (!titleJsonString.endsWith('}')) {
+              titleJsonString += '}';
+            }
+
+            try {
+              final Map<String, dynamic> titleMap = jsonDecode(titleJsonString);
+              final content = titleMap['content'];
+              parsedContent = content;
+              // print('Parsed Content: $content');
+            } catch (error) {
+              print('Error parsing title JSON: $error');
+            }
+          }
+
+          // print('Parsed are $parsedRoomId, $parsedContent');
+          return RoomInfoDto(
+            roomId: parsedRoomId,
+            title: parsedContent,
+          );
         }).toList();
 
         final eitherResult =

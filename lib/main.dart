@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/auth/application/status/auth_status_bloc.dart';
+import 'package:hello_world_mvp/center/application/center_bloc.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
@@ -13,7 +15,14 @@ import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'auth/application/login_bloc.dart';
+import 'auth/presentation/login_screen.dart';
+import 'home/presentation/home_page.dart';
+import 'init/presentation/splash_page.dart';
 import 'new_chat/application/session/chat_session_bloc.dart';
+import 'new_chat/domain/service/stream/streamed_chat_service.dart';
+import 'new_chat/domain/service/stream/streamed_chat_parse_service.dart';
+import 'new_chat/domain/service/chat_fetch_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,9 +45,9 @@ void main() async {
   };
 
   await SentryFlutter.init(
-    (options) {
+        (options) {
       options.dsn =
-          'https://e59673dcfb84f5fcff7d288377b07ca9@o4508302669512704.ingest.us.sentry.io/4508302674231296';
+      'https://e59673dcfb84f5fcff7d288377b07ca9@o4508302669512704.ingest.us.sentry.io/4508302674231296';
       // // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
       // // We recommend adjusting this value in production.
       // options.tracesSampleRate = 1.0;
@@ -46,38 +55,48 @@ void main() async {
       // // Setting to 1.0 will profile 100% of sampled transactions:
       // options.profilesSampleRate = 1.0;
     },
-    appRunner: () => runApp(
-      EasyLocalization(
-        supportedLocales: const [
-          Locale('en', 'US'),
-          Locale('ko', 'KR'),
-          Locale('ja', 'JP'),
-          Locale('zh', 'CN'),
-          Locale('vi', 'VN'),
-        ],
-        path: 'assets/translations',
-        child: MultiBlocProvider(
-          providers: [
-            BlocProvider(
-              create: (context) => getIt<ToastBloc>(),
+    appRunner: () =>
+        runApp(
+          EasyLocalization(
+            supportedLocales: const [
+              Locale('en', 'US'),
+              Locale('ko', 'KR'),
+              Locale('ja', 'JP'),
+              Locale('zh', 'CN'),
+              Locale('vi', 'VN'),
+            ],
+            path: 'assets/translations',
+            child: MultiBlocProvider(
+              providers: [
+                BlocProvider(
+                  create: (context) => getIt<ToastBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<LocaleBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AppInitBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<RouteBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<ChatSessionBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<AuthStatusBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<LoginBloc>(),
+                ),
+                BlocProvider(
+                  create: (context) => getIt<CenterBloc>(),
+                )
+              ],
+              child: MainApp(),
             ),
-            BlocProvider(
-              create: (context) => getIt<LocaleBloc>(),
-            ),
-            BlocProvider(
-              create: (context) => getIt<AppInitBloc>(),
-            ),
-            BlocProvider(
-              create: (context) => getIt<RouteBloc>(),
-            ),
-            BlocProvider(
-              create: (context) => getIt<ChatSessionBloc>(),
-            ),
-          ],
-          child: MainApp(),
+          ),
         ),
-      ),
-    ),
   );
 }
 
@@ -120,8 +139,14 @@ class _MainAppState extends State<MainApp> {
                 commonToastKey.currentState?.updateMessage(state.message);
               },
             ),
-            BlocListener<AppInitBloc, AppInitState>(
-              listener: (context, state) => _handleNavigation(context, state),
+            BlocListener<AuthStatusBloc, AuthStatusState>(
+              listener: (context, state) {
+                if (state.isSignedIn != null) {
+                  print(
+                      'main :: build :: AuthStatusBloc state updated: isSignedIn=${state
+                          .isSignedIn}, isFirstRun=${state.isFirstRun}');
+                }
+              },
             ),
           ],
           child: MaterialApp.router(
@@ -140,16 +165,6 @@ class _MainAppState extends State<MainApp> {
       },
     );
   }
-
-  void _handleNavigation(BuildContext context, AppInitState state) {
-    final _router = GoRouter.of(context);
-
-    if (state.isFirstRun) {
-      _router.go('/login');
-    } else {
-      _router.go('/home');
-    }
-  }
 }
 
 class ToastWrapper extends StatelessWidget {
@@ -164,7 +179,11 @@ class ToastWrapper extends StatelessWidget {
       child: Stack(
         children: [
           SafeArea(child: widget ?? const SizedBox()),
-          Positioned(top: 0, bottom: 0, left: 0, right: 0, child: commonToast),
+          Positioned(top: 0,
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: commonToast),
         ],
       ),
     );

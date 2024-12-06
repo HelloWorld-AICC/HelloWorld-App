@@ -47,5 +47,4 @@ class LocalStorageService {
     }
 
     return right(unit);
-  }
 }

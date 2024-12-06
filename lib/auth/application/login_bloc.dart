@@ -6,6 +6,7 @@ import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
 import 'package:injectable/injectable.dart';
 
 part 'login_event.dart';
+
 part 'login_state.dart';
 
 @injectable
@@ -16,6 +17,28 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<SignInWithGoogle>((event, emit) async {
       emit(LoginState.initial().copyWith(isLoading: true));
       final tokenOrFailure = await authRepository.getAuthCodeFromGoogle();
+
+      emit(tokenOrFailure.fold((f) {
+        return state.copyWith(succeeded: false, failure: f, isLoading: false);
+      }, (success) {
+        return state.copyWith(succeeded: true, isLoading: false);
+      }));
+    });
+
+    on<SignOut>((event, emit) async {
+      emit(LoginState.initial().copyWith(isLoading: true));
+      final tokenOrFailure = await authRepository.signOut();
+
+      emit(tokenOrFailure.fold((f) {
+        return state.copyWith(succeeded: false, failure: f, isLoading: false);
+      }, (success) {
+        return state.copyWith(succeeded: true, isLoading: false);
+      }));
+    });
+
+    on<RefreshAccessToken>((event, emit) async {
+      emit(LoginState.initial().copyWith(isLoading: true));
+      final tokenOrFailure = await authRepository.refreshAccessTokenIfNeeded();
 
       emit(tokenOrFailure.fold((f) {
         return state.copyWith(succeeded: false, failure: f, isLoading: false);
