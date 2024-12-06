@@ -138,7 +138,7 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
             style: const TextStyle(
               fontFamily: 'SB AggroOTF',
               color: HelloColors.subTextColor,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),

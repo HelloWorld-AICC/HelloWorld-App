@@ -71,10 +71,16 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
       streamedChatService.clearChatLogs();
       emit(state.copyWith(messages: []));
     });
-  }
-}
 
-String formatMessage(String text, int lineLength) {
-  final regExp = RegExp('.{1,$lineLength}'); // 1에서 lineLength 길이로 문자열을 나눔
-  return regExp.allMatches(text).map((match) => match.group(0)!).join('\n');
+    on<UpdateMessagesEvent>((event, emit) {
+      emit(state.copyWith(
+        messages: event.messages,
+        failure: event.failure,
+      ));
+    });
+
+    on<ChangeRoomIdEvent>((event, emit) {
+      emit(state.copyWith(roomId: event.roomId));
+    });
+  }
 }
