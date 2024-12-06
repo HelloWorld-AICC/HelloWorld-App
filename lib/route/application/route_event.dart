@@ -15,6 +15,27 @@ final class RouteChanged extends RouteEvent {
   List<Object?> get props => [newIndex, newRoute];
 }
 
+final class RouteEventHome extends RouteEvent {
+  RouteEventHome();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class RouteEventLogin extends RouteEvent {
+  RouteEventLogin();
+
+  @override
+  List<Object?> get props => [];
+}
+
+final class RouteEventSplash extends RouteEvent {
+  RouteEventSplash();
+
+  @override
+  List<Object?> get props => [];
+}
+
 // final class ChatSelected extends RouteEvent {
 //   final String? roomId;
 //

@@ -59,6 +59,7 @@ class ChatInputField extends StatelessWidget {
                     ),
                     onSubmitted: (value) {
                       sendMessage();
+                      controller.clear();
                     },
                     onTap: () {
                       tapped();

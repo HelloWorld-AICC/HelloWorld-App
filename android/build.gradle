@@ -1,4 +1,4 @@
-    buildscript {
+buildscript {
     ext.kotlin_version = "1.9.23"  // 최신 Kotlin 버전으로 변경
     repositories {
         google()
@@ -7,6 +7,7 @@
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.4.2'
+        classpath "com.google.android.libraries.mapsplatform.secrets-gradle-plugin:secrets-gradle-plugin:2.0.1"
     }
 }
 
@@ -28,4 +29,3 @@ subprojects {
 tasks.register("clean", Delete) {
     delete rootProject.buildDir
 }
-

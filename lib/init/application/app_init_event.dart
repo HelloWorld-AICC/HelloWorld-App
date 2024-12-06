@@ -6,3 +6,5 @@ sealed class AppInitEvent extends Equatable {
 }
 
 final class CheckAppFirstRun extends AppInitEvent {}
+
+final class MarkSplashDone extends AppInitEvent {}

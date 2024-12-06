@@ -19,4 +19,9 @@ class ChatMessage {
       content: content ?? this.content,
     );
   }
+
+  @override
+  String toString() {
+    return 'ChatMessage(sender: $sender, content: $content)';
+  }
 }

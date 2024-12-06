@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:dartz/dartz.dart';
@@ -7,9 +8,11 @@ import 'package:hello_world_mvp/new_chat/domain/service/chat_fetch_service.dart'
 import 'package:hello_world_mvp/new_chat/infrastructure/dtos/chat_log_dto.dart';
 import 'package:hello_world_mvp/new_chat/presentation/widgets/new_chat_content.dart';
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../../core/value_objects.dart';
 import '../../../fetch/fetch_service.dart';
+import '../../domain/chat_enums.dart';
 import '../../domain/failure/chat_failure.dart';
 import '../../domain/model/chat_message.dart';
 import '../../domain/model/chat_room.dart';
@@ -20,6 +23,8 @@ import '../dtos/room_dto.dart';
 @LazySingleton(as: IChatRepository)
 class ChatRepository implements IChatRepository {
   final ChatFetchService _fetchService;
+  final StreamController<List<ChatMessage>> _messageStreamController =
+      StreamController.broadcast();
 
   AuthenticatedHttpClient get client => _fetchService.client;
 
@@ -32,18 +37,21 @@ class ChatRepository implements IChatRepository {
         pathPrefix: '/webflux',
         path: '/chat/room-log',
         queryParams: {'roomId': roomId.getOrCrash()});
+    print("ChatRepository :: getRoomById : roomId=${roomId.getOrCrash()}");
     return failureOrResponse.fold(
         (failure) => left(
               ChatRoomFetchFailure(
                   message: "Failed to fetch rooms with $roomId"),
             ), (response) {
-      final parsedRoomId = response.result['roomId'] as String;
+      final parsedRoomId = response.result['result']['roomId'] as String;
       if (parsedRoomId != roomId.getOrCrash()) {
         return left(ChatRoomIdMismatchFailure(message: "Room ID mismatch"));
       }
-      List<RoomDto> chatLogs = response.result['chatLogs'] as List<RoomDto>;
-      List<ChatMessage> chatMessages =
-          (chatLogs.map((log) => log.toDomain() as ChatMessage)).toList();
+      final chatLogsJson =
+          response.result['result']['chatLogs'] as List<dynamic>;
+      List<ChatMessage> chatMessages = (chatLogsJson.map((log) =>
+              ChatLogDto.fromJson(log as Map<String, dynamic>).toDomain()))
+          .toList();
 
       return right(
         ChatRoom(
@@ -70,41 +78,5 @@ class ChatRepository implements IChatRepository {
           .toList();
       return right(chatRooms);
     });
-  }
-
-  Future<Either<ChatFailure, Stream<String>>> sendMessage(
-    StringVO roomId,
-    StringVO message,
-  ) async {
-    final failureOrResponse = await _fetchService.streamedRequest(
-      method: HttpMethod.post,
-      pathPrefix: '/webflux',
-      path: '/chat/ask',
-      bodyParam: {'content': message.getOrCrash()},
-      queryParams: {'roomId': roomId.getOrCrash()},
-    );
-
-    client.printRequestDebug(
-      'POST',
-      Uri(
-        path: '/webflux/chat/ask',
-        queryParameters: {'roomId': roomId.getOrCrash()},
-      ),
-      headers: {"Content-Type": "application/json; charset=utf-8"},
-      body: {'content': message.getOrCrash(), 'roomId': roomId.getOrCrash()},
-    );
-
-    return failureOrResponse.fold(
-      (failure) => left(ChatSendFailure(message: "Failed to send message")),
-      (streamedResponse) {
-        final lineStream = streamedResponse.stream
-            .transform(utf8.decoder)
-            .transform(LineSplitter());
-        printInColor("linestream in chat_repository: ${lineStream.runtimeType}",
-            color: red);
-
-        return right(lineStream);
-      },
-    );
   }
 }

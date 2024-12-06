@@ -4,14 +4,12 @@ class ChatSessionState extends Equatable {
   final String? roomId;
   final List<ChatMessage> messages;
   final bool isLoading;
-  final TypingIndicatorState typingState;
   final ChatFailure? failure;
 
   const ChatSessionState({
     required this.roomId,
     required this.messages,
     required this.isLoading,
-    required this.typingState,
     this.failure,
   });
 
@@ -19,7 +17,6 @@ class ChatSessionState extends Equatable {
         roomId: null,
         messages: [],
         isLoading: true,
-        typingState: TypingIndicatorState.hidden,
         failure: null,
       );
 
@@ -27,19 +24,16 @@ class ChatSessionState extends Equatable {
     List<ChatMessage>? messages,
     bool? isLoading,
     String? roomId,
-    TypingIndicatorState? typingState,
     ChatFailure? failure,
   }) {
     return ChatSessionState(
       roomId: roomId ?? this.roomId,
       messages: messages ?? this.messages,
       isLoading: isLoading ?? this.isLoading,
-      typingState: typingState ?? this.typingState,
       failure: failure ?? this.failure,
     );
   }
 
   @override
-  List<Object?> get props =>
-      [roomId, messages, isLoading, typingState, failure];
+  List<Object?> get props => [roomId, messages, isLoading, failure];
 }

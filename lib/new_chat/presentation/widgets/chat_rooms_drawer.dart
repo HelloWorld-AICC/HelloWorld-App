@@ -1,12 +1,21 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/new_chat/domain/model/chat_message.dart';
 
+import '../../../core/value_objects.dart';
 import '../../../design_system/hello_colors.dart';
+import '../../../injection.dart';
 import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
+import '../../infrastructure/repository/chat_repository.dart';
 
 class ChatRoomsDrawer extends StatefulWidget {
-  const ChatRoomsDrawer({Key? key}) : super(key: key);
+  final StreamController<ChatMessage> streamController;
+
+  const ChatRoomsDrawer({Key? key, required this.streamController})
+      : super(key: key);
 
   @override
   State<ChatRoomsDrawer> createState() => _ChatRoomsDrawerState();
@@ -53,9 +62,49 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
                     ),
                     selected: state.selectedRoomId == room.roomId,
                     selectedTileColor: Colors.blue.shade100,
-                    onTap: () {
+                    onTap: () async {
                       context.read<ChatDrawerBloc>().add(
                           SelectRoomEvent(roomId: room.roomId.getOrCrash()));
+
+                      context.read<ChatSessionBloc>().add(UpdateMessagesEvent(
+                          messages: [], isLoading: false, failure: null));
+
+                      final chatRepository = getIt<ChatRepository>();
+                      final failureOrChatRoom = await chatRepository
+                          .getRoomById(StringVO(room.roomId.getOrCrash()));
+                      List<ChatMessage> updatedMessages =
+                          failureOrChatRoom.fold(
+                        (failure) {
+                          return [];
+                        },
+                        (chatRoom) {
+                          List<ChatMessage> fetchedMessages = chatRoom.messages;
+                          fetchedMessages = fetchedMessages.map((message) {
+                            final content =
+                                cleanContent(message.content.getOrCrash());
+                            return message.copyWith(content: StringVO(content));
+                          }).toList();
+                          return fetchedMessages;
+                        },
+                      );
+                      final stateMessages =
+                          context.read<ChatSessionBloc>().state.messages;
+                      updatedMessages.addAll(stateMessages);
+
+                      updatedMessages.forEach((message) {
+                        widget.streamController.add(message);
+                      });
+
+                      context.read<ChatSessionBloc>().add(
+                            UpdateMessagesEvent(
+                              messages: updatedMessages,
+                              failure: failureOrChatRoom.fold(
+                                (failure) => failure,
+                                (chatRoom) => null,
+                              ),
+                              isLoading: false,
+                            ),
+                          );
                     },
                   ),
               ],
@@ -64,6 +113,16 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
         );
       },
     );
+  }
+
+  String cleanContent(String content) {
+    final regex = RegExp(r'^\{"content":"(.*)"\}$');
+
+    final match = regex.firstMatch(content);
+    if (match != null) {
+      return match.group(1)!;
+    }
+    return content;
   }
 
   Widget _buildDrawerHeader(BuildContext context) {
@@ -79,7 +138,7 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
             style: const TextStyle(
               fontFamily: 'SB AggroOTF',
               color: HelloColors.subTextColor,
-              fontSize: 24,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -89,11 +148,16 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
               color: HelloColors.subTextColor,
             ),
             onPressed: () {
-              context.read<ChatSessionBloc>().add(ClearMessagesEvent());
+              context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
             },
           ),
         ],
       ),
     );
   }
+}
+
+String formatMessage(String text, int lineLength) {
+  final regExp = RegExp('.{1,$lineLength}'); // 1에서 lineLength 길이로 문자열을 나눔
+  return regExp.allMatches(text).map((match) => match.group(0)!).join('\n');
 }

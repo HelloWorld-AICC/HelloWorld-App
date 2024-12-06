@@ -10,7 +10,4 @@ abstract class IChatRepository {
   Future<Either<ChatFailure, ChatRoom>> getRoomById(StringVO roomId);
 
   Future<Either<ChatFailure, List<ChatRoomInfo>>> fetchRoomsInfo();
-
-  Future<Either<ChatFailure, Stream<String>>> sendMessage(
-      StringVO roomId, StringVO message);
 }
