@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 
@@ -10,34 +11,39 @@ class Post extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const _Title(),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const _Date(),
-                const SizedBox(width: 12),
-                SvgPicture.asset("assets/images/community/comment.svg"),
-                const SizedBox(width: 2),
-                const _CommentCount()
-              ],
-            )
-          ],
-        ),
-        Container(
-          width: 21,
-          height: 21,
-          decoration: BoxDecoration(
-              color: Colors.red, borderRadius: BorderRadius.circular(4.0)),
-        )
-      ],
-    ));
+    return InkWell(
+      onTap: () {
+        context.push('/community/post-detail');
+      },
+      child: Container(
+          child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const _Title(),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  const _Date(),
+                  const SizedBox(width: 12),
+                  SvgPicture.asset("assets/images/community/comment.svg"),
+                  const SizedBox(width: 2),
+                  const _CommentCount()
+                ],
+              )
+            ],
+          ),
+          Container(
+            width: 21,
+            height: 21,
+            decoration: BoxDecoration(
+                color: Colors.red, borderRadius: BorderRadius.circular(4.0)),
+          )
+        ],
+      )),
+    );
   }
 }
 

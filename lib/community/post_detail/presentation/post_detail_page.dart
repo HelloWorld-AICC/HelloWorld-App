@@ -10,8 +10,8 @@ import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
 
-class CreatePostPage extends StatelessWidget {
-  const CreatePostPage({super.key});
+class PostDetailPage extends StatelessWidget {
+  const PostDetailPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +20,10 @@ class CreatePostPage extends StatelessWidget {
       child: Builder(builder: (context) {
         return Scaffold(
             appBar: HelloAppbar(
-              title: "글 작성하기",
+              title: "Community",
               action: CommunityActionButton(
-                  text: "완료",
-                  buttonColor: HelloColors.subTextColor,
+                  text: "글 신고",
+                  buttonColor: Color(0xFFFF8181),
                   onTap: () {
                     context.read<CreatePostBloc>().add(SubmitPost());
                   }),
