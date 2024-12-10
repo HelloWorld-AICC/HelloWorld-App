@@ -4,6 +4,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/common/presentation/common_appbar.dart';
 import 'package:hello_world_mvp/common/presentation/hello_appbar.dart';
+import 'package:hello_world_mvp/community/board/presentation/widgets/board_tab.dart';
+import 'package:hello_world_mvp/community/board/presentation/widgets/post.dart';
 import 'package:hello_world_mvp/community/common/presentation/community_action_button.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
@@ -93,58 +95,7 @@ class _Body extends StatelessWidget {
               shrinkWrap: true,
               itemCount: 5,
               itemBuilder: (context, index) {
-                return Container(
-                    child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text("1경기 전력 어떻게 봐 ?",
-                            style: TextStyle(
-                              fontFamily: HelloFonts.inter,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w900,
-                              height: 12 / 12,
-                              letterSpacing: 0.12,
-                            )),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Text("2024.03.08",
-                                style: TextStyle(
-                                  fontFamily: HelloFonts.inter,
-                                  fontSize: 8,
-                                  fontWeight: FontWeight.w400,
-                                  height: 10 / 8,
-                                  letterSpacing: 0.08,
-                                )),
-                            const SizedBox(width: 12),
-                            SvgPicture.asset(
-                                "assets/images/community/comment.svg"),
-                            const SizedBox(width: 2),
-                            const Text("39",
-                                style: TextStyle(
-                                  color: HelloColors.gray,
-                                  fontFamily: HelloFonts.inter,
-                                  fontSize: 6,
-                                  fontWeight: FontWeight.w400,
-                                  height: 4 / 6,
-                                  letterSpacing: 0.06,
-                                ))
-                          ],
-                        )
-                      ],
-                    ),
-                    Container(
-                      width: 21,
-                      height: 21,
-                      decoration: BoxDecoration(
-                          color: Colors.red,
-                          borderRadius: BorderRadius.circular(4.0)),
-                    )
-                  ],
-                ));
+                return const Post();
               },
               separatorBuilder: (context, index) {
                 return Container(
@@ -157,37 +108,6 @@ class _Body extends StatelessWidget {
           ],
         )),
       ],
-    );
-  }
-}
-
-class BoardTab extends StatelessWidget {
-  final String title;
-  final Function onTap;
-  final bool isSelected;
-  const BoardTab({
-    super.key,
-    required this.title,
-    required this.onTap,
-    required this.isSelected,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 6.0),
-      child: InkWell(
-        onTap: () => onTap(),
-        child: Text(title,
-            style: TextStyle(
-              color: isSelected
-                  ? HelloColors.subTextColor
-                  : const Color(0xFFB2B2B2),
-              fontFamily: HelloFonts.sbAggroOTF,
-              fontSize: 12,
-              height: 16 / 12,
-            )),
-      ),
     );
   }
 }
