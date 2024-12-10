@@ -7,6 +7,7 @@ import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
 import 'package:hello_world_mvp/community/common/domain/post.dart';
 import 'package:hello_world_mvp/community/common/domain/repository/i_community_repository.dart';
 import 'package:hello_world_mvp/fetch/failure.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:injectable/injectable.dart';
@@ -37,6 +38,16 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     });
 
     on<SubmitPost>((event, emit) async {
+      if (state.title == null || state.title!.isEmpty) {
+        showToast("제목을 입력해주세요.");
+        return;
+      }
+
+      if (state.body == null || state.body!.isEmpty) {
+        showToast("내용을 입력해주세요.");
+        return;
+      }
+
       emit(state.copyWith(isLoading: true));
       final failureOrSuccess = await communityRepository.createPost(
         categoryId: 0,
