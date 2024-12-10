@@ -44,14 +44,23 @@ import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
 import 'locale/domain/localization_service.dart' as _i121;
 import 'mypage/account/application/signout_bloc.dart' as _i598;
+import 'mypage/app_version/application/app_version_bloc.dart' as _i684;
+import 'mypage/common/domain/repository/i_app_version_repository.dart' as _i129;
+import 'mypage/common/domain/repository/i_mypage_repository.dart' as _i558;
+import 'mypage/common/infrastructure/provider/app_version_local_provider.dart'
+    as _i309;
+import 'mypage/common/infrastructure/provider/interface/i_app_version_local_provider.dart'
+    as _i842;
+import 'mypage/common/infrastructure/provider/interface/i_mypage_internal_provider.dart'
+    as _i897;
+import 'mypage/common/infrastructure/provider/mypage_internal_provider.dart'
+    as _i280;
+import 'mypage/common/infrastructure/repository/app_version_repository.dart'
+    as _i436;
+import 'mypage/common/infrastructure/repository/mypage_repository.dart'
+    as _i681;
 import 'mypage/edit_profile/application/edit_profile_bloc.dart' as _i835;
 import 'mypage/menu/application/mypage/mypage_bloc.dart' as _i876;
-import 'mypage/menu/domain/repository/i_mypage_repository.dart' as _i392;
-import 'mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider.dart'
-    as _i665;
-import 'mypage/menu/infrastructure/provider/mypage_internal_provider.dart'
-    as _i487;
-import 'mypage/menu/infrastructure/repository/mypage_repository.dart' as _i936;
 import 'mypage/withdraw/application/withdraw_bloc.dart' as _i501;
 import 'new_chat/application/drawer/chat_drawer_bloc.dart' as _i810;
 import 'new_chat/application/session/chat_session_bloc.dart' as _i659;
@@ -90,10 +99,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
+    gh.lazySingleton<_i842.IAppVersionLocalProvider>(
+        () => _i309.AppVersionLocalProvider());
+    gh.lazySingleton<_i129.IAppVersionRepository>(() =>
+        _i436.AppVersionRepository(
+            appVersionProvider: gh<_i842.IAppVersionLocalProvider>()));
     gh.lazySingleton<_i690.IAuthLocalProvider>(
         () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
+    gh.factory<_i684.AppVersionBloc>(() => _i684.AppVersionBloc(
+        appVersionRepository: gh<_i129.IAppVersionRepository>()));
     gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
         _i30.AuthenticatedHttpClient(
             tokenRepository: gh<_i658.ITokenRepository>()));
@@ -121,12 +137,12 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.lazySingleton<_i188.ICommunityInternalProvider>(
         () => _i480.CommunityInternalProvider(gh<_i1053.FetchService>()));
-    gh.lazySingleton<_i665.IMypageInternalProvider>(
-        () => _i487.MypageInternalProvider(gh<_i1053.FetchService>()));
+    gh.lazySingleton<_i897.IMypageInternalProvider>(
+        () => _i280.MypageInternalProvider(gh<_i1053.FetchService>()));
+    gh.lazySingleton<_i558.IMypageRepository>(() => _i681.MypageRepository(
+        mypageProvider: gh<_i897.IMypageInternalProvider>()));
     gh.factory<_i659.ChatSessionBloc>(() =>
         _i659.ChatSessionBloc(chatRepository: gh<_i605.ChatRepository>()));
-    gh.lazySingleton<_i392.IMypageRepository>(() => _i936.MypageRepository(
-        mypageProvider: gh<_i665.IMypageInternalProvider>()));
     gh.lazySingleton<_i307.ICommunityRepository>(() =>
         _i996.CommunityRepository(gh<_i188.ICommunityInternalProvider>()));
     gh.factory<_i810.ChatDrawerBloc>(() => _i810.ChatDrawerBloc(
@@ -135,20 +151,20 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i115.CreatePostBloc>(() => _i115.CreatePostBloc(
         communityRepository: gh<_i307.ICommunityRepository>()));
+    gh.factory<_i835.EditProfileBloc>(() => _i835.EditProfileBloc(
+          myPageRepository: gh<_i558.IMypageRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
+    gh.factory<_i876.MypageBloc>(() => _i876.MypageBloc(
+          myPageRepository: gh<_i558.IMypageRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i598.SignOutBloc>(
         () => _i598.SignOutBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i501.WithdrawBloc>(
         () => _i501.WithdrawBloc(authRepository: gh<_i667.IAuthRepository>()));
-    gh.factory<_i835.EditProfileBloc>(() => _i835.EditProfileBloc(
-          myPageRepository: gh<_i392.IMypageRepository>(),
-          bus: gh<_i461.Bus>(),
-        ));
-    gh.factory<_i876.MypageBloc>(() => _i876.MypageBloc(
-          myPageRepository: gh<_i392.IMypageRepository>(),
-          bus: gh<_i461.Bus>(),
-        ));
     return this;
   }
 }

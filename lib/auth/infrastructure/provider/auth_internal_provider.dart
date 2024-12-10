@@ -36,7 +36,7 @@ class AuthInternalProvider implements IAuthInternalProvider {
   @override
   Future<Either<Failure, Unit>> withdraw() async {
     final failureOrTokens = await _fetchService.request(
-      pathPrefix: "/api/v1",
+      pathPrefix: "",
       path: "/myPage/delete",
       method: HttpMethod.delete,
     );

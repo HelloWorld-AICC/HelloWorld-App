@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
@@ -79,8 +80,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text("프로필 변경",
-                            style: TextStyle(
+                        Text(context.tr("mypage_edit_profile"),
+                            style: const TextStyle(
                               fontFamily: HelloFonts.pretendard,
                               fontSize: 12,
                               color: HelloColors.mainColor1,
@@ -90,9 +91,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "닉네임 변경",
-                              style: TextStyle(
+                            Text(
+                              context.tr("mypage_change_nickname"),
+                              style: const TextStyle(
                                 fontFamily: HelloFonts.pretendard,
                                 color: HelloColors.subTextColor,
                                 fontSize: 12,
@@ -127,43 +128,43 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ],
                         ),
                         const SizedBox(height: 20),
-                        // Container(height: 1, color: const Color(0xFFE6E6E6)),
-                        // const SizedBox(height: 20),
-                        // const Text(
-                        //   "언어 변경",
-                        //   style: TextStyle(
-                        //     fontFamily: HelloFonts.pretendard,
-                        //     color: HelloColors.subTextColor,
-                        //     fontSize: 12,
-                        //     fontWeight: FontWeight.w500,
-                        //   ),
-                        // ),
-                        // const SizedBox(height: 14),
-                        // Container(
-                        //   height: 200,
-                        //   child: GridView.count(
-                        //     primary: false,
-                        //     padding: EdgeInsets.zero,
-                        //     crossAxisCount: 4,
-                        //     children: const <Widget>[
-                        //       LanguageFlag(
-                        //         lanagaue: Language.korean,
-                        //       ),
-                        //       LanguageFlag(
-                        //         lanagaue: Language.chinese,
-                        //       ),
-                        //       LanguageFlag(
-                        //         lanagaue: Language.vietnamese,
-                        //       ),
-                        //       LanguageFlag(
-                        //         lanagaue: Language.japanese,
-                        //       ),
-                        //       LanguageFlag(
-                        //         lanagaue: Language.english,
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
+                        Container(height: 1, color: const Color(0xFFE6E6E6)),
+                        const SizedBox(height: 20),
+                        Text(
+                          context.tr("mypage_change_language"),
+                          style: const TextStyle(
+                            fontFamily: HelloFonts.pretendard,
+                            color: HelloColors.subTextColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(height: 14),
+                        SizedBox(
+                          height: 200,
+                          child: GridView.count(
+                            primary: false,
+                            padding: EdgeInsets.zero,
+                            crossAxisCount: 4,
+                            children: const <Widget>[
+                              LanguageFlag(
+                                lanagaue: Language.korean,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.chinese,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.vietnamese,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.japanese,
+                              ),
+                              LanguageFlag(
+                                lanagaue: Language.english,
+                              ),
+                            ],
+                          ),
+                        ),
                       ],
                     ))
                   ],

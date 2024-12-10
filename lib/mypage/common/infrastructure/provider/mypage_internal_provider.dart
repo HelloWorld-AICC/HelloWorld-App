@@ -2,8 +2,8 @@
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
-import 'package:hello_world_mvp/mypage/menu/infrastructure/dtos/my_info_dto.dart';
-import 'package:hello_world_mvp/mypage/menu/infrastructure/provider/interface/i_mypage_internal_provider.dart';
+import 'package:hello_world_mvp/mypage/common/infrastructure/dtos/my_info_dto.dart';
+import 'package:hello_world_mvp/mypage/common/infrastructure/provider/interface/i_mypage_internal_provider.dart';
 import 'package:injectable/injectable.dart';
 
 import 'package:hello_world_mvp/fetch/failure.dart';

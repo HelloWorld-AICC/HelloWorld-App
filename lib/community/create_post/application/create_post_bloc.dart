@@ -7,9 +7,6 @@ import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
 import 'package:hello_world_mvp/community/common/domain/post.dart';
 import 'package:hello_world_mvp/community/common/domain/repository/i_community_repository.dart';
 import 'package:hello_world_mvp/fetch/failure.dart';
-import 'package:hello_world_mvp/mypage/menu/domain/failure/mypage_failure.dart';
-import 'package:hello_world_mvp/mypage/menu/domain/model/my_info.dart';
-import 'package:hello_world_mvp/mypage/menu/domain/repository/i_mypage_repository.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:injectable/injectable.dart';

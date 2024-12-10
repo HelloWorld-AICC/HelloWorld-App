@@ -1,7 +1,7 @@
 name: hello_world_mvp
 description: "A new Flutter project."
 publish_to: "none"
-version: 0.1.1
+version: 0.1.2
 
 environment:
   sdk: ">=3.4.4 <4.0.0"
@@ -60,6 +60,7 @@ flutter:
     - assets/icons/
     - assets/icons/grey/
     - assets/icons/blue/
+    - assets/images/common/flags/
 
   fonts:
     - family: SB AggroOTF

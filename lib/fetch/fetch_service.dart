@@ -54,7 +54,7 @@ class FetchService {
     var realPath = "/mvc$pathPrefix$path";
     pathParams?.forEach((key, value) {
       realPath = realPath.replaceFirst("{$key}", "$value");
-    });
+    }); 
 
     // debugPrint("CORE :: CORE_API :: request -> $realPath // $queryParams");
     //request

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,8 +49,8 @@ Future<void> showSignOutDailog(BuildContext context) async {
                               width: 50.5,
                               height: 50.5),
                           const SizedBox(height: 27),
-                          const Text("로그아웃을 하시겠습니까?",
-                              style: TextStyle(
+                          Text(context.tr("mypage_signout_dialog"),
+                              style: const TextStyle(
                                 color: HelloColors.mainBlue,
                                 fontFamily: HelloFonts.sbAggroOTF,
                                 fontSize: 12,
@@ -70,10 +71,10 @@ Future<void> showSignOutDailog(BuildContext context) async {
                                       color: const Color(0xFFEBEBEB),
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    child: const Center(
+                                    child: Center(
                                       child: Text(
-                                        "취소",
-                                        style: TextStyle(
+                                        context.tr("cancel_button"),
+                                        style: const TextStyle(
                                           color: HelloColors.gray,
                                           fontFamily: HelloFonts.sbAggroOTF,
                                           fontSize: 12,
@@ -96,9 +97,9 @@ Future<void> showSignOutDailog(BuildContext context) async {
                                       color: HelloColors.mainBlue,
                                       borderRadius: BorderRadius.circular(4.0),
                                     ),
-                                    child: const Center(
-                                      child: Text("확인",
-                                          style: TextStyle(
+                                    child: Center(
+                                      child: Text(context.tr("confirm_button"),
+                                          style: const TextStyle(
                                             color: HelloColors.subTextColor,
                                             fontFamily: HelloFonts.sbAggroOTF,
                                             fontSize: 12,
