@@ -12,6 +12,7 @@ import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 
 class CreatePostPage extends StatelessWidget {
   const CreatePostPage({super.key});
@@ -21,14 +22,26 @@ class CreatePostPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<CreatePostBloc>(),
       child: Builder(builder: (context) {
-        return BlocListener<CreatePostBloc, CreatePostState>(
-          listenWhen: (prev, next) {
-            return (prev.isSuccess != next.isSuccess) &&
-                (next.isSuccess == true);
-          },
-          listener: (context, state) {
-            context.pop();
-          },
+        return MultiBlocListener(
+          listeners: [
+            BlocListener<CreatePostBloc, CreatePostState>(
+              listenWhen: (prev, next) {
+                return (prev.isSuccess != next.isSuccess) &&
+                    (next.isSuccess == true);
+              },
+              listener: (context, state) {
+                context.pop();
+              },
+            ),
+            BlocListener<CreatePostBloc, CreatePostState>(
+              listenWhen: (prev, next) {
+                return (next.failure != null);
+              },
+              listener: (context, state) {
+                showToast(state.failure.toString());
+              },
+            ),
+          ],
           child: Scaffold(
               appBar: HelloAppbar(
                 title: "글 작성하기",
