@@ -129,14 +129,18 @@ class _Body extends StatelessWidget {
                     child: Container(
                       width: 60,
                       height: 60,
-                      decoration: const BoxDecoration(
-                        color: Colors.blue,
-                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.2),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(4.0)),
                       ),
                     ),
                   );
                 } else {
                   return InkWell(
+                    onTap: () {
+                      context.read<CreatePostBloc>().add(SelectMedia());
+                    },
                     child: SizedBox(
                       height: 60,
                       child: ListView.separated(

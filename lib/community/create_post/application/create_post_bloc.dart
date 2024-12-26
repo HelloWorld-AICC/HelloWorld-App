@@ -2,8 +2,6 @@ import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
-import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
 import 'package:hello_world_mvp/community/common/domain/creat_post.dart';
 import 'package:hello_world_mvp/community/common/domain/repository/i_community_repository.dart';
 import 'package:hello_world_mvp/fetch/failure.dart';
