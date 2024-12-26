@@ -37,6 +37,7 @@ dependencies:
   country_icons: ^3.0.0
   image_picker: ^1.1.2
   sentry_flutter: ^8.10.1
+  custom_refresh_indicator: ^4.0.1
 
 dev_dependencies:
   flutter_test:

@@ -4,7 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
 import 'package:hello_world_mvp/auth/domain/repository/i_auth_repository.dart';
-import 'package:hello_world_mvp/community/common/domain/post.dart';
+import 'package:hello_world_mvp/community/common/domain/creat_post.dart';
 import 'package:hello_world_mvp/community/common/domain/repository/i_community_repository.dart';
 import 'package:hello_world_mvp/fetch/failure.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
@@ -34,7 +34,7 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
       // Pick an image.
       final List<XFile> medias = await picker.pickMultipleMedia();
 
-      emit(state.copyWith(media: medias));
+      emit(state.copyWith(medias: medias));
     });
 
     on<SubmitPost>((event, emit) async {
@@ -51,15 +51,17 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
       emit(state.copyWith(isLoading: true));
       final failureOrSuccess = await communityRepository.createPost(
         categoryId: 0,
-        post: Post(
+        post: CreatePost(
           title: state.title!,
           body: state.body!,
-          medias: state.media.map((e) => File(e.path)).toList(),
+          medias: state.medias.map((e) => File(e.path)).toList(),
         ),
       );
-      emit(failureOrSuccess.fold(
-          (f) => state.copyWith(isLoading: false, failure: f),
-          (r) => state.copyWith(isLoading: false, isSuccess: true)));
+      emit(failureOrSuccess.fold((f) {
+        return state.copyWith(isLoading: false, failure: f);
+      }, (r) {
+        return state.copyWith(isLoading: false, isSuccess: true);
+      }));
     });
   }
 }

@@ -1,43 +1,51 @@
-import 'dart:io';
-
 import 'package:hello_world_mvp/community/common/domain/post.dart';
+import 'package:hello_world_mvp/core/value_objects.dart';
 
 class PostDto {
   final String title;
-  final String body;
-  final List<File> medias;
+  final String cratedAt;
+  final int commentNum;
+  final String? imageUrl;
 
-  PostDto({
-    required this.title,
-    required this.body,
-    required this.medias,
-  });
+  PostDto(
+      {required this.title,
+      required this.cratedAt,
+      required this.commentNum,
+      this.imageUrl});
 
-  Post toDomain() {
-    return Post(title: title, body: body, medias: medias);
+  static PostDto fromDomain(Post domain) {
+    return PostDto(
+      title: domain.title.getOrCrash(),
+      cratedAt: domain.createdAt.getOrCrash().toString(),
+      commentNum: domain.commentNum.getOrCrash(),
+      imageUrl: domain.imageUrl?.getOrCrash(),
+    );
   }
 
-  factory PostDto.fromDomain(Post post) {
-    return PostDto(
-      title: post.title,
-      body: post.body,
-      medias: post.medias,
+  Post toDomain() {
+    return Post(
+      title: StringVO(title),
+      createdAt: DateVO(DateTime.parse(cratedAt)),
+      commentNum: IntVO(commentNum),
+      imageUrl: imageUrl != null ? StringVO(imageUrl) : null,
     );
   }
 
   factory PostDto.fromJson(Map<String, dynamic> json) {
     return PostDto(
       title: json['title'],
-      body: json['body'],
-      medias: json['medias'],
+      cratedAt: json['crated_at'],
+      commentNum: json['commentNum'],
+      imageUrl: json['imageUrl'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
       'title': title,
-      'body': body,
-      'medias': medias,
+      'crated_at': cratedAt,
+      'commentNum': commentNum,
+      'imageUrl': imageUrl,
     };
   }
 }

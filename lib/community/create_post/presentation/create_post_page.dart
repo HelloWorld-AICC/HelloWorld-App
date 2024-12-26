@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/common/presentation/hello_appbar.dart';
 import 'package:hello_world_mvp/community/common/presentation/community_action_button.dart';
 import 'package:hello_world_mvp/community/common/presentation/section_title.dart';
@@ -18,28 +21,37 @@ class CreatePostPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<CreatePostBloc>(),
       child: Builder(builder: (context) {
-        return Scaffold(
-            appBar: HelloAppbar(
-              title: "글 작성하기",
-              action: CommunityActionButton(
-                  text: "완료",
-                  buttonColor: HelloColors.subTextColor,
-                  onTap: () {
-                    context.read<CreatePostBloc>().add(SubmitPost());
-                  }),
-            ),
-            body: const SingleChildScrollView(
-              child: MypageBackgroundGradient(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 4,
-                    ),
-                    _Body(),
-                  ],
-                ),
+        return BlocListener<CreatePostBloc, CreatePostState>(
+          listenWhen: (prev, next) {
+            return (prev.isSuccess != next.isSuccess) &&
+                (next.isSuccess == true);
+          },
+          listener: (context, state) {
+            context.pop();
+          },
+          child: Scaffold(
+              appBar: HelloAppbar(
+                title: "글 작성하기",
+                action: CommunityActionButton(
+                    text: "완료",
+                    buttonColor: HelloColors.subTextColor,
+                    onTap: () {
+                      context.read<CreatePostBloc>().add(SubmitPost());
+                    }),
               ),
-            ));
+              body: const SingleChildScrollView(
+                child: MypageBackgroundGradient(
+                  child: Column(
+                    children: [
+                      SizedBox(
+                        height: 4,
+                      ),
+                      _Body(),
+                    ],
+                  ),
+                ),
+              )),
+        );
       }),
     );
   }
@@ -107,6 +119,47 @@ class _Body extends StatelessWidget {
             const Divider(),
             const SectionTitle(text: "사진 및 영상 업로드"),
             const SizedBox(height: 13),
+            BlocBuilder<CreatePostBloc, CreatePostState>(
+              builder: (context, state) {
+                if (state.medias.isEmpty) {
+                  return InkWell(
+                    onTap: () {
+                      context.read<CreatePostBloc>().add(SelectMedia());
+                    },
+                    child: Container(
+                      width: 60,
+                      height: 60,
+                      decoration: const BoxDecoration(
+                        color: Colors.blue,
+                        borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                      ),
+                    ),
+                  );
+                } else {
+                  return InkWell(
+                    child: SizedBox(
+                      height: 60,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        padding: EdgeInsets.zero,
+                        itemBuilder: (context, index) {
+                          return Image.file(
+                            File(state.medias[index].path),
+                            width: 60,
+                            height: 60,
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return const SizedBox(width: 4);
+                        },
+                        itemCount: state.medias.length,
+                      ),
+                    ),
+                  );
+                }
+              },
+            )
           ],
         )),
         const SizedBox(height: 15),

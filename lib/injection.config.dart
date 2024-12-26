@@ -26,6 +26,7 @@ import 'auth/infrastructure/provider/interface/i_auth_local_provider.dart'
 import 'auth/infrastructure/repository/auth_repository.dart' as _i217;
 import 'auth/infrastructure/repository/token_repository.dart' as _i782;
 import 'bus/bus.dart' as _i461;
+import 'community/board/applicatioin/board_bloc.dart' as _i392;
 import 'community/common/domain/repository/i_community_repository.dart'
     as _i307;
 import 'community/common/infrastructure/provider/community_internal_provider.dart'
@@ -145,6 +146,10 @@ extension GetItInjectableX on _i174.GetIt {
         _i659.ChatSessionBloc(chatRepository: gh<_i605.ChatRepository>()));
     gh.lazySingleton<_i307.ICommunityRepository>(() =>
         _i996.CommunityRepository(gh<_i188.ICommunityInternalProvider>()));
+    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
+          communityRepository: gh<_i307.ICommunityRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
     gh.factory<_i810.ChatDrawerBloc>(() => _i810.ChatDrawerBloc(
           gh<_i779.ChatRoomsInfoRepository>(),
           gh<_i659.ChatSessionBloc>(),

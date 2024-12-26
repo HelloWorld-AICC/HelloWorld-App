@@ -1,12 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/community/common/domain/post.dart';
+import 'package:hello_world_mvp/core/value_objects.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 
-class Post extends StatelessWidget {
-  const Post({
+class PostItem extends StatelessWidget {
+  final Post post;
+  const PostItem({
     super.key,
+    required this.post,
   });
 
   @override
@@ -22,25 +27,30 @@ class Post extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const _Title(),
+              _Title(text: post.title.getOrCrash()),
               const SizedBox(height: 4),
               Row(
                 children: [
-                  const _Date(),
+                  _Date(
+                    dateTime: post.createdAt,
+                  ),
                   const SizedBox(width: 12),
                   SvgPicture.asset("assets/images/community/comment.svg"),
                   const SizedBox(width: 2),
-                  const _CommentCount()
+                  _CommentCount(count: post.commentNum.getOrCrash())
                 ],
               )
             ],
           ),
-          Container(
-            width: 21,
-            height: 21,
-            decoration: BoxDecoration(
-                color: Colors.red, borderRadius: BorderRadius.circular(4.0)),
-          )
+          if (post.imageUrl != null)
+            Container(
+                width: 21,
+                height: 21,
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(4.0),
+                ),
+                child: Image.network(post.imageUrl!.getOrCrash()))
         ],
       )),
     );
@@ -48,14 +58,15 @@ class Post extends StatelessWidget {
 }
 
 class _CommentCount extends StatelessWidget {
+  final int count;
   const _CommentCount({
-    super.key,
+    required this.count,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Text("39",
-        style: TextStyle(
+    return Text(count.toString(),
+        style: const TextStyle(
           color: HelloColors.gray,
           fontFamily: HelloFonts.inter,
           fontSize: 6,
@@ -67,14 +78,17 @@ class _CommentCount extends StatelessWidget {
 }
 
 class _Date extends StatelessWidget {
+  final DateVO dateTime;
   const _Date({
-    super.key,
+    required this.dateTime,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Text("2024.03.08",
-        style: TextStyle(
+    final formattedDate =
+        DateFormat('yyyy-MM-dd').format(dateTime.getOrCrash());
+    return Text(formattedDate,
+        style: const TextStyle(
           fontFamily: HelloFonts.inter,
           fontSize: 8,
           fontWeight: FontWeight.w400,
@@ -85,14 +99,15 @@ class _Date extends StatelessWidget {
 }
 
 class _Title extends StatelessWidget {
+  final String text;
   const _Title({
-    super.key,
+    required this.text,
   });
 
   @override
   Widget build(BuildContext context) {
-    return const Text("1경기 전력 어떻게 봐 ?",
-        style: TextStyle(
+    return Text(text,
+        style: const TextStyle(
           fontFamily: HelloFonts.inter,
           fontSize: 12,
           fontWeight: FontWeight.w900,

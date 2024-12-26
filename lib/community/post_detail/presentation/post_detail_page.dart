@@ -23,7 +23,7 @@ class PostDetailPage extends StatelessWidget {
               title: "Community",
               action: CommunityActionButton(
                   text: "글 신고",
-                  buttonColor: Color(0xFFFF8181),
+                  buttonColor: const Color(0xFFFF8181),
                   onTap: () {
                     context.read<CreatePostBloc>().add(SubmitPost());
                   }),
@@ -52,72 +52,88 @@ class _Body extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.min,
       children: [
         MypageBox(
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionTitle(text: "제목"),
-            const SizedBox(height: 13),
-            TextField(
-              onChanged: (value) {
-                context.read<CreatePostBloc>().add(TitleChanged(title: value));
-              },
-              decoration: const InputDecoration(
-                hintText: "제목을 입력해주세요",
-                border: InputBorder.none,
-              ),
-              style: const TextStyle(
-                color: HelloColors.gray,
-                fontFamily: HelloFonts.inter,
-                fontSize: 12,
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w500,
-                height: 1.0,
-                letterSpacing: 0.12,
-                fontFeatures: [
-                  FontFeature.enable('dlig'),
-                ],
-              ),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SectionTitle(text: "제목 들어가는 곳"),
+                Text(
+                  "2024.12.13 03:08",
+                  style: TextStyle(
+                    color: HelloColors.subTextColor,
+                    fontFamily: HelloFonts.inter,
+                    fontSize: 8,
+                    fontWeight: FontWeight.normal,
+                    letterSpacing: 0.08,
+                  ),
+                )
+              ],
             ),
-            const Divider(),
-            const SectionTitle(text: "내용"),
-            const SizedBox(height: 13),
-            TextField(
-              onChanged: (value) {
-                context.read<CreatePostBloc>().add(BodyChanged(body: value));
-              },
-              decoration: const InputDecoration(
-                hintText: "내용을 입력해주세요",
-                border: InputBorder.none,
-              ),
-              style: const TextStyle(
-                color: HelloColors.gray,
-                fontFamily: HelloFonts.inter,
-                fontSize: 12,
-                fontStyle: FontStyle.normal,
-                fontWeight: FontWeight.w500,
-                height: 1.0,
-                letterSpacing: 0.12,
-                fontFeatures: [
-                  FontFeature.enable('dlig'),
-                ],
-              ),
+            Container(
+              height: 1,
+              margin: const EdgeInsets.symmetric(vertical: 21),
+              decoration: BoxDecoration(
+                  color:
+                      const Color.fromARGB(0, 173, 173, 173).withOpacity(0.2)),
             ),
-            const Divider(),
-            const SectionTitle(text: "사진 및 영상 업로드"),
+            const Text("내용",
+                style: TextStyle(
+                  color: HelloColors.subTextColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.12,
+                )),
+            const SizedBox(height: 21),
+            Row(
+              children: [
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                ),
+                const SizedBox(width: 4),
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                ),
+                const SizedBox(width: 4),
+                Container(
+                  width: 60,
+                  height: 60,
+                  decoration: const BoxDecoration(
+                      color: Colors.blue,
+                      borderRadius: BorderRadius.all(Radius.circular(4.0))),
+                ),
+              ],
+            ),
             const SizedBox(height: 13),
           ],
         )),
         const SizedBox(height: 15),
-        const Text(
-          "사진은 최대 10장까지 업로드 가능합니다.\n영상은 최대 2개까지 업로드 가능합니다.\n과도한 비방 및 욕설이 포함된 게시물은 신고에 의해 무통보 삭제될 수 있습니다.\n초상권, 저작권 침해 및 기타 위법한 게시물은 관리자에 의해 무통보 삭제될 수 있습니다.",
-          style: TextStyle(
-              color: HelloColors.gray,
-              fontFamily: HelloFonts.sbAggroOTF,
-              fontSize: 8,
-              height: 16 / 8),
-        ),
+        MypageBox(
+            child: ListView.separated(
+          padding: EdgeInsets.zero,
+          shrinkWrap: true, 
+          itemCount: 10,
+          itemBuilder: (context, index) {
+            return Container(
+              height: 10,
+            );
+          },
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: 16);
+          },
+        ))
       ],
     );
   }
