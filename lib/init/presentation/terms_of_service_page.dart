@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
+import 'package:hello_world_mvp/init/domain/term.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart';
 
 class TermsOfServicePage extends StatelessWidget {
@@ -109,6 +110,8 @@ class TermsOfServicePage extends StatelessWidget {
 }
 
 class TermsContent extends StatefulWidget {
+  const TermsContent({super.key});
+
   @override
   _TermsContentState createState() => _TermsContentState();
 }
@@ -117,10 +120,8 @@ class _TermsContentState extends State<TermsContent> {
   bool allSelected = false;
   List<bool> selections = [false, false];
 
-  final List<Map<String, String>> terms = [
-    {
-      "title": "개인정보 처리방침에 동의 (필수)",
-      "details": """
+  final List<Term> terms = [
+    const Term(title: "개인정보 처리방침에 동의 (필수)", body: """
     HelloWorld 서비스(이하 "서비스")를 제공하는 개발팀(이하 "팀")은 개인정보 보호를 중요하게 생각하며, 서비스 이용 과정에서 수집되는 개인정보의 처리에 대해 아래와 같이 안내드립니다.
 
     1. 수집하는 개인정보의 항목
@@ -147,11 +148,8 @@ class _TermsContentState extends State<TermsContent> {
 
     7. 개인정보의 파기
     - 서비스 이용 중 개인정보 처리 목적이 달성되면 즉시 파기됩니다.
-    """,
-    },
-    {
-      "title": "사용약관 처리방침에 동의 (필수)",
-      "details": """
+    """),
+    const Term(title: "사용약관 처리방침에 동의 (필수)", body: """
     본 약관은 HelloWorld 서비스(이하 "서비스")의 이용에 관한 조건을 규정하며, 서비스 제공 및 회원 간의 권리와 의무를 명시합니다.
 
     1. 서비스의 제공
@@ -178,8 +176,7 @@ class _TermsContentState extends State<TermsContent> {
 
     8. 법적 준거 및 분쟁 해결
     - 본 약관은 대한민국 법에 따르며, 서비스 이용과 관련된 분쟁은 팀의 소재지 법원을 제1심 법원으로 합니다.
-    """
-    }
+    """),
   ];
 
   void toggleAllSelected(bool? value) {
@@ -301,8 +298,8 @@ class _TermsContentState extends State<TermsContent> {
                     Container(
                       width: MediaQuery.of(context).size.width * 0.6,
                       child: Text(
-                        terms[index]["title"]!,
-                        style: TextStyle(
+                        terms[index].title,
+                        style: const TextStyle(
                           fontFamily: 'SB AggroOTF',
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
@@ -320,14 +317,14 @@ class _TermsContentState extends State<TermsContent> {
                         )),
                   ],
                 ),
-                SizedBox(height: 5),
+                const SizedBox(height: 5),
                 GestureDetector(
                   onTap: () => showDetailsPopup(
                     context,
-                    terms[index]["title"]!,
-                    terms[index]["details"]!,
+                    terms[index].title,
+                    terms[index].body,
                   ),
-                  child: Text(
+                  child: const Text(
                     "세부 정보 보기 >",
                     style: TextStyle(
                       fontFamily: 'SB AggroOTF',
@@ -337,7 +334,7 @@ class _TermsContentState extends State<TermsContent> {
                     ),
                   ),
                 ),
-                Divider(),
+                const Divider(),
               ],
             );
           }),

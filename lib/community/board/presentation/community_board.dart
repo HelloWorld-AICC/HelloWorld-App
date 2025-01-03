@@ -62,17 +62,39 @@ class CommunityBoard extends StatelessWidget {
                 ),
               );
             },
-            child: const SingleChildScrollView(
-              child: MypageBackgroundGradient(
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: 21,
-                    ),
-                    _Body(),
-                  ],
+            child: Column(
+              children: [
+                BlocBuilder<BoardBloc, BoardState>(
+                  builder: (context, state) {
+                    return Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        ...PostCategory.values.map((board) => BoardTab(
+                              title: board.title,
+                              onTap: () {
+                                context
+                                    .read<BoardBloc>()
+                                    .add(SelectBoard(category: board));
+                              },
+                              isSelected: board.id == state.selectedBoard.id,
+                            )),
+                      ],
+                    );
+                  },
                 ),
-              ),
+                const SizedBox(height: 20),
+                const Flexible(
+                  child: SingleChildScrollView(
+                    child: MypageBackgroundGradient(
+                      child: Column(
+                        children: [
+                          _Body(),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         );
@@ -91,25 +113,7 @@ class _Body extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        BlocBuilder<BoardBloc, BoardState>(
-          builder: (context, state) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ...PostCategory.values.map((board) => BoardTab(
-                      title: board.title,
-                      onTap: () {
-                        context
-                            .read<BoardBloc>()
-                            .add(SelectBoard(category: board));
-                      },
-                      isSelected: board.id == state.selectedBoard.id,
-                    )),
-              ],
-            );
-          },
-        ),
-        const SizedBox(height: 29),
+        const SizedBox(height: 9),
         BlocBuilder<BoardBloc, BoardState>(
           builder: (context, state) {
             return MypageBox(
@@ -117,10 +121,14 @@ class _Body extends StatelessWidget {
               children: [
                 const SizedBox(height: 2),
                 ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: state.postList?.posts.length ?? 0,
                   itemBuilder: (context, index) {
-                    return PostItem(post: state.postList!.posts[index]);
+                    return PostItem(
+                      post: state.postList!.posts[index],
+                      postCategory: state.selectedBoard,
+                    );
                   },
                   separatorBuilder: (context, index) {
                     return Container(
@@ -129,7 +137,6 @@ class _Body extends StatelessWidget {
                         color: const Color(0xFF919191).withOpacity(0.8));
                   },
                 ),
-                Container(height: 100),
               ],
             ));
           },

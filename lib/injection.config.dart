@@ -41,6 +41,7 @@ import 'fetch/fetch_service.dart' as _i1053;
 import 'home/application/home_bloc.dart' as _i785;
 import 'home/injection/home_register_module.dart' as _i443;
 import 'init/application/app_init_bloc.dart' as _i775;
+import 'init/application/terms_of_service/terms_of_service_bloc.dart' as _i453;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
 import 'locale/domain/localization_service.dart' as _i121;
@@ -146,6 +147,10 @@ extension GetItInjectableX on _i174.GetIt {
         _i659.ChatSessionBloc(chatRepository: gh<_i605.ChatRepository>()));
     gh.lazySingleton<_i307.ICommunityRepository>(() =>
         _i996.CommunityRepository(gh<_i188.ICommunityInternalProvider>()));
+    gh.factory<_i453.TermsOfServiceBloc>(() => _i453.TermsOfServiceBloc(
+          communityRepository: gh<_i307.ICommunityRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
     gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
           communityRepository: gh<_i307.ICommunityRepository>(),
           bus: gh<_i461.Bus>(),

@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/community/board/presentation/community_board.dart';
+import 'package:hello_world_mvp/community/common/domain/post.dart';
 import 'package:hello_world_mvp/community/create_post/presentation/create_post_page.dart';
 import 'package:hello_world_mvp/community/post_detail/presentation/post_detail_page.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
@@ -75,8 +76,15 @@ class RouteService {
         builder: (context, state) => const CommunityBoard(),
       ),
       GoRoute(
-        path: '/community/post-detail',
-        builder: (context, state) => const PostDetailPage(),
+        path: '/community/:category_id/posts/:post_id',
+        name: 'post-detail',
+        builder: (context, state) {
+          final int postId = int.parse(state.pathParameters['post_id'] ?? "");
+          final int categoryId =
+              int.parse(state.pathParameters['category_id'] ?? "");
+
+          return PostDetailPage(postId: postId, categoryId: categoryId);
+        },
       ),
       GoRoute(
         path: '/community/create-post',

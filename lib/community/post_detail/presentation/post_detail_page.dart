@@ -1,9 +1,12 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/common/presentation/hello_appbar.dart';
+import 'package:hello_world_mvp/community/common/domain/post.dart';
 import 'package:hello_world_mvp/community/common/presentation/community_action_button.dart';
 import 'package:hello_world_mvp/community/common/presentation/section_title.dart';
 import 'package:hello_world_mvp/community/create_post/application/create_post_bloc.dart';
+import 'package:hello_world_mvp/community/post_detail/application/post_detail_bloc.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 import 'package:hello_world_mvp/injection.dart';
@@ -11,12 +14,18 @@ import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gra
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
 
 class PostDetailPage extends StatelessWidget {
-  const PostDetailPage({super.key});
+  final int postId;
+  final int categoryId;
+  const PostDetailPage({
+    super.key,
+    required this.postId,
+    required this.categoryId,
+  });
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => getIt<CreatePostBloc>(),
+      create: (context) => getIt<PostDetailBloc>(),
       child: Builder(builder: (context) {
         return Scaffold(
             appBar: HelloAppbar(
@@ -58,20 +67,20 @@ class _Body extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                SectionTitle(text: "제목 들어가는 곳"),
-                Text(
-                  "2024.12.13 03:08",
-                  style: TextStyle(
-                    color: HelloColors.subTextColor,
-                    fontFamily: HelloFonts.inter,
-                    fontSize: 8,
-                    fontWeight: FontWeight.normal,
-                    letterSpacing: 0.08,
-                  ),
-                )
+                SectionTitle(text: ""),
+                // Text(
+                //   DateFormat('yyyy.MM.dd hh:mm').format(""),
+                //   style: const TextStyle(
+                //     color: HelloColors.subTextColor,
+                //     fontFamily: HelloFonts.inter,
+                //     fontSize: 8,
+                //     fontWeight: FontWeight.normal,
+                //     letterSpacing: 0.08,
+                //   ),
+                // )
               ],
             ),
             Container(
@@ -81,7 +90,7 @@ class _Body extends StatelessWidget {
                   color:
                       const Color.fromARGB(0, 173, 173, 173).withOpacity(0.2)),
             ),
-            const Text("내용",
+            Text("내용",
                 style: TextStyle(
                   color: HelloColors.subTextColor,
                   fontSize: 12,
@@ -123,7 +132,7 @@ class _Body extends StatelessWidget {
         MypageBox(
             child: ListView.separated(
           padding: EdgeInsets.zero,
-          shrinkWrap: true, 
+          shrinkWrap: true,
           itemCount: 10,
           itemBuilder: (context, index) {
             return Container(

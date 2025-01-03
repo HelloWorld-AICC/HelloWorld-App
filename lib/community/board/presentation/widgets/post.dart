@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/community/board/presentation/community_board.dart';
 import 'package:hello_world_mvp/community/common/domain/post.dart';
 import 'package:hello_world_mvp/core/value_objects.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
@@ -9,16 +10,21 @@ import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 
 class PostItem extends StatelessWidget {
   final Post post;
+  final PostCategory postCategory;
   const PostItem({
     super.key,
     required this.post,
+    required this.postCategory,
   });
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.push('/community/post-detail');
+        context.goNamed('post-detail', pathParameters: {
+          'post_id': post.postId.getOrCrash().toString(),
+          'category_id': postCategory.id.toString()
+        });
       },
       child: Container(
           child: Row(

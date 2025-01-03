@@ -18,13 +18,15 @@ class PostListDto {
 
   factory PostListDto.fromJson(Map<String, dynamic> json) {
     return PostListDto(
-      posts: (json['posts'] as List).map((e) => PostDto.fromJson(e)).toList(),
+      posts: (json['postDTOList'] as List)
+          .map((e) => PostDto.fromJson(e))
+          .toList(),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'posts': posts.map((e) => e.toJson()).toList(),
+      'postDTOList': posts.map((e) => e.toJson()).toList(),
     };
   }
 }

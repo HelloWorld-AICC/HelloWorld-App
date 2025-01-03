@@ -160,7 +160,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
       newHeaders.putIfAbsent('Authorization',
           () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
 
-      var request = http.MultipartRequest("POST", url);
+      var request = http.MultipartRequest("PATCH", url);
 
       request.headers.addAll(newHeaders);
 

@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:hello_world_mvp/community/common/domain/post_list.dart';
 import 'package:hello_world_mvp/community/common/infrastructure/dtos/create_post_dto.dart';
+import 'package:hello_world_mvp/community/common/infrastructure/dtos/post_detail_dto.dart';
 import 'package:hello_world_mvp/community/common/infrastructure/dtos/post_list_dto.dart';
 import 'package:hello_world_mvp/community/common/infrastructure/provider/interface/i_community_internal_provider.dart';
 import 'package:hello_world_mvp/fetch/failure.dart';
@@ -56,6 +56,25 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
       return left(f);
     }, (result) {
       return right(unit);
+    });
+  }
+
+  @override
+  Future<Either<Failure, PostDetailDto>> getPostDetail({
+    required int categoryId,
+    required int postId,
+  }) async {
+    final failureOrTokens = await _fetchService.request(
+        pathPrefix: "",
+        path: "/community/$categoryId/detail/$postId",
+        method: HttpMethod.get);
+
+    return failureOrTokens.fold((f) {
+      return left(f);
+    }, (result) {
+      final PostDetailDto postDetailDto = PostDetailDto.fromJson(result.result);
+
+      return right(postDetailDto);
     });
   }
 }

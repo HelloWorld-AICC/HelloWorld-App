@@ -94,7 +94,7 @@ class _SplashPageState extends State<SplashPage> {
                 left: MediaQuery.of(context).size.width / 2 - 100,
                 child: Column(
                   children: [
-                    Container(
+                    SizedBox(
                       height: MediaQuery.of(context).size.height / 5,
                       child: Image.asset(
                         'assets/images/home/Nice to meet you.png',
@@ -103,7 +103,7 @@ class _SplashPageState extends State<SplashPage> {
                     ),
                     const SizedBox(height: 20),
                     // SplashTextLabel(text: tr("splash_page.language_select")),
-                    SplashTextLabel(text: "언어 선택"),
+                    const SplashTextLabel(text: "언어 선택"),
                     const SizedBox(height: 20),
                   ],
                 ),
@@ -114,7 +114,7 @@ class _SplashPageState extends State<SplashPage> {
                 right: 0,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                  child: Container(
+                  child: SizedBox(
                     width: MediaQuery.of(context).size.width / 3,
                     height: MediaQuery.of(context).size.height / 3,
                     child: ListView.builder(
@@ -149,7 +149,7 @@ class _SplashPageState extends State<SplashPage> {
                 left: MediaQuery.of(context).size.width / 1.5,
                 right: 0,
                 child: Padding(
-                  padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
                   child: GestureDetector(
                     onTap: () async {
                       // 비동기 호출 전 필요한 값을 저장
@@ -160,12 +160,12 @@ class _SplashPageState extends State<SplashPage> {
 
                       if (selectedIndex == 0 && mounted) {
                         localeBloc.add(SetLocale(
-                            locale: selectedLocale ?? Locale('en', 'US'),
+                            locale: selectedLocale ?? const Locale('en', 'US'),
                             index: selectedIndex ?? 0));
 
-                        await context
-                            .setLocale(selectedLocale ?? Locale('en', 'US'));
-                        await Future.delayed(Duration(milliseconds: 100));
+                        await context.setLocale(
+                            selectedLocale ?? const Locale('en', 'US'));
+                        await Future.delayed(const Duration(milliseconds: 100));
                       }
 
                       if (mounted) {
