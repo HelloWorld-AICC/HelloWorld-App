@@ -36,7 +36,7 @@ class MypageInternalProvider implements IMypageInternalProvider {
       pathPrefix: "",
       path: "/myPage/setProfile",
       method: HttpMethod.file,
-      file: file,
+      files: [if (file != null) file],
       bodyParam: {
         "nickName": nickname,
       },

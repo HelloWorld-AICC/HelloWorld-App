@@ -37,6 +37,7 @@ dependencies:
   country_icons: ^3.0.0
   image_picker: ^1.1.2
   sentry_flutter: ^8.10.1
+  custom_refresh_indicator: ^4.0.1
   google_maps_flutter: ^2.9.0
   geolocator: ^13.0.2
   google_maps_flutter_platform_interface: ^2.9.5
@@ -61,6 +62,7 @@ flutter:
     - assets/images/chat/
     - assets/images/common/
     - assets/images/mypage/
+    - assets/images/community/
     - assets/fonts/
     - assets/icons/
     - assets/icons/grey/
@@ -96,4 +98,25 @@ flutter:
         - asset: assets/fonts/pretendard/Pretendard-ExtraLight.otf
           weight: 200
         - asset: assets/fonts/pretendard/Pretendard-Thin.otf
+          weight: 100
+
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/inter/Inter-Black.otf
+          weight: 900
+        - asset: assets/fonts/inter/Inter-ExtraBold.otf
+          weight: 800
+        - asset: assets/fonts/inter/Inter-Bold.otf
+          weight: 700
+        - asset: assets/fonts/inter/Inter-SemiBold.otf
+          weight: 600
+        - asset: assets/fonts/inter/Inter-Medium.otf
+          weight: 500
+        - asset: assets/fonts/inter/Inter-Regular.otf
+          weight: 400
+        - asset: assets/fonts/inter/Inter-Light.otf
+          weight: 300
+        - asset: assets/fonts/inter/Inter-ExtraLight.otf
+          weight: 200
+        - asset: assets/fonts/inter/Inter-Thin.otf
           weight: 100

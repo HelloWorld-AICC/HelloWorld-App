@@ -104,27 +104,3 @@ class _Body extends StatelessWidget {
     );
   }
 }
-
-class _Title extends StatelessWidget {
-  final String title;
-
-  const _Title({
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 19.0,
-        vertical: 18,
-      ),
-      child: Text(title,
-          style: const TextStyle(
-            color: Color(0xFFADADAD),
-            fontSize: 18,
-            fontWeight: FontWeight.w700,
-          )),
-    );
-  }
-}
