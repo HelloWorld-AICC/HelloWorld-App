@@ -84,7 +84,6 @@ class _CenterScreenState extends State<CenterScreen> {
     Position position = await Geolocator.getCurrentPosition();
     latitude = position.latitude;
     longitude = position.longitude;
-    print("geolocator에서 가져온 latitude: $latitude, longitude: $longitude");
     return LatLng(position.latitude, position.longitude);
   }
 
@@ -258,10 +257,11 @@ class _CenterScreenState extends State<CenterScreen> {
 
   Widget _buildOverlay(BuildContext context) {
     return Positioned(
-      top: MediaQuery.of(context).size.height * 0.05,
-      left: MediaQuery.of(context).size.width * 0.1,
+      top: 10,
+      left: 10,
+      right: 10,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildBackButton(context),
           SizedBox(width: MediaQuery.of(context).size.width * 0.1),
@@ -274,6 +274,7 @@ class _CenterScreenState extends State<CenterScreen> {
   Widget _buildBackButton(BuildContext context) {
     return GestureDetector(
       onTap: () {
+        Future.delayed(const Duration(milliseconds: 100));
         Navigator.pop(context);
       },
       child: Container(
@@ -297,7 +298,7 @@ class _CenterScreenState extends State<CenterScreen> {
 
   Widget _buildLocationInfo() {
     return Container(
-      width: 160,
+      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
       decoration: const BoxDecoration(
         color: Colors.white,
         shape: BoxShape.rectangle,
@@ -307,17 +308,20 @@ class _CenterScreenState extends State<CenterScreen> {
         ),
         boxShadow: CenterScreen._boxShadow,
       ),
-      child: const Padding(
-        padding: EdgeInsets.all(4.0),
+      child: const FittedBox(
+        fit: BoxFit.scaleDown,
+        // Ensures the text scales to fit within its container
         child: Text(
           '오프라인 상담센터',
-          style: TextStyle(
+          style: const TextStyle(
             fontFamily: 'SB AggroOTF',
             color: HelloColors.subTextColor,
             fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,
+          maxLines: 1, // Force the text to be one line
+          overflow: TextOverflow.ellipsis, // Handle overflow with ellipsis
         ),
       ),
     );

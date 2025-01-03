@@ -68,7 +68,7 @@ class RouteService {
         GoRoute(
           path: '/center',
           builder: (context, state) => CenterScreen(),
-        )
+        ),
       ],
       redirect: (context, state) {
         final isFirstRun = context.read<AppInitBloc>().state.isFirstRun;

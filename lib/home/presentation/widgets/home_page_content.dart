@@ -81,7 +81,7 @@ class HomePageContent extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.all(MediaQuery.sizeOf(context).width * 0.05),
               child: Stack(
                 children: [
                   Stack(
@@ -125,7 +125,7 @@ class HomePageContent extends StatelessWidget {
                     child: _buildHeader(context),
                   ),
                   Positioned(
-                    top: 300,
+                    top: MediaQuery.sizeOf(context).height * 0.37,
                     child: HomeRouteGrid(
                       items: routeBoxItems,
                       navigationService: navigationService,
@@ -184,7 +184,7 @@ class HomePageContent extends StatelessWidget {
             ],
           ),
           Text(
-            "${tr("app_name")},",
+            context.tr("app_name"),
             style: const TextStyle(
               fontFamily: "SB AggroOTF",
               fontSize: 14,

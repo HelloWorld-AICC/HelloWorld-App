@@ -33,7 +33,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return BlocBuilder<RouteBloc, RouteState>(
       builder: (context, routeState) {
         return FractionallySizedBox(
-          heightFactor: 0.1,
+          heightFactor: MediaQuery.sizeOf(context).height < 600 ? 0.10 : 0.08,
           child: Padding(
             padding: EdgeInsets.only(
               bottom: MediaQuery.of(context).viewInsets.bottom,

@@ -37,9 +37,7 @@ class HomeRouteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (routePath == "community" ||
-            routePath == "resume" ||
-            routePath == "call_bot") {
+        if (routePath == "resume" || routePath == "call_bot") {
           showToast("미구현 기능입니다.");
           return;
         }

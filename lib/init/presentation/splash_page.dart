@@ -90,23 +90,25 @@ class _SplashPageState extends State<SplashPage> {
                 ),
               ),
 
-              Positioned(
+              Positioned.fill(
                 top: MediaQuery.of(context).size.height / 8,
-                left: MediaQuery.of(context).size.width / 2 - 100,
-                child: Column(
-                  children: [
-                    Container(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Image.asset(
-                        'assets/images/home/Nice to meet you.png',
-                        fit: BoxFit.cover,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: Image.asset(
+                          'assets/images/home/Nice to meet you.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    // SplashTextLabel(text: tr("splash_page.language_select")),
-                    SplashTextLabel(text: "언어 선택"),
-                    const SizedBox(height: 20),
-                  ],
+                      const SizedBox(height: 20),
+                      SplashTextLabel(text: "언어 선택"),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
               Positioned(

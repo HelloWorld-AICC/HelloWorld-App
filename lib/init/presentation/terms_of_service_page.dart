@@ -9,7 +9,15 @@ import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart
 
 import '../../auth/application/status/auth_status_bloc.dart';
 
-class TermsOfServicePage extends StatelessWidget {
+class TermsOfServicePage extends StatefulWidget {
+  @override
+  _TermsOfServicePageState createState() => _TermsOfServicePageState();
+}
+
+class _TermsOfServicePageState extends State<TermsOfServicePage> {
+  bool allSelected = false;
+  List<bool> selections = [false, false];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -65,10 +73,15 @@ class TermsOfServicePage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // SplashTextLabel(text: tr("splash_page.language_select")),
                     SplashTextLabel(text: "사용 약관"),
                     const SizedBox(height: 20),
-                    TermsContent(),
+                    TermsContent(
+                      onAllTermsAccepted: (bool isAccepted) {
+                        setState(() {
+                          allSelected = isAccepted;
+                        });
+                      },
+                    ),
                   ],
                 ),
               ),
@@ -80,6 +93,13 @@ class TermsOfServicePage extends StatelessWidget {
                   padding: EdgeInsets.only(left: 30.0, right: 30.0),
                   child: GestureDetector(
                     onTap: () async {
+                      if (!allSelected) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("모든 약관에 동의해야 합니다.")),
+                        );
+                        return;
+                      }
+
                       context.read<AppInitBloc>().add(MarkSplashDone());
                       final isSignIn =
                           context.read<AuthStatusBloc>().state.isSignedIn;
@@ -119,13 +139,16 @@ class TermsOfServicePage extends StatelessWidget {
 }
 
 class TermsContent extends StatefulWidget {
+  final Function(bool) onAllTermsAccepted;
+
+  TermsContent({required this.onAllTermsAccepted});
+
   @override
   _TermsContentState createState() => _TermsContentState();
 }
 
 class _TermsContentState extends State<TermsContent> {
-  bool allSelected = false;
-  List<bool> selections = [false, false];
+  List<bool> selections = [];
 
   final List<Map<String, String>> terms = [
     {
@@ -192,19 +215,27 @@ class _TermsContentState extends State<TermsContent> {
     }
   ];
 
+  @override
+  void initState() {
+    super.initState();
+    selections = List.generate(terms.length, (index) => false);
+  }
+
   void toggleAllSelected(bool? value) {
     setState(() {
-      allSelected = value ?? false;
+      final isSelected = value ?? false;
       for (int i = 0; i < selections.length; i++) {
-        selections[i] = allSelected;
+        selections[i] = isSelected;
       }
+      widget.onAllTermsAccepted(isSelected);
     });
   }
 
   void toggleIndividualCheckbox(int index, bool? value) {
     setState(() {
       selections[index] = value ?? false;
-      allSelected = selections.every((isSelected) => isSelected);
+      final allAccepted = selections.every((isSelected) => isSelected);
+      widget.onAllTermsAccepted(allAccepted);
     });
   }
 
@@ -296,7 +327,9 @@ class _TermsContentState extends State<TermsContent> {
               Container(
                 alignment: Alignment.centerRight,
                 child: CustomCheckbox(
-                    value: allSelected, onChanged: toggleAllSelected),
+                  value: selections.every((isSelected) => isSelected),
+                  onChanged: toggleAllSelected,
+                ),
               ),
             ],
           ),
@@ -366,8 +399,6 @@ class CustomCheckbox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      // width: 24,
-      // height: 24,
       child: Material(
         color: Colors.transparent,
         child: InkWell(

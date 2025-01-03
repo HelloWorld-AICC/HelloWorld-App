@@ -251,7 +251,7 @@ class NewChatContentState extends State<NewChatContent>
           final request = http.Request("POST", uri);
 
           request.headers['accept'] = 'text/event-stream';
-          print("보내기 직전에 messagetoSend 값: $messageToSend");
+          // print("보내기 직전에 messagetoSend 값: $messageToSend");
           final bodyParams = {'content': messageToSend};
           request.body = json.encode(bodyParams);
 
@@ -262,29 +262,29 @@ class NewChatContentState extends State<NewChatContent>
           final finalResponse = StringBuffer();
 
           streamedResponse.stream.transform(utf8.decoder).listen((line) {
-            print('Received line: $line');
+            // print('Received line: $line');
 
             if (line.startsWith('data:')) {
               var temp = line.substring(5).trim();
-              print('Processed temp: $temp');
+              // print('Processed temp: $temp');
 
               if (temp.isEmpty) {
                 temp = ' ';
-                print('Temp was empty, setting to space');
+                // print('Temp was empty, setting to space');
               }
 
               if (line.startsWith('data:Room ID: ')) {
-                print('Room ID found: $temp');
+                // print('Room ID found: $temp');
                 roomId = temp;
                 context
                     .read<ChatSessionBloc>()
                     .add(ChangeRoomIdEvent(roomId: roomId));
               } else {
                 if (temp == 'data:') {
-                  print('Data is empty, appending newline');
+                  // print('Data is empty, appending newline');
                   finalResponse.write('\n');
                 } else {
-                  print('Appending content: $temp');
+                  // print('Appending content: $temp');
                   finalResponse.write(temp);
                 }
 
@@ -306,9 +306,9 @@ class NewChatContentState extends State<NewChatContent>
                       messages: updatedMessages,
                       isLoading: false,
                       failure: null));
-                  print('Updated messages (new bot message): $updatedMessages');
+                  // print('Updated messages (new bot message): $updatedMessages');
                 } else {
-                  print('Updating bot message content');
+                  // print('Updating bot message content');
 
                   botMessage = botMessage!.copyWith(
                     content: StringVO(finalResponse.toString()),
@@ -348,7 +348,7 @@ class NewChatContentState extends State<NewChatContent>
                       isLoading: false,
                       failure: null));
                   _streamController.add(botMessage!);
-                  print('Updated messages (modified bot message): $botMessage');
+                  // print('Updated messages (modified bot message): $botMessage');
                 }
               }
             }
