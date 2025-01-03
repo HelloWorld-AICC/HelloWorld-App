@@ -1,20 +1,30 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:hello_world_mvp/new_chat/presentation/widgets/typing_indicator.dart';
+import 'package:hello_world_mvp/auth/infrastructure/repository/auth_repository.dart';
+import 'package:hello_world_mvp/fetch/fetch_service.dart';
+import 'package:http/http.dart' as http;
 
 import '../../../core/value_objects.dart';
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
-import '../../../home/presentation/widgets/home_page_content.dart';
+import '../../../fetch/authenticated_http_client.dart';
+import '../../../injection.dart';
+import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
+import '../../domain/service/chat_fetch_service.dart';
+import '../../domain/service/stream/streamed_chat_parse_service.dart';
+import '../../domain/service/stream/streamed_chat_service.dart';
 import 'chat_guide_widget.dart';
 import 'chat_input_field.dart';
 import 'chat_rooms_drawer.dart';
 import 'message_list_widget.dart';
+import 'message_widget.dart';
 
 class NewChatContent extends StatefulWidget {
   @override
@@ -27,88 +37,102 @@ class NewChatContentState extends State<NewChatContent>
 
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+  final ScrollController _scrollController = ScrollController();
+
   bool isKeyboardVisible = false;
+
+  String? roomId;
+
+  late StreamedChatService streamedChatService;
+
+  late StreamController<ChatMessage> _streamController;
 
   @override
   void initState() {
     super.initState();
 
+    streamedChatService = getIt<StreamedChatService>();
+
+    _streamController = StreamController<ChatMessage>.broadcast();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final chatSessionBloc = context.read<ChatSessionBloc>();
       if (chatSessionBloc.state.roomId == null &&
           chatSessionBloc.state.isLoading) {
-        printInColor('Loading chat session', color: red);
-        context.read<ChatSessionBloc>().add(
-              LoadChatSessionEvent(roomId: 'new_chat'),
-            );
+        chatSessionBloc.add(LoadChatSessionEvent(roomId: 'new_chat'));
       }
+      _scrollToBottom();
     });
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     String? roomId = context.read<ChatSessionBloc>().state.roomId;
 
-    return SafeArea(
-      child: Scaffold(
-        key: _scaffoldKey,
-        resizeToAvoidBottomInset: false,
-        backgroundColor: Colors.white,
-        appBar: AppBar(
+    return BlocBuilder<ChatSessionBloc, ChatSessionState>(
+        builder: (context, state) {
+      return SafeArea(
+        child: Scaffold(
+          key: _scaffoldKey,
+          resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Text(
-            tr('chat_title'),
-            style: TextStyle(
-              color: HelloColors.subTextColor,
-              fontFamily: "SB AggroOTF",
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
+          appBar: AppBar(
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            title: Text(
+              tr('chat_title'),
+              style: TextStyle(
+                color: HelloColors.subTextColor,
+                fontFamily: "SB AggroOTF",
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
             ),
-          ),
-          leading: IconButton(
-            icon: Icon(
-              Icons.list_rounded,
-              color: HelloColors.subTextColor,
-            ),
-            color: HelloColors.subTextColor,
-            onPressed: () {
-              // context
-              //     .read<RouteBloc>()
-              //     .add(RouteChanged(newIndex: 0, newRoute: '/home'));
-              // Navigator.of(context).pop();
-              _scaffoldKey.currentState?.openDrawer();
-            },
-          ),
-          actions: [
-            IconButton(
+            leading: IconButton(
               icon: Icon(
-                Icons.add,
+                Icons.list_rounded,
                 color: HelloColors.subTextColor,
               ),
+              color: HelloColors.subTextColor,
               onPressed: () {
-                context.read<ChatSessionBloc>().add(ClearMessagesEvent());
+                // context
+                //     .read<RouteBloc>()
+                //     .add(RouteChanged(newIndex: 0, newRoute: '/home'));
+                // Navigator.of(context).pop();
+                _scaffoldKey.currentState?.openDrawer();
               },
             ),
-          ],
-        ),
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              BlocListener<ChatSessionBloc, ChatSessionState>(
-                listener: (context, state) {
-                  // if (state.roomId == null) {
-                  //   printInColor('Loading chat session', color: red);
-                  //   context.read<ChatSessionBloc>().add(
-                  //       LoadChatSessionEvent(roomId: state.roomId ?? 'new_chat'));
-                  // }
+            actions: [
+              IconButton(
+                icon: Icon(
+                  Icons.add,
+                  color: HelloColors.subTextColor,
+                ),
+                onPressed: () {
+                  context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
                 },
-                child: Expanded(
+              ),
+            ],
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
                   child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
                     builder: (context, state) {
-                      if (state.roomId == null) {
+                      if (state.roomId == "new_chat") {
                         return Padding(
                           padding: const EdgeInsets.only(
                             top: 10,
@@ -119,46 +143,220 @@ class NewChatContentState extends State<NewChatContent>
                           child: ChatGuideWidget(),
                         );
                       } else {
-                        final messageStream =
-                            context.read<ChatSessionBloc>().messagesStream;
-                        return MessageListWidget(
-                          messageStream: messageStream,
+                        // return MessageListWidget(
+                        //   messageStream:
+                        //       streamedChatService.parseService.messageStream,
+                        //   roomId: state.roomId,
+                        // );
+                        return StreamBuilder<ChatMessage>(
+                          stream: _streamController.stream,
+                          builder: (context, snapshot) {
+                            final updatedMessages =
+                                List<ChatMessage>.from(state.messages);
+                            // List<ChatMessage> updatedMessages = [];
+
+                            if (snapshot.connectionState ==
+                                    ConnectionState.active ||
+                                snapshot.connectionState ==
+                                    ConnectionState.done) {
+                              if (snapshot.hasData) {
+                                // print(formatMessage(
+                                //     "새로운 메시지가 도착했습니다: ${snapshot.data.toString()}",
+                                //     150));
+                                // updatedMessages.add(snapshot.data!);
+                              }
+
+                              return NoStreamMessageListWidget(
+                                messages: updatedMessages,
+                                roomId: roomId,
+                              );
+                            } else if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return NoStreamMessageListWidget(
+                                messages: updatedMessages,
+                                roomId: roomId,
+                              );
+                            } else {
+                              // 스트림이 완료된 후 처리할 사항
+                              return Text("스트림이 종료되었습니다.");
+                            }
+                          },
                         );
                       }
                     },
                   ),
                 ),
-              ),
-              // if (context.watch<ChatSessionBloc>().state.typingState ==
-              //     TypingIndicatorState.shown)
-              //   TypingIndicator(),
-              // Expanded(
-              //   child: ActionButtonsWidget(
-              //     onButtonPressed: (selectedContent) {},
-              //   ),
-              // ),
-              _buildInputArea(roomId),
-            ],
+                // if (context.watch<ChatSessionBloc>().state.typingState ==
+                //     TypingIndicatorState.shown)
+                //   TypingIndicator(),
+                // Expanded(
+                //   child: ActionButtonsWidget(
+                //     onButtonPressed: (selectedContent) {},
+                //   ),
+                // ),
+                _buildInputArea(roomId ?? 'new_chat'),
+              ],
+            ),
           ),
+          bottomNavigationBar: Visibility(
+            visible: !isKeyboardVisible,
+            child: CustomBottomNavigationBar(items: bottomNavItems),
+          ),
+          drawer: ChatRoomsDrawer(streamController: _streamController),
+          onDrawerChanged: (isOpen) {
+            if (!isOpen) {
+              final selectedRoomId =
+                  context.read<ChatDrawerBloc>().state.selectedRoomId;
+              context
+                  .read<ChatDrawerBloc>()
+                  .add(CloseDrawerEvent(selectedRoomId: selectedRoomId));
+              context
+                  .read<ChatSessionBloc>()
+                  .add(ChangeRoomIdEvent(roomId: selectedRoomId));
+            }
+          },
         ),
-        bottomNavigationBar: Visibility(
-          visible: !isKeyboardVisible,
-          child: CustomBottomNavigationBar(items: bottomNavItems),
-        ),
-        drawer: ChatRoomsDrawer(),
-      ),
-    );
+      );
+    });
   }
 
-  Widget _buildInputArea(String? roomId) {
+  Widget _buildInputArea(String roomId) {
     return BlocListener<ChatSessionBloc, ChatSessionState>(
-      listener: (context, state) {},
+      listener: (context, state) {
+        print("ChatSessionBloc state: ${state.toString()}");
+      },
       child: ChatInputField(
-        sendMessage: () {
-          context.read<ChatSessionBloc>().add(SendMessageEvent(
-              message: ChatMessage(
-                  sender: Sender.user, content: StringVO(_controller.text))));
-          _controller.clear();
+        sendMessage: () async {
+          if (_controller.text.isEmpty || _controller.text == " ") return;
+
+          final messageToSend = _controller.text;
+          context.read<ChatSessionBloc>().add(UpdateMessagesEvent(messages: [
+                ...context.read<ChatSessionBloc>().state.messages,
+                ChatMessage(
+                    sender: Sender.user, content: StringVO(messageToSend))
+              ], isLoading: true, failure: null));
+
+          // WidgetsBinding.instance.addPostFrameCallback((_) {
+          //   _scrollController.animateTo(
+          //     _scrollController.position.maxScrollExtent,
+          //     duration: Duration(milliseconds: 300),
+          //     curve: Curves.easeOut,
+          //   );
+          // });
+
+          const String authority = "www.gotoend.store";
+          final queryParams = {'roomId': roomId};
+          final uri = Uri.https(authority, "webflux/chat/ask", queryParams);
+
+          final request = http.Request("POST", uri);
+
+          request.headers['accept'] = 'text/event-stream';
+          print("보내기 직전에 messagetoSend 값: $messageToSend");
+          final bodyParams = {'content': messageToSend};
+          request.body = json.encode(bodyParams);
+
+          final streamedResponse =
+              await getIt<AuthenticatedHttpClient>().send(request);
+
+          ChatMessage? botMessage;
+          final finalResponse = StringBuffer();
+
+          streamedResponse.stream.transform(utf8.decoder).listen((line) {
+            print('Received line: $line');
+
+            if (line.startsWith('data:')) {
+              var temp = line.substring(5).trim();
+              print('Processed temp: $temp');
+
+              if (temp.isEmpty) {
+                temp = ' ';
+                print('Temp was empty, setting to space');
+              }
+
+              if (line.startsWith('data:Room ID: ')) {
+                print('Room ID found: $temp');
+                roomId = temp;
+                context
+                    .read<ChatSessionBloc>()
+                    .add(ChangeRoomIdEvent(roomId: roomId));
+              } else {
+                if (temp == 'data:') {
+                  print('Data is empty, appending newline');
+                  finalResponse.write('\n');
+                } else {
+                  print('Appending content: $temp');
+                  finalResponse.write(temp);
+                }
+
+                if (botMessage == null) {
+                  print('Creating new bot message');
+                  botMessage = ChatMessage(
+                    sender: Sender.bot,
+                    content: StringVO(finalResponse.toString()),
+                  );
+
+                  _streamController.add(botMessage!);
+                  final updatedMessages = context
+                      .read<ChatSessionBloc>()
+                      .state
+                      .messages
+                    ..add(botMessage!);
+
+                  context.read<ChatSessionBloc>().add(UpdateMessagesEvent(
+                      messages: updatedMessages,
+                      isLoading: false,
+                      failure: null));
+                  print('Updated messages (new bot message): $updatedMessages');
+                } else {
+                  print('Updating bot message content');
+
+                  botMessage = botMessage!.copyWith(
+                    content: StringVO(finalResponse.toString()),
+                  );
+                  _streamController.add(botMessage!);
+
+                  // final updatedMessages = context
+                  //     .read<ChatSessionBloc>()
+                  //     .state
+                  //     .messages
+                  //     .map((message) => message.content == botMessage!.content
+                  //         ? botMessage!
+                  //         : message)
+                  //     .toList();
+
+                  // final updatedMessages = context
+                  //     .read<ChatSessionBloc>()
+                  //     .state
+                  //     .messages
+                  //     .map((message) =>
+                  //         message.sender == Sender.bot ? botMessage! : message)
+                  //     .toList();
+
+                  List<ChatMessage> updatedMessages =
+                      List.from(context.read<ChatSessionBloc>().state.messages);
+
+                  if (updatedMessages.isNotEmpty) {
+                    final lastMessageIndex = updatedMessages.length - 1;
+                    final lastMessage = updatedMessages[lastMessageIndex];
+                    if (lastMessage.sender == Sender.bot) {
+                      updatedMessages[lastMessageIndex] = botMessage!;
+                    }
+                  }
+
+                  context.read<ChatSessionBloc>().add(UpdateMessagesEvent(
+                      messages: updatedMessages,
+                      isLoading: false,
+                      failure: null));
+                  _streamController.add(botMessage!);
+                  print('Updated messages (modified bot message): $botMessage');
+                }
+              }
+            }
+          }, onDone: () {
+            _controller.clear();
+            print("사용자 메시지와 봇 메시지 전송이 완료되었고, 스트림이 종료되었습니다.");
+          });
+
           setState(() {
             isKeyboardVisible = false;
           });
@@ -166,9 +364,9 @@ class NewChatContentState extends State<NewChatContent>
         tapped: () {
           setState(() {
             isKeyboardVisible = true;
-            context
-                .read<ChatSessionBloc>()
-                .add(ChangeRoomIdEvent(roomId: 'new_chat'));
+            // context
+            //     .read<ChatSessionBloc>()
+            //     .add(ChangeRoomIdEvent(roomId: 'new_chat'));
           });
         },
         controller: _controller,
@@ -176,12 +374,3 @@ class NewChatContentState extends State<NewChatContent>
     );
   }
 }
-
-void printInColor(String message, {String color = '\x1B[37m'}) {
-  print('$color$message\x1B[0m'); // 메시지를 색상 코드와 함께 출력
-}
-
-const String red = '\x1B[31m';
-const String green = '\x1B[32m';
-const String yellow = '\x1B[33m';
-const String blue = '\x1B[34m';

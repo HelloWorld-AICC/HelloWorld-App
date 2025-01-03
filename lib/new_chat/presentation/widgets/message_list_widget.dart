@@ -2,24 +2,36 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_parse_service.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_service.dart';
+import '../../../injection.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
 
-class MessageListWidget extends StatelessWidget {
+class MessageListWidget extends StatefulWidget {
   final Stream<List<ChatMessage>> messageStream;
+  final roomId;
 
   const MessageListWidget({
     Key? key,
     required this.messageStream,
+    required this.roomId,
   }) : super(key: key);
 
   @override
+  State<MessageListWidget> createState() => _MessageListWidgetState();
+}
+
+class _MessageListWidgetState extends State<MessageListWidget> {
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<ChatMessage>>(
-      stream: messageStream,
+      stream: widget.messageStream,
       builder: (context, snapshot) {
         final messages = snapshot.data ?? [];
+
+        print("New data received: ${messages.length}");
 
         return ListView.builder(
           controller: ScrollController(),
@@ -60,7 +72,7 @@ class MessageBubble extends StatelessWidget {
 
             final message = snapshot.data!;
 
-            if (!isUser && state.typingState == TypingIndicatorState.shown) {
+            if (!isUser && state.isLoading) {
               return _buildBubble(context,
                   child: TweenAnimationBuilder<Color?>(
                     tween: ColorTween(
@@ -120,6 +132,31 @@ class MessageBubble extends StatelessWidget {
         bottomLeft: isUser ? const Radius.circular(16) : Radius.zero,
         bottomRight: isUser ? Radius.zero : const Radius.circular(16),
       ),
+    );
+  }
+}
+
+class NoStreamMessageListWidget extends StatelessWidget {
+  final List<ChatMessage> messages;
+  final String? roomId;
+
+  const NoStreamMessageListWidget({
+    Key? key,
+    required this.messages,
+    required this.roomId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: messages.length,
+      itemBuilder: (context, index) {
+        return MessageBubble(
+          messageStream:
+              Stream.value(StringBuffer(messages[index].content.getOrCrash())),
+          isUser: messages[index].sender == Sender.user,
+        );
+      },
     );
   }
 }
