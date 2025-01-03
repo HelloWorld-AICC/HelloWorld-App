@@ -5,7 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/init/domain/term.dart';
+import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart';
+
+import '../../auth/application/status/auth_status_bloc.dart';
 
 class TermsOfServicePage extends StatelessWidget {
   @override
@@ -78,6 +81,13 @@ class TermsOfServicePage extends StatelessWidget {
                   padding: EdgeInsets.only(left: 30.0, right: 30.0),
                   child: GestureDetector(
                     onTap: () async {
+                      context.read<AppInitBloc>().add(MarkSplashDone());
+                      final isSignIn =
+                          context.read<AuthStatusBloc>().state.isSignedIn;
+                      if (isSignIn == null || !isSignIn) {
+                        context.push('/login');
+                        return;
+                      }
                       context.push('/home');
                     },
                     child: Stack(

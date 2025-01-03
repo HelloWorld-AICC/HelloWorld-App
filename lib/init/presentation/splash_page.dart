@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
+import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/language_selection_widget.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart';
 
@@ -149,53 +150,59 @@ class _SplashPageState extends State<SplashPage> {
                 left: MediaQuery.of(context).size.width / 1.5,
                 right: 0,
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                  child: GestureDetector(
-                    onTap: () async {
-                      // 비동기 호출 전 필요한 값을 저장
-                      final localeBloc = context.read<LocaleBloc>();
-                      final routeBloc = context.read<RouteBloc>();
-                      final selectedLocale = localeBloc.state.locale;
-                      final selectedIndex = localeBloc.state.selectedIndex;
-
-                      if (selectedIndex == 0 && mounted) {
-                        localeBloc.add(SetLocale(
-                            locale: selectedLocale ?? const Locale('en', 'US'),
-                            index: selectedIndex ?? 0));
-
-                        await context.setLocale(
-                            selectedLocale ?? const Locale('en', 'US'));
-                        await Future.delayed(const Duration(milliseconds: 100));
-                      }
-
-                      if (mounted) {
-                        routeBloc.add(
-                          RouteChanged(
-                            newIndex: 2,
-                            newRoute: '/home',
-                          ),
-                        );
+                  padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                  child: BlocListener<AppInitBloc, AppInitState>(
+                    listener: (context, state) {
+                      if (!state.isFirstRun) {
                         context.push('/terms-of-service');
-                        // context.push('/home');
                       }
                     },
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          width: 60,
-                          height: 60,
-                          decoration: const BoxDecoration(
-                            color: Color(0xffB7D3F6),
-                            shape: BoxShape.circle,
+                    child: GestureDetector(
+                      onTap: () async {
+                        final localeBloc = context.read<LocaleBloc>();
+                        final routeBloc = context.read<RouteBloc>();
+                        final selectedLocale = localeBloc.state.locale;
+                        final selectedIndex = localeBloc.state.selectedIndex;
+
+                        if (selectedIndex == 0 && mounted) {
+                          localeBloc.add(SetLocale(
+                              locale: selectedLocale ?? Locale('en', 'US'),
+                              index: selectedIndex ?? 0));
+
+                          await context
+                              .setLocale(selectedLocale ?? Locale('en', 'US'));
+                          await Future.delayed(Duration(milliseconds: 100));
+                        }
+
+                        if (mounted) {
+                          routeBloc.add(
+                            RouteChanged(
+                              newIndex: 2,
+                              newRoute: '/home',
+                            ),
+                          );
+                          context.read<AppInitBloc>().add(CheckAppFirstRun());
+                          // context.push('/home');
+                        }
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffB7D3F6),
+                              shape: BoxShape.circle,
+                            ),
                           ),
-                        ),
-                        const Icon(
-                          Icons.arrow_forward_rounded,
-                          size: 45,
-                          color: HelloColors.white,
-                        ),
-                      ],
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 45,
+                            color: HelloColors.white,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

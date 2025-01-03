@@ -54,15 +54,14 @@ class FetchService {
     var realPath = "/mvc$pathPrefix$path";
     pathParams?.forEach((key, value) {
       realPath = realPath.replaceFirst("{$key}", "$value");
-    }); 
+    });
 
-    // debugPrint("CORE :: CORE_API :: request -> $realPath // $queryParams");
+    debugPrint("CORE :: CORE_API :: request -> $realPath // $queryParams");
     //request
 
     const String authority = "www.gotoend.store";
 
     final uri = Uri.https(authority, realPath, queryParams);
-
     Response response;
 
     try {
