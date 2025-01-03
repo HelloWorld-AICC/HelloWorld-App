@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 
 class SplashTextLabel extends StatelessWidget {
   final String text;
@@ -11,14 +12,14 @@ class SplashTextLabel extends StatelessWidget {
 
     return Container(
       width: width,
-      constraints: BoxConstraints(
+      constraints: const BoxConstraints(
         minHeight: 36,
       ),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(40),
         border: Border.all(
-          color: Color(0xFFB3D4E0),
+          color: const Color(0xFFB3D4E0),
           width: 2,
         ),
         boxShadow: [
@@ -35,8 +36,8 @@ class SplashTextLabel extends StatelessWidget {
           padding: const EdgeInsets.all(6.0),
           child: Text(
             text,
-            style: TextStyle(
-              fontFamily: "SB AggroOTF",
+            style: const TextStyle(
+              fontFamily: HelloFonts.pretendard,
               fontSize: 16,
               fontWeight: FontWeight.bold,
               color: Color(0xff6D9CD5),

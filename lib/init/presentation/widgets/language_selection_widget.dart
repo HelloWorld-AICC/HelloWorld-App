@@ -25,7 +25,7 @@ class LanguageSelectionWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(10),
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           color: Colors.transparent,
         ),
         height: height * 0.05,
@@ -47,8 +47,9 @@ class LanguageSelectionWidget extends StatelessWidget {
                   textAlign: TextAlign.start,
                   style: const TextStyle(
                     fontFamily: "SB AggroOTF",
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                    height: 1.0,
+                    fontWeight: FontWeight.w400,
                     color: Color(0xff9D9D9D),
                   ),
                 ),
