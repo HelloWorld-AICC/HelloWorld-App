@@ -16,7 +16,7 @@ final Map<String, ImageIcon> bottomNavItems = {
   'bottom_navigation.home':
       ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
   'bottom_navigation.community':
-      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
+      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 24),
   'bottom_navigation.center':
       ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
 };
@@ -33,24 +33,14 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return BlocBuilder<RouteBloc, RouteState>(
       builder: (context, routeState) {
         return FractionallySizedBox(
-          heightFactor: MediaQuery.sizeOf(context).height < 600 ? 0.10 : 0.08,
+          heightFactor: 0.11,
           child: Padding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                canvasColor: HelloColors.white,
-                tooltipTheme: TooltipThemeData(
-                  textStyle: TextStyle(
-                    fontSize: 8,
-                    color: Colors.white,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                // bottom: MediaQuery.of(context).viewInsets.bottom,
                 ),
+            child: Container(
+              decoration: BoxDecoration(
+                color: HelloColors.white,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -61,14 +51,18 @@ class CustomBottomNavigationBar extends StatelessWidget {
                         final index = items.keys.toList().indexOf(key);
                         return Expanded(
                           child: Align(
-                            alignment: Alignment.center,
+                            alignment: Alignment.bottomCenter,
                             child: index == routeState.currentIndex
                                 ? Container(
-                                    width: 40,
-                                    height: 4,
-                                    color: Color(0xff4B7BF5),
+                                    width: 30,
+                                    height: 3,
+                                    color: const Color(0xff4B7BF5),
                                   )
-                                : SizedBox(width: 40),
+                                : Container(
+                                    width: 30,
+                                    height: 3,
+                                    color: Colors.transparent,
+                                  ),
                           ),
                         );
                       }).toList(),
@@ -112,11 +106,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return items.entries.map((entry) {
       return BottomNavigationBarItem(
         icon: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: entry.value,
         ),
         label: localization.getTranslatedText(entry.key),
-        tooltip: localization.getTranslatedText(entry.key),
+        backgroundColor: HelloColors.white,
       );
     }).toList();
   }
