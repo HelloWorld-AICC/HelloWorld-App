@@ -46,10 +46,4 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
     //   final roomId = activeChatRoomBloc.state.roomId;
     //   add(ChatSelected(roomId: roomId));
   }
-
-// Future<void> _onChatSelected(
-//     ChatSelected event, Emitter<RouteState> emit) async {
-//   final roomId = event.roomId;
-//   chatSessionBloc.add(LoadChatSession(roomId: roomId ?? 'new-chat'));
-// }
 }

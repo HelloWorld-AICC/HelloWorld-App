@@ -155,9 +155,7 @@ class _SplashPageState extends State<SplashPage> {
                   padding: EdgeInsets.only(left: 30.0, right: 30.0),
                   child: BlocListener<AppInitBloc, AppInitState>(
                     listener: (context, state) {
-                      if (!state.isFirstRun) {
-                        context.push('/terms-of-service');
-                      }
+                      //
                     },
                     child: GestureDetector(
                       onTap: () async {
@@ -183,27 +181,38 @@ class _SplashPageState extends State<SplashPage> {
                               newRoute: '/home',
                             ),
                           );
-                          context.read<AppInitBloc>().add(CheckAppFirstRun());
-                          // context.push('/home');
                         }
                       },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: const BoxDecoration(
-                              color: Color(0xffB7D3F6),
-                              shape: BoxShape.circle,
+                      child: GestureDetector(
+                        onTap: () {
+                          context
+                              .read<AppInitBloc>()
+                              .add(MarkAppRunnedBefore());
+                          context
+                              .read<AppInitBloc>()
+                              .add(MarkLanguageSelected());
+                          print('Language selected');
+                          print("Navigating to terms of service");
+                          context.push('/terms-of-service');
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffB7D3F6),
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                          const Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 45,
-                            color: HelloColors.white,
-                          ),
-                        ],
+                            const Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 45,
+                              color: HelloColors.white,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

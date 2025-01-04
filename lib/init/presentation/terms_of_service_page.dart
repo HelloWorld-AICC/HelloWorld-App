@@ -106,8 +106,9 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                       if (isSignIn == null || !isSignIn) {
                         context.push('/login');
                         return;
+                      } else {
+                        context.push('/home');
                       }
-                      context.push('/home');
                     },
                     child: Stack(
                       alignment: Alignment.center,

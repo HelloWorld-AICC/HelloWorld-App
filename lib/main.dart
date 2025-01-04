@@ -30,9 +30,8 @@ void main() async {
   await EasyLocalization.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
-  prefs.setString('isFirstLaunch', 'true');
+  prefs.getBool('isFirstRun') ?? true;
   prefs.setString('lastVersion', '0.1.0');
-
   configureDependencies();
 
   FlutterError.onError = (errorDetails) {
