@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../injection.dart';
+import '../domain/route_service.dart';
+
 part 'route_event.dart';
 
 part 'route_state.dart';
@@ -32,6 +35,14 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
         currentRoute: '/splash',
       ));
     });
+    on<PopEvent>((event, emit) async {
+      emit(state.copyWith(
+        currentIndex: 2,
+        currentRoute: '/home',
+      ));
+      getIt<RouteService>().router.pop();
+      print("RouteBloc에서 pop");
+    });
     // on<ChatSelected>(_onChatSelected);
   }
 
@@ -41,9 +52,10 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       currentIndex: event.newIndex,
       currentRoute: event.newRoute,
     ));
-    debugPrint("naviagtion to ${event.newRoute}");
+    getIt<RouteService>().router.push("/${event.newRoute}");
     // if (event.newIndex == 1) {
     //   final roomId = activeChatRoomBloc.state.roomId;
     //   add(ChatSelected(roomId: roomId));
+    print("RouteBloc에서 push");
   }
 }

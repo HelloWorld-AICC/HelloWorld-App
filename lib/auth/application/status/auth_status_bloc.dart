@@ -42,9 +42,9 @@ class AuthStatusBloc extends Bloc<AuthStatusEvent, AuthStatusState> {
       final tokensOrFailure = await tokenRepository.getTokens();
       final isSignedIn = tokensOrFailure.isRight();
       if (!isSignedIn) {
-        routeService.redirectToLoginPage();
+        routeService.router.go('/login');
       } else {
-        routeService.redirectToHomePage();
+        routeService.router.go('/home');
       }
     });
   }

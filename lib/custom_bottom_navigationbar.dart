@@ -30,7 +30,12 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationService = GetIt.instance<LocalizationService>();
 
-    return BlocBuilder<RouteBloc, RouteState>(
+    return BlocConsumer<RouteBloc, RouteState>(
+      listenWhen: (previous, current) =>
+          previous.currentIndex != current.currentIndex,
+      listener: (context, routeState) {
+        print("Route changed to index: ${routeState.currentIndex}");
+      },
       builder: (context, routeState) {
         return FractionallySizedBox(
           heightFactor: 0.11,

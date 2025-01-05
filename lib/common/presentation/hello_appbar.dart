@@ -21,6 +21,7 @@ class HelloAppbar extends StatelessWidget implements PreferredSizeWidget {
           InkWell(
             onTap: () {
               context.pop();
+              print("popped");
             },
             child: SvgPicture.asset(
               "assets/images/mypage/caret-left.svg",

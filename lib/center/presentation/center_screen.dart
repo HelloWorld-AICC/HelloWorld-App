@@ -224,8 +224,6 @@ class _CenterScreenState extends State<CenterScreen> {
   }
 
   Widget _buildGoogleMap(LatLng currentLocation) {
-    print("centers: $_centerLocations");
-
     return GoogleMap(
       onMapCreated: _onMapCreated,
       initialCameraPosition: CameraPosition(
@@ -264,8 +262,9 @@ class _CenterScreenState extends State<CenterScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           _buildBackButton(context),
-          SizedBox(width: MediaQuery.of(context).size.width * 0.1),
+          Spacer(),
           _buildLocationInfo(),
+          Spacer(),
         ],
       ),
     );
