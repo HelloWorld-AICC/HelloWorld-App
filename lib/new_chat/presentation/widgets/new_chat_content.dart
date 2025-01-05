@@ -4,8 +4,6 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/auth/infrastructure/repository/auth_repository.dart';
-import 'package:hello_world_mvp/fetch/fetch_service.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/value_objects.dart';
@@ -13,18 +11,18 @@ import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
 import '../../../fetch/authenticated_http_client.dart';
 import '../../../injection.dart';
+import '../../../route/application/route_bloc.dart';
+import '../../../route/domain/route_service.dart';
 import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
-import '../../domain/service/chat_fetch_service.dart';
-import '../../domain/service/stream/streamed_chat_parse_service.dart';
 import '../../domain/service/stream/streamed_chat_service.dart';
+import 'chat_appbar.dart';
 import 'chat_guide_widget.dart';
 import 'chat_input_field.dart';
 import 'chat_rooms_drawer.dart';
 import 'message_list_widget.dart';
-import 'message_widget.dart';
 
 class NewChatContent extends StatefulWidget {
   @override
@@ -63,6 +61,10 @@ class NewChatContentState extends State<NewChatContent>
       }
       _scrollToBottom();
     });
+
+    // print("새로운 채팅방을 생성합니다.");
+    // _streamController
+    //     .add(ChatMessage(sender: Sender.bot, content: StringVO("안녕하세요!")));
   }
 
   void _scrollToBottom() {
@@ -82,150 +84,124 @@ class NewChatContentState extends State<NewChatContent>
     return BlocBuilder<ChatSessionBloc, ChatSessionState>(
         builder: (context, state) {
       return SafeArea(
-        child: Scaffold(
-          key: _scaffoldKey,
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.white,
-          appBar: AppBar(
-            backgroundColor: Colors.white,
-            centerTitle: true,
-            title: Text(
-              tr('chat_title'),
-              style: TextStyle(
-                color: HelloColors.subTextColor,
-                fontFamily: "SB AggroOTF",
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-            leading: IconButton(
-              icon: Icon(
-                Icons.list_rounded,
-                color: HelloColors.subTextColor,
-              ),
-              color: HelloColors.subTextColor,
-              onPressed: () {
-                // context
-                //     .read<RouteBloc>()
-                //     .add(RouteChanged(newIndex: 0, newRoute: '/home'));
-                // Navigator.of(context).pop();
-                _scaffoldKey.currentState?.openDrawer();
-              },
-            ),
-            actions: [
-              IconButton(
-                icon: Icon(
-                  Icons.add,
-                  color: HelloColors.subTextColor,
-                ),
-                onPressed: () {
-                  context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
-                },
-              ),
-            ],
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Expanded(
-                  child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
-                    builder: (context, state) {
-                      if (state.roomId == "new_chat") {
-                        return Padding(
-                          padding: const EdgeInsets.only(
-                            top: 10,
-                            left: 10,
-                            right: 100,
-                            bottom: 350,
-                          ),
-                          child: ChatGuideWidget(),
-                        );
-                      } else {
-                        // return MessageListWidget(
-                        //   messageStream:
-                        //       streamedChatService.parseService.messageStream,
-                        //   roomId: state.roomId,
-                        // );
-                        return StreamBuilder<ChatMessage>(
-                          stream: _streamController.stream,
-                          builder: (context, snapshot) {
-                            final updatedMessages =
-                                List<ChatMessage>.from(state.messages);
-                            // List<ChatMessage> updatedMessages = [];
-
-                            if (snapshot.connectionState ==
-                                    ConnectionState.active ||
-                                snapshot.connectionState ==
-                                    ConnectionState.done) {
-                              if (snapshot.hasData) {
-                                // print(formatMessage(
-                                //     "새로운 메시지가 도착했습니다: ${snapshot.data.toString()}",
-                                //     150));
-                                // updatedMessages.add(snapshot.data!);
-                              }
-
-                              return NoStreamMessageListWidget(
-                                messages: updatedMessages,
-                                roomId: roomId,
-                              );
-                            } else if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return NoStreamMessageListWidget(
-                                messages: updatedMessages,
-                                roomId: roomId,
-                              );
-                            } else {
-                              // 스트림이 완료된 후 처리할 사항
-                              return Text("스트림이 종료되었습니다.");
-                            }
-                          },
-                        );
-                      }
-                    },
-                  ),
-                ),
-                // if (context.watch<ChatSessionBloc>().state.typingState ==
-                //     TypingIndicatorState.shown)
-                //   TypingIndicator(),
-                // Expanded(
-                //   child: ActionButtonsWidget(
-                //     onButtonPressed: (selectedContent) {},
-                //   ),
-                // ),
-                _buildInputArea(roomId ?? 'new_chat'),
-              ],
-            ),
-          ),
-          bottomNavigationBar: Visibility(
-            visible: !isKeyboardVisible,
-            child: CustomBottomNavigationBar(items: bottomNavItems),
-          ),
-          drawer: ChatRoomsDrawer(streamController: _streamController),
-          onDrawerChanged: (isOpen) {
-            if (!isOpen) {
-              final selectedRoomId =
-                  context.read<ChatDrawerBloc>().state.selectedRoomId;
-              context
-                  .read<ChatDrawerBloc>()
-                  .add(CloseDrawerEvent(selectedRoomId: selectedRoomId));
-              context
-                  .read<ChatSessionBloc>()
-                  .add(ChangeRoomIdEvent(roomId: selectedRoomId));
+        child: PopScope(
+          onPopInvoked: (result) {
+            if (result) {
+              print("Pop invoked in NewChatContent");
+              context.read<RouteBloc>().add(PopEvent());
             }
           },
+          child: Scaffold(
+            key: _scaffoldKey,
+            resizeToAvoidBottomInset: false,
+            backgroundColor: Colors.white,
+            appBar: ChatAppbar(scaffoldKey: _scaffoldKey),
+            body: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Expanded(
+                    child: BlocBuilder<ChatSessionBloc, ChatSessionState>(
+                        builder: (context, state) {
+                      if (state.roomId == "new_chat") {
+                        // 채팅 가이드 위젯 삭제
+                        // return Padding(
+                        //   padding: const EdgeInsets.only(
+                        //     top: 10,
+                        //     left: 10,
+                        //     right: 100,
+                        //     bottom: 200,
+                        //   ),
+                        //   child: ChatGuideWidget(),
+                        // );
+                      }
+
+                      return StreamBuilder<ChatMessage>(
+                        stream: _streamController.stream,
+                        builder: (context, snapshot) {
+                          // print("채팅방 ID: ${state.roomId}");
+
+                          final updatedMessages =
+                              List<ChatMessage>.from(state.messages);
+                          // List<ChatMessage> updatedMessages = [];
+
+                          if (snapshot.connectionState ==
+                                  ConnectionState.active ||
+                              snapshot.connectionState ==
+                                  ConnectionState.done) {
+                            if (snapshot.hasData) {
+                              // print(formatMessage(
+                              //     "새로운 메시지가 도착했습니다: ${snapshot.data.toString()}",
+                              //     200));
+                              // updatedMessages.add(snapshot.data!);
+                              WidgetsBinding.instance.addPostFrameCallback((_) {
+                                _scrollToBottom();
+                              });
+                            }
+
+                            return NoStreamMessageListWidget(
+                              messages: updatedMessages,
+                              roomId: roomId,
+                            );
+                          } else if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return NoStreamMessageListWidget(
+                              messages: updatedMessages,
+                              roomId: roomId,
+                            );
+                          } else {
+                            // 스트림이 완료된 후 처리할 사항
+                            return Text("스트림이 종료되었습니다.");
+                          }
+                        },
+                      );
+                    }
+                        // },
+                        ),
+                  ),
+                  // if (context.watch<ChatSessionBloc>().state.typingState ==
+                  //     TypingIndicatorState.shown)
+                  //   TypingIndicator(),
+                  // Expanded(
+                  //   child: ActionButtonsWidget(
+                  //     onButtonPressed: (selectedContent) {},
+                  //   ),
+                  // ),
+                  _buildInputArea(roomId ?? 'new_chat'),
+                ],
+              ),
+            ),
+            bottomNavigationBar: Visibility(
+              visible: !isKeyboardVisible,
+              child: CustomBottomNavigationBar(items: bottomNavItems),
+            ),
+            drawer: ChatRoomsDrawer(streamController: _streamController),
+            onDrawerChanged: (isOpen) {
+              if (!isOpen) {
+                final selectedRoomId =
+                    context.read<ChatDrawerBloc>().state.selectedRoomId;
+                context.read<ChatDrawerBloc>().add(CloseDrawerEvent(
+                    selectedRoomId: selectedRoomId == "new_chat"
+                        ? context.read<ChatSessionBloc>().state.roomId
+                        : selectedRoomId));
+                if (selectedRoomId != null) {
+                  context
+                      .read<ChatSessionBloc>()
+                      .add(ChangeRoomIdEvent(roomId: selectedRoomId));
+                }
+              }
+            },
+          ),
         ),
       );
     });
   }
 
   Widget _buildInputArea(String roomId) {
-    return BlocListener<ChatSessionBloc, ChatSessionState>(
-      listener: (context, state) {
-        print("ChatSessionBloc state: ${state.toString()}");
-      },
-      child: ChatInputField(
+    return BlocConsumer<ChatSessionBloc, ChatSessionState>(
+      listener: (context, state) {},
+      builder: (context, state) => ChatInputField(
         sendMessage: () async {
           if (_controller.text.isEmpty || _controller.text == " ") return;
 
@@ -251,7 +227,6 @@ class NewChatContentState extends State<NewChatContent>
           final request = http.Request("POST", uri);
 
           request.headers['accept'] = 'text/event-stream';
-          // print("보내기 직전에 messagetoSend 값: $messageToSend");
           final bodyParams = {'content': messageToSend};
           request.body = json.encode(bodyParams);
 
@@ -279,6 +254,7 @@ class NewChatContentState extends State<NewChatContent>
                 context
                     .read<ChatSessionBloc>()
                     .add(ChangeRoomIdEvent(roomId: roomId));
+                return;
               } else {
                 if (temp == 'data:') {
                   // print('Data is empty, appending newline');
@@ -289,7 +265,7 @@ class NewChatContentState extends State<NewChatContent>
                 }
 
                 if (botMessage == null) {
-                  print('Creating new bot message');
+                  // print('Creating new bot message');
                   botMessage = ChatMessage(
                     sender: Sender.bot,
                     content: StringVO(finalResponse.toString()),
@@ -353,6 +329,9 @@ class NewChatContentState extends State<NewChatContent>
               }
             }
           }, onDone: () {
+            context
+                .read<ChatSessionBloc>()
+                .add(ChangeBlockInputEvent(blockInput: false));
             _controller.clear();
             print("사용자 메시지와 봇 메시지 전송이 완료되었고, 스트림이 종료되었습니다.");
           });

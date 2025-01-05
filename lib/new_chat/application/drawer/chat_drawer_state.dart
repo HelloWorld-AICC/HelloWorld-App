@@ -3,21 +3,21 @@ part of 'chat_drawer_bloc.dart';
 class ChatDrawerState extends Equatable {
   final bool loading;
   final bool isDrawerOpen;
-  final String selectedRoomId;
+  final String? selectedRoomId;
   final List<ChatRoomInfo> chatRoomInfoList;
 
   ChatDrawerState(
       {required this.loading,
       required this.isDrawerOpen,
       required this.chatRoomInfoList,
-      required this.selectedRoomId});
+      this.selectedRoomId});
 
   factory ChatDrawerState.initial() {
     return ChatDrawerState(
-        loading: false,
-        isDrawerOpen: false,
-        chatRoomInfoList: [],
-        selectedRoomId: 'new_chat');
+      loading: false,
+      isDrawerOpen: false,
+      chatRoomInfoList: [],
+    );
   }
 
   ChatDrawerState copyWith(

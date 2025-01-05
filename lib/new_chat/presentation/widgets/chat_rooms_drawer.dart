@@ -36,76 +36,90 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
         return Drawer(
           backgroundColor: HelloColors.white,
           child: ListView(
-            padding: EdgeInsets.zero,
             children: [
-              _buildDrawerHeader(context),
+              _buildCustomDrawerHeader(context),
               if (state.loading)
                 const Center(child: CircularProgressIndicator())
               else ...[
                 for (final room in state.chatRoomInfoList)
-                  ListTile(
-                    title: Text(
-                      room.title.getOrCrash(),
-                      style: const TextStyle(
-                          fontFamily: "SB AggroOTF",
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12,
-                          color: HelloColors.mainColor2),
-                    ),
-                    subtitle: Text(
-                      room.roomId.getOrCrash(),
-                      style: const TextStyle(
-                        fontFamily: "SB AggroOTF",
-                        fontSize: 8,
-                        color: HelloColors.mainColor2,
-                      ),
-                    ),
-                    selected: state.selectedRoomId == room.roomId,
-                    selectedTileColor: Colors.blue.shade100,
-                    onTap: () async {
-                      context.read<ChatDrawerBloc>().add(
-                          SelectRoomEvent(roomId: room.roomId.getOrCrash()));
+                  Column(
+                    children: [
+                      ListTile(
+                        title: Text(
+                          room.title.getOrCrash(),
+                          style: const TextStyle(
+                              fontFamily: "SB AggroOTF",
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                              color: HelloColors.mainColor2),
+                        ),
+                        subtitle: Text(
+                          room.roomId.getOrCrash(),
+                          style: const TextStyle(
+                            fontFamily: "SB AggroOTF",
+                            fontSize: 8,
+                            color: HelloColors.mainColor2,
+                          ),
+                        ),
+                        selected: state.selectedRoomId == room.roomId,
+                        selectedTileColor: Colors.blue.shade100,
+                        onTap: () async {
+                          context.read<ChatDrawerBloc>().add(SelectRoomEvent(
+                              roomId: room.roomId.getOrCrash()));
 
-                      context.read<ChatSessionBloc>().add(UpdateMessagesEvent(
-                          messages: [], isLoading: false, failure: null));
+                          context.read<ChatSessionBloc>().add(
+                              UpdateMessagesEvent(
+                                  messages: [],
+                                  isLoading: false,
+                                  failure: null));
 
-                      final chatRepository = getIt<ChatRepository>();
-                      final failureOrChatRoom = await chatRepository
-                          .getRoomById(StringVO(room.roomId.getOrCrash()));
-                      List<ChatMessage> updatedMessages =
-                          failureOrChatRoom.fold(
-                        (failure) {
-                          return [];
-                        },
-                        (chatRoom) {
-                          List<ChatMessage> fetchedMessages = chatRoom.messages;
-                          fetchedMessages = fetchedMessages.map((message) {
-                            final content =
-                                cleanContent(message.content.getOrCrash());
-                            return message.copyWith(content: StringVO(content));
-                          }).toList();
-                          return fetchedMessages;
-                        },
-                      );
-                      final stateMessages =
-                          context.read<ChatSessionBloc>().state.messages;
-                      updatedMessages.addAll(stateMessages);
-
-                      updatedMessages.forEach((message) {
-                        widget.streamController.add(message);
-                      });
-
-                      context.read<ChatSessionBloc>().add(
-                            UpdateMessagesEvent(
-                              messages: updatedMessages,
-                              failure: failureOrChatRoom.fold(
-                                (failure) => failure,
-                                (chatRoom) => null,
-                              ),
-                              isLoading: false,
-                            ),
+                          final chatRepository = getIt<ChatRepository>();
+                          final failureOrChatRoom = await chatRepository
+                              .getRoomById(StringVO(room.roomId.getOrCrash()));
+                          List<ChatMessage> updatedMessages =
+                              failureOrChatRoom.fold(
+                            (failure) {
+                              return [];
+                            },
+                            (chatRoom) {
+                              List<ChatMessage> fetchedMessages =
+                                  chatRoom.messages;
+                              fetchedMessages = fetchedMessages.map((message) {
+                                final content =
+                                    cleanContent(message.content.getOrCrash());
+                                return message.copyWith(
+                                    content: StringVO(content));
+                              }).toList();
+                              return fetchedMessages;
+                            },
                           );
-                    },
+                          final stateMessages =
+                              context.read<ChatSessionBloc>().state.messages;
+                          updatedMessages.addAll(stateMessages);
+
+                          updatedMessages.forEach((message) {
+                            widget.streamController.add(message);
+                          });
+
+                          context.read<ChatSessionBloc>().add(
+                                UpdateMessagesEvent(
+                                  messages: updatedMessages,
+                                  failure: failureOrChatRoom.fold(
+                                    (failure) => failure,
+                                    (chatRoom) => null,
+                                  ),
+                                  isLoading: false,
+                                ),
+                              );
+                        },
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 16.0, left: 16.0),
+                        child: Divider(
+                          height: 0.1,
+                        ),
+                      ),
+                    ],
                   ),
               ],
             ],
@@ -125,33 +139,38 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
     return content;
   }
 
-  Widget _buildDrawerHeader(BuildContext context) {
-    return DrawerHeader(
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.transparent),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            'Chatting Room',
-            style: const TextStyle(
-              fontFamily: 'SB AggroOTF',
-              color: HelloColors.subTextColor,
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+  Widget _buildCustomDrawerHeader(BuildContext context) {
+    return SizedBox(
+      height: MediaQuery.sizeOf(context).height * 0.2,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+        decoration: BoxDecoration(
+          color: Colors.transparent, // Adjust the background color as needed
+        ),
+        child: const Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Chatting Room',
+              style: TextStyle(
+                fontFamily: 'SB AggroOTF',
+                color: HelloColors.subTextColor,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.add,
-              color: HelloColors.subTextColor,
-            ),
-            onPressed: () {
-              context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
-            },
-          ),
-        ],
+            // Uncomment if you want to add a button
+            // IconButton(
+            //   icon: Icon(
+            //     Icons.add,
+            //     color: HelloColors.subTextColor,
+            //   ),
+            //   onPressed: () {
+            //     context.read<ChatSessionBloc>().add(ClearChatSessionEvent());
+            //   },
+            // ),
+          ],
+        ),
       ),
     );
   }

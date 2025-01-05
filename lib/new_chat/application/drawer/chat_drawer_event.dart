@@ -20,9 +20,9 @@ class OpenDrawerEvent extends ChatDrawerEvent {
 }
 
 class CloseDrawerEvent extends ChatDrawerEvent {
-  final String selectedRoomId;
+  final String? selectedRoomId;
 
-  const CloseDrawerEvent({this.selectedRoomId = 'new_chat'});
+  const CloseDrawerEvent({required this.selectedRoomId});
 
   @override
   List<Object?> get props => [selectedRoomId];

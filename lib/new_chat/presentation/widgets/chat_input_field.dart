@@ -19,13 +19,26 @@ class ChatInputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ChatSessionBloc, ChatSessionState>(
+    return BlocConsumer<ChatSessionBloc, ChatSessionState>(
+      listenWhen: (previous, current) {
+        return previous.blockInput != current.blockInput;
+      },
+      listener: (context, state) {
+        if (state.blockInput) {
+          print('ChatInputField :: build :: blockInput=true');
+          return;
+        }
+        print('ChatInputField :: build :: blockInput=false');
+      },
       builder: (context, state) {
-        bool isEnabled = !state.isLoading;
-        Color backgroundColor = isEnabled ? Colors.white : Colors.grey[100]!;
+        bool blockInput = !state.blockInput;
+        Color backgroundColor = blockInput ? Colors.white : Colors.grey[100]!;
+        Color textColor = blockInput ? HelloColors.mainColor1 : Colors.grey;
         Color borderColor =
-            isEnabled ? HelloColors.subTextColor : Colors.grey[100]!;
-        Color iconColor = isEnabled ? HelloColors.mainColor1 : HelloColors.gray;
+            blockInput ? HelloColors.subTextColor : Colors.grey[100]!;
+        Color iconColor =
+            blockInput ? HelloColors.mainColor1 : HelloColors.gray;
+        // print('ChatInputField :: build :: blockInput=$blockInput');
 
         return Padding(
           padding: const EdgeInsets.all(32.0),
@@ -40,14 +53,14 @@ class ChatInputField extends StatelessWidget {
                 Expanded(
                   child: TextField(
                     controller: controller,
-                    enabled: isEnabled,
-                    style: const TextStyle(
+                    enabled: blockInput,
+                    style: TextStyle(
                       fontFamily: "SB AggroOTF",
                       fontSize: 12,
-                      color: HelloColors.mainColor1,
+                      color: textColor,
                     ),
                     decoration: InputDecoration(
-                      hintText: isEnabled ? '상담하고자 하는 내용을 입력하세요' : '',
+                      hintText: blockInput ? '상담하고자 하는 내용을 입력하세요' : '',
                       hintStyle: TextStyle(
                         fontFamily: "SB AggroOTF",
                         fontSize: 12,
@@ -58,8 +71,10 @@ class ChatInputField extends StatelessWidget {
                       contentPadding: EdgeInsets.symmetric(horizontal: 16.0),
                     ),
                     onSubmitted: (value) {
-                      sendMessage();
+                      context.read<ChatSessionBloc>().add(
+                          ChangeLoadingEvent(isLoading: true, failure: null));
                       controller.clear();
+                      sendMessage();
                     },
                     onTap: () {
                       tapped();
@@ -72,8 +87,11 @@ class ChatInputField extends StatelessWidget {
                     size: 20,
                     color: iconColor,
                   ),
-                  onPressed: isEnabled
+                  onPressed: blockInput
                       ? () {
+                          context
+                              .read<ChatSessionBloc>()
+                              .add(ChangeBlockInputEvent(blockInput: true));
                           sendMessage();
                         }
                       : null,

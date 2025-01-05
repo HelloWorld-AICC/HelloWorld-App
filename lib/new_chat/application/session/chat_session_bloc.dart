@@ -67,6 +67,10 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
       ));
     });
 
+    on<ChangeBlockInputEvent>((event, emit) {
+      emit(state.copyWith(blockInput: event.blockInput));
+    });
+
     on<ClearChatSessionEvent>((event, emit) {
       streamedChatService.clearChatLogs();
       emit(state.copyWith(messages: []));
@@ -80,6 +84,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
     });
 
     on<ChangeRoomIdEvent>((event, emit) {
+      print("ChatSessionBloc :: ChangeRoomIdEvent : roomId=${event.roomId}");
       emit(state.copyWith(roomId: event.roomId));
     });
   }

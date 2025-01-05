@@ -30,6 +30,9 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationService = GetIt.instance<LocalizationService>();
 
+    // Get the keyboard visibility status
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
     return BlocConsumer<RouteBloc, RouteState>(
       listenWhen: (previous, current) =>
           previous.currentIndex != current.currentIndex,
@@ -37,42 +40,47 @@ class CustomBottomNavigationBar extends StatelessWidget {
         print("Route changed to index: ${routeState.currentIndex}");
       },
       builder: (context, routeState) {
-        return FractionallySizedBox(
-          heightFactor: 0.11,
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height:
+              isKeyboardVisible ? 0 : MediaQuery.of(context).size.height * 0.11,
           child: Padding(
             padding: EdgeInsets.only(
-                // bottom: MediaQuery.of(context).viewInsets.bottom,
-                ),
+                // Adjust for the keyboard height if needed
+                bottom: isKeyboardVisible
+                    ? MediaQuery.of(context).viewInsets.bottom
+                    : 0),
             child: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: HelloColors.white,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: items.keys.map((key) {
-                        final index = items.keys.toList().indexOf(key);
-                        return Expanded(
-                          child: Align(
-                            alignment: Alignment.bottomCenter,
-                            child: index == routeState.currentIndex
-                                ? Container(
-                                    width: 30,
-                                    height: 3,
-                                    color: const Color(0xff4B7BF5),
-                                  )
-                                : Container(
-                                    width: 30,
-                                    height: 3,
-                                    color: Colors.transparent,
-                                  ),
-                          ),
-                        );
-                      }).toList(),
+                  if (!isKeyboardVisible)
+                    Expanded(
+                      child: Row(
+                        children: items.keys.map((key) {
+                          final index = items.keys.toList().indexOf(key);
+                          return Expanded(
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: index == routeState.currentIndex
+                                  ? Container(
+                                      width: 30,
+                                      height: 3,
+                                      color: const Color(0xff4B7BF5),
+                                    )
+                                  : Container(
+                                      width: 30,
+                                      height: 3,
+                                      color: Colors.transparent,
+                                    ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  ),
                   BottomNavigationBar(
                     currentIndex: routeState.currentIndex,
                     onTap: (index) {
@@ -86,13 +94,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       }
                       context.read<RouteBloc>().add(RouteChanged(
                           newIndex: index, newRoute: selectedRoute));
-                      Future.delayed(Duration(milliseconds: 100), () {
+                      Future.delayed(const Duration(milliseconds: 100), () {
                         context.push(selectedRoute);
                       });
                     },
                     items: _getBottomNavItems(localizationService),
                     backgroundColor: HelloColors.white,
-                    selectedItemColor: Color(0xff4B7BF5),
+                    selectedItemColor: const Color(0xff4B7BF5),
                     unselectedItemColor: Colors.grey,
                     showUnselectedLabels: true,
                     elevation: 0,
