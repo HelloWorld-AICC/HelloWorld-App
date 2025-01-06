@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/center/presentation/center_screen.dart';
+import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
+import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -103,7 +105,19 @@ class RouteService {
             postId: int.parse(postId),
           );
         },
-      )
+      ),
+      GoRoute(
+        path: '/account',
+        builder: (context, state) => AccountScreen(),
+      ),
+      GoRoute(
+        path: '/term',
+        builder: (context, state) => TermsOfServicePage(),
+      ),
+      GoRoute(
+        path: '/privacy-policy',
+        builder: (context, state) => PrivacyPolicyScreen(),
+      ),
     ], observers: [
       CustomNavigatorObserver(routeBloc),
     ]);

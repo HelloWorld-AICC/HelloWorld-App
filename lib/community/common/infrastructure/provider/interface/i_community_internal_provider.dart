@@ -17,7 +17,15 @@ abstract class ICommunityInternalProvider {
   });
 
   Future<Either<Failure, PostDetailDto>> getPostDetail({
+    required int page,
+    required int pageSize,
     required int categoryId,
     required int postId,
+  });
+
+  Future<Either<Failure, Unit>> writeComment({
+    required int categoryId,
+    required int postId,
+    required String content,
   });
 }

@@ -8,6 +8,9 @@ import 'package:hello_world_mvp/community/common/infrastructure/provider/interfa
 import 'package:hello_world_mvp/fetch/failure.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/post_detail.dart';
+import '../dtos/post_list_dto.dart';
+
 @LazySingleton(as: ICommunityRepository)
 class CommunityRepository implements ICommunityRepository {
   final ICommunityInternalProvider _internalProvider;
@@ -26,6 +29,10 @@ class CommunityRepository implements ICommunityRepository {
       pageSize: pageSize,
     );
 
+    Either<Failure, PostList> temp = failureOrTokens.fold(
+        (f) => left(CommunityFailure(message: f.message)),
+        (result) => right(result.toDomain()));
+
     return failureOrTokens.fold(
         (f) => left(CommunityFailure(message: f.message)),
         (result) => right(result.toDomain()));
@@ -42,6 +49,39 @@ class CommunityRepository implements ICommunityRepository {
       postDto: postDto,
     );
 
+    return failureOrTokens.fold((f) => left(f), (result) => right(unit));
+  }
+
+  @override
+  Future<Either<CommunityFailure, PostDetail>> getPostDetail({
+    required int page,
+    required int pageSize,
+    required int categoryId,
+    required int postId,
+  }) async {
+    final failureOrTokens = await _internalProvider.getPostDetail(
+      page: page,
+      pageSize: pageSize,
+      categoryId: categoryId,
+      postId: postId,
+    );
+
+    return failureOrTokens.fold(
+        (f) => left(CommunityFailure(message: f.message)),
+        (result) => right(result.toDomain()));
+  }
+
+  @override
+  Future<Either<Failure, Unit>> writeComment({
+    required int categoryId,
+    required int postId,
+    required String content,
+  }) async {
+    final failureOrTokens = await _internalProvider.writeComment(
+      categoryId: categoryId,
+      postId: postId,
+      content: content,
+    );
     return failureOrTokens.fold((f) => left(f), (result) => right(unit));
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/common/presentation/hello_appbar.dart';
 import 'package:hello_world_mvp/community/common/presentation/community_action_button.dart';
+import 'package:hello_world_mvp/community/common/presentation/custom_text_form_field.dart';
 import 'package:hello_world_mvp/community/common/presentation/section_title.dart';
 import 'package:hello_world_mvp/community/create_post/application/create_post_bloc.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
@@ -47,11 +48,12 @@ class CreatePostPage extends StatelessWidget {
                 title: "글 작성하기",
                 action: CommunityActionButton(
                     text: "완료",
-                    buttonColor: HelloColors.subTextColor,
+                    buttonColor: Color(0xffECF6FE),
                     onTap: () {
                       context.read<CreatePostBloc>().add(SubmitPost());
                     }),
               ),
+              backgroundColor: HelloColors.white,
               body: const SingleChildScrollView(
                 child: MypageBackgroundGradient(
                   child: Column(
@@ -84,15 +86,14 @@ class _Body extends StatelessWidget {
           children: [
             const SectionTitle(text: "제목"),
             const SizedBox(height: 13),
-            TextField(
+            CustomTextFormField(
+              hintText: "제목을 입력해주세요",
               onChanged: (value) {
                 context.read<CreatePostBloc>().add(TitleChanged(title: value));
               },
-              decoration: const InputDecoration(
-                hintText: "제목을 입력해주세요",
-                border: InputBorder.none,
-              ),
-              style: const TextStyle(
+              minLines: 1,
+              maxLines: 2,
+              hintStyle: const TextStyle(
                 color: HelloColors.gray,
                 fontFamily: HelloFonts.inter,
                 fontSize: 12,
@@ -108,15 +109,35 @@ class _Body extends StatelessWidget {
             const Divider(),
             const SectionTitle(text: "내용"),
             const SizedBox(height: 13),
-            TextField(
+            // TextField(
+            //   onChanged: (value) {
+            //     context.read<CreatePostBloc>().add(BodyChanged(body: value));
+            //   },
+            //   decoration: const InputDecoration(
+            //     hintText: "내용을 입력해주세요",
+            //     border: InputBorder.none,
+            //   ),
+            //   style: const TextStyle(
+            //     color: HelloColors.gray,
+            //     fontFamily: HelloFonts.inter,
+            //     fontSize: 12,
+            //     fontStyle: FontStyle.normal,
+            //     fontWeight: FontWeight.w500,
+            //     height: 1.0,
+            //     letterSpacing: 0.12,
+            //     fontFeatures: [
+            //       FontFeature.enable('dlig'),
+            //     ],
+            //   ),
+            // ),
+            CustomTextFormField(
+              hintText: "내용을 입력해주세요",
               onChanged: (value) {
                 context.read<CreatePostBloc>().add(BodyChanged(body: value));
               },
-              decoration: const InputDecoration(
-                hintText: "내용을 입력해주세요",
-                border: InputBorder.none,
-              ),
-              style: const TextStyle(
+              minLines: 1,
+              maxLines: 10,
+              hintStyle: const TextStyle(
                 color: HelloColors.gray,
                 fontFamily: HelloFonts.inter,
                 fontSize: 12,

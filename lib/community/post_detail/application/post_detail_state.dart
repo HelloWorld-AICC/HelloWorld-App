@@ -5,6 +5,7 @@ class PostDetailState extends Equatable {
   final String? title;
   final String? body;
   final List<XFile> medias;
+  final DateTime createdAt;
   final bool isLoading;
   final bool isSuccess;
   final Failure? failure;
@@ -13,15 +14,17 @@ class PostDetailState extends Equatable {
     required this.title,
     required this.body,
     required this.medias,
+    required this.createdAt,
     required this.isLoading,
     required this.isSuccess,
     required this.failure,
   });
 
-  factory PostDetailState.initial() => const PostDetailState(
+  factory PostDetailState.initial() => PostDetailState(
         title: null,
         body: null,
-        medias: [],
+        medias: const [],
+        createdAt: DateTime.now(),
         isLoading: false,
         isSuccess: false,
         failure: null,
@@ -43,6 +46,7 @@ class PostDetailState extends Equatable {
       title: title ?? this.title,
       body: body ?? this.body,
       medias: medias ?? this.medias,
+      createdAt: createdAt,
       isLoading: isLoading ?? this.isLoading,
       isSuccess: isSuccess ?? this.isSuccess,
       failure: failure ?? this.failure,

@@ -7,7 +7,7 @@ import 'package:hello_world_mvp/core/value_objects.dart';
 class Comment extends Equatable {
   final int anonymousName;
   final DateVO createdAt;
-  final DateVO content;
+  final StringVO content;
 
   const Comment(
       {required this.anonymousName,

@@ -7,6 +7,7 @@ import 'package:google_maps_flutter_platform_interface/google_maps_flutter_platf
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 
 import '../../custom_bottom_navigationbar.dart';
+import '../../route/application/route_bloc.dart';
 import '../application/center_bloc.dart';
 
 import '../domain/model/center.dart' as center_model;
@@ -106,17 +107,25 @@ class _CenterScreenState extends State<CenterScreen> {
     }
 
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: HelloColors.white,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            _buildMapContainer(context),
-            _buildLocationText(context),
-          ],
-        ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          items: bottomNavItems,
+      child: PopScope(
+        onPopInvoked: (result) {
+          if (result) {
+            print("Pop invoked in CenterScreen");
+            context.read<RouteBloc>().add(PopEvent());
+          }
+        },
+        child: Scaffold(
+          backgroundColor: HelloColors.white,
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildMapContainer(context),
+              _buildLocationText(context),
+            ],
+          ),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            items: bottomNavItems,
+          ),
         ),
       ),
     );
