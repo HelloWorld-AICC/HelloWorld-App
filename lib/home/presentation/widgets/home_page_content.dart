@@ -68,12 +68,12 @@ class HomePageContent extends StatelessWidget {
       "bottom_index": 0,
       "isBeta": false,
     },
-    "call_bot": {
+    "callbot": {
       "title": "home_grid.call_bot.title",
       "subTitle": "home_grid.call_bot.subtitle",
       "imgPath": "assets/images/home/grid_view/call_bot.png",
       "bottom_index": 2,
-      "isBeta": true,
+      "isBeta": false,
     },
   };
 

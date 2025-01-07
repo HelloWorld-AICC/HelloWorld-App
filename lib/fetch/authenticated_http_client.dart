@@ -12,12 +12,13 @@ import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton()
+@injectable
 class AuthenticatedHttpClient extends http.BaseClient {
   final ITokenRepository tokenRepository;
-  final TokenAuthenticator tokenAuthenticator;
 
-  AuthenticatedHttpClient(
-      {required this.tokenRepository, required this.tokenAuthenticator});
+  AuthenticatedHttpClient({
+    required this.tokenRepository,
+  });
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {

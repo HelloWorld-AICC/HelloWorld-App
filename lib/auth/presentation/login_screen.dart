@@ -61,26 +61,41 @@ class LoginScreen extends StatelessWidget {
                             child: Stack(
                               children: [
                                 Positioned(
-                                  top: MediaQuery.of(context).size.height * 0.2,
-                                  left:
-                                      MediaQuery.of(context).size.width * 0.15,
-                                  child: Image.asset(
-                                    "assets/images/common/sphere.png",
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.7,
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                Positioned(
-                                  top: MediaQuery.of(context).size.height * 0.4,
-                                  left: MediaQuery.of(context).size.width * 0.3,
-                                  child: Image.asset(
-                                    "assets/images/home/hello_world_title.png",
+                                  top: MediaQuery.of(context).size.height * 0.3,
+                                  left: 0,
+                                  right: 0,
+                                  child: SizedBox(
                                     width:
                                         MediaQuery.of(context).size.width * 0.4,
-                                    fit: BoxFit.cover,
+                                    height:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    child: Image.asset(
+                                      "assets/images/common/app_icon.png",
+                                      fit: BoxFit.contain,
+                                    ),
                                   ),
                                 ),
+                                // Positioned(
+                                //   top: MediaQuery.of(context).size.height * 0.2,
+                                //   left:
+                                //       MediaQuery.of(context).size.width * 0.15,
+                                //   child: Image.asset(
+                                //     "assets/images/common/sphere.png",
+                                //     width:
+                                //         MediaQuery.of(context).size.width * 0.7,
+                                //     fit: BoxFit.cover,
+                                //   ),
+                                // ),
+                                // Positioned(
+                                //   top: MediaQuery.of(context).size.height * 0.4,
+                                //   left: MediaQuery.of(context).size.width * 0.3,
+                                //   child: Image.asset(
+                                //     "assets/images/home/hello_world_title.png",
+                                //     width:
+                                //         MediaQuery.of(context).size.width * 0.4,
+                                //     fit: BoxFit.cover,
+                                //   ),
+                                // ),
                                 Positioned(
                                     bottom: MediaQuery.of(context).size.height *
                                         0.25,
@@ -147,7 +162,7 @@ class _LoginWithGoogle extends StatelessWidget {
               Image.asset("assets/images/auth/google_logo.png"),
               const SizedBox(width: 8),
               const Text("Google로 로그인",
-                  style: TextStyle( 
+                  style: TextStyle(
                     color: Color(0xFF0F0F0F),
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
