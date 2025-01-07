@@ -10,7 +10,8 @@ import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
 import '../../../locale/application/locale_bloc.dart';
 import '../../../locale/domain/localization_service.dart';
-import '../../../route/domain/navigation_service.dart';
+import '../../../route/application/route_bloc.dart';
+import '../../../route/domain/route_service.dart';
 import 'home_route_grid.dart';
 
 final Map<String, ImageIcon> bottomNavItems = {
@@ -29,13 +30,13 @@ final Map<String, ImageIcon> bottomNavItems = {
 class HomePageContent extends StatelessWidget {
   final LocalizationService localizationService;
   final List<String> imagesPath;
-  final NavigationService navigationService;
+  final RouteService routeService;
 
   HomePageContent({
     Key? key,
     required this.localizationService,
     required this.imagesPath,
-    required this.navigationService,
+    required this.routeService,
   }) : super(key: key);
 
   final routeBoxItems = {
@@ -94,19 +95,22 @@ class HomePageContent extends StatelessWidget {
               ),
             ),
             child: Padding(
-              padding: EdgeInsets.all(20),
+              padding: EdgeInsets.only(
+                  left: MediaQuery.sizeOf(context).width * 0.05,
+                  right: MediaQuery.sizeOf(context).width * 0.05,
+                  top: MediaQuery.sizeOf(context).height * 0.05),
               child: Stack(
                 children: [
                   Stack(
                     children: [
                       Positioned(
-                        top: 80,
+                        top: 60,
                         child: Padding(
                           padding: const EdgeInsets.all(30),
                           child: ClipRect(
                             child: Align(
                               alignment: Alignment.topCenter,
-                              heightFactor: 0.5,
+                              heightFactor: 0.3,
                               child: Image.asset(
                                 'assets/images/home/nice_to_meet_you_with_sphere.png',
                                 fit: BoxFit.cover,
@@ -117,7 +121,7 @@ class HomePageContent extends StatelessWidget {
                         ),
                       ),
                       Positioned(
-                        top: 80,
+                        top: 60,
                         child: ClipRect(
                           child: BackdropFilter(
                             filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
@@ -138,10 +142,10 @@ class HomePageContent extends StatelessWidget {
                     child: _buildHeader(context),
                   ),
                   Positioned(
-                    top: 300,
+                    top: MediaQuery.sizeOf(context).height * 0.3,
                     child: HomeRouteGrid(
                       items: routeBoxItems,
-                      navigationService: navigationService,
+                      routeService: routeService,
                     ),
                   ),
                 ],
@@ -197,7 +201,7 @@ class HomePageContent extends StatelessWidget {
             ],
           ),
           Text(
-            "${tr("app_name")},",
+            context.tr("app_name"),
             style: const TextStyle(
               fontFamily: "SB AggroOTF",
               fontSize: 14,

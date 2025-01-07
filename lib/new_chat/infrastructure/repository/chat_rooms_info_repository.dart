@@ -40,14 +40,14 @@ class ChatRoomsInfoRepository implements IChatRoomsInfoRepository {
           if (eMap.containsKey('title') && eMap['title'] is String) {
             var titleJsonString = eMap['title'] as String;
 
-            final jsonFixPattern =
-                RegExp(r'(?<=[{,])(\w+):'); // 속성 이름 앞에 따옴표 추가
+            final jsonFixPattern = RegExp(r'(?<=[{,])(\w+):');
             titleJsonString =
                 titleJsonString.replaceAllMapped(jsonFixPattern, (match) {
               return '"${match[1]}":';
             });
 
-            if (!titleJsonString.endsWith('"')) {
+            if (!titleJsonString.endsWith('"') &&
+                !titleJsonString.endsWith('}')) {
               titleJsonString += '"';
             }
             if (!titleJsonString.endsWith('}')) {
@@ -58,16 +58,13 @@ class ChatRoomsInfoRepository implements IChatRoomsInfoRepository {
               final Map<String, dynamic> titleMap = jsonDecode(titleJsonString);
               final content = titleMap['content'];
               parsedContent = content;
-              // print('Parsed Content: $content');
             } catch (error) {
               print('Error parsing title JSON: $error');
             }
           }
-
-          // print('Parsed are $parsedRoomId, $parsedContent');
           return RoomInfoDto(
             roomId: parsedRoomId,
-            title: parsedContent,
+            title: parsedContent == '' ? 'No title' : parsedContent,
           );
         }).toList();
 

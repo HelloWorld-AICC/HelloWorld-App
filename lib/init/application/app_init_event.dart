@@ -5,6 +5,8 @@ sealed class AppInitEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class CheckAppFirstRun extends AppInitEvent {}
+final class MarkAppRunnedBefore extends AppInitEvent {}
 
 final class MarkSplashDone extends AppInitEvent {}
+
+final class MarkLanguageSelected extends AppInitEvent {}

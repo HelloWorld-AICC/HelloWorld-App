@@ -10,18 +10,17 @@ part 'app_init_state.dart';
 @Injectable()
 class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
   AppInitBloc() : super(AppInitState.initial()) {
-    on<CheckAppFirstRun>(_onCheckAppFirstRun);
+    on<MarkAppRunnedBefore>(_onMarkAppRunnedBefore);
     on<MarkSplashDone>(_onCheckSplashDone);
+    on<MarkLanguageSelected>(_onCheckLanguageSelected);
   }
 
-  Future<void> _onCheckAppFirstRun(
-    CheckAppFirstRun event,
+  Future<void> _onMarkAppRunnedBefore(
+    MarkAppRunnedBefore event,
     Emitter<AppInitState> emit,
   ) async {
-    print("Checking if app has run before");
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isFirstRun', false);
-    emit(state.copyWith(isFirstRun: false));
   }
 
   Future<void> _onCheckSplashDone(
@@ -29,5 +28,14 @@ class AppInitBloc extends Bloc<AppInitEvent, AppInitState> {
     Emitter<AppInitState> emit,
   ) async {
     emit((state.copyWith(isSplashComplete: true)));
+  }
+
+  Future<void> _onCheckLanguageSelected(
+    MarkLanguageSelected event,
+    Emitter<AppInitState> emit,
+  ) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isFirstRun', false);
+    emit((state.copyWith(isLanguageSelected: true, isFirstRun: false)));
   }
 }

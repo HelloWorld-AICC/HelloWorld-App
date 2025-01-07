@@ -12,7 +12,10 @@ import 'package:hello_world_mvp/mypage/common/application/mypage_messages.dart';
 
 import 'package:injectable/injectable.dart';
 
+import '../../common/domain/creat_post.dart';
+
 part 'board_event.dart';
+
 part 'board_state.dart';
 
 @injectable

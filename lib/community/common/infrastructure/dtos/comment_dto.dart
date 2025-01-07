@@ -1,5 +1,8 @@
 import 'dart:convert';
 
+import '../../../../core/value_objects.dart';
+import '../../domain/comment.dart';
+
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 class CommentDto {
   final int anonymousName;
@@ -37,5 +40,26 @@ class CommentDto {
       createdAt: map['createdAt'] as String,
       content: map['content'] as String,
     );
+  }
+
+  Comment toDomain() {
+    return Comment(
+      anonymousName: anonymousName,
+      createdAt: DateVO(parseDate(createdAt)),
+      content: StringVO(content),
+    );
+  }
+
+  DateTime parseDate(String date) {
+    final parts = date.split('.');
+    if (parts.length != 3) {
+      throw FormatException('Invalid date format. Expected "yyyy.MM.dd".');
+    }
+
+    final year = int.parse(parts[0]);
+    final month = int.parse(parts[1]);
+    final day = int.parse(parts[2]);
+
+    return DateTime(year, month, day);
   }
 }

@@ -8,4 +8,21 @@ class PostDetail extends Equatable {
   final StringVO createAt;
   final ListVO<StringVO> fileList;
   final ListVO<Comment> commentList;
+
+  const PostDetail({
+    required this.title,
+    required this.content,
+    required this.createAt,
+    required this.fileList,
+    required this.commentList,
+  });
+
+  @override
+  List<Object?> get props => [
+        title,
+        content,
+        createAt,
+        fileList,
+        commentList,
+      ];
 }

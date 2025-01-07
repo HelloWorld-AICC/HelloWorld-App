@@ -16,7 +16,7 @@ final Map<String, ImageIcon> bottomNavItems = {
   'bottom_navigation.home':
       ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
   'bottom_navigation.community':
-      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
+      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 24),
   'bottom_navigation.center':
       ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
 };
@@ -30,50 +30,57 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final localizationService = GetIt.instance<LocalizationService>();
 
-    return BlocBuilder<RouteBloc, RouteState>(
+    // Get the keyboard visibility status
+    final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
+
+    return BlocConsumer<RouteBloc, RouteState>(
+      listenWhen: (previous, current) =>
+          previous.currentIndex != current.currentIndex,
+      listener: (context, routeState) {
+        print("Route changed to index: ${routeState.currentIndex}");
+      },
       builder: (context, routeState) {
-        return FractionallySizedBox(
-          heightFactor: 0.1,
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height:
+              isKeyboardVisible ? 0 : MediaQuery.of(context).size.height * 0.11,
           child: Padding(
             padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom,
-            ),
-            child: Theme(
-              data: Theme.of(context).copyWith(
-                canvasColor: HelloColors.white,
-                tooltipTheme: TooltipThemeData(
-                  textStyle: TextStyle(
-                    fontSize: 8,
-                    color: Colors.white,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.8),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
+                // Adjust for the keyboard height if needed
+                bottom: isKeyboardVisible
+                    ? MediaQuery.of(context).viewInsets.bottom
+                    : 0),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: HelloColors.white,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: Row(
-                      children: items.keys.map((key) {
-                        final index = items.keys.toList().indexOf(key);
-                        return Expanded(
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: index == routeState.currentIndex
-                                ? Container(
-                                    width: 40,
-                                    height: 4,
-                                    color: Color(0xff4B7BF5),
-                                  )
-                                : SizedBox(width: 40),
-                          ),
-                        );
-                      }).toList(),
+                  if (!isKeyboardVisible)
+                    Expanded(
+                      child: Row(
+                        children: items.keys.map((key) {
+                          final index = items.keys.toList().indexOf(key);
+                          return Expanded(
+                            child: Align(
+                              alignment: Alignment.bottomCenter,
+                              child: index == routeState.currentIndex
+                                  ? Container(
+                                      width: 30,
+                                      height: 3,
+                                      color: const Color(0xff4B7BF5),
+                                    )
+                                  : Container(
+                                      width: 30,
+                                      height: 3,
+                                      color: Colors.transparent,
+                                    ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
                     ),
-                  ),
                   BottomNavigationBar(
                     currentIndex: routeState.currentIndex,
                     onTap: (index) {
@@ -87,13 +94,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       }
                       context.read<RouteBloc>().add(RouteChanged(
                           newIndex: index, newRoute: selectedRoute));
-                      Future.delayed(Duration(milliseconds: 100), () {
+                      Future.delayed(const Duration(milliseconds: 100), () {
                         context.push(selectedRoute);
                       });
                     },
                     items: _getBottomNavItems(localizationService),
                     backgroundColor: HelloColors.white,
-                    selectedItemColor: Color(0xff4B7BF5),
+                    selectedItemColor: const Color(0xff4B7BF5),
                     unselectedItemColor: Colors.grey,
                     showUnselectedLabels: true,
                     elevation: 0,
@@ -112,11 +119,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return items.entries.map((entry) {
       return BottomNavigationBarItem(
         icon: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(6.0),
           child: entry.value,
         ),
         label: localization.getTranslatedText(entry.key),
-        tooltip: localization.getTranslatedText(entry.key),
+        backgroundColor: HelloColors.white,
       );
     }).toList();
   }

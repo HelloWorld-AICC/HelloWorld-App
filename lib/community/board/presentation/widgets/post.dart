@@ -11,6 +11,7 @@ import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 class PostItem extends StatelessWidget {
   final Post post;
   final PostCategory postCategory;
+
   const PostItem({
     super.key,
     required this.post,
@@ -21,7 +22,7 @@ class PostItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.goNamed('post-detail', pathParameters: {
+        context.pushNamed('post-detail', pathParameters: {
           'post_id': post.postId.getOrCrash().toString(),
           'category_id': postCategory.id.toString()
         });
@@ -65,6 +66,7 @@ class PostItem extends StatelessWidget {
 
 class _CommentCount extends StatelessWidget {
   final int count;
+
   const _CommentCount({
     required this.count,
   });
@@ -85,6 +87,7 @@ class _CommentCount extends StatelessWidget {
 
 class _Date extends StatelessWidget {
   final DateVO dateTime;
+
   const _Date({
     required this.dateTime,
   });
@@ -106,6 +109,7 @@ class _Date extends StatelessWidget {
 
 class _Title extends StatelessWidget {
   final String text;
+
   const _Title({
     required this.text,
   });

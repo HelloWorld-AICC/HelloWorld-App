@@ -1,18 +1,20 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import '../../../design_system/hello_colors.dart';
+import '../../../injection.dart';
 import '../../../route/application/route_bloc.dart';
-import '../../../route/domain/navigation_service.dart';
+import '../../../route/domain/route_service.dart';
 
 class HomeRouteItem extends StatelessWidget {
   final String title;
   final String subTitle;
   final String imgPath;
   final int bottomIndex;
-  final NavigationService navigationService;
+  final RouteService routeService;
   final String routePath;
   final Alignment imgAlign;
   final double imgWidth;
@@ -21,7 +23,7 @@ class HomeRouteItem extends StatelessWidget {
 
   HomeRouteItem({
     Key? key,
-    required this.navigationService,
+    required this.routeService,
     required this.title,
     required this.subTitle,
     required this.imgPath,
@@ -37,16 +39,13 @@ class HomeRouteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        if (routePath == "community" ||
-            routePath == "resume" ||
-            routePath == "call_bot") {
+        if (routePath == "resume" || routePath == "call_bot") {
           showToast("미구현 기능입니다.");
           return;
         }
         context
             .read<RouteBloc>()
             .add(RouteChanged(newIndex: bottomIndex, newRoute: routePath));
-        navigationService.navigateTo("/$routePath");
       },
       child: Container(
         decoration: BoxDecoration(

@@ -7,6 +7,9 @@ import 'package:hello_world_mvp/fetch/failure.dart';
 import 'package:hello_world_mvp/fetch/fetch_service.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../domain/community_failure.dart';
+import '../../domain/post_detail.dart';
+
 @LazySingleton(as: ICommunityInternalProvider)
 class CommunityInternalProvider implements ICommunityInternalProvider {
   final FetchService _fetchService;
@@ -61,13 +64,19 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
 
   @override
   Future<Either<Failure, PostDetailDto>> getPostDetail({
+    required int page,
+    required int pageSize,
     required int categoryId,
     required int postId,
   }) async {
     final failureOrTokens = await _fetchService.request(
         pathPrefix: "",
         path: "/community/$categoryId/detail/$postId",
-        method: HttpMethod.get);
+        method: HttpMethod.post,
+        queryParams: {
+          "page": page.toString(),
+          "size": pageSize.toString(),
+        });
 
     return failureOrTokens.fold((f) {
       return left(f);
@@ -75,6 +84,27 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
       final PostDetailDto postDetailDto = PostDetailDto.fromJson(result.result);
 
       return right(postDetailDto);
+    });
+  }
+
+  @override
+  Future<Either<Failure, Unit>> writeComment({
+    required int categoryId,
+    required int postId,
+    required String content,
+  }) async {
+    final failureOrTokens = await _fetchService.request(
+      pathPrefix: "",
+      path: "/community/$categoryId/create",
+      method: HttpMethod.post,
+      bodyParam: {
+        "content": content,
+      },
+    );
+    return failureOrTokens.fold((f) {
+      return left(f);
+    }, (result) {
+      return right(unit);
     });
   }
 }

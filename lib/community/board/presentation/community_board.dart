@@ -13,6 +13,9 @@ import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gra
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
 import "dart:math" as math;
 
+import '../../../custom_bottom_navigationbar.dart';
+import '../../../route/application/route_bloc.dart';
+
 enum PostCategory {
   suffering(title: "직장 내 고충", id: 0),
   meical(title: "산재 및 의료", id: 1),
@@ -33,68 +36,83 @@ class CommunityBoard extends StatelessWidget {
     return BlocProvider(
       create: (context) => getIt<BoardBloc>()..add(GetPosts()),
       child: Builder(builder: (context) {
-        return Scaffold(
-          appBar: HelloAppbar(
-            title: "Community",
-            action: CommunityActionButton(
-              text: "글 작성",
-              buttonColor: HelloColors.subTextColor,
-              onTap: () {
-                context.push('/community/create-post');
-              },
+        return PopScope(
+          onPopInvoked: (result) {
+            if (result) {
+              print("Pop invoked in community board");
+              context.read<RouteBloc>().add(PopEvent());
+            }
+          },
+          child: Scaffold(
+            appBar: HelloAppbar(
+              title: "Community",
+              action: CommunityActionButton(
+                text: "글 작성",
+                buttonColor: HelloColors.subTextColor,
+                onTap: () {
+                  context.push('/community/create-post');
+                },
+              ),
             ),
-          ),
-          backgroundColor: HelloColors.white,
-          body: CustomMaterialIndicator(
-            onRefresh: () {
-              context.read<BoardBloc>().add(GetPosts());
-              return Future.value();
-            }, // Your refresh logic
-            backgroundColor: Colors.white,
-            indicatorBuilder: (context, controller) {
-              return Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: CircularProgressIndicator(
-                  color: HelloColors.mainBlue,
-                  value: controller.state.isLoading
-                      ? null
-                      : math.min(controller.value, 1.0),
-                ),
-              );
-            },
-            child: Column(
-              children: [
-                BlocBuilder<BoardBloc, BoardState>(
-                  builder: (context, state) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        ...PostCategory.values.map((board) => BoardTab(
-                              title: board.title,
-                              onTap: () {
-                                context
-                                    .read<BoardBloc>()
-                                    .add(SelectBoard(category: board));
-                              },
-                              isSelected: board.id == state.selectedBoard.id,
-                            )),
-                      ],
-                    );
-                  },
-                ),
-                const SizedBox(height: 20),
-                const Flexible(
-                  child: SingleChildScrollView(
-                    child: MypageBackgroundGradient(
-                      child: Column(
-                        children: [
-                          _Body(),
-                        ],
+            backgroundColor: HelloColors.white,
+            body: CustomMaterialIndicator(
+              onRefresh: () {
+                context.read<BoardBloc>().add(GetPosts());
+                return Future.value();
+              }, // Your refresh logic
+              backgroundColor: Colors.white,
+              indicatorBuilder: (context, controller) {
+                return Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: CircularProgressIndicator(
+                    color: HelloColors.mainBlue,
+                    value: controller.state.isLoading
+                        ? null
+                        : math.min(controller.value, 1.0),
+                  ),
+                );
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20),
+                child: Column(
+                  children: [
+                    BlocBuilder<BoardBloc, BoardState>(
+                      builder: (context, state) {
+                        return Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            ...PostCategory.values.map((board) => BoardTab(
+                                  title: board.title,
+                                  onTap: () {
+                                    context
+                                        .read<BoardBloc>()
+                                        .add(SelectBoard(category: board));
+                                  },
+                                  isSelected:
+                                      board.id == state.selectedBoard.id,
+                                )),
+                          ],
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    const Flexible(
+                      child: SingleChildScrollView(
+                        child: MypageBackgroundGradient(
+                          child: Column(
+                            children: [
+                              _Body(),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
-              ],
+              ),
+            ),
+            bottomNavigationBar: CustomBottomNavigationBar(
+              items: bottomNavItems,
             ),
           ),
         );
@@ -120,23 +138,50 @@ class _Body extends StatelessWidget {
                 child: Column(
               children: [
                 const SizedBox(height: 2),
-                ListView.separated(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: state.postList?.posts.length ?? 0,
-                  itemBuilder: (context, index) {
-                    return PostItem(
-                      post: state.postList!.posts[index],
-                      postCategory: state.selectedBoard,
-                    );
-                  },
-                  separatorBuilder: (context, index) {
-                    return Container(
-                        margin: const EdgeInsets.only(top: 16, bottom: 16),
-                        height: 0.4,
-                        color: const Color(0xFF919191).withOpacity(0.8));
-                  },
-                ),
+                state.postList?.posts.isEmpty ?? true
+                    ? Container(
+                        height: MediaQuery.of(context).size.height *
+                            0.5, // Adjust height as needed
+                        alignment: Alignment.center,
+                        child: const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image(
+                              image: AssetImage(
+                                  "assets/images/community/caution.png"),
+                              width: 50,
+                              height: 50,
+                            ),
+                            const SizedBox(height: 20),
+                            Text(
+                              textAlign: TextAlign.center,
+                              "아직 게시물이 없어요.\n첫 번째 게시물을 작성해보세요!",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: HelloColors.subTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    : ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: state.postList?.posts.length ?? 0,
+                        itemBuilder: (context, index) {
+                          return PostItem(
+                            post: state.postList!.posts[index],
+                            postCategory: state.selectedBoard,
+                          );
+                        },
+                        separatorBuilder: (context, index) {
+                          return Container(
+                            margin: const EdgeInsets.only(top: 16, bottom: 16),
+                            height: 0.4,
+                            color: const Color(0xFF919191).withOpacity(0.8),
+                          );
+                        },
+                      )
               ],
             ));
           },

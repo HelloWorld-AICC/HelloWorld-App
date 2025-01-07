@@ -36,6 +36,13 @@ final class RouteEventSplash extends RouteEvent {
   List<Object?> get props => [];
 }
 
+final class PopEvent extends RouteEvent {
+  PopEvent();
+
+  @override
+  List<Object?> get props => [];
+}
+
 // final class ChatSelected extends RouteEvent {
 //   final String? roomId;
 //

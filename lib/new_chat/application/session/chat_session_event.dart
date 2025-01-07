@@ -34,3 +34,9 @@ final class ChangeLoadingEvent extends ChatSessionEvent {
 
   ChangeLoadingEvent({required this.isLoading, required this.failure});
 }
+
+final class ChangeBlockInputEvent extends ChatSessionEvent {
+  final bool blockInput;
+
+  ChangeBlockInputEvent({required this.blockInput});
+}

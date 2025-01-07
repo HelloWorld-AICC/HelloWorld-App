@@ -90,23 +90,25 @@ class _SplashPageState extends State<SplashPage> {
                 ),
               ),
 
-              Positioned(
+              Positioned.fill(
                 top: MediaQuery.of(context).size.height / 8,
-                left: MediaQuery.of(context).size.width / 2 - 100,
-                child: Column(
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 5,
-                      child: Image.asset(
-                        'assets/images/home/Nice to meet you.png',
-                        fit: BoxFit.cover,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height / 5,
+                        child: Image.asset(
+                          'assets/images/home/Nice to meet you.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    // SplashTextLabel(text: tr("splash_page.language_select")),
-                    const SplashTextLabel(text: "언어 선택"),
-                    const SizedBox(height: 20),
-                  ],
+                      const SizedBox(height: 20),
+                      SplashTextLabel(text: "언어 선택"),
+                      const SizedBox(height: 20),
+                    ],
+                  ),
                 ),
               ),
               Positioned(
@@ -115,7 +117,7 @@ class _SplashPageState extends State<SplashPage> {
                 right: 0,
                 child: Padding(
                   padding: const EdgeInsets.only(left: 30.0, right: 30.0),
-                  child: SizedBox(
+                  child: Container(
                     width: MediaQuery.of(context).size.width / 3,
                     height: MediaQuery.of(context).size.height / 3,
                     child: ListView.builder(
@@ -153,9 +155,7 @@ class _SplashPageState extends State<SplashPage> {
                   padding: EdgeInsets.only(left: 30.0, right: 30.0),
                   child: BlocListener<AppInitBloc, AppInitState>(
                     listener: (context, state) {
-                      if (!state.isFirstRun) {
-                        context.push('/terms-of-service');
-                      }
+                      //
                     },
                     child: GestureDetector(
                       onTap: () async {
@@ -181,27 +181,38 @@ class _SplashPageState extends State<SplashPage> {
                               newRoute: '/home',
                             ),
                           );
-                          context.read<AppInitBloc>().add(CheckAppFirstRun());
-                          // context.push('/home');
                         }
                       },
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Container(
-                            width: 60,
-                            height: 60,
-                            decoration: const BoxDecoration(
-                              color: Color(0xffB7D3F6),
-                              shape: BoxShape.circle,
+                      child: GestureDetector(
+                        onTap: () {
+                          context
+                              .read<AppInitBloc>()
+                              .add(MarkAppRunnedBefore());
+                          context
+                              .read<AppInitBloc>()
+                              .add(MarkLanguageSelected());
+                          print('Language selected');
+                          print("Navigating to terms of service");
+                          context.push('/terms-of-service');
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 60,
+                              height: 60,
+                              decoration: const BoxDecoration(
+                                color: Color(0xffB7D3F6),
+                                shape: BoxShape.circle,
+                              ),
                             ),
-                          ),
-                          const Icon(
-                            Icons.arrow_forward_rounded,
-                            size: 45,
-                            color: HelloColors.white,
-                          ),
-                        ],
+                            const Icon(
+                              Icons.arrow_forward_rounded,
+                              size: 45,
+                              color: HelloColors.white,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),

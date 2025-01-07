@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
 part 'create_post_event.dart';
+
 part 'create_post_state.dart';
 
 @injectable
@@ -25,6 +26,9 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     });
     on<BodyChanged>((event, emit) async {
       emit(state.copyWith(body: event.body));
+    });
+    on<MediaChanged>((event, emit) async {
+      emit(state.copyWith(medias: event.medias));
     });
 
     on<SelectMedia>((event, emit) async {

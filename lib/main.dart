@@ -30,13 +30,13 @@ void main() async {
   await EasyLocalization.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
-  prefs.setString('isFirstLaunch', 'true');
+  prefs.getBool('isFirstRun') ?? true;
   prefs.setString('lastVersion', '0.1.0');
-
   configureDependencies();
 
   FlutterError.onError = (errorDetails) {
-    showToast(errorDetails.exceptionAsString());
+    print('FlutterError.onError: $errorDetails');
+    // showToast(errorDetails.exceptionAsString());
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -45,58 +45,61 @@ void main() async {
   };
 
   await SentryFlutter.init(
-        (options) {
-      options.dsn =
-      'https://e59673dcfb84f5fcff7d288377b07ca9@o4508302669512704.ingest.us.sentry.io/4508302674231296';
-      // // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
-      // // We recommend adjusting this value in production.
-      // options.tracesSampleRate = 1.0;
-      // // The sampling rate for profiling is relative to tracesSampleRate
-      // // Setting to 1.0 will profile 100% of sampled transactions:
-      // options.profilesSampleRate = 1.0;
+    (options) {
+      if (kReleaseMode) {
+        options.dsn =
+            'https://e59673dcfb84f5fcff7d288377b07ca9@o4508302669512704.ingest.us.sentry.io/4508302674231296';
+        // // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+        // // We recommend adjusting this value in production.
+        // options.tracesSampleRate = 1.0;
+        // // The sampling rate for profiling is relative to tracesSampleRate
+        // // Setting to 1.0 will profile 100% of sampled transactions:
+        // options.profilesSampleRate = 1.0;
+      } else {
+        options.dsn = '';
+      }
     },
-    appRunner: () =>
-        runApp(
-          EasyLocalization(
-            supportedLocales: const [
-              Locale('en', 'US'),
-              Locale('ko', 'KR'),
-              Locale('ja', 'JP'),
-              Locale('zh', 'CN'),
-              Locale('vi', 'VN'),
-            ],
-            path: 'assets/translations',
-            child: MultiBlocProvider(
-              providers: [
-                BlocProvider(
-                  create: (context) => getIt<ToastBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<LocaleBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<AppInitBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<RouteBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<ChatSessionBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<AuthStatusBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<LoginBloc>(),
-                ),
-                BlocProvider(
-                  create: (context) => getIt<CenterBloc>(),
-                )
-              ],
-              child: MainApp(),
+    appRunner: () => runApp(
+      EasyLocalization(
+        supportedLocales: const [
+          Locale('en', 'US'),
+          Locale('ko', 'KR'),
+          Locale('ja', 'JP'),
+          Locale('zh', 'CN'),
+          Locale('vi', 'VN'),
+        ],
+        path: 'assets/translations',
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => getIt<ToastBloc>(),
             ),
-          ),
+            BlocProvider(
+              create: (context) => getIt<LocaleBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<AppInitBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<RouteBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<ChatSessionBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<AuthStatusBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<LoginBloc>(),
+            ),
+            BlocProvider(
+              create: (context) => getIt<CenterBloc>(),
+            )
+          ],
+          child: MainApp(),
         ),
+      ),
+    ),
   );
 }
 
@@ -143,8 +146,7 @@ class _MainAppState extends State<MainApp> {
               listener: (context, state) {
                 if (state.isSignedIn != null) {
                   print(
-                      'main :: build :: AuthStatusBloc state updated: isSignedIn=${state
-                          .isSignedIn}, isFirstRun=${state.isFirstRun}');
+                      'main :: build :: AuthStatusBloc state updated: isSignedIn=${state.isSignedIn}, isFirstRun=${state.isFirstRun}');
                 }
               },
             ),
@@ -179,11 +181,7 @@ class ToastWrapper extends StatelessWidget {
       child: Stack(
         children: [
           SafeArea(child: widget ?? const SizedBox()),
-          Positioned(top: 0,
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: commonToast),
+          Positioned(top: 0, bottom: 0, left: 0, right: 0, child: commonToast),
         ],
       ),
     );

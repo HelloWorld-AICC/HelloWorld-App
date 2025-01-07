@@ -7,6 +7,7 @@ sealed class CreatePostEvent extends Equatable {
 
 final class TitleChanged extends CreatePostEvent {
   final String title;
+
   TitleChanged({required this.title});
 
   @override
@@ -15,10 +16,20 @@ final class TitleChanged extends CreatePostEvent {
 
 final class BodyChanged extends CreatePostEvent {
   final String body;
+
   BodyChanged({required this.body});
 
   @override
   List<Object> get props => [body];
+}
+
+final class MediaChanged extends CreatePostEvent {
+  final List<XFile> medias;
+
+  MediaChanged({required this.medias});
+
+  @override
+  List<Object> get props => [medias];
 }
 
 //select media

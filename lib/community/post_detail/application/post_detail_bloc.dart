@@ -10,7 +10,10 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:injectable/injectable.dart';
 
+import '../../../core/value_objects.dart';
+
 part 'post_detail_event.dart';
+
 part 'post_detail_state.dart';
 
 @injectable
@@ -21,7 +24,33 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
     required this.communityRepository,
   }) : super(PostDetailState.initial()) {
     on<PostDetailFetched>((event, emit) async {
-      // emit(state.copyWith(title: event.title));
+      final failureOrSuccess = await communityRepository.getPostDetail(
+          page: 0,
+          pageSize: 10,
+          categoryId: event.categoryId,
+          postId: event.postId);
+
+      failureOrSuccess.fold(
+        (failure) {
+          emit(state.copyWith(
+            isLoading: false,
+            failure: failure,
+          ));
+        },
+        (postDetail) {
+          emit(state.copyWith(
+            isLoading: false,
+            title: (postDetail.title.value).getOrElse(() => ""),
+            body: postDetail.content.value.getOrElse(() => ""),
+            medias:
+                postDetail.fileList.value?.getOrElse(() => []).map((fileVO) {
+                      return XFile(fileVO.getOrCrash());
+                    }).toList() ??
+                    [],
+            isSuccess: true,
+          ));
+        },
+      );
     });
   }
 }

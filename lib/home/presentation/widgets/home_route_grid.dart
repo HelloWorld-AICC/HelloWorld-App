@@ -1,15 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../route/domain/navigation_service.dart';
+import '../../../route/domain/route_service.dart';
 import 'home_route_item.dart';
 
 class HomeRouteGrid extends StatelessWidget {
   final Map<String, Map<String, Object>> items;
-  final NavigationService navigationService;
+  final RouteService routeService;
 
-  HomeRouteGrid(
-      {Key? key, required this.items, required this.navigationService})
+  HomeRouteGrid({Key? key, required this.items, required this.routeService})
       : super(key: key);
 
   @override
@@ -108,7 +107,7 @@ class HomeRouteGrid extends StatelessWidget {
         width: MediaQuery.of(context).size.width / 2.35,
         height: height,
         child: HomeRouteItem(
-          navigationService: navigationService,
+          routeService: routeService,
           title: item['title'] as String,
           subTitle: item['subTitle'] as String,
           imgPath: item['imgPath'] as String,
