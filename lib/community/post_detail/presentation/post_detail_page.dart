@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:custom_refresh_indicator/custom_refresh_indicator.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +9,18 @@ import 'package:hello_world_mvp/community/common/presentation/community_action_b
 import 'package:hello_world_mvp/community/common/presentation/section_title.dart';
 import 'package:hello_world_mvp/community/create_post/application/create_post_bloc.dart';
 import 'package:hello_world_mvp/community/post_detail/application/post_detail_bloc.dart';
+import 'package:hello_world_mvp/community/post_detail/presentation/widgets/comment_input_button.dart';
+import 'package:hello_world_mvp/community/post_detail/presentation/widgets/video_preview.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_background_gradient.dart';
 import 'package:hello_world_mvp/mypage/common/presentation/mypage_box.dart';
+import 'package:image_picker/image_picker.dart';
 import "dart:math" as math;
 
 import '../../../custom_bottom_navigationbar.dart';
+import '../../../route/application/route_bloc.dart';
 import '../../board/applicatioin/board_bloc.dart';
 
 class PostDetailPage extends StatefulWidget {
@@ -37,42 +43,75 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return BlocProvider(
       create: (context) => getIt<PostDetailBloc>()
         ..add(PostDetailFetched(
-          postId: widget.postId,
           categoryId: widget.categoryId,
+          postId: widget.postId,
         )),
-      child: Scaffold(
-        backgroundColor: Color(0xffECF6FE),
-        appBar: HelloAppbar(
-          title: "Community",
-          action: CommunityActionButton(
-            text: "글 신고",
-            buttonColor: const Color(0xFFFF8181),
-            onTap: () {
-              context.read<CreatePostBloc>().add(SubmitPost());
-            },
-          ),
-        ),
-        body: BlocBuilder<PostDetailBloc, PostDetailState>(
+      child: BlocBuilder<PostDetailBloc, PostDetailState>(
           builder: (context, state) {
-            return SingleChildScrollView(
-              child: MypageBackgroundGradient(
-                child: Column(
-                  children: [
-                    const SizedBox(height: 4),
-                    _Body(
+        return PopScope(
+          onPopInvoked: (result) {
+            if (result) {
+              print("Pop invoked in post detail");
+              context.read<RouteBloc>().add(PopEvent());
+            }
+          },
+          child: Scaffold(
+            backgroundColor: Color(0xffECF6FE),
+            appBar: HelloAppbar(
+              title: "Community",
+              action: CommunityActionButton(
+                text: "글 신고",
+                buttonColor: const Color(0xFFFF8181),
+                onTap: () {
+                  context.read<CreatePostBloc>().add(SubmitPost());
+                },
+              ),
+            ),
+            body: CustomMaterialIndicator(
+              onRefresh: () {
+                context.read<PostDetailBloc>().add(PostDetailFetched(
                       categoryId: widget.categoryId,
                       postId: widget.postId,
+                    ));
+                return Future.value();
+              },
+              backgroundColor: Colors.white,
+              indicatorBuilder: (context, controller) {
+                return Padding(
+                  padding: const EdgeInsets.all(6.0),
+                  child: CircularProgressIndicator(
+                    color: HelloColors.mainBlue,
+                    value: controller.state.isLoading
+                        ? null
+                        : math.min(controller.value, 1.0),
+                  ),
+                );
+              },
+              child: BlocBuilder<PostDetailBloc, PostDetailState>(
+                builder: (context, state) {
+                  return SingleChildScrollView(
+                    child: MypageBackgroundGradient(
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 4),
+                          _Body(
+                            categoryId: widget.categoryId,
+                            postId: widget.postId,
+                          ),
+                        ],
+                      ),
                     ),
-                  ],
-                ),
+                  ); // Default empty state
+                },
               ),
-            ); // Default empty state
-          },
-        ),
-        bottomNavigationBar: CustomBottomNavigationBar(
-          items: bottomNavItems,
-        ),
-      ),
+            ),
+            bottomSheet: Container(
+              decoration: const BoxDecoration(color: Color(0xffECF6FE)),
+              child: const CommentInputButton(),
+            ),
+          ),
+        );
+      }),
     );
   }
 }
@@ -90,217 +129,183 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var createdAt = context.read<PostDetailBloc>().state.createdAt;
+    print("createdAt: $createdAt");
     DateTime dateTime = createdAt;
     String formattedDate = DateFormat('yyyy.MM.dd HH:mm').format(dateTime);
+    print("formattedDate: $formattedDate");
 
-    return CustomMaterialIndicator(
-      onRefresh: () {
-        return Future.value();
-      }, // Your refresh logic
-      backgroundColor: Colors.white,
-      indicatorBuilder: (context, controller) {
-        return Padding(
-          padding: const EdgeInsets.all(6.0),
-          child: CircularProgressIndicator(
-            color: HelloColors.mainBlue,
-            value: controller.state.isLoading
-                ? null
-                : math.min(controller.value, 1.0),
-          ),
-        );
-      },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 60),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            MypageBox(
-                child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SectionTitle(
-                        text: context.read<PostDetailBloc>().state.title ?? ""),
-                    Text(
-                      formattedDate,
-                      style: const TextStyle(
-                        color: HelloColors.subTextColor,
-                        fontFamily: HelloFonts.inter,
-                        fontSize: 8,
-                        fontWeight: FontWeight.normal,
-                        letterSpacing: 0.08,
-                      ),
-                    )
-                  ],
-                ),
-                Container(
-                  height: 1,
-                  margin: const EdgeInsets.symmetric(vertical: 21),
-                  decoration: BoxDecoration(
-                      color: const Color.fromARGB(0, 173, 173, 173)
-                          .withOpacity(0.2)),
-                ),
-                Text("내용",
-                    style: TextStyle(
-                      color: HelloColors.subTextColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w500,
-                      letterSpacing: 0.12,
-                    )),
-                const SizedBox(height: 21),
-                Row(
-                  children: [
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    ),
-                    const SizedBox(width: 4),
-                    Container(
-                      width: 60,
-                      height: 60,
-                      decoration: const BoxDecoration(
-                          color: Colors.blue,
-                          borderRadius: BorderRadius.all(Radius.circular(4.0))),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 13),
-              ],
-            )),
-            const SizedBox(height: 15),
-            MypageBox(
-                child: ListView.separated(
-              padding: EdgeInsets.zero,
-              shrinkWrap: true,
-              itemCount: 10,
-              itemBuilder: (context, index) {
-                return Container(
-                    height: 30,
-                    child: Row(
-                      children: [
-                        Image(
-                          image: AssetImage(context
-                              .read<PostDetailBloc>()
-                              .state
-                              .medias[index]
-                              .path),
-                          width: 16,
-                          height: 16,
-                        ),
-                        const SizedBox(width: 4),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Text(
-                            //   context
-                            //       .read<PostDetailBloc>()
-                            //       .state
-                            //       .medias[index]
-                            //       .title,
-                            //   style: const TextStyle(
-                            //     color: HelloColors.subTextColor,
-                            //     fontSize: 12,
-                            //     fontWeight: FontWeight.w500,
-                            //     letterSpacing: 0.12,
-                            //   ),
-                            // ),
-                            // Text(
-                            //   context
-                            //       .read<PostDetailBloc>()
-                            //       .state
-                            //       .medias[index]
-                            //       .content,
-                            //   style: const TextStyle(
-                            //     color: HelloColors.subTextColor,
-                            //     fontSize: 8,
-                            //     fontWeight: FontWeight.w500,
-                            //     letterSpacing: 0.08,
-                            //   ),
-                            // ),
-                          ],
-                        )
-                      ],
-                    ));
-              },
-              separatorBuilder: (context, index) {
-                return const SizedBox(height: 16);
-              },
-            )),
-            _buildCommentInputButton(context),
-          ],
-        ),
-      ),
-    );
-  }
+    List<XFile> images = context.read<PostDetailBloc>().state.medias;
+    print("all images are, ${images.map((e) => e.path)}");
 
-  _buildCommentInputButton(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(24),
-      child: Container(
-          height: MediaQuery.sizeOf(context).height * 0.05,
-          decoration: BoxDecoration(
-            color: HelloColors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(
-              color: HelloColors.mainBlue,
-              width: 1,
-            ),
-            boxShadow: const [
-              BoxShadow(
-                color: HelloColors.subTextColor,
-                blurRadius: 4.0,
-                spreadRadius: 0.0,
-                offset: Offset(0, 0),
+      padding: const EdgeInsets.only(bottom: 60),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MypageBox(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SectionTitle(
+                      text: context.read<PostDetailBloc>().state.title ??
+                          "No title"),
+                  Text(
+                    formattedDate,
+                    style: const TextStyle(
+                      color: HelloColors.subTextColor,
+                      fontFamily: HelloFonts.inter,
+                      fontSize: 8,
+                      fontWeight: FontWeight.normal,
+                      letterSpacing: 0.08,
+                    ),
+                  )
+                ],
               ),
+              Container(
+                height: 1,
+                margin: const EdgeInsets.symmetric(vertical: 21),
+                decoration: BoxDecoration(
+                    color: const Color.fromARGB(0, 173, 173, 173)
+                        .withOpacity(0.2)),
+              ),
+              Text("내용",
+                  style: TextStyle(
+                    color: HelloColors.subTextColor,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0.12,
+                  )),
+              const SizedBox(height: 3),
+              Text(
+                context.read<PostDetailBloc>().state.body ?? "No content",
+                style: const TextStyle(
+                  color: HelloColors.subTextColor,
+                  fontSize: 12,
+                  fontWeight: FontWeight.normal,
+                  letterSpacing: 0.12,
+                ),
+              ),
+              const SizedBox(height: 21),
+              SizedBox(
+                height: 60,
+                child: images.isEmpty
+                    // Case 1: images is empty, show a container
+                    ? const Center(
+                        child: CircularProgressIndicator(
+                            color: HelloColors.mainBlue, strokeWidth: 2),
+                      )
+                    : images[0].path == "NULL"
+                        // Case 2: images is not empty, but the first item is "Null", show nothing
+                        ? Container()
+                        : GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3, // Number of columns
+                              crossAxisSpacing: 8.0, // Spacing between columns
+                              mainAxisSpacing: 8.0, // Spacing between rows
+                              childAspectRatio: 1, // Aspect ratio of grid items
+                            ),
+                            itemCount: images.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final media = images[index];
+                              print("media path: ${media.path}");
+
+                              // Define the condition to check if it's a video
+                              final isVideo =
+                                  true; // Replace with real video checking logic
+
+                              if (isVideo) {
+                                return VideoPreview(videoUrl: media.path);
+                              } else {
+                                return Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    borderRadius: BorderRadius.circular(4.0),
+                                    image: DecorationImage(
+                                      image: FileImage(File(media.path)),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                );
+                              }
+                            },
+                          ),
+              ),
+              const SizedBox(height: 13),
             ],
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: SizedBox(
-                    width: MediaQuery.sizeOf(context).width * 0.7,
-                    child: TextFormField(
-                      decoration: const InputDecoration(
-                        hintText: "댓글을 입력해주세요",
-                        hintStyle: TextStyle(
-                          fontFamily: HelloFonts.sbAggroOTF,
+          )),
+          const SizedBox(height: 15),
+          MypageBox(
+              child: ListView.separated(
+            padding: EdgeInsets.zero,
+            shrinkWrap: true,
+            itemCount: context.read<PostDetailBloc>().state.comments.length,
+            itemBuilder: (context, index) {
+              var anonymousName = context
+                  .read<PostDetailBloc>()
+                  .state
+                  .comments[index]
+                  .anonymousName;
+              var createdAt = context
+                  .read<PostDetailBloc>()
+                  .state
+                  .comments[index]
+                  .createdAt;
+              var content =
+                  context.read<PostDetailBloc>().state.comments[index].content;
+
+              print(
+                  "anonymousName: $anonymousName, createdAt: $createdAt, content: $content");
+
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        anonymousName.toString(),
+                        style: const TextStyle(
                           color: HelloColors.subTextColor,
                           fontSize: 12,
                           fontWeight: FontWeight.w500,
+                          letterSpacing: 0.12,
                         ),
-                        border: InputBorder.none,
                       ),
+                      Text(
+                        createdAt.toString(),
+                        style: const TextStyle(
+                          color: HelloColors.subTextColor,
+                          fontSize: 8,
+                          fontWeight: FontWeight.normal,
+                          letterSpacing: 0.08,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    content.toString(),
+                    style: const TextStyle(
+                      color: HelloColors.subTextColor,
+                      fontSize: 12,
+                      fontWeight: FontWeight.normal,
+                      letterSpacing: 0.12,
                     ),
                   ),
-                ),
-                SizedBox(width: 8),
-                IconButton(
-                  onPressed: () {},
-                  icon: Image.asset("assets/icons/upload_button.png"),
-                  color: HelloColors.mainBlue,
-                ),
-              ],
-            ),
+                ],
+              );
+            },
+            separatorBuilder: (context, index) {
+              return const SizedBox(height: 16);
+            },
           )),
+        ],
+      ),
     );
   }
 }

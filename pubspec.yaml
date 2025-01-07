@@ -43,6 +43,7 @@ dependencies:
   google_maps_flutter_platform_interface: ^2.9.5
   google_maps_flutter_android: ^2.14.11
   synchronized: ^3.3.0+3
+  video_player: ^2.9.2
 
 dev_dependencies:
   flutter_test:

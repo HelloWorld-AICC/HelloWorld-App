@@ -77,7 +77,7 @@ class PostDetailDto {
     return PostDetailDto(
       title: map['title'] as String? ?? '',
       content: map['content'] as String? ?? '',
-      createdAt: map['createdAt'] as String? ?? '',
+      createdAt: map['created_at'] as String? ?? '',
       fileList: processedFileList,
       commentDtoList: processedCommentList,
     );
@@ -95,5 +95,10 @@ class PostDetailDto {
         commentDtoList.map((e) => e.toDomain()).toList(),
       ),
     );
+  }
+
+  @override
+  String toString() {
+    return 'PostDetailDto(title: $title, content: $content, createdAt: $createdAt, fileList: $fileList, commentDtoList: $commentDtoList)';
   }
 }

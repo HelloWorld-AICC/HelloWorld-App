@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
+import '../../common/domain/comment.dart';
 
 part 'post_detail_event.dart';
 
@@ -42,11 +43,13 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
             isLoading: false,
             title: (postDetail.title.value).getOrElse(() => ""),
             body: postDetail.content.value.getOrElse(() => ""),
-            medias:
-                postDetail.fileList.value?.getOrElse(() => []).map((fileVO) {
-                      return XFile(fileVO.getOrCrash());
-                    }).toList() ??
-                    [],
+            medias: postDetail.fileList.value.getOrElse(() => []).map((fileVO) {
+              return XFile(fileVO.getOrCrash());
+            }).toList(),
+            createdAt: postDetail.createAt.value
+                .map((date) => DateTime.parse(date))
+                .getOrElse(() => DateTime.now()),
+            comments: postDetail.commentList.value.getOrElse(() => []),
             isSuccess: true,
           ));
         },
