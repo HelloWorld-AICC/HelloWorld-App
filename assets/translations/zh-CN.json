@@ -33,6 +33,23 @@
   "splash_page": {
     "language_select": "选择语言"
   },
+  "login": {
+    "login_button": "Google登录"
+  },
+  "center": {
+    "title": "线下咨询中心"
+  },
+  "common": {
+    "recent_applicants": "最近的申请人"
+  },
+  "community": {
+    "write_post": "写帖子",
+    "post": "发布",
+    "title_placeholder": "请输入标题",
+    "content_placeholder": "请输入内容",
+    "upload_section_title": "上传照片和视频",
+    "upload_instructions": "您最多可以上传10张照片和2个视频。包含过度侮辱或恶俗语言的帖子，可能会被举报后删除，且不另行通知。侵犯肖像权、版权或其他违法内容的帖子，可能会被管理员删除且不另行通知。"
+  },
   "app_name": "外国支持中心 AICC",
   "login_button": "登录",
   "select_language": "请选择语言",

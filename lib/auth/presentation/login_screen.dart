@@ -161,7 +161,7 @@ class _LoginWithGoogle extends StatelessWidget {
             children: [
               Image.asset("assets/images/auth/google_logo.png"),
               const SizedBox(width: 8),
-              const Text("Google로 로그인",
+              Text("login.login_button".tr(),
                   style: TextStyle(
                     color: Color(0xFF0F0F0F),
                     fontSize: 12,

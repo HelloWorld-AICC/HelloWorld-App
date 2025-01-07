@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -45,9 +46,9 @@ class CreatePostPage extends StatelessWidget {
           ],
           child: Scaffold(
               appBar: HelloAppbar(
-                title: "글 작성하기",
+                title: "community.write_post".tr(),
                 action: CommunityActionButton(
-                    text: "완료",
+                    text: "community.post".tr(),
                     buttonColor: Color(0xffECF6FE),
                     onTap: () {
                       context.read<CreatePostBloc>().add(SubmitPost());
@@ -84,10 +85,10 @@ class _Body extends StatelessWidget {
             child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SectionTitle(text: "제목"),
+            const SectionTitle(text: "Title"),
             const SizedBox(height: 13),
             CustomTextFormField(
-              hintText: "제목을 입력해주세요",
+              hintText: "community.title_placeholder".tr(),
               onChanged: (value) {
                 context.read<CreatePostBloc>().add(TitleChanged(title: value));
               },
@@ -107,7 +108,7 @@ class _Body extends StatelessWidget {
               ),
             ),
             const Divider(),
-            const SectionTitle(text: "내용"),
+            const SectionTitle(text: "Content"),
             const SizedBox(height: 13),
             // TextField(
             //   onChanged: (value) {
@@ -131,7 +132,7 @@ class _Body extends StatelessWidget {
             //   ),
             // ),
             CustomTextFormField(
-              hintText: "내용을 입력해주세요",
+              hintText: "community.content_placeholder".tr(),
               onChanged: (value) {
                 context.read<CreatePostBloc>().add(BodyChanged(body: value));
               },
@@ -151,7 +152,7 @@ class _Body extends StatelessWidget {
               ),
             ),
             const Divider(),
-            const SectionTitle(text: "사진 및 영상 업로드"),
+            SectionTitle(text: "community.upload_section_title".tr()),
             const SizedBox(height: 13),
             BlocBuilder<CreatePostBloc, CreatePostState>(
               builder: (context, state) {
@@ -201,8 +202,8 @@ class _Body extends StatelessWidget {
           ],
         )),
         const SizedBox(height: 15),
-        const Text(
-          "사진은 최대 10장까지 업로드 가능합니다.\n영상은 최대 2개까지 업로드 가능합니다.\n과도한 비방 및 욕설이 포함된 게시물은 신고에 의해 무통보 삭제될 수 있습니다.\n초상권, 저작권 침해 및 기타 위법한 게시물은 관리자에 의해 무통보 삭제될 수 있습니다.",
+        Text(
+          "community.upload_instructions".tr(),
           style: TextStyle(
               color: HelloColors.gray,
               fontFamily: HelloFonts.sbAggroOTF,

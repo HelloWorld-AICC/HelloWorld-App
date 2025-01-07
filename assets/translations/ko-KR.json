@@ -33,6 +33,23 @@
   "splash_page": {
     "language_select": "언어 선택"
   },
+  "login": {
+    "login_button": "구글 로그인"
+  },
+  "center": {
+    "title": "오프라인 상담센터"
+  },
+  "common": {
+    "recent_applicants": "최근 상담 신청자 목록"
+  },
+  "community": {
+    "write_post": "글 작성",
+    "post": "완료",
+    "title_placeholder": "제목을 입력해주세요",
+    "content_placeholder": "내용을 입력해주세요",
+    "upload_section_title": "사진 및 영상 업로드",
+    "upload_instructions": "사진은 최대 10장, 영상은 최대 2개까지 업로드할 수 있습니다. 과도한 비방 및 욕설이 포함된 게시물은 신고에 의해 무통보 삭제될 수 있습니다. 초상권, 저작권 침해 및 기타 위법한 게시물은 관리자에 의해 무통보 삭제될 수 있습니다."
+  },
   "app_name": "외국인 근로자를 위한 맞춤형 지원 플랫폼",
   "login_button": "로그인",
   "select_language": "사용 가능한 언어를 골라주세요",

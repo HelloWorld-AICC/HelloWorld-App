@@ -33,6 +33,23 @@
   "splash_page": {
     "language_select": "言語を選択してください"
   },
+  "login": {
+    "login_button": "Googleログイン"
+  },
+  "center": {
+    "title": "オフライン相談センター"
+  },
+  "common": {
+    "recent_applicants": "最近の申請者"
+  },
+  "community": {
+    "write_post": "投稿を書く",
+    "post": "投稿する",
+    "title_placeholder": "タイトルを入力してください",
+    "content_placeholder": "内容を入力してください",
+    "upload_section_title": "写真と動画のアップロード",
+    "upload_instructions": "最大10枚の写真と2本の動画をアップロードできます。過度な誹謗中傷や侮辱的な言葉が含まれる投稿は、通報により通知なしで削除されることがあります。肖像権、著作権侵害、その他の違法な投稿は、管理者によって通知なしで削除されることがあります。"
+  },
   "app_name": "外国支援センター AICC",
   "login_button": "ログイン",
   "select_language": "言語を選択してください",

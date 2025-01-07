@@ -33,6 +33,23 @@
   "splash_page": {
     "language_select": "Select Language"
   },
+  "login": {
+    "login_button": "Google Login"
+  },
+  "center": {
+    "title": "Offline Counseling Center"
+  },
+  "common": {
+    "recent_applicants": "Recent Applicants List"
+  },
+  "community": {
+    "write_post": "Write a Post",
+    "post": "Post",
+    "title_placeholder": "Enter a title",
+    "content_placeholder": "Enter content",
+    "upload_section_title": "Upload Photos and Videos",
+    "upload_instructions": "You can upload up to 10 photos and 2 videos. Posts with excessive abuse or profanity may be deleted without notice upon report. Posts infringing on portrait rights, copyrights, or containing other illegal content may be removed without notice by administrators."
+  },
   "app_name": "Foreign Support Center AICC",
   "login_button": "Login",
   "select_language": "Please select a language",

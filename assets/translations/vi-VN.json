@@ -33,6 +33,23 @@
   "splash_page": {
     "language_select": "Chọn ngôn ngữ"
   },
+  "login": {
+    "login_button": "Đăng nhập Google"
+  },
+  "center": {
+    "title": "Trung Tâm Tư Vấn Trực Tiếp"
+  },
+  "common": {
+    "recent_applicants": "Người ứng tuyển gần đây"
+  },
+  "community": {
+    "write_post": "Viết bài đăng",
+    "post": "Đăng bài",
+    "title_placeholder": "Nhập tiêu đề",
+    "content_placeholder": "Nhập nội dung",
+    "upload_section_title": "Tải lên ảnh và video",
+    "upload_instructions": "Bạn có thể tải lên tối đa 10 ảnh và 2 video. Bài đăng có lời lẽ lăng mạ hoặc thô tục có thể bị xóa mà không cần thông báo khi bị báo cáo. Bài đăng xâm phạm quyền chân dung, bản quyền hoặc chứa nội dung vi phạm pháp luật có thể bị xóa mà không cần thông báo bởi quản trị viên."
+  },
   "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
   "login_button": "Đăng nhập",
   "select_language": "Vui lòng chọn ngôn ngữ",

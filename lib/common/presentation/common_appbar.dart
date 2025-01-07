@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
 
 class CommonAppbar extends StatelessWidget implements PreferredSizeWidget {
   const CommonAppbar({
@@ -21,9 +21,9 @@ class CommonAppbar extends StatelessWidget implements PreferredSizeWidget {
               },
               child: SvgPicture.asset("assets/images/common/back.svg")),
           const SizedBox(width: 28.33),
-          const Text(
-            "최근 상담 신청자 목록",
-            style: TextStyle(
+          Text(
+            "common.recent_applicants".tr(),
+            style: const TextStyle(
               color: Colors.black,
               fontSize: 20,
               fontWeight: FontWeight.w700,
