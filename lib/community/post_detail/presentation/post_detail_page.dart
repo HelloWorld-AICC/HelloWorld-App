@@ -10,6 +10,7 @@ import 'package:hello_world_mvp/community/common/presentation/section_title.dart
 import 'package:hello_world_mvp/community/create_post/application/create_post_bloc.dart';
 import 'package:hello_world_mvp/community/post_detail/application/post_detail_bloc.dart';
 import 'package:hello_world_mvp/community/post_detail/presentation/widgets/comment_input_button.dart';
+import 'package:hello_world_mvp/community/post_detail/presentation/widgets/comment_list_widget.dart';
 import 'package:hello_world_mvp/community/post_detail/presentation/widgets/video_preview.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/design_system/hello_fonts.dart';
@@ -107,7 +108,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ),
             bottomSheet: Container(
               decoration: const BoxDecoration(color: Color(0xffECF6FE)),
-              child: const CommentInputButton(),
+              child: CommentInputButton(
+                postId: widget.postId,
+                categoryId: widget.categoryId,
+              ),
             ),
           ),
         );
@@ -129,13 +133,11 @@ class _Body extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var createdAt = context.read<PostDetailBloc>().state.createdAt;
-    print("createdAt: $createdAt");
     DateTime dateTime = createdAt;
     String formattedDate = DateFormat('yyyy.MM.dd HH:mm').format(dateTime);
-    print("formattedDate: $formattedDate");
 
     List<XFile> images = context.read<PostDetailBloc>().state.medias;
-    print("all images are, ${images.map((e) => e.path)}");
+    // print("all images are, ${images.map((e) => e.path)}");
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 60),
@@ -239,71 +241,7 @@ class _Body extends StatelessWidget {
             ],
           )),
           const SizedBox(height: 15),
-          MypageBox(
-              child: ListView.separated(
-            padding: EdgeInsets.zero,
-            shrinkWrap: true,
-            itemCount: context.read<PostDetailBloc>().state.comments.length,
-            itemBuilder: (context, index) {
-              var anonymousName = context
-                  .read<PostDetailBloc>()
-                  .state
-                  .comments[index]
-                  .anonymousName;
-              var createdAt = context
-                  .read<PostDetailBloc>()
-                  .state
-                  .comments[index]
-                  .createdAt;
-              var content =
-                  context.read<PostDetailBloc>().state.comments[index].content;
-
-              print(
-                  "anonymousName: $anonymousName, createdAt: $createdAt, content: $content");
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        anonymousName.toString(),
-                        style: const TextStyle(
-                          color: HelloColors.subTextColor,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.12,
-                        ),
-                      ),
-                      Text(
-                        createdAt.toString(),
-                        style: const TextStyle(
-                          color: HelloColors.subTextColor,
-                          fontSize: 8,
-                          fontWeight: FontWeight.normal,
-                          letterSpacing: 0.08,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    content.toString(),
-                    style: const TextStyle(
-                      color: HelloColors.subTextColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.normal,
-                      letterSpacing: 0.12,
-                    ),
-                  ),
-                ],
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(height: 16);
-            },
-          )),
+          CommentListWidget(),
         ],
       ),
     );

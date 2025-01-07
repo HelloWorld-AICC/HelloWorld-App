@@ -2,6 +2,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:async/async.dart';
+import 'package:hello_world_mvp/auth/domain/service/token/token_authenticator.dart';
 import 'package:path/path.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -13,8 +14,10 @@ import 'package:injectable/injectable.dart';
 @LazySingleton()
 class AuthenticatedHttpClient extends http.BaseClient {
   final ITokenRepository tokenRepository;
+  final TokenAuthenticator tokenAuthenticator;
 
-  AuthenticatedHttpClient({required this.tokenRepository});
+  AuthenticatedHttpClient(
+      {required this.tokenRepository, required this.tokenAuthenticator});
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest request) async {

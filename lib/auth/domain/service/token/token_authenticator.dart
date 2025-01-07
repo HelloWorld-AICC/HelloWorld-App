@@ -23,7 +23,8 @@ class TokenAuthenticator {
     final isPathRefresh =
         requestOptions.uri.toString() == '$_baseUrl$_tokenRefreshUrl';
 
-    if (response.statusCode == 401 && !isPathRefresh) {
+    if (response.statusCode == 401 ||
+        response.statusCode == 403 && !isPathRefresh) {
       final tokenRefreshSuccess = await _fetchUpdateToken();
 
       if (tokenRefreshSuccess) {

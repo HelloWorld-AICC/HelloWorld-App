@@ -55,5 +55,33 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
         },
       );
     });
+
+    on<PostDetailCommentAdded>((event, emit) async {
+      final failureOrSuccess = await communityRepository.writeComment(
+        categoryId: event.categoryId,
+        postId: event.postId,
+        content: event.comment,
+      );
+
+      failureOrSuccess.fold(
+        (failure) {
+          emit(state.copyWith(
+            isLoading: false,
+            failure: failure,
+          ));
+        },
+        (comment) {
+          emit(state.copyWith(
+            comments: [
+              ...state.comments,
+              Comment(
+                  anonymousName: 0,
+                  createdAt: DateVO(DateTime.now()),
+                  content: StringVO(event.comment))
+            ],
+          ));
+        },
+      );
+    });
   }
 }

@@ -40,7 +40,8 @@ void main() async {
   };
 
   PlatformDispatcher.instance.onError = (error, stack) {
-    showToast(error.toString());
+    print('PlatformDispatcher.instance.onError: ${error.toString()}');
+    // showToast(error.toString());
     return true;
   };
 
