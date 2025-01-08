@@ -50,16 +50,21 @@ class CommentDto {
     );
   }
 
-  DateTime parseDate(String date) {
-    final parts = date.split('.');
-    if (parts.length != 3) {
-      throw FormatException('Invalid date format. Expected "yyyy.MM.dd".');
-    }
-
-    final year = int.parse(parts[0]);
-    final month = int.parse(parts[1]);
-    final day = int.parse(parts[2]);
-
-    return DateTime(year, month, day);
+  DateTime parseDate(String dateString) {
+    DateTime parsedDate = DateTime.parse(dateString);
+    return parsedDate;
   }
+
+// DateTime parseDate(String date) {
+//   final parts = date.split('.');
+//   if (parts.length != 3) {
+//     throw FormatException('Invalid date format. Expected "yyyy.MM.dd".');
+//   }
+//
+//   final year = int.parse(parts[0]);
+//   final month = int.parse(parts[1]);
+//   final day = int.parse(parts[2]);
+//
+//   return DateTime(year, month, day);
+// }
 }

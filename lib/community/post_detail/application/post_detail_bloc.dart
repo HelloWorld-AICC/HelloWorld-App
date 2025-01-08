@@ -11,6 +11,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/value_objects.dart';
+import '../../common/domain/comment.dart';
 
 part 'post_detail_event.dart';
 
@@ -42,12 +43,42 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
             isLoading: false,
             title: (postDetail.title.value).getOrElse(() => ""),
             body: postDetail.content.value.getOrElse(() => ""),
-            medias:
-                postDetail.fileList.value?.getOrElse(() => []).map((fileVO) {
-                      return XFile(fileVO.getOrCrash());
-                    }).toList() ??
-                    [],
+            medias: postDetail.fileList.value.getOrElse(() => []).map((fileVO) {
+              return XFile(fileVO.getOrCrash());
+            }).toList(),
+            createdAt: postDetail.createAt.value
+                .map((date) => DateTime.parse(date))
+                .getOrElse(() => DateTime.now()),
+            comments: postDetail.commentList.value.getOrElse(() => []),
             isSuccess: true,
+          ));
+        },
+      );
+    });
+
+    on<PostDetailCommentAdded>((event, emit) async {
+      final failureOrSuccess = await communityRepository.writeComment(
+        categoryId: event.categoryId,
+        postId: event.postId,
+        content: event.comment,
+      );
+
+      failureOrSuccess.fold(
+        (failure) {
+          emit(state.copyWith(
+            isLoading: false,
+            failure: failure,
+          ));
+        },
+        (comment) {
+          emit(state.copyWith(
+            comments: [
+              ...state.comments,
+              Comment(
+                  anonymousName: 0,
+                  createdAt: DateVO(DateTime.now()),
+                  content: StringVO(event.comment))
+            ],
           ));
         },
       );

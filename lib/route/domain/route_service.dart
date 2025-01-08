@@ -4,11 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/center/presentation/center_screen.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
 import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
+import 'package:hello_world_mvp/resume/resume_screen.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../auth/application/status/auth_status_bloc.dart';
 import '../../auth/presentation/login_screen.dart';
+import '../../callbot/call_bot_screen.dart';
 import '../../community/board/presentation/community_board.dart';
 import '../../community/create_post/presentation/create_post_page.dart';
 import '../../community/post_detail/presentation/post_detail_page.dart';
@@ -87,7 +89,15 @@ class RouteService {
         builder: (context, state) => CenterScreen(),
       ),
       GoRoute(
+        path: '/consultation_center',
+        builder: (context, state) => CenterScreen(),
+      ),
+      GoRoute(
         path: '/community',
+        builder: (context, state) => CommunityBoard(),
+      ),
+      GoRoute(
+        path: '/community/board',
         builder: (context, state) => CommunityBoard(),
       ),
       GoRoute(
@@ -118,6 +128,14 @@ class RouteService {
         path: '/privacy-policy',
         builder: (context, state) => PrivacyPolicyScreen(),
       ),
+      GoRoute(
+        path: '/resume',
+        builder: (context, state) => const ResumeScreen(),
+      ),
+      GoRoute(
+        path: '/callbot',
+        builder: (context, state) => const CallBotScreen(),
+      )
     ], observers: [
       CustomNavigatorObserver(routeBloc),
     ]);

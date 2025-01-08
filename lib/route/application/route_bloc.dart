@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../injection.dart';
@@ -14,6 +15,8 @@ part 'route_state.dart';
 class RouteBloc extends Bloc<RouteEvent, RouteState> {
   // final ChatSessionManager chatSessionBloc;
   // final ActiveChatRoomBloc activeChatRoomBloc;
+
+  BuildContext? context;
 
   RouteBloc(// this.chatSessionBloc, this.roomIdBloc
       )
@@ -53,9 +56,5 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       currentRoute: event.newRoute,
     ));
     getIt<RouteService>().router.push("/${event.newRoute}");
-    // if (event.newIndex == 1) {
-    //   final roomId = activeChatRoomBloc.state.roomId;
-    //   add(ChatSelected(roomId: roomId));
-    print("RouteBloc에서 push");
   }
 }

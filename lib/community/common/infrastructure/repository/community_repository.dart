@@ -66,9 +66,10 @@ class CommunityRepository implements ICommunityRepository {
       postId: postId,
     );
 
-    return failureOrTokens.fold(
-        (f) => left(CommunityFailure(message: f.message)),
-        (result) => right(result.toDomain()));
+    return failureOrTokens
+        .fold((f) => left(CommunityFailure(message: f.message)), (result) {
+      return right(result.toDomain());
+    });
   }
 
   @override

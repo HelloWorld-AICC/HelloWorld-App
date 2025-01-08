@@ -61,8 +61,8 @@ class HomeRouteGrid extends StatelessWidget {
                   const SizedBox(height: 3), // 간격 추가
                   _buildGridItem(
                     context,
-                    items['call_bot']!,
-                    "call_bot",
+                    items['callbot']!,
+                    "callbot",
                     MediaQuery.of(context).size.height / 7.5,
                     150,
                     150,

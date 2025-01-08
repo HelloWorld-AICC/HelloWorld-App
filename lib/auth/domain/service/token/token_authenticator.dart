@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../route/domain/route_service.dart';
@@ -23,7 +24,8 @@ class TokenAuthenticator {
     final isPathRefresh =
         requestOptions.uri.toString() == '$_baseUrl$_tokenRefreshUrl';
 
-    if (response.statusCode == 401 && !isPathRefresh) {
+    if (response.statusCode == 401 ||
+        response.statusCode == 403 && !isPathRefresh) {
       final tokenRefreshSuccess = await _fetchUpdateToken();
 
       if (tokenRefreshSuccess) {

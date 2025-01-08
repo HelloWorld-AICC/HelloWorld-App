@@ -8,6 +8,7 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
+import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
@@ -15,6 +16,7 @@ import 'auth/application/login_bloc.dart' as _i317;
 import 'auth/application/status/auth_status_bloc.dart' as _i157;
 import 'auth/domain/repository/i_auth_repository.dart' as _i667;
 import 'auth/domain/repository/i_token_repository.dart' as _i658;
+import 'auth/domain/service/token/token_authenticator.dart' as _i495;
 import 'auth/infrastructure/provider/auth_external_provider.dart' as _i914;
 import 'auth/infrastructure/provider/auth_internal_provider.dart' as _i877;
 import 'auth/infrastructure/provider/auth_local_provider.dart' as _i350;
@@ -121,6 +123,12 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
         authLocalProvider: gh<_i690.IAuthLocalProvider>()));
+    gh.lazySingleton<_i495.TokenAuthenticator>(() => _i495.TokenAuthenticator(
+          gh<_i361.Dio>(),
+          gh<String>(),
+          gh<String>(),
+          gh<_i807.RouteService>(),
+        ));
     gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
           tokenRepository: gh<_i658.ITokenRepository>(),
           appInitBloc: gh<_i775.AppInitBloc>(),
@@ -128,13 +136,14 @@ extension GetItInjectableX on _i174.GetIt {
         ));
     gh.factory<_i684.AppVersionBloc>(() => _i684.AppVersionBloc(
         appVersionRepository: gh<_i129.IAppVersionRepository>()));
-    gh.lazySingleton<_i30.AuthenticatedHttpClient>(() =>
-        _i30.AuthenticatedHttpClient(
-            tokenRepository: gh<_i658.ITokenRepository>()));
     gh.factory<_i785.HomeBloc>(() => _i785.HomeBloc(
           tokenRepository: gh<_i658.ITokenRepository>(),
           bus: gh<_i461.Bus>(),
         ));
+    gh.lazySingleton<_i30.AuthenticatedHttpClient>(
+        () => _i30.AuthenticatedHttpClient(
+              tokenRepository: gh<_i658.ITokenRepository>(),
+            ));
     gh.singleton<_i1053.FetchService>(
         () => _i1053.FetchService(client: gh<_i30.AuthenticatedHttpClient>()));
     gh.singleton<_i261.ChatFetchService>(() =>
