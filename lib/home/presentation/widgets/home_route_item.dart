@@ -39,10 +39,10 @@ class HomeRouteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // if (routePath == "call_bot") {
-        //   showToast("미구현 기능입니다.");
-        //   return;
-        // }
+        if (routePath == "callbot") {
+          showToast("미구현 기능입니다.");
+          return;
+        }
         context
             .read<RouteBloc>()
             .add(RouteChanged(newIndex: bottomIndex, newRoute: routePath));
