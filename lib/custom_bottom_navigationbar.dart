@@ -87,11 +87,10 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       final selectedKey = items.keys.elementAt(index);
                       final selectedRoute = '/${selectedKey.split('.').last}';
 
-                      // if (selectedRoute == "/consultation_center" ||
-                      //     selectedRoute == "/resume") {
-                      //   showToast("미구현된 기능입니다.");
-                      //   return;
-                      // }
+                      if (selectedRoute == "/resume") {
+                        showToast("미구현된 기능입니다.");
+                        return;
+                      }
                       context.read<RouteBloc>().add(RouteChanged(
                           newIndex: index, newRoute: selectedRoute));
                       Future.delayed(const Duration(milliseconds: 100), () {
