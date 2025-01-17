@@ -87,7 +87,6 @@ class NewChatContentState extends State<NewChatContent>
         child: PopScope(
           onPopInvoked: (result) {
             if (result) {
-              print("Pop invoked in NewChatContent");
               context.read<RouteBloc>().add(PopEvent());
             }
           },
@@ -174,7 +173,7 @@ class NewChatContentState extends State<NewChatContent>
             ),
             bottomNavigationBar: Visibility(
               visible: !isKeyboardVisible,
-              child: CustomBottomNavigationBar(items: bottomNavItems),
+              child: CustomBottomNavigationBar(),
             ),
             drawer: ChatRoomsDrawer(streamController: _streamController),
             onDrawerChanged: (isOpen) {

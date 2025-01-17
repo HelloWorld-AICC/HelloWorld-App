@@ -1,9 +1,4 @@
-enum IconType {
-  xperson,
-  law,
-  ambulance,
-  edit2,
-}
+enum IconType { law, visa, translation }
 
 class IconData {
   final String iconPath;
@@ -13,20 +8,16 @@ class IconData {
 }
 
 final Map<IconType, IconData> initial_icons = {
-  IconType.xperson: IconData(
-    iconPath: "assets/images/chat/xperson.png",
-    title: "직장 내 고충",
-  ),
   IconType.law: IconData(
     iconPath: "assets/images/chat/law.png",
-    title: "체류 및 근로 자격",
+    title: "법률",
   ),
-  IconType.ambulance: IconData(
-    iconPath: "assets/images/chat/ambulance.png",
-    title: "산재 및 의료",
+  IconType.visa: IconData(
+    iconPath: "assets/images/chat/visa.png",
+    title: "비자",
   ),
-  IconType.edit2: IconData(
-    iconPath: "assets/images/chat/edit2.png",
-    title: "기타",
+  IconType.translation: IconData(
+    iconPath: "assets/images/chat/translation.png",
+    title: "생활 정보",
   ),
 };

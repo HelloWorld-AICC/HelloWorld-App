@@ -45,6 +45,11 @@ class RouteService {
 
               print(
                   'isFirstRun: $isFirstRun, isSignedIn: $isSignedIn.. in Initial Route');
+
+              if (isFirstRun) {
+                // Check if selected language is sent to the server
+              }
+
               if (!isFirstRun && isSignedIn) {
                 return HomePage();
               } else if (!isFirstRun && !isSignedIn) {

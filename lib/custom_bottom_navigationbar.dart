@@ -8,23 +8,30 @@ import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'locale/domain/localization_service.dart';
 import 'route/application/route_bloc.dart';
 
-final Map<String, ImageIcon> bottomNavItems = {
-  'bottom_navigation.chat':
-      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
-  'bottom_navigation.resume':
-      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
-  'bottom_navigation.home':
-      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
-  'bottom_navigation.community':
-      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 24),
-  'bottom_navigation.center':
-      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
-};
+class CustomBottomNavigationBar extends StatefulWidget {
+  CustomBottomNavigationBar({super.key});
 
-class CustomBottomNavigationBar extends StatelessWidget {
-  final Map<String, ImageIcon> items;
+  @override
+  State<CustomBottomNavigationBar> createState() =>
+      _CustomBottomNavigationBarState();
+}
 
-  const CustomBottomNavigationBar({super.key, required this.items});
+class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
+  final Map<String, ImageIcon> items = {
+    'bottom_navigation.chat':
+        const ImageIcon(AssetImage('assets/icons/grey/3x/chat.png'), size: 24),
+    'bottom_navigation.resume': const ImageIcon(
+        AssetImage('assets/icons/grey/3x/writing.png'),
+        size: 24),
+    'bottom_navigation.home':
+        const ImageIcon(AssetImage('assets/icons/grey/3x/home.png'), size: 24),
+    'bottom_navigation.community': const ImageIcon(
+        AssetImage('assets/icons/grey/3x/community.png'),
+        size: 32),
+    'bottom_navigation.center': const ImageIcon(
+        AssetImage('assets/icons/grey/3x/announcement.png'),
+        size: 24),
+  };
 
   @override
   Widget build(BuildContext context) {
@@ -36,9 +43,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
     return BlocConsumer<RouteBloc, RouteState>(
       listenWhen: (previous, current) =>
           previous.currentIndex != current.currentIndex,
-      listener: (context, routeState) {
-        print("Route changed to index: ${routeState.currentIndex}");
-      },
+      listener: (context, routeState) {},
       builder: (context, routeState) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -46,10 +51,11 @@ class CustomBottomNavigationBar extends StatelessWidget {
               isKeyboardVisible ? 0 : MediaQuery.of(context).size.height * 0.11,
           child: Padding(
             padding: EdgeInsets.only(
-                // Adjust for the keyboard height if needed
-                bottom: isKeyboardVisible
-                    ? MediaQuery.of(context).viewInsets.bottom
-                    : 0),
+              // Adjust for the keyboard height if needed
+              bottom: isKeyboardVisible
+                  ? MediaQuery.of(context).viewInsets.bottom
+                  : 0,
+            ),
             child: Container(
               decoration: const BoxDecoration(
                 color: HelloColors.white,
@@ -87,15 +93,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       final selectedKey = items.keys.elementAt(index);
                       final selectedRoute = '/${selectedKey.split('.').last}';
 
-                      // if (selectedRoute == "/consultation_center" ||
-                      //     selectedRoute == "/resume") {
-                      //   showToast("미구현된 기능입니다.");
-                      //   return;
-                      // }
+                      if (selectedRoute == "/resume") {
+                        showToast("미구현된 기능입니다.");
+                        return;
+                      }
                       context.read<RouteBloc>().add(RouteChanged(
                           newIndex: index, newRoute: selectedRoute));
+
                       Future.delayed(const Duration(milliseconds: 100), () {
-                        context.push(selectedRoute);
+                        if (mounted) {
+                          context.push(selectedRoute);
+                        }
                       });
                     },
                     items: _getBottomNavItems(localizationService),

@@ -57,19 +57,26 @@ flutter:
 
   assets:
     - assets/translations/
+
+    - assets/icons/
+    - assets/icons/blue/
+    - assets/icons/blue/bottom_bar/
+    - assets/icons/grey/
+    - assets/icons/grey/bottom_bar/
+
     - assets/images/
     - assets/images/auth/
-    - assets/images/home/
-    - assets/images/home/grid_view/
     - assets/images/chat/
     - assets/images/common/
-    - assets/images/mypage/
+    - assets/images/common/app/
+    - assets/images/common/flags/
     - assets/images/community/
+    - assets/images/home/
+    - assets/images/home/grid_view/
+    - assets/images/mypage/
+
     - assets/fonts/
     - assets/icons/
-    - assets/icons/grey/
-    - assets/icons/blue/
-    - assets/images/common/flags/
 
   fonts:
     - family: SB AggroOTF

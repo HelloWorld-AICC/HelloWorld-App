@@ -111,9 +111,7 @@ class CommunityBoard extends StatelessWidget {
                 ),
               ),
             ),
-            bottomNavigationBar: CustomBottomNavigationBar(
-              items: bottomNavItems,
-            ),
+            bottomNavigationBar: CustomBottomNavigationBar(),
           ),
         );
       }),

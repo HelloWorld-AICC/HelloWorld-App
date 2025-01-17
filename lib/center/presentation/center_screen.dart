@@ -123,9 +123,7 @@ class _CenterScreenState extends State<CenterScreen> {
               _buildLocationText(context),
             ],
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            items: bottomNavItems,
-          ),
+          bottomNavigationBar: CustomBottomNavigationBar(),
         ),
       ),
     );

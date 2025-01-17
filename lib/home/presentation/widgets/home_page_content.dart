@@ -14,19 +14,6 @@ import '../../../route/application/route_bloc.dart';
 import '../../../route/domain/route_service.dart';
 import 'home_route_grid.dart';
 
-final Map<String, ImageIcon> bottomNavItems = {
-  'bottom_navigation.chat':
-      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
-  'bottom_navigation.resume':
-      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
-  'bottom_navigation.home':
-      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
-  'bottom_navigation.community/board':
-      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
-  'bottom_navigation.consultation_center':
-      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
-};
-
 class HomePageContent extends StatelessWidget {
   final LocalizationService localizationService;
   final List<String> imagesPath;
@@ -152,9 +139,7 @@ class HomePageContent extends StatelessWidget {
               ),
             ),
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            items: bottomNavItems,
-          ),
+          bottomNavigationBar: CustomBottomNavigationBar(),
         );
       },
     );
