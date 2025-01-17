@@ -58,7 +58,6 @@ class PostDetailBloc extends Bloc<PostDetailEvent, PostDetailState> {
 
     on<PostDetailCommentAdded>((event, emit) async {
       final failureOrSuccess = await communityRepository.writeComment(
-        categoryId: event.categoryId,
         postId: event.postId,
         content: event.comment,
       );

@@ -121,6 +121,15 @@ class FetchService {
       return left(NetworkFailure.unknownError(e));
     }
 
+    // final pathAndQuery = uri.toString().replaceAll(
+    //     "${uri.scheme}://${uri.host}${uri.fragment}${uri.query}", "");
+
+    // print("API CALL [${method.name}] $pathAndQuery " +
+    //     (body != 'null' && body.isNotEmpty ? "\n$body" : ""));
+
+    // print(
+    //     "API RESPONSE [${method.name}] $pathAndQuery\n${utf8.decode(response.bodyBytes)}");
+
     switch (response.statusCode) {
       case 400:
       // throw FetchException(
@@ -148,15 +157,6 @@ class FetchService {
 
     final ServerResponse serverResponse =
         ServerResponse.fromJson(jsonDecode(utf8.decode(response.bodyBytes)));
-
-    final pathAndQuery = uri.toString().replaceAll(
-        "${uri.scheme}://${uri.host}${uri.fragment}${uri.query}", "");
-
-    print("API CALL [${method.name}] $pathAndQuery " +
-        (body != 'null' && body.isNotEmpty ? "\n$body" : ""));
-
-    print(
-        "API RESPONSE [${method.name}] $pathAndQuery\n${utf8.decode(response.bodyBytes)}");
 
     return right(serverResponse);
   }

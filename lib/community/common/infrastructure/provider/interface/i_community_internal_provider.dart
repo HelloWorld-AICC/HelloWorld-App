@@ -24,7 +24,6 @@ abstract class ICommunityInternalProvider {
   });
 
   Future<Either<Failure, Unit>> writeComment({
-    required int categoryId,
     required int postId,
     required String content,
   });

@@ -24,12 +24,6 @@ class AuthenticatedHttpClient extends http.BaseClient {
   Future<http.StreamedResponse> send(http.BaseRequest request) async {
     final tokens = await tokenRepository.getTokens();
 
-    printRequestDebug(
-      'POST',
-      request.url,
-      headers: request.headers,
-    );
-
     return tokens.fold((f) {
       return request.send();
     }, (result) {
