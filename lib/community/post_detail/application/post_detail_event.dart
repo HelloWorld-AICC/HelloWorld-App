@@ -18,10 +18,10 @@ final class PostDetailFetched extends PostDetailEvent {
 final class PostDetailCommentAdded extends PostDetailEvent {
   final String comment;
   final int postId;
-  final int categoryId;
+  final int communityId;
 
   PostDetailCommentAdded(
-      {required this.comment, required this.postId, required this.categoryId});
+      {required this.comment, required this.postId, required this.communityId});
 
   @override
   List<Object> get props => [comment];

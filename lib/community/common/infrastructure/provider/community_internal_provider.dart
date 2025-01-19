@@ -89,13 +89,12 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
 
   @override
   Future<Either<Failure, Unit>> writeComment({
-    required int categoryId,
     required int postId,
     required String content,
   }) async {
     final failureOrTokens = await _fetchService.request(
       pathPrefix: "",
-      path: "/community/$categoryId/create",
+      path: "/community/$postId/comment/create",
       method: HttpMethod.post,
       bodyParam: {
         "content": content,

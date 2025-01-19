@@ -68,7 +68,7 @@ class CommentInputButton extends StatelessWidget {
                 if (comment.isNotEmpty) {
                   context.read<PostDetailBloc>().add(
                         PostDetailCommentAdded(
-                          categoryId: categoryId,
+                          communityId: postId,
                           postId: postId,
                           comment: comment, // Pass the comment here
                         ),

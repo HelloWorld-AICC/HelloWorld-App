@@ -74,12 +74,10 @@ class CommunityRepository implements ICommunityRepository {
 
   @override
   Future<Either<Failure, Unit>> writeComment({
-    required int categoryId,
     required int postId,
     required String content,
   }) async {
     final failureOrTokens = await _internalProvider.writeComment(
-      categoryId: categoryId,
       postId: postId,
       content: content,
     );
