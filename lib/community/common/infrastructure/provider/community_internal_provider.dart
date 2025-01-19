@@ -47,7 +47,7 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
     final failureOrTokens = await _fetchService.request(
       pathPrefix: "",
       path: "/community/$categoryId/create",
-      method: HttpMethod.file,
+      method: HttpMethod.post,
       files: postDto.medias,
       bodyParam: {
         "title": postDto.title,

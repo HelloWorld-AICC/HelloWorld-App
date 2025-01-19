@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:async/async.dart';
 import 'package:hello_world_mvp/auth/domain/service/token/token_authenticator.dart';
+import 'package:hello_world_mvp/fetch/fetch_service.dart';
 import 'package:path/path.dart';
 
 import 'package:flutter/cupertino.dart';
@@ -155,7 +156,8 @@ class AuthenticatedHttpClient extends http.BaseClient {
 
   Future<Response> upload(
     Uri url,
-    List<File>? files, {
+    List<File>? files,
+    HttpMethod method, {
     Map<String, String>? headers,
     Map<String, dynamic>? body,
     Encoding? encoding,
@@ -170,7 +172,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
       newHeaders.putIfAbsent('Authorization',
           () => "Bearer ${result.atk?.token.getOrCrash() ?? ""}");
 
-      var request = http.MultipartRequest("PATCH", url);
+      var request = http.MultipartRequest(method.name.toUpperCase(), url);
 
       request.headers.addAll(newHeaders);
 
@@ -197,12 +199,12 @@ class AuthenticatedHttpClient extends http.BaseClient {
       //contentType: new MediaType('image', 'png'));
 
       var response = await request.send();
-      printRequestDebug('UPLOAD', url,
+      printRequestDebug(method.name.toUpperCase(), url,
           headers: headers, body: body, encoding: encoding);
       var responseData = await response.stream.toBytes();
       var responseString = String.fromCharCodes(responseData);
-      printDebugResponse(
-          'UPLOAD', Response(responseString, response.statusCode));
+      printDebugResponse(method.name.toUpperCase(),
+          Response(responseString, response.statusCode));
       return Response(responseString, response.statusCode);
     });
   }
