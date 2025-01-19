@@ -24,8 +24,7 @@ enum HttpMethod {
   post,
   delete,
   put,
-  patch,
-  file;
+  patch;
 }
 
 @singleton
@@ -46,7 +45,6 @@ class FetchService {
     Map<String, dynamic>? queryParams,
     List<File>? files,
   }) async {
-    assert(method == HttpMethod.file || files == null);
     //body
     final body = json.encode(bodyParam);
 
@@ -65,49 +63,51 @@ class FetchService {
     Response response;
 
     try {
-      switch (method) {
-        case HttpMethod.post:
-          response = await client.post(
-            uri,
-            headers: _baseHeaders,
-            body: body,
-          );
-          break;
-        case HttpMethod.delete:
-          response = await client.delete(
-            uri,
-            headers: _baseHeaders,
-            body: body,
-          );
-          break;
-        case HttpMethod.patch:
-          response = await client.patch(
-            uri,
-            headers: _baseHeaders,
-            body: body,
-          );
-          break;
-        case HttpMethod.put:
-          response = await client.put(
-            uri,
-            headers: _baseHeaders,
-            body: body,
-          );
-          break;
-        case HttpMethod.file:
-          response = await client.upload(
-            uri,
-            files,
-            headers: _baseHeaders,
-            body: bodyParam,
-          );
-          break;
-        default:
-          response = await client.get(
-            uri,
-            headers: _baseHeaders,
-          );
-          break;
+      if (files != null && files.isNotEmpty) {
+        response = await client.upload(
+          uri,
+          files,
+          method,
+          headers: _baseHeaders,
+          body: bodyParam,
+        );
+      } else {
+        switch (method) {
+          case HttpMethod.post:
+            response = await client.post(
+              uri,
+              headers: _baseHeaders,
+              body: body,
+            );
+            break;
+          case HttpMethod.delete:
+            response = await client.delete(
+              uri,
+              headers: _baseHeaders,
+              body: body,
+            );
+            break;
+          case HttpMethod.patch:
+            response = await client.patch(
+              uri,
+              headers: _baseHeaders,
+              body: body,
+            );
+            break;
+          case HttpMethod.put:
+            response = await client.put(
+              uri,
+              headers: _baseHeaders,
+              body: body,
+            );
+            break;
+          default:
+            response = await client.get(
+              uri,
+              headers: _baseHeaders,
+            );
+            break;
+        }
       }
     } on SocketException catch (e) {
       return left(NetworkFailure.socketError(e));
