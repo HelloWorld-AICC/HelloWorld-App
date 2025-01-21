@@ -30,7 +30,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       emit(tokenOrFailure.fold((f) {
         return state.copyWith(failure: f, isLoading: false);
       }, (myInfo) {
-        return state.copyWith(myInfo: myInfo, isLoading: false);
+        return state.copyWith(
+            myInfo: myInfo, isLoading: false, newNickname: myInfo.name);
       }));
     });
 

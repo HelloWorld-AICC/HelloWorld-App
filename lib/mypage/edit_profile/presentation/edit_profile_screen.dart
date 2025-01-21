@@ -56,7 +56,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         return MyPageTitle(
                             isConfirmActivated:
                                 state.selectedProfileImage != null ||
-                                    state.newNickname != null,
+                                    state.newNickname != state.myInfo?.name,
                             onTapConfirm: () {
                               context.read<EditProfileBloc>().add(Submit());
                             });

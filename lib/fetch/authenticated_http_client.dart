@@ -174,14 +174,12 @@ class AuthenticatedHttpClient extends http.BaseClient {
 
       request.headers.addAll(newHeaders);
 
-      late Map<String, String> convertedMap;
-
       if (body != null) {
+        late Map<String, String> convertedMap;
         convertedMap = body
             .map((key, value) => MapEntry(key, value?.toString() ?? "null"));
+        request.fields.addAll(convertedMap);
       }
-
-      request.fields.addAll(convertedMap);
 
       if (files != null) {
         for (var file in files) {
