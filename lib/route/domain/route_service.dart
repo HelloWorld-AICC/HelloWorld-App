@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/center/presentation/center_screen.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
 import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
+import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
 import 'package:hello_world_mvp/resume/resume_screen.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -135,6 +136,10 @@ class RouteService {
       GoRoute(
         path: '/callbot',
         builder: (context, state) => const CallBotScreen(),
+      ),
+      GoRoute(
+        path: '/withdraw',
+        builder: (context, state) => const WithdrawScreen(),
       )
     ], observers: [
       CustomNavigatorObserver(routeBloc),
