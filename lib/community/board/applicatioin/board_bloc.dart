@@ -6,11 +6,13 @@ import 'package:hello_world_mvp/bus/bus.dart';
 import 'package:hello_world_mvp/bus/bus_message.dart';
 import 'package:hello_world_mvp/community/board/presentation/community_board.dart';
 import 'package:hello_world_mvp/community/common/domain/community_failure.dart';
+import 'package:hello_world_mvp/community/common/domain/post.dart';
 import 'package:hello_world_mvp/community/common/domain/post_list.dart';
 import 'package:hello_world_mvp/community/common/domain/repository/i_community_repository.dart';
 import 'package:hello_world_mvp/mypage/common/application/mypage_messages.dart';
 
 import 'package:injectable/injectable.dart';
+import 'package:rxdart/rxdart.dart';
 
 import '../../common/domain/creat_post.dart';
 
@@ -30,6 +32,11 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
     return super.close();
   }
 
+  EventTransformer<T> throttle<T>(Duration duration) {
+    return (events, mapper) =>
+        events.throttleTime(duration).asyncExpand(mapper);
+  }
+
   BoardBloc({required this.communityRepository, required this.bus})
       : super(BoardState.initial()) {
     busSubscription = bus.subscribe((message) {
@@ -38,7 +45,17 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       }
     });
 
+    on<Refresh>((event, emit) {
+      emit(BoardState.initial().copyWith(selectedBoard: state.selectedBoard));
+
+      add(GetPosts());
+    });
+
     on<GetPosts>((event, emit) async {
+      if (state.ended == true) {
+        return;
+      }
+
       emit(state.copyWith(isLoading: true));
       final tokenOrFailure = await communityRepository.getPosts(
         categoryId: state.selectedBoard.id,
@@ -49,9 +66,17 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
       emit(tokenOrFailure.fold((f) {
         return state.copyWith(failure: f, isLoading: false);
       }, (myInfo) {
-        return state.copyWith(postList: myInfo, isLoading: false);
+        return state.copyWith(
+          postList: [
+            if (state.postList != null) ...state.postList!,
+            ...myInfo.posts,
+          ],
+          isLoading: false,
+          page: state.page + 1,
+          ended: myInfo.posts.isEmpty,
+        );
       }));
-    });
+    }, transformer: throttle(const Duration(milliseconds: 500)));
 
     on<SelectBoard>((event, emit) {
       emit(state.copyWith(selectedBoard: event.category));
