@@ -80,7 +80,7 @@ class BoardBloc extends Bloc<BoardEvent, BoardState> {
 
     on<SelectBoard>((event, emit) {
       emit(state.copyWith(selectedBoard: event.category));
-      add(GetPosts());
+      add(Refresh());
     });
   }
 }

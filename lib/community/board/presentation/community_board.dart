@@ -125,6 +125,7 @@ class _BodyState extends State<_Body> {
                           context
                               .read<BoardBloc>()
                               .add(SelectBoard(category: board));
+                          controller.jumpTo(0);
                         },
                         isSelected: board.id == state.selectedBoard.id,
                       )),
