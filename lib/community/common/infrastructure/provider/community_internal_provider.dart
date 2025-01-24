@@ -72,7 +72,7 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
     final failureOrTokens = await _fetchService.request(
         pathPrefix: "",
         path: "/community/$categoryId/detail/$postId",
-        method: HttpMethod.post,
+        method: HttpMethod.get,
         queryParams: {
           "page": page.toString(),
           "size": pageSize.toString(),
