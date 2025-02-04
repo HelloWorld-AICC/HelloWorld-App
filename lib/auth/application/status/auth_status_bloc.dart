@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/auth/domain/repository/i_token_repository.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
+import 'package:hello_world_mvp/route/domain/new_route_service.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../route/domain/route_service.dart';

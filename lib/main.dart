@@ -9,6 +9,7 @@ import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart';
+import 'package:hello_world_mvp/route/domain/new_route_service.dart';
 import 'package:hello_world_mvp/route/domain/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';

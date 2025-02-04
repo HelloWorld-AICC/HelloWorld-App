@@ -5,6 +5,7 @@ import 'package:hello_world_mvp/home/application/home_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart'; // 추가된 import
+import 'package:hello_world_mvp/route/domain/new_route_service.dart';
 
 import '../../locale/domain/localization_service.dart';
 import '../../route/domain/route_service.dart';
