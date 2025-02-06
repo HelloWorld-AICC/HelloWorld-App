@@ -38,14 +38,6 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
         currentRoute: '/splash',
       ));
     });
-    on<PopEvent>((event, emit) async {
-      emit(state.copyWith(
-        currentIndex: 2,
-        currentRoute: '/home',
-      ));
-      getIt<RouteService>().router.pop();
-      print("RouteBloc에서 pop");
-    });
     // on<ChatSelected>(_onChatSelected);
   }
 
@@ -53,8 +45,7 @@ class RouteBloc extends Bloc<RouteEvent, RouteState> {
       RouteChanged event, Emitter<RouteState> emit) async {
     emit(state.copyWith(
       currentIndex: event.newIndex,
-      currentRoute: event.newRoute,
     ));
-    getIt<RouteService>().router.push("/${event.newRoute}");
+    // router.push("/${event.newRoute}");
   }
 }

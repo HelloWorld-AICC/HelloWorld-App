@@ -1,37 +1,38 @@
 import 'package:flutter/material.dart';
 import '../application/route_bloc.dart';
+import 'route_service.dart';
 
-class CustomNavigatorObserver extends NavigatorObserver {
-  final RouteBloc routeBloc;
+// class CustomNavigatorObserver extends NavigatorObserver {
+//   final RouteBloc routeBloc;
 
-  CustomNavigatorObserver(this.routeBloc);
+//   CustomNavigatorObserver(this.routeBloc);
 
-  @override
-  void didPop(Route route, Route? previousRoute) {
-    print("기존 화면으로부터 pop함");
-    super.didPop(route, previousRoute);
+//   @override
+//   void didPop(Route route, Route? previousRoute) {
+//     print("기존 화면으로부터 pop함");
+//     super.didPop(route, previousRoute);
 
-    if (previousRoute != null) {
-      final newRouteName = previousRoute.settings.name;
-      final newRouteIndex = _getRouteIndex(newRouteName); // Implement this
-      if (newRouteIndex != null) {
-        print("newRouteIndex: $newRouteIndex, newRouteName: $newRouteName");
-        routeBloc.add(
-            RouteChanged(newIndex: newRouteIndex, newRoute: newRouteName!));
-      }
-    }
-  }
+//     if (previousRoute != null) {
+//       final newRouteName = previousRoute.settings.name;
+//       final newRouteIndex = _getRouteIndex(newRouteName); // Implement this
+//       if (newRouteIndex != null) {
+//         print("newRouteIndex: $newRouteIndex, newRouteName: $newRouteName");
+//         router.push(newRouteName!);
+//         routeBloc.add(RouteChanged(newIndex: newRouteIndex));
+//       }
+//     }
+//   }
 
-  int? _getRouteIndex(String? routeName) {
-    // Map route names to their corresponding indices
-    const routeMap = {
-      '/chat': 0,
-      '/resume': 1,
-      '/home': 2,
-      '/community': 3,
-      '/center': 4,
-    };
+//   int? _getRouteIndex(String? routeName) {
+//     // Map route names to their corresponding indices
+//     const routeMap = {
+//       '/chat': 0,
+//       '/resume': 1,
+//       '/home': 2,
+//       '/community': 3,
+//       '/center': 4,
+//     };
 
-    return routeMap[routeName];
-  }
-}
+//     return routeMap[routeName];
+//   }
+// }

@@ -14,7 +14,7 @@ class CallBotScreen extends StatelessWidget {
       onPopInvoked: (result) {
         if (result) {
           print("Pop invoked in call bot");
-          context.read<RouteBloc>().add(PopEvent());
+          // context.read<RouteBloc>().add(PopEvent());
         }
       },
       child: Scaffold(

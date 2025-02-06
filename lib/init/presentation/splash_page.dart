@@ -10,6 +10,7 @@ import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart
 
 import '../../locale/application/locale_bloc.dart';
 import '../../route/application/route_bloc.dart';
+import '../../route/domain/route_service.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -175,11 +176,9 @@ class _SplashPageState extends State<SplashPage> {
                         }
 
                         if (mounted) {
+                          router.go ('home');
                           routeBloc.add(
-                            RouteChanged(
-                              newIndex: 2,
-                              newRoute: '/home',
-                            ),
+                            RouteChanged(newIndex: 2),
                           );
                         }
                       },

@@ -6,10 +6,11 @@ import 'home_route_item.dart';
 
 class HomeRouteGrid extends StatelessWidget {
   final Map<String, Map<String, Object>> items;
-  final RouteService routeService;
 
-  HomeRouteGrid({Key? key, required this.items, required this.routeService})
-      : super(key: key);
+  HomeRouteGrid({
+    Key? key,
+    required this.items,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class HomeRouteGrid extends StatelessWidget {
               _buildGridItem(
                 context,
                 items['center']!,
-                "center",
+                "/center",
                 MediaQuery.of(context).size.height / 6,
                 130,
                 130,
@@ -33,7 +34,7 @@ class HomeRouteGrid extends StatelessWidget {
               _buildGridItem(
                 context,
                 items['community']!,
-                "community",
+                "/community",
                 MediaQuery.of(context).size.height / 6,
                 130,
                 130,
@@ -52,7 +53,7 @@ class HomeRouteGrid extends StatelessWidget {
                   _buildGridItem(
                     context,
                     items['resume']!,
-                    "resume",
+                    "/resume",
                     MediaQuery.of(context).size.height / 7.5,
                     150,
                     150,
@@ -62,7 +63,7 @@ class HomeRouteGrid extends StatelessWidget {
                   _buildGridItem(
                     context,
                     items['callbot']!,
-                    "callbot",
+                    "/callbot",
                     MediaQuery.of(context).size.height / 7.5,
                     150,
                     150,
@@ -74,7 +75,7 @@ class HomeRouteGrid extends StatelessWidget {
               _buildGridItem(
                 context,
                 items['chat']!,
-                "chat",
+                "/chat",
                 MediaQuery.of(context).size.height / 3.6,
                 500,
                 500,
@@ -107,7 +108,6 @@ class HomeRouteGrid extends StatelessWidget {
         width: MediaQuery.of(context).size.width / 2.35,
         height: height,
         child: HomeRouteItem(
-          routeService: routeService,
           title: item['title'] as String,
           subTitle: item['subTitle'] as String,
           imgPath: item['imgPath'] as String,

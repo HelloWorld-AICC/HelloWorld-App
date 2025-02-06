@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
+import 'package:hello_world_mvp/route/domain/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import 'locale/domain/localization_service.dart';
@@ -87,15 +88,25 @@ class CustomBottomNavigationBar extends StatelessWidget {
                       final selectedKey = items.keys.elementAt(index);
                       final selectedRoute = '/${selectedKey.split('.').last}';
 
+                      if (selectedRoute == "/community/board") {
+                        router.push("/community/board");
+                        return;
+                      }
+
+                      if (selectedRoute == "/consultation_center") {
+                        router.push("/center");
+                        return;
+                      }
+
                       if (selectedRoute == "/resume") {
                         showToast("미구현된 기능입니다.");
                         return;
                       }
-                      context.read<RouteBloc>().add(RouteChanged(
-                          newIndex: index, newRoute: selectedRoute));
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        context.push(selectedRoute);
-                      });
+
+                      context.push(selectedRoute);
+                      context
+                          .read<RouteBloc>()
+                          .add(RouteChanged(newIndex: index));
                     },
                     items: _getBottomNavItems(localizationService),
                     backgroundColor: HelloColors.white,

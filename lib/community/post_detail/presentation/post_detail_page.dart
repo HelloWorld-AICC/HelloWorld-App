@@ -53,7 +53,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
           onPopInvoked: (result) {
             if (result) {
               print("Pop invoked in post detail");
-              context.read<RouteBloc>().add(PopEvent());
+              // context.read<RouteBloc>().add(PopEvent());
             }
           },
           child: Scaffold(

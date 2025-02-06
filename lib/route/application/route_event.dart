@@ -7,12 +7,11 @@ sealed class RouteEvent extends Equatable {
 
 final class RouteChanged extends RouteEvent {
   final int newIndex;
-  final String newRoute;
 
-  RouteChanged({required this.newIndex, required this.newRoute});
+  RouteChanged({required this.newIndex});
 
   @override
-  List<Object?> get props => [newIndex, newRoute];
+  List<Object?> get props => [newIndex];
 }
 
 final class RouteEventHome extends RouteEvent {

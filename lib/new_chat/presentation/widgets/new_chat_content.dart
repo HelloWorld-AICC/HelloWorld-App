@@ -88,7 +88,7 @@ class NewChatContentState extends State<NewChatContent>
           onPopInvoked: (result) {
             if (result) {
               print("Pop invoked in NewChatContent");
-              context.read<RouteBloc>().add(PopEvent());
+              // context.read<RouteBloc>().add(PopEvent());
             }
           },
           child: Scaffold(
