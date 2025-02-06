@@ -17,6 +17,7 @@ enum AppRoute {
   resume,
   callBot,
   withdraw,
+  term
 }
 
 enum AuthState {

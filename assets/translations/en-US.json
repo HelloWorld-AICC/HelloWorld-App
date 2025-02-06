@@ -33,6 +33,13 @@
   "splash_page": {
     "language_select": "Select Language"
   },
+  "offline_center_page": {
+    "title": "Offline Counseling Center"
+  },
+  "chat_page": {
+    "title": "Chatting Consultation",
+    "input_hint": "Type your message here"
+  },
   "app_name": "Foreign Support Center AICC",
   "login_button": "Login",
   "select_language": "Please select a language",

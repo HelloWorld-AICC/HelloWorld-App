@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/new_chat/presentation/widgets/new_chat_content.dart';
@@ -60,7 +61,7 @@ class ChatInputField extends StatelessWidget {
                       color: textColor,
                     ),
                     decoration: InputDecoration(
-                      hintText: blockInput ? '상담하고자 하는 내용을 입력하세요' : '',
+                      hintText: blockInput ? 'chat_page.input_hint'.tr() : '',
                       hintStyle: TextStyle(
                         fontFamily: "SB AggroOTF",
                         fontSize: 12,

@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
@@ -314,15 +315,15 @@ class _CenterScreenState extends State<CenterScreen> {
         ),
         boxShadow: CenterScreen._boxShadow,
       ),
-      child: const FittedBox(
+      child: FittedBox(
         fit: BoxFit.scaleDown,
         // Ensures the text scales to fit within its container
         child: Text(
-          '오프라인 상담센터',
+          "offline_center_page.title".tr(),
           style: const TextStyle(
             fontFamily: 'SB AggroOTF',
             color: HelloColors.subTextColor,
-            fontSize: 16,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.center,

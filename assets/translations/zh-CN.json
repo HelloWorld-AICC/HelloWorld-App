@@ -33,6 +33,13 @@
   "splash_page": {
     "language_select": "选择语言"
   },
+  "offline_center_page": {
+    "title": "线下咨询中心"
+  },
+  "chat_page": {
+    "title": "聊天咨询",
+    "input_hint": "请输入您要咨询的内容"
+  },
   "app_name": "外国支持中心 AICC",
   "login_button": "登录",
   "select_language": "请选择语言",

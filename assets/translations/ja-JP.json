@@ -33,6 +33,13 @@
   "splash_page": {
     "language_select": "言語を選択してください"
   },
+  "offline_center_page": {
+    "title": "オフライン相談センター"
+  },
+  "chat_page": {
+    "title": "チャット相談",
+    "input_hint": "相談したい内容を入力してください"
+  },
   "app_name": "外国支援センター AICC",
   "login_button": "ログイン",
   "select_language": "言語を選択してください",

@@ -21,7 +21,7 @@ class ChatAppbar extends StatelessWidget implements PreferredSizeWidget {
       title: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Text(
-          context.tr('chat_title'),
+          context.tr('chat_page.title'),
           style: TextStyle(
             color: HelloColors.subTextColor,
             fontFamily: "SB AggroOTF",

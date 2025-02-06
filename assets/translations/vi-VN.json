@@ -33,6 +33,13 @@
   "splash_page": {
     "language_select": "Chọn ngôn ngữ"
   },
+  "offline_center_page": {
+    "title": "Trung Tâm Tư Vấn Trực Tiếp"
+  },
+  "chat_page": {
+    "title": "Tư Vấn Trò Chuyện",
+    "input_hint": "Nhập nội dung bạn muốn tư vấn"
+  },
   "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
   "login_button": "Đăng nhập",
   "select_language": "Vui lòng chọn ngôn ngữ",

@@ -15,6 +15,7 @@ import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart'
 import 'package:hello_world_mvp/mypage/edit_profile/presentation/edit_profile_screen.dart';
 import 'package:hello_world_mvp/mypage/menu/presentation/mypage_menu_screen.dart';
 import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
+import 'package:hello_world_mvp/mypage/term/presentation/term_screen.dart';
 import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
 import 'package:hello_world_mvp/new_chat/presentation/new_chat_page.dart';
 import 'package:hello_world_mvp/resume/resume_screen.dart';
@@ -51,6 +52,7 @@ class RouteService {
     AppRoute.resume: '/resume',
     AppRoute.callBot: '/callbot',
     AppRoute.withdraw: '/withdraw',
+    AppRoute.term: '/term',
   };
 
   // Map of AppRoute to its respective widget builder
@@ -72,6 +74,7 @@ class RouteService {
     AppRoute.resume: (context) => const ResumeScreen(),
     AppRoute.callBot: (context) => const CallBotScreen(),
     AppRoute.withdraw: (context) => const WithdrawScreen(),
+    AppRoute.term: (context) => const TermScreen(),
   };
 
   RouteService({required this.routeBloc}) {
