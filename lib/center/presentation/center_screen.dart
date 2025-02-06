@@ -111,7 +111,6 @@ class _CenterScreenState extends State<CenterScreen> {
         onPopInvoked: (result) {
           if (result) {
             print("Pop invoked in CenterScreen");
-            // context.read<RouteBloc>().add(PopEvent());
           }
         },
         child: Scaffold(
@@ -123,9 +122,6 @@ class _CenterScreenState extends State<CenterScreen> {
               _buildLocationText(context),
             ],
           ),
-          // bottomNavigationBar: CustomBottomNavigationBar(
-          //   items: bottomNavItems,
-          // ),
         ),
       ),
     );

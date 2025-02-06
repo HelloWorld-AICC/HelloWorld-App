@@ -88,7 +88,6 @@ class NewChatContentState extends State<NewChatContent>
           onPopInvoked: (result) {
             if (result) {
               print("Pop invoked in NewChatContent");
-              // context.read<RouteBloc>().add(PopEvent());
             }
           },
           child: Scaffold(
@@ -160,14 +159,6 @@ class NewChatContentState extends State<NewChatContent>
                         // },
                         ),
                   ),
-                  // if (context.watch<ChatSessionBloc>().state.typingState ==
-                  //     TypingIndicatorState.shown)
-                  //   TypingIndicator(),
-                  // Expanded(
-                  //   child: ActionButtonsWidget(
-                  //     onButtonPressed: (selectedContent) {},
-                  //   ),
-                  // ),
                   _buildInputArea(roomId ?? 'new_chat'),
                 ],
               ),

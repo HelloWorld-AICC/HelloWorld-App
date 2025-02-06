@@ -16,7 +16,6 @@ class NewChatPage extends StatelessWidget {
       ],
       child: Scaffold(
         body: NewChatContent(),
-        // bottomNavigationBar: CustomBottomNavigationBar(),
       ),
     );
   }
