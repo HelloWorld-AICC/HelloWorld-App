@@ -24,31 +24,31 @@ class _SplashPageState extends State<SplashPage> {
       'flag': 'icons/flags/png100px/us.png'
     },
     {
-      'locale': Locale('ja', 'JP'),
-      'label': '日本語',
-      'flag': 'icons/flags/png100px/jp.png'
-    },
-    {
       'locale': Locale('ko', 'KR'),
       'label': '한국어',
       'flag': 'icons/flags/png100px/kr.png'
     },
     {
-      'locale': Locale('vi', 'VN'),
-      'label': 'Tiếng Việt',
-      'flag': 'icons/flags/png100px/vn.png'
+      'locale': Locale('ja', 'JP'),
+      'label': '日本語',
+      'flag': 'icons/flags/png100px/jp.png'
     },
     {
       'locale': Locale('zh', 'CN'),
       'label': '中文',
       'flag': 'icons/flags/png100px/cn.png'
     },
+    {
+      'locale': Locale('vi', 'VN'),
+      'label': 'Tiếng Việt',
+      'flag': 'icons/flags/png100px/vn.png'
+    },
   ];
 
   @override
   Widget build(BuildContext context) {
-    Map<String, Object> selectedLanguage;
-    int selectedIndex;
+    Map<String, Object> selectedLanguage = {};
+    int selectedIndex = 0;
 
     return SafeArea(
       child: Scaffold(
@@ -185,14 +185,8 @@ class _SplashPageState extends State<SplashPage> {
                       },
                       child: GestureDetector(
                         onTap: () {
-                          context
-                              .read<AppInitBloc>()
-                              .add(MarkAppRunnedBefore());
-                          context
-                              .read<AppInitBloc>()
-                              .add(MarkLanguageSelected());
-                          print('Language selected');
-                          print("Navigating to terms of service");
+                          context.read<AppInitBloc>().add(StoreSelectedLanguage(
+                              selectedIndex: selectedIndex));
                           context.push('/terms-of-service');
                         },
                         child: Stack(

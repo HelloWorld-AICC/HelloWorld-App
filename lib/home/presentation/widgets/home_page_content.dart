@@ -5,14 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hello_world_mvp/route/domain/new_route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
 
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
 import '../../../locale/application/locale_bloc.dart';
 import '../../../locale/domain/localization_service.dart';
-import '../../../route/application/route_bloc.dart';
-import '../../../route/domain/route_service.dart';
 import 'home_route_grid.dart';
 
 class HomePageContent extends StatelessWidget {

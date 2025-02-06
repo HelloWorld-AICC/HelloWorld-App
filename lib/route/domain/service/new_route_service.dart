@@ -22,7 +22,7 @@ import 'package:hello_world_mvp/route/path.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../application/route_bloc.dart';
+import '../../application/route_bloc.dart';
 import 'custom_navigator_observer.dart';
 
 @LazySingleton()
@@ -125,14 +125,14 @@ class RouteService {
   // Builder for the initial route
   Widget _initialRouteBuilder(BuildContext context, GoRouterState state) {
     return FutureBuilder<bool>(
-      future: _markAppRunnedBefore(),
+      future: _isFirstRun(),
       builder: (context, snapshot) {
         bool isFirstRun = snapshot.data ?? true;
         bool isSignedIn =
             context.read<AuthStatusBloc>().state.isSignedIn ?? false;
 
         if (isFirstRun) {
-          // Check if selected language is sent to the server
+          return SplashPage();
         }
 
         if (!isFirstRun && isSignedIn) {
@@ -140,7 +140,7 @@ class RouteService {
         } else if (!isFirstRun && !isSignedIn) {
           return const LoginScreen();
         } else {
-          return SplashPage();
+          return SplashPage(); // Same as placeholder
         }
       },
     );
@@ -164,8 +164,27 @@ class RouteService {
     router.go(_getRoutePath(AppRoute.home));
   }
 
-  Future<bool> _markAppRunnedBefore() async {
+  Future<bool> _isFirstRun() async {
     final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isFirstRun') ?? false;
+    final keys = prefs.getKeys();
+    bool isFirstRun =
+        keys.contains('isFirstRun') ? prefs.getBool('isFirstRun')! : true;
+    String lastVersion = keys.contains('lastVersion')
+        ? prefs.getString('lastVersion')!
+        : '0.1.0';
+    bool isUpdateProcessed = keys.contains('isUpdateProcessed')
+        ? prefs.getBool('isUpdateProcessed')!
+        : false;
+
+    String currentVersion = '0.1.1';
+
+    if (isFirstRun || (lastVersion != currentVersion && !isUpdateProcessed)) {
+      await prefs.setBool('isFirstRun', false);
+      await prefs.setString('lastVersion', currentVersion);
+      await prefs.setBool('isUpdateProcessed', true);
+      return true;
+    } else {
+      return false;
+    }
   }
 }

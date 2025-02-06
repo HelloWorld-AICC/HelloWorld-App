@@ -1,12 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:hello_world_mvp/route/domain/new_route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../injection.dart';
-import '../domain/route_service.dart';
 
 part 'route_event.dart';
 

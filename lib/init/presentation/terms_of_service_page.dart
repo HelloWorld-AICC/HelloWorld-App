@@ -99,10 +99,10 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                         );
                         return;
                       }
-
-                      context.read<AppInitBloc>().add(MarkSplashDone());
+                      context.read<AppInitBloc>().add(MarkAppRunnedBefore());
                       final isSignIn =
                           context.read<AuthStatusBloc>().state.isSignedIn;
+
                       if (isSignIn == null || !isSignIn) {
                         context.push('/login');
                         return;

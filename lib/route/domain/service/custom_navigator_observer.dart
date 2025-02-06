@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../application/route_bloc.dart';
+import '../../application/route_bloc.dart';
 
 class CustomNavigatorObserver extends NavigatorObserver {
   final RouteBloc routeBloc;
