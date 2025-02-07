@@ -13,32 +13,10 @@ part 'route_state.dart';
 
 @Injectable()
 class RouteBloc extends Bloc<RouteEvent, RouteState> {
-  // final ChatSessionManager chatSessionBloc;
-  // final ActiveChatRoomBloc activeChatRoomBloc;
-
   BuildContext? context;
 
-  RouteBloc(// this.chatSessionBloc, this.roomIdBloc
-      )
-      : super(RouteState.initial()) {
+  RouteBloc() : super(RouteState.initial()) {
     on<RouteChanged>(_onRouteChanged);
-    on<RouteEventHome>((event, emit) async {
-      emit(state.copyWith(
-        currentIndex: 2,
-        currentRoute: '/home',
-      ));
-    });
-    on<RouteEventLogin>((event, emit) async {
-      emit(state.copyWith(
-        currentRoute: '/login',
-      ));
-    });
-    on<RouteEventSplash>((event, emit) async {
-      emit(state.copyWith(
-        currentRoute: '/splash',
-      ));
-    });
-    // on<ChatSelected>(_onChatSelected);
   }
 
   Future<void> _onRouteChanged(

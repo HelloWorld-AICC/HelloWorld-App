@@ -133,7 +133,9 @@ class HomePageContent extends StatelessWidget {
               ),
             ),
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(),
+          bottomNavigationBar: CustomBottomNavigationBar(
+            items: bottomNavItems,
+          ),
         );
       },
     );

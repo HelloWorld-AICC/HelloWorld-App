@@ -6,7 +6,6 @@ import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart'
 import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
 import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
 import 'package:hello_world_mvp/resume/resume_screen.dart';
-import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../auth/application/status/auth_status_bloc.dart';
@@ -24,7 +23,6 @@ import '../../mypage/edit_profile/presentation/edit_profile_screen.dart';
 import '../../mypage/menu/presentation/mypage_menu_screen.dart';
 import '../../new_chat/presentation/new_chat_page.dart';
 import '../application/route_bloc.dart';
-import 'custom_navigator_observer.dart';
 
 Future<bool> markAppRunnedBefore() async {
   final prefs = await SharedPreferences.getInstance();
@@ -35,7 +33,6 @@ final router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
     path: '/',
     builder: (context, state) {
-      print("Initial Route Called");
       return FutureBuilder<bool>(
         future: markAppRunnedBefore(),
         builder: (context, snapshot) {
@@ -43,8 +40,6 @@ final router = GoRouter(initialLocation: '/', routes: [
           bool isSignedIn =
               context.read<AuthStatusBloc>().state.isSignedIn ?? false;
 
-          print(
-              'isFirstRun: $isFirstRun, isSignedIn: $isSignedIn.. in Initial Route');
           if (!isFirstRun && isSignedIn) {
             return HomePage();
           } else if (!isFirstRun && !isSignedIn) {

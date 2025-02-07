@@ -37,11 +37,6 @@ class CommunityBoard extends StatelessWidget {
       create: (context) => getIt<BoardBloc>()..add(GetPosts()),
       child: Builder(builder: (context) {
         return PopScope(
-          onPopInvoked: (result) {
-            if (result) {
-              print("Pop invoked in community board");
-            }
-          },
           child: Scaffold(
             appBar: HelloAppbar(
               title: "Community",

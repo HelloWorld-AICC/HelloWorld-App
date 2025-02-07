@@ -83,7 +83,6 @@ class NewChatContentState extends State<NewChatContent>
         builder: (context, state) {
       return SafeArea(
         child: PopScope(
-          onPopInvoked: (result) {},
           child: Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
@@ -159,7 +158,9 @@ class NewChatContentState extends State<NewChatContent>
             ),
             bottomNavigationBar: Visibility(
               visible: !isKeyboardVisible,
-              child: CustomBottomNavigationBar(),
+              child: CustomBottomNavigationBar(
+                items: bottomNavItems,
+              ),
             ),
             drawer: ChatRoomsDrawer(streamController: _streamController),
             onDrawerChanged: (isOpen) {

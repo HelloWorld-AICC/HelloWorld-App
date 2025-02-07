@@ -11,7 +11,6 @@ class CallBotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (result) {},
       child: Scaffold(
         backgroundColor: HelloColors.white,
         body: Center(
