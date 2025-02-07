@@ -41,6 +41,7 @@
     "input_hint": "Type your message here"
   },
   "resume_page": {
+    "restart": "Restart",
     "resume": {
       "title": "Resume Writing",
       "next": "Next",
@@ -53,7 +54,7 @@
       "planning": "I plan to acquire a visa",
       "select_visa": "Please select your visa",
       "select_visa_title": "Visa Selection",
-      "issue_date",: "Issue Date",
+      "issue_date": "Issue Date",
       "expiry_date": "Expiry Date"
     },
     "work_experience": {
@@ -103,6 +104,17 @@
       "main_content": "Please describe what you studied in detail"
     }
   },
+  "terms_page": {
+    "title": "Terms of Use",
+    "look_details": "View Details",
+    "snackbar": "You must agree to all terms.",
+    "all_agree": "Agree to All",
+    "privacy_policy": "Agree to the Privacy Policy (Required)",
+    "terms_of_service": "Agree to the Terms of Service (Required)",
+    "privacy_policy_details": "The HelloWorld service (hereinafter referred to as 'Service') is provided by the development team (hereinafter referred to as 'Team'). The Team values the protection of personal information and provides the following guidelines regarding the processing of personal data collected during the use of the Service.\n\n1. Personal Information Collected\n- Personal information collected during registration: KakaoTalk account information, nickname\n- Additional personal information collected: Profile picture, My Team information, etc.\n\n2. Purpose of Processing Personal Information\n- Providing services and managing members\n- Preventing fraudulent activities and improving the Service\n- Collecting and analyzing service usage statistics\n\n3. Retention and Processing Period of Personal Information\n- Personal information is processed and retained within the period stipulated by law.\n- Personal information is deleted within 90 days after service use ends.\n\n4. Provision of Personal Information to Third Parties\n- Personal information is not provided to third parties without the member’s consent.\n\n5. Methods of Protecting Personal Information\n- The Team applies various security technologies to protect personal information.\n\n6. Rights and Obligations of Members\n- Members can view, modify, or delete their personal information at any time and exercise their rights regarding the processing of personal data.\n\n7. Disposal of Personal Information\n- Once the purpose of processing personal information is achieved, it is immediately disposed of.",
+    "terms_of_service_details": "These terms define the conditions of use of the HelloWorld service (hereinafter referred to as 'Service') and outline the rights and obligations between the Service provider and its members.\n\n1. Provision of Service\n- The HelloWorld Service provides various features and content to its members, and its use is subject to these terms.\n\n2. Member Obligations\n- Members must not infringe on the rights of others or interfere with the normal operation of the Service.\n- Engaging in illegal or criminal activities that harm the Service may result in restrictions on service use.\n\n3. Service Use Restrictions\n- If fraudulent activities or violations of the terms are detected, the Team may restrict the use of the Service or suspend the member’s account.\n\n4. Protection of Personal Information\n- Personal information collected during Service use is processed according to the Team’s Privacy Policy, and members may request modifications or deletions at any time.\n\n5. Service Changes and Discontinuation\n- The Team may modify or discontinue the Service due to technical issues or operational needs.\n\n6. Changes to the Terms\n- The Team may modify these terms for service improvements or changes in the law. The revised terms take effect after notification.\n\n7. Disclaimer\n- The Team is not legally responsible for issues arising from the use of the Service, and members bear full responsibility for any consequences during Service use.\n\n8. Governing Law and Dispute Resolution\n- These terms are governed by the laws of the Republic of Korea, and disputes related to Service use shall be resolved in the court of the Team’s jurisdiction."
+  },
+  "main_content": "Main Content",
   "app_name": "Foreign Support Center AICC",
   "login_button": "Login",
   "select_language": "Please select a language",

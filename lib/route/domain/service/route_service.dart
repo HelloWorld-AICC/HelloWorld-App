@@ -23,7 +23,25 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<bool> markAppRunnedBefore() async {
   final prefs = await SharedPreferences.getInstance();
-  return prefs.getBool('isFirstRun') ?? false;
+  final keys = prefs.getKeys();
+  bool isFirstRun =
+      keys.contains('isFirstRun') ? prefs.getBool('isFirstRun')! : true;
+  String lastVersion =
+      keys.contains('lastVersion') ? prefs.getString('lastVersion')! : '0.1.0';
+  bool isUpdateProcessed = keys.contains('isUpdateProcessed')
+      ? prefs.getBool('isUpdateProcessed')!
+      : false;
+
+  String currentVersion = '0.1.1';
+
+  if (isFirstRun || (lastVersion != currentVersion && !isUpdateProcessed)) {
+    await prefs.setBool('isFirstRun', false);
+    await prefs.setString('lastVersion', currentVersion);
+    await prefs.setBool('isUpdateProcessed', true);
+    return true;
+  } else {
+    return false;
+  }
 }
 
 final router = GoRouter(initialLocation: '/', routes: [

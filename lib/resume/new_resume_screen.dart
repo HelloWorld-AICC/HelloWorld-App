@@ -13,8 +13,11 @@ class _ResumeScreenState extends State<ResumeScreen> {
   double progress = 0.0;
   bool isButtonActive = false;
 
+  int _maxLength = 2000;
+  List _currentLength = [0, 0];
+
   final List<TextEditingController> controllers =
-      List.generate(10, (index) => TextEditingController());
+      List.generate(30, (index) => TextEditingController());
   String? selectedVisa, selectedNationality, selectedGender;
 
   @override
@@ -34,7 +37,7 @@ class _ResumeScreenState extends State<ResumeScreen> {
   }
 
   void _nextStep() {
-    if (isButtonActive && currentStep < 6) {
+    if (isButtonActive && currentStep < 7) {
       setState(() {
         currentStep++;
         isButtonActive = false;
@@ -42,18 +45,33 @@ class _ResumeScreenState extends State<ResumeScreen> {
     }
   }
 
+  void _updateCharacterCnt(int index) {
+    setState(() {
+      _currentLength[index] = controllers[15].text.length;
+    });
+  }
+
+  final List<String> subtitles = [
+    'resume_page.visa.subtitle',
+    'resume_page.visa.subtitle',
+    'resume_page.work_experience.subtitle',
+    'resume_page.personal_info.subtitle',
+    'resume_page.korean_ability.subtitle',
+    'resume_page.education.subtitle',
+    'resume_page.certificate.subtitle',
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: false, // Set to false to avoid resizing
+        resizeToAvoidBottomInset: false,
         backgroundColor: HelloColors.mainBlue,
         body: Stack(
           children: [
             // Background Image
             Positioned(
               top: 80,
-              // Starts below the SizedBox
               left: 0,
               right: 0,
               bottom: 0,
@@ -62,75 +80,101 @@ class _ResumeScreenState extends State<ResumeScreen> {
                 fit: BoxFit.fitHeight,
               ),
             ),
-            // Your content on top of the image
-            Padding(
-              padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
-              child: Column(
-                children: [
-                  LinearProgressIndicator(
-                    value: progress,
-                    minHeight: 10,
-                    backgroundColor: Color(0xffDFEDFD),
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(Color(0xffBFDAFC)),
-                  ),
-                  SizedBox(height: 100),
-                  Text(
-                    tr('resume_page.resume.title'),
-                    style: TextStyle(
-                        fontSize: 22,
-                        fontWeight: FontWeight.bold,
-                        color: HelloColors.mainColor1),
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    tr('resume_page.visa.subtitle'),
-                    style: TextStyle(
-                        fontSize: 16, color: HelloColors.subTextColor),
-                  ),
-                  SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Builder(
-                      builder: (_) {
-                        if (currentStep == 0) return _buildVisaSelection();
-                        if (currentStep == 1) return _buildVisaDetails();
-                        if (currentStep == 2) return _buildWorkExperience();
-                        if (currentStep == 3) return _buildPersonalInfo();
-                        if (currentStep == 4) return _buildKoreanAbility();
-                        if (currentStep == 5) return _buildEducation();
-                        if (currentStep == 6) return _buildCertificates();
-                        return SizedBox(); // Return an empty widget if no condition is met
-                      },
+            // Content
+            Positioned(
+              top: 20,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                child: Column(
+                  children: [
+                    // Progress Bar (Fixed at the top)
+                    LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 10,
+                      backgroundColor: Color(0xffDFEDFD),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(Color(0xffBFDAFC)),
                     ),
-                  ),
-                  Spacer(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      if (currentStep > 0)
-                        IconButton(
-                          onPressed: () => setState(() {
-                            currentStep--;
-                            _updateProgress();
-                            selectedVisa = null;
-                          }),
-                          icon: SvgPicture.asset('assets/icons/arrow_left.svg',
-                              width: 60, height: 60),
+                    SizedBox(height: 100),
+
+                    // Title and Subtitle (Fixed)
+                    Text(
+                      tr('resume_page.resume.title'),
+                      style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: HelloColors.mainColor1),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      tr(subtitles[currentStep]),
+                      style: TextStyle(
+                          fontSize: 16, color: HelloColors.subTextColor),
+                    ),
+                    SizedBox(height: 20),
+
+                    // Scrollable content
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.all(20),
+                          child: Builder(
+                            builder: (_) {
+                              if (currentStep == 0)
+                                return _buildVisaSelection();
+                              if (currentStep == 1) return _buildVisaDetails();
+                              if (currentStep == 2)
+                                return _buildWorkExperience();
+                              if (currentStep == 3) return _buildPersonalInfo();
+                              if (currentStep == 4)
+                                return _buildKoreanAbility();
+                              if (currentStep == 5) return _buildEducation();
+                              if (currentStep == 6) return _buildCertificates();
+                              return _buildCompleteScreen();
+                            },
+                          ),
                         ),
-                      Spacer(),
+                      ),
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 20,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    if (currentStep > 0)
                       IconButton(
-                        onPressed: () {
-                          isButtonActive ? _nextStep() : null;
+                        onPressed: () => setState(() {
+                          currentStep--;
                           _updateProgress();
                           selectedVisa = null;
-                        },
-                        icon: SvgPicture.asset('assets/icons/arrow_right.svg',
+                        }),
+                        icon: SvgPicture.asset('assets/icons/arrow_left.svg',
                             width: 60, height: 60),
                       ),
-                    ],
-                  ),
-                ],
+                    Spacer(),
+                    IconButton(
+                      onPressed: () {
+                        isButtonActive ? _nextStep() : null;
+                        _updateProgress();
+                        selectedVisa = null;
+                      },
+                      icon: SvgPicture.asset('assets/icons/arrow_right.svg',
+                          width: 60, height: 60),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -196,9 +240,9 @@ class _ResumeScreenState extends State<ResumeScreen> {
     return Column(
       children: [
         SizedBox(height: 50),
-        _buildSelectableButton('resume_page.visa.acquired', true),
+        _buildSelectableButton('resume_page.visa.acquired'.tr(), true),
         SizedBox(height: 10),
-        _buildSelectableButton('resume_page.visa.planning', false),
+        _buildSelectableButton('resume_page.visa.planning'.tr(), false),
       ],
     );
   }
@@ -271,17 +315,32 @@ class _ResumeScreenState extends State<ResumeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle(tr('resume_page.visa.company_name_title')),
+        _buildSectionTitle(
+            tr('resume_page.work_experience.company_name_title')),
         _buildTextFormField(
           controller: controllers[2],
           labelText: tr('resume_page.work_experience.company_name'),
           onChanged: (_) => _updateProgress(),
         ),
         SizedBox(height: 20),
-        _buildSectionTitle(tr('resume_page.visa.job_title_title')),
+        _buildSectionTitle(tr('resume_page.work_experience.job_title_title')),
         _buildTextFormField(
           controller: controllers[3],
           labelText: tr('resume_page.work_experience.job_title'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.work_experience.start_date')),
+        _buildTextFormField(
+          controller: controllers[4],
+          labelText: tr('resume_page.work_experience.start_date'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.work_experience.end_date')),
+        _buildTextFormField(
+          controller: controllers[5],
+          labelText: tr('resume_page.work_experience.end_date'),
           onChanged: (_) => _updateProgress(),
         ),
       ],
@@ -292,16 +351,37 @@ class _ResumeScreenState extends State<ResumeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        _buildSectionTitle(tr('resume_page.personal_info.nationality')),
+        _buildDropdownFormField(
+          value: selectedVisa,
+          hint: tr('resume_page.personal_info.select_nationality'),
+          items: [
+            "countries.korea".tr(),
+            "countries.japan".tr(),
+            "countries.china".tr(),
+            "countries.vietnam".tr(),
+            "countries.usa".tr()
+          ],
+          onChanged: (val) => setState(() => selectedVisa = val),
+        ),
+        SizedBox(height: 20),
         _buildSectionTitle(tr('resume_page.personal_info.birth_date')),
         _buildTextFormField(
-          controller: controllers[4],
+          controller: controllers[6],
           labelText: tr('resume_page.personal_info.birth_date'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.personal_info.residence')),
+        _buildTextFormField(
+          controller: controllers[7],
+          labelText: tr('resume_page.personal_info.residence'),
           onChanged: (_) => _updateProgress(),
         ),
         SizedBox(height: 20),
         _buildSectionTitle(tr('resume_page.personal_info.email')),
         _buildTextFormField(
-          controller: controllers[5],
+          controller: controllers[8],
           labelText: tr('resume_page.personal_info.email'),
           onChanged: (_) => _updateProgress(),
         ),
@@ -315,8 +395,15 @@ class _ResumeScreenState extends State<ResumeScreen> {
       children: [
         _buildSectionTitle(tr('resume_page.korean_ability.test_name')),
         _buildTextFormField(
-          controller: controllers[6],
+          controller: controllers[9],
           labelText: tr('resume_page.korean_ability.test_name'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.korean_ability.score')),
+        _buildTextFormField(
+          controller: controllers[10],
+          labelText: tr('resume_page.korean_ability.score'),
           onChanged: (_) => _updateProgress(),
         ),
       ],
@@ -329,9 +416,46 @@ class _ResumeScreenState extends State<ResumeScreen> {
       children: [
         _buildSectionTitle(tr('resume_page.education.school_name')),
         _buildTextFormField(
-          controller: controllers[7],
+          controller: controllers[11],
           labelText: tr('resume_page.education.school_name'),
           onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.education.major')),
+        _buildTextFormField(
+          controller: controllers[12],
+          labelText: tr('resume_page.education.major'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.education.start_date')),
+        _buildTextFormField(
+          controller: controllers[13],
+          labelText: tr('resume_page.education.start_date'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.education.end_date')),
+        _buildTextFormField(
+          controller: controllers[14],
+          labelText: tr('resume_page.education.end_date'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('main_content')),
+        _buildTextFormField(
+            controller: controllers[15],
+            labelText: tr('resume_page.education.main_content'),
+            onChanged: (_) {
+              _updateProgress();
+              _updateCharacterCnt(0);
+            }),
+        SizedBox(height: 8),
+        Text(
+          'Characters: ${_currentLength[0]}/$_maxLength',
+          style: TextStyle(
+            color: _currentLength[0] > _maxLength ? Colors.red : Colors.black,
+          ),
         ),
       ],
     );
@@ -341,13 +465,84 @@ class _ResumeScreenState extends State<ResumeScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildSectionTitle(tr('resume_page.certificate.name')),
+        _buildSectionTitle(tr('resume_page.certificate.name').tr()),
         _buildTextFormField(
-          controller: controllers[8],
+          controller: controllers[16],
           labelText: tr('resume_page.certificate.name'),
           onChanged: (_) => _updateProgress(),
         ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.certificate.organization').tr()),
+        _buildTextFormField(
+          controller: controllers[17],
+          labelText: tr('resume_page.certificate.organization'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.certificate.acquisition_date').tr()),
+        _buildTextFormField(
+          controller: controllers[18],
+          labelText: tr('resume_page.certificate.acquisition_date'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('resume_page.certificate.expiry_date').tr()),
+        _buildTextFormField(
+          controller: controllers[19],
+          labelText: tr('resume_page.certificate.expiry_date'),
+          onChanged: (_) => _updateProgress(),
+        ),
+        SizedBox(height: 20),
+        _buildSectionTitle(tr('main_content')),
+        _buildTextFormField(
+            controller: controllers[20],
+            labelText: tr('resume_page.certificate.main_content'),
+            onChanged: (_) {
+              _updateProgress();
+              _updateCharacterCnt(1);
+            }),
+        SizedBox(height: 8),
+        Text(
+          'Characters: ${_currentLength[1]}/$_maxLength',
+          style: TextStyle(
+            color: _currentLength[1] > _maxLength ? Colors.red : Colors.black,
+          ),
+        ),
       ],
+    );
+  }
+
+  Widget _buildCompleteScreen() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(Icons.check_circle, color: HelloColors.subTextColor, size: 80),
+          SizedBox(height: 20),
+          Text(
+            tr('resume_page.complete_message'),
+            style: TextStyle(
+                fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+          ),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                currentStep = 0; // 처음으로 되돌리기
+                progress = 0.0;
+              });
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: HelloColors.subTextColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+            child: Text(tr('resume_page.restart'),
+                style: TextStyle(color: Colors.white)),
+          ),
+        ],
+      ),
     );
   }
 }

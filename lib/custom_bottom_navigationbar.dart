@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/route/domain/route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import 'locale/domain/localization_service.dart';

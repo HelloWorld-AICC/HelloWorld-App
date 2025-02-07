@@ -73,7 +73,7 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    SplashTextLabel(text: "사용 약관"),
+                    SplashTextLabel(text: "terms_page.title".tr()),
                     const SizedBox(height: 20),
                     TermsContent(
                       onAllTermsAccepted: (bool isAccepted) {
@@ -95,7 +95,7 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                     onTap: () async {
                       if (!allSelected) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("모든 약관에 동의해야 합니다.")),
+                          SnackBar(content: Text("terms_page.snackbar".tr())),
                         );
                         return;
                       }
@@ -153,66 +153,12 @@ class _TermsContentState extends State<TermsContent> {
 
   final List<Map<String, String>> terms = [
     {
-      "title": "개인정보 처리방침에 동의 (필수)",
-      "details": """
-    HelloWorld 서비스(이하 "서비스")를 제공하는 개발팀(이하 "팀")은 개인정보 보호를 중요하게 생각하며, 서비스 이용 과정에서 수집되는 개인정보의 처리에 대해 아래와 같이 안내드립니다.
-
-    1. 수집하는 개인정보의 항목
-    - 회원가입 시 수집되는 개인정보: 카카오톡 계정 정보, 닉네임
-    - 별도로 수집되는 개인정보: 프로필 사진, My Team 정보 등
-
-    2. 개인정보의 처리 목적
-    - 서비스 제공 및 회원 관리
-    - 부정행위 방지 및 서비스 개선
-    - 서비스 이용 통계 수집 및 분석
-
-    3. 개인정보의 처리 및 보유 기간
-    - 법령에 따른 개인정보 보유 및 이용기간 내에서 처리 및 보유됩니다.
-    - 서비스 이용 후 90일 이내에 개인정보를 파기합니다.
-
-    4. 개인정보의 제3자 제공
-    - 회원의 동의 없이 개인정보를 제3자에게 제공하지 않습니다.
-
-    5. 개인정보의 보호 방법
-    - 팀은 개인정보 보호를 위해 다양한 보안 기술을 적용하고 있습니다.
-
-    6. 회원의 권리 및 의무
-    - 회원은 언제든지 자신의 개인정보를 조회하거나 수정, 삭제할 수 있으며, 개인정보 처리에 관한 권리를 행사할 수 있습니다.
-
-    7. 개인정보의 파기
-    - 서비스 이용 중 개인정보 처리 목적이 달성되면 즉시 파기됩니다.
-    """,
+      "title": "terms_page.privacy_policy".tr(),
+      "details": "terms_page.privacy_policy_details".tr(),
     },
     {
-      "title": "사용약관 처리방침에 동의 (필수)",
-      "details": """
-    본 약관은 HelloWorld 서비스(이하 "서비스")의 이용에 관한 조건을 규정하며, 서비스 제공 및 회원 간의 권리와 의무를 명시합니다.
-
-    1. 서비스의 제공
-    - HelloWorld 서비스는 회원에게 다양한 기능과 콘텐츠를 제공하며, 서비스 이용에 대한 약관을 따릅니다.
-    
-    2. 회원의 의무
-    - 회원은 서비스를 이용하면서 타인의 권리를 침해하거나 서비스의 정상적인 운영을 방해하는 행위를 해서는 안 됩니다.
-    - 불법적인 행위, 범죄행위 등 서비스에 해를 끼치는 행위를 할 경우 서비스 이용이 제한될 수 있습니다.
-
-    3. 서비스 이용 제한
-    - 팀은 서비스 이용 중 부정행위 또는 약관 위반을 발견한 경우, 해당 회원에 대해 서비스 이용을 제한하거나 계정을 정지할 수 있습니다.
-
-    4. 개인정보 보호
-    - 서비스 이용 시 수집되는 개인정보는 팀의 개인정보 처리방침에 따라 처리되며, 회원은 언제든지 개인정보 수정 및 삭제를 요청할 수 있습니다.
-
-    5. 서비스의 변경 및 중단
-    - 팀은 기술적 문제나 운영상의 필요로 인해 서비스를 변경하거나 중단할 수 있습니다.
-    
-    6. 약관의 변경
-    - 팀은 서비스의 향상 및 법령의 변경 등을 이유로 약관을 변경할 수 있으며, 변경된 약관은 공지 후 효력을 발생합니다.
-
-    7. 면책 조항
-    - 팀은 서비스 이용과 관련하여 발생하는 문제에 대해 법적으로 책임지지 않으며, 회원은 서비스를 이용하는 과정에서 발생할 수 있는 모든 책임을 지게 됩니다.
-
-    8. 법적 준거 및 분쟁 해결
-    - 본 약관은 대한민국 법에 따르며, 서비스 이용과 관련된 분쟁은 팀의 소재지 법원을 제1심 법원으로 합니다.
-    """
+      "title": "terms_page.terms_of_service".tr(),
+      "details": "terms_page.terms_of_service_details".tr(),
     }
   ];
 
@@ -317,7 +263,7 @@ class _TermsContentState extends State<TermsContent> {
               Container(
                 width: MediaQuery.of(context).size.width * 0.6,
                 child: Text(
-                  "모두 동의",
+                  "terms_page.all_agree".tr(),
                   style: TextStyle(
                     fontFamily: "SB AggroOTF",
                     fontWeight: FontWeight.bold,
@@ -372,7 +318,7 @@ class _TermsContentState extends State<TermsContent> {
                     terms[index]["details"]!,
                   ),
                   child: Text(
-                    "세부 정보 보기 >",
+                    "terms_page.look_details".tr(),
                     style: TextStyle(
                       fontFamily: 'SB AggroOTF',
                       fontSize: 12,

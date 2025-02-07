@@ -2,7 +2,9 @@ import 'dart:ui';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/common/presentation/hello_appbar.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/language_selection_widget.dart';
@@ -53,168 +55,174 @@ class _SplashPageState extends State<SplashPage> {
 
     return SafeArea(
       child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Stack(
-            children: [
-              // 배경 도형
-              Container(
-                decoration: const BoxDecoration(
-                  color: Color(0xffECF6FE),
+        body: Stack(
+          children: [
+            // 배경 도형
+            Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Color(0xffECF6FE), // Darker color at the top
+                    HelloColors.white, // Lighter color at the bottom
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
                 ),
               ),
-              // 큰 원
-              Positioned(
-                bottom: -MediaQuery.of(context).size.height / 6,
-                left: MediaQuery.of(context).size.width / 2 - 400,
-                child: ClipOval(
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-                    child: Container(
-                      width: 800,
-                      height: 800,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                            colors: [
-                              HelloColors.white.withOpacity(0.8),
-                              HelloColors.mainBlue.withOpacity(0.01),
-                            ],
-                            stops: const [
-                              0.2,
-                              0.8
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-              Positioned.fill(
-                top: MediaQuery.of(context).size.height / 8,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        height: MediaQuery.of(context).size.height / 5,
-                        child: Image.asset(
-                          'assets/images/home/Nice to meet you.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                      const SizedBox(height: 20),
-                      SplashTextLabel(text: "언어 선택"),
-                      const SizedBox(height: 20),
-                    ],
-                  ),
-                ),
-              ),
-              Positioned(
-                top: MediaQuery.of(context).size.height / 2.3,
-                left: 0,
-                right: 0,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+            ),
+            // 큰 원
+            Positioned(
+              bottom: -MediaQuery.of(context).size.height / 6,
+              left: MediaQuery.of(context).size.width / 2 - 400,
+              child: ClipOval(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
                   child: Container(
-                    width: MediaQuery.of(context).size.width / 3,
-                    height: MediaQuery.of(context).size.height / 3,
-                    child: ListView.builder(
-                      itemCount: languages.length,
-                      itemBuilder: (context, index) {
-                        final language = languages[index];
-                        final isSelected =
-                            context.watch<LocaleBloc>().state.selectedIndex ==
-                                index;
-
-                        return Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8.0),
-                          child: LanguageSelectionWidget(
-                            flagPath: language['flag'] as String,
-                            language: language['label'] as String,
-                            isSelected: isSelected,
-                            onTap: () {
-                              selectedLanguage = language;
-                              selectedIndex = index;
-                              _handleLanguageSelection(
-                                  context, language, index);
-                            },
-                          ),
-                        );
-                      },
+                    width: 800,
+                    height: 800,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          colors: [
+                            HelloColors.white.withOpacity(0.8),
+                            HelloColors.mainBlue.withOpacity(0.01),
+                          ],
+                          stops: const [
+                            0.2,
+                            0.8
+                          ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter),
                     ),
                   ),
                 ),
               ),
-              Positioned(
-                top: MediaQuery.of(context).size.height / 1.16,
-                left: MediaQuery.of(context).size.width / 1.5,
-                right: 0,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 30.0, right: 30.0),
-                  child: BlocListener<AppInitBloc, AppInitState>(
-                    listener: (context, state) {
-                      //
+            ),
+
+            Positioned.fill(
+              top: MediaQuery.of(context).size.height / 8,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height / 5,
+                      child: Image.asset(
+                        'assets/images/home/Nice to meet you.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    SplashTextLabel(text: "언어 선택"),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height / 2.3,
+              left: 0,
+              right: 0,
+              child: Padding(
+                padding: const EdgeInsets.only(left: 30.0, right: 30.0),
+                child: Container(
+                  width: MediaQuery.of(context).size.width / 3,
+                  height: MediaQuery.of(context).size.height / 3,
+                  child: ListView.builder(
+                    itemCount: languages.length,
+                    itemBuilder: (context, index) {
+                      final language = languages[index];
+                      final isSelected =
+                          context.watch<LocaleBloc>().state.selectedIndex ==
+                              index;
+
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8.0),
+                        child: LanguageSelectionWidget(
+                          flagPath: language['flag'] as String,
+                          language: language['label'] as String,
+                          isSelected: isSelected,
+                          onTap: () {
+                            selectedLanguage = language;
+                            selectedIndex = index;
+                            _handleLanguageSelection(context, language, index);
+                          },
+                        ),
+                      );
                     },
-                    child: GestureDetector(
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              top: MediaQuery.of(context).size.height / 1.16,
+              left: MediaQuery.of(context).size.width / 1.5,
+              right: 0,
+              child: Padding(
+                padding: EdgeInsets.only(left: 30.0, right: 30.0),
+                child: BlocBuilder<LocaleBloc, LocaleState>(
+                  // Wrap with BlocBuilder here
+                  builder: (context, state) {
+                    return GestureDetector(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: const BoxDecoration(
+                              color: Color(0xffB7D3F6),
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                          const Icon(
+                            Icons.arrow_forward_rounded,
+                            size: 45,
+                            color: HelloColors.white,
+                          ),
+                        ],
+                      ),
                       onTap: () async {
-                        final localeBloc = context.read<LocaleBloc>();
-                        final routeBloc = context.read<RouteBloc>();
-                        final selectedLocale = localeBloc.state.locale;
-                        final selectedIndex = localeBloc.state.selectedIndex;
+                        if (state.selectedIndex == -1) {
+                          final selectedLanguage = languages[0];
+                          const selectedIndex = 0;
 
-                        if (selectedIndex == 0 && mounted) {
-                          localeBloc.add(SetLocale(
-                              locale: selectedLocale ?? Locale('en', 'US'),
-                              index: selectedIndex ?? 0));
-
-                          await context
-                              .setLocale(selectedLocale ?? Locale('en', 'US'));
-                          await Future.delayed(Duration(milliseconds: 100));
+                          context
+                              .setLocale(selectedLanguage['locale'] as Locale);
+                          context.read<LocaleBloc>().add(
+                                SetLocale(
+                                  locale: selectedLanguage['locale'] as Locale,
+                                  index: selectedIndex,
+                                ),
+                              );
                         }
 
+                        final routeBloc = context.read<RouteBloc>();
+
                         if (mounted) {
-                          router.go('home');
+                          // router.go('/home');
                           routeBloc.add(
                             RouteChanged(
                               newIndex: 2,
                             ),
                           );
                         }
+
+                        final appInitBloc = context.read<AppInitBloc>();
+                        appInitBloc.add(StoreSelectedLanguage(
+                            selectedIndex: context
+                                    .read<LocaleBloc>()
+                                    .state
+                                    .selectedIndex ??
+                                0));
+                        context.push('/terms-of-service');
                       },
-                      child: GestureDetector(
-                        onTap: () {
-                          context.read<AppInitBloc>().add(StoreSelectedLanguage(
-                              selectedIndex: selectedIndex));
-                          context.push('/terms-of-service');
-                        },
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 60,
-                              height: 60,
-                              decoration: const BoxDecoration(
-                                color: Color(0xffB7D3F6),
-                                shape: BoxShape.circle,
-                              ),
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_rounded,
-                              size: 45,
-                              color: HelloColors.white,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
