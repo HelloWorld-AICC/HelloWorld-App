@@ -14,7 +14,6 @@ class HomeRouteItem extends StatelessWidget {
   final String subTitle;
   final String imgPath;
   final int bottomIndex;
-  final RouteService routeService;
   final String routePath;
   final Alignment imgAlign;
   final double imgWidth;
@@ -23,7 +22,6 @@ class HomeRouteItem extends StatelessWidget {
 
   HomeRouteItem({
     Key? key,
-    required this.routeService,
     required this.title,
     required this.subTitle,
     required this.imgPath,
@@ -43,9 +41,19 @@ class HomeRouteItem extends StatelessWidget {
           showToast("미구현 기능입니다.");
           return;
         }
-        context
-            .read<RouteBloc>()
-            .add(RouteChanged(newIndex: bottomIndex, newRoute: routePath));
+
+        if (routePath == "/resume") {
+          context.push("/resume");
+          return;
+        } else if (routePath == "/community") {
+          context.push("/community/board");
+          return;
+        } else if (routePath == "/center") {
+          context.push("/center");
+          return;
+        }
+
+        context.read<RouteBloc>().add(RouteChanged(newIndex: bottomIndex));
       },
       child: Container(
         decoration: BoxDecoration(

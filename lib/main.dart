@@ -153,7 +153,7 @@ class _MainAppState extends State<MainApp> {
             ),
           ],
           child: MaterialApp.router(
-            routerConfig: getIt<RouteService>().router,
+            routerConfig: router,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: locale,

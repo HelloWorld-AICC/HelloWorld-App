@@ -16,12 +16,10 @@ part 'auth_status_state.dart';
 class AuthStatusBloc extends Bloc<AuthStatusEvent, AuthStatusState> {
   final AppInitBloc appInitBloc;
   final ITokenRepository tokenRepository;
-  final RouteService routeService;
 
   AuthStatusBloc({
     required this.tokenRepository,
     required this.appInitBloc,
-    required this.routeService,
   }) : super(AuthStatusState.initial()) {
     on<CheckAuthStatus>((event, emit) async {
       print('AuthStatusBloc :: CheckAuthStatus event has been called');
@@ -42,9 +40,9 @@ class AuthStatusBloc extends Bloc<AuthStatusEvent, AuthStatusState> {
       final tokensOrFailure = await tokenRepository.getTokens();
       final isSignedIn = tokensOrFailure.isRight();
       if (!isSignedIn) {
-        routeService.router.go('/login');
+        router.go('/login');
       } else {
-        routeService.router.go('/home');
+        router.go('/home');
       }
     });
   }

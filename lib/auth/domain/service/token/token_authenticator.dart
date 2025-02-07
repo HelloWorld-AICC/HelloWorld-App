@@ -10,13 +10,10 @@ class TokenAuthenticator {
   final Dio _dio;
   final String _baseUrl;
   final String _tokenRefreshUrl;
-  final RouteService _routeService;
-
   TokenAuthenticator(
     this._dio,
     this._baseUrl,
     this._tokenRefreshUrl,
-    this._routeService,
   );
 
   Future<RequestOptions> authenticate(
@@ -78,6 +75,6 @@ class TokenAuthenticator {
     await prefs.remove('accessToken');
     await prefs.remove('refreshToken');
 
-    _routeService.router.go('/firstLaunch');
+    router.go('/firstLaunch');
   }
 }

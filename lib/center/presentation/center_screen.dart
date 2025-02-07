@@ -111,7 +111,6 @@ class _CenterScreenState extends State<CenterScreen> {
         onPopInvoked: (result) {
           if (result) {
             print("Pop invoked in CenterScreen");
-            context.read<RouteBloc>().add(PopEvent());
           }
         },
         child: Scaffold(
@@ -122,9 +121,6 @@ class _CenterScreenState extends State<CenterScreen> {
               _buildMapContainer(context),
               _buildLocationText(context),
             ],
-          ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            items: bottomNavItems,
           ),
         ),
       ),
@@ -151,9 +147,7 @@ class _CenterScreenState extends State<CenterScreen> {
                 boxShadow: CenterScreen._boxShadow,
               ),
             ),
-            SizedBox(
-              height: 20,
-            ),
+            const SizedBox(height: 20),
             Expanded(
                 child: Container(
               child: CircularProgressIndicator(color: HelloColors.mainBlue),

@@ -28,15 +28,11 @@ final Map<String, ImageIcon> bottomNavItems = {
 };
 
 class HomePageContent extends StatelessWidget {
-  final LocalizationService localizationService;
   final List<String> imagesPath;
-  final RouteService routeService;
 
   HomePageContent({
     Key? key,
-    required this.localizationService,
     required this.imagesPath,
-    required this.routeService,
   }) : super(key: key);
 
   final routeBoxItems = {
@@ -145,7 +141,6 @@ class HomePageContent extends StatelessWidget {
                     top: MediaQuery.sizeOf(context).height * 0.3,
                     child: HomeRouteGrid(
                       items: routeBoxItems,
-                      routeService: routeService,
                     ),
                   ),
                 ],

@@ -7,12 +7,11 @@ sealed class RouteEvent extends Equatable {
 
 final class RouteChanged extends RouteEvent {
   final int newIndex;
-  final String newRoute;
 
-  RouteChanged({required this.newIndex, required this.newRoute});
+  RouteChanged({required this.newIndex});
 
   @override
-  List<Object?> get props => [newIndex, newRoute];
+  List<Object?> get props => [newIndex];
 }
 
 final class RouteEventHome extends RouteEvent {
@@ -35,19 +34,3 @@ final class RouteEventSplash extends RouteEvent {
   @override
   List<Object?> get props => [];
 }
-
-final class PopEvent extends RouteEvent {
-  PopEvent();
-
-  @override
-  List<Object?> get props => [];
-}
-
-// final class ChatSelected extends RouteEvent {
-//   final String? roomId;
-//
-//   ChatSelected({this.roomId});
-//
-//   @override
-//   List<Object?> get props => [roomId];
-// }

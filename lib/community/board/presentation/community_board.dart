@@ -40,7 +40,6 @@ class CommunityBoard extends StatelessWidget {
           onPopInvoked: (result) {
             if (result) {
               print("Pop invoked in community board");
-              context.read<RouteBloc>().add(PopEvent());
             }
           },
           child: Scaffold(
@@ -73,9 +72,6 @@ class CommunityBoard extends StatelessWidget {
                 );
               },
               child: const _Body(),
-            ),
-            bottomNavigationBar: CustomBottomNavigationBar(
-              items: bottomNavItems,
             ),
           ),
         );

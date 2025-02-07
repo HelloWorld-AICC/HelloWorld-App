@@ -37,7 +37,6 @@ class _ResumeScreenState extends State<ResumeScreen>
       onPopInvoked: (result) {
         if (result) {
           print("Pop invoked in resume");
-          context.read<RouteBloc>().add(PopEvent());
         }
       },
       child: Scaffold(
