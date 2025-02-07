@@ -11,15 +11,18 @@ import 'route/application/route_bloc.dart';
 
 final Map<String, ImageIcon> bottomNavItems = {
   'bottom_navigation.chat':
-      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
-  'bottom_navigation.resume':
-      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
+      ImageIcon(AssetImage('assets/icons/grey/bottom_bar/chat.png'), size: 24),
+  'bottom_navigation.resume': ImageIcon(
+      AssetImage('assets/icons/grey/bottom_bar/writing.png'),
+      size: 24),
   'bottom_navigation.home':
-      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
-  'bottom_navigation.community':
-      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 24),
-  'bottom_navigation.center':
-      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
+      ImageIcon(AssetImage('assets/icons/grey/bottom_bar/home.png'), size: 24),
+  'bottom_navigation.community': ImageIcon(
+      AssetImage('assets/icons/grey/bottom_bar/community.png'),
+      size: 24),
+  'bottom_navigation.center': ImageIcon(
+      AssetImage('assets/icons/grey/bottom_bar/announcement.png'),
+      size: 24),
 };
 
 class CustomBottomNavigationBar extends StatelessWidget {
