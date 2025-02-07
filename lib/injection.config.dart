@@ -83,7 +83,6 @@ import 'new_chat/infrastructure/repository/chat_repository.dart' as _i605;
 import 'new_chat/infrastructure/repository/chat_rooms_info_repository.dart'
     as _i779;
 import 'route/application/route_bloc.dart' as _i1045;
-import 'route/domain/service/new_route_service.dart' as _i329;
 import 'toast/toast_bloc.dart' as _i301;
 
 extension GetItInjectableX on _i174.GetIt {
@@ -116,8 +115,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i129.IAppVersionRepository>(() =>
         _i436.AppVersionRepository(
             appVersionProvider: gh<_i842.IAppVersionLocalProvider>()));
-    gh.lazySingleton<_i329.RouteService>(
-        () => _i329.RouteService(routeBloc: gh<_i1045.RouteBloc>()));
     gh.lazySingleton<_i690.IAuthLocalProvider>(
         () => _i350.AuthLocalProvier(service: gh<_i187.LocalStorageService>()));
     gh.lazySingleton<_i658.ITokenRepository>(() => _i782.TokenRepository(
@@ -179,6 +176,10 @@ extension GetItInjectableX on _i174.GetIt {
           communityRepository: gh<_i307.ICommunityRepository>(),
           bus: gh<_i461.Bus>(),
         ));
+    gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
+          tokenRepository: gh<_i658.ITokenRepository>(),
+          appInitBloc: gh<_i775.AppInitBloc>(),
+        ));
     gh.factory<_i115.CreatePostBloc>(() => _i115.CreatePostBloc(
         communityRepository: gh<_i307.ICommunityRepository>()));
     gh.factory<_i597.PostDetailBloc>(() => _i597.PostDetailBloc(
@@ -201,11 +202,6 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i598.SignOutBloc(authRepository: gh<_i667.IAuthRepository>()));
     gh.factory<_i501.WithdrawBloc>(
         () => _i501.WithdrawBloc(authRepository: gh<_i667.IAuthRepository>()));
-    gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
-          tokenRepository: gh<_i658.ITokenRepository>(),
-          appInitBloc: gh<_i775.AppInitBloc>(),
-          routeService: gh<_i329.RouteService>(),
-        ));
     gh.factory<_i810.ChatDrawerBloc>(() => _i810.ChatDrawerBloc(
           gh<_i779.ChatRoomsInfoRepository>(),
           gh<_i659.ChatSessionBloc>(),

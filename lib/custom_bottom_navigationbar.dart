@@ -98,7 +98,8 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                         return;
                       }
                       context.read<RouteBloc>().add(RouteChanged(
-                          newIndex: index, newRoute: selectedRoute));
+                            newIndex: index,
+                          ));
 
                       Future.delayed(const Duration(milliseconds: 100), () {
                         if (mounted) {

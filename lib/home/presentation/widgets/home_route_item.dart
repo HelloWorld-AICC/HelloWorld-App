@@ -1,7 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
+import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 
 import '../../../design_system/hello_colors.dart';
 import '../../../route/application/route_bloc.dart';
@@ -11,7 +12,6 @@ class HomeRouteItem extends StatelessWidget {
   final String subTitle;
   final String imgPath;
   final int bottomIndex;
-  final RouteService routeService;
   final String routePath;
   final Alignment imgAlign;
   final double imgWidth;
@@ -20,7 +20,6 @@ class HomeRouteItem extends StatelessWidget {
 
   HomeRouteItem({
     Key? key,
-    required this.routeService,
     required this.title,
     required this.subTitle,
     required this.imgPath,
@@ -40,9 +39,18 @@ class HomeRouteItem extends StatelessWidget {
         //   showToast("미구현 기능입니다.");
         //   return;
         // }
-        context
-            .read<RouteBloc>()
-            .add(RouteChanged(newIndex: bottomIndex, newRoute: routePath));
+        if (routePath == "/resume") {
+          context.push("/resume");
+          return;
+        } else if (routePath == "/community") {
+          context.push("/community/board");
+          return;
+        } else if (routePath == "/center") {
+          context.push("/center");
+          return;
+        }
+
+        context.read<RouteBloc>().add(RouteChanged(newIndex: bottomIndex));
       },
       child: Container(
         decoration: BoxDecoration(

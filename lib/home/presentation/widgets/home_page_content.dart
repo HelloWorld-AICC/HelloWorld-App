@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
@@ -14,15 +14,11 @@ import '../../../locale/domain/localization_service.dart';
 import 'home_route_grid.dart';
 
 class HomePageContent extends StatelessWidget {
-  final LocalizationService localizationService;
   final List<String> imagesPath;
-  final RouteService routeService;
 
   HomePageContent({
     Key? key,
-    required this.localizationService,
     required this.imagesPath,
-    required this.routeService,
   }) : super(key: key);
 
   final routeBoxItems = {
@@ -131,7 +127,6 @@ class HomePageContent extends StatelessWidget {
                     top: MediaQuery.sizeOf(context).height * 0.3,
                     child: HomeRouteGrid(
                       items: routeBoxItems,
-                      routeService: routeService,
                     ),
                   ),
                 ],

@@ -83,11 +83,7 @@ class NewChatContentState extends State<NewChatContent>
         builder: (context, state) {
       return SafeArea(
         child: PopScope(
-          onPopInvoked: (result) {
-            if (result) {
-              context.read<RouteBloc>().add(PopEvent());
-            }
-          },
+          onPopInvoked: (result) {},
           child: Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
@@ -157,14 +153,6 @@ class NewChatContentState extends State<NewChatContent>
                         // },
                         ),
                   ),
-                  // if (context.watch<ChatSessionBloc>().state.typingState ==
-                  //     TypingIndicatorState.shown)
-                  //   TypingIndicator(),
-                  // Expanded(
-                  //   child: ActionButtonsWidget(
-                  //     onButtonPressed: (selectedContent) {},
-                  //   ),
-                  // ),
                   _buildInputArea(roomId ?? 'new_chat'),
                 ],
               ),

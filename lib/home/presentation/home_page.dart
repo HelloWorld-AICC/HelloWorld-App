@@ -6,7 +6,7 @@ import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart'; // 추가된 import
-import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 
 import '../../locale/domain/localization_service.dart';
 import 'widgets/home_page_content.dart';
@@ -19,8 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  late final LocalizationService _localizationService;
-
   @override
   void initState() {
     super.initState();
@@ -39,9 +37,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _routeService = RouteService(routeBloc: context.read<RouteBloc>());
-    final _localizationService = LocalizationService();
-
     return MultiBlocProvider(
       providers: [
         BlocProvider<HomeBloc>(
@@ -63,9 +58,7 @@ class _HomePageState extends State<HomePage> {
               }
             },
             child: HomePageContent(
-              localizationService: _localizationService,
               imagesPath: _imagesPath(),
-              routeService: _routeService,
             ),
           );
         },

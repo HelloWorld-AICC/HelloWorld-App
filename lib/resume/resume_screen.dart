@@ -34,12 +34,7 @@ class _ResumeScreenState extends State<ResumeScreen>
     var paddingVal = MediaQuery.of(context).size.height * 0.1;
 
     return PopScope(
-      onPopInvoked: (result) {
-        if (result) {
-          print("Pop invoked in resume");
-          context.read<RouteBloc>().add(PopEvent());
-        }
-      },
+      onPopInvoked: (result) {},
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(

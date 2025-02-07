@@ -109,12 +109,7 @@ class _CenterScreenState extends State<CenterScreen> {
 
     return SafeArea(
       child: PopScope(
-        onPopInvoked: (result) {
-          if (result) {
-            print("Pop invoked in CenterScreen");
-            context.read<RouteBloc>().add(PopEvent());
-          }
-        },
+        onPopInvoked: (result) {},
         child: Scaffold(
           backgroundColor: HelloColors.white,
           body: Column(
@@ -124,7 +119,6 @@ class _CenterScreenState extends State<CenterScreen> {
               _buildLocationText(context),
             ],
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(),
         ),
       ),
     );

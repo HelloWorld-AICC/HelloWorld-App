@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,13 +9,11 @@ class TokenAuthenticator {
   final Dio _dio;
   final String _baseUrl;
   final String _tokenRefreshUrl;
-  final RouteService _routeService;
 
   TokenAuthenticator(
     this._dio,
     this._baseUrl,
     this._tokenRefreshUrl,
-    this._routeService,
   );
 
   Future<RequestOptions> authenticate(
@@ -77,6 +75,6 @@ class TokenAuthenticator {
     await prefs.remove('accessToken');
     await prefs.remove('refreshToken');
 
-    _routeService.router.go('/firstLaunch');
+    router.go('/firstLaunch');
   }
 }

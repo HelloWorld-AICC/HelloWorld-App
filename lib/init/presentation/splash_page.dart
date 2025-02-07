@@ -7,6 +7,7 @@ import 'package:hello_world_mvp/design_system/hello_colors.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/language_selection_widget.dart';
 import 'package:hello_world_mvp/init/presentation/widgets/splash_text_label.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 
 import '../../locale/application/locale_bloc.dart';
 import '../../route/application/route_bloc.dart';
@@ -175,10 +176,10 @@ class _SplashPageState extends State<SplashPage> {
                         }
 
                         if (mounted) {
+                          router.go('home');
                           routeBloc.add(
                             RouteChanged(
                               newIndex: 2,
-                              newRoute: '/home',
                             ),
                           );
                         }

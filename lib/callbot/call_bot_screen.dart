@@ -11,12 +11,7 @@ class CallBotScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PopScope(
-      onPopInvoked: (result) {
-        if (result) {
-          print("Pop invoked in call bot");
-          context.read<RouteBloc>().add(PopEvent());
-        }
-      },
+      onPopInvoked: (result) {},
       child: Scaffold(
         backgroundColor: HelloColors.white,
         body: Center(

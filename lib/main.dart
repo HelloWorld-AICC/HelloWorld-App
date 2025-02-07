@@ -8,7 +8,7 @@ import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart';
-import 'package:hello_world_mvp/route/domain/service/new_route_service.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 import 'package:hello_world_mvp/toast/toast_bloc.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -152,7 +152,7 @@ class _MainAppState extends State<MainApp> {
             ),
           ],
           child: MaterialApp.router(
-            routerConfig: getIt<RouteService>().router,
+            routerConfig: router,
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
             locale: locale,
