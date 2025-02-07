@@ -5,7 +5,8 @@ import 'package:hello_world_mvp/center/presentation/center_screen.dart';
 import 'package:hello_world_mvp/mypage/account/presentation/account_screen.dart';
 import 'package:hello_world_mvp/mypage/privacy_policy/presentation/privacy_policy_screen.dart';
 import 'package:hello_world_mvp/mypage/withdraw/presentation/withdraw_screen.dart';
-import 'package:hello_world_mvp/resume/resume_screen.dart';
+import 'package:hello_world_mvp/resume/new_resume_screen.dart';
+import 'package:hello_world_mvp/resume/prev/resume_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../auth/application/status/auth_status_bloc.dart';
@@ -125,7 +126,7 @@ final router = GoRouter(initialLocation: '/', routes: [
   ),
   GoRoute(
     path: '/resume',
-    builder: (context, state) => const ResumeScreen(),
+    builder: (context, state) => ResumeScreen(),
   ),
   GoRoute(
     path: '/callbot',

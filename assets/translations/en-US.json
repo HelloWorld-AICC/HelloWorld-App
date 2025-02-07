@@ -40,6 +40,69 @@
     "title": "Chatting Consultation",
     "input_hint": "Type your message here"
   },
+  "resume_page": {
+    "resume": {
+      "title": "Resume Writing",
+      "next": "Next",
+      "back": "Back",
+      "submit": "Submit"
+    },
+    "visa": {
+      "subtitle": "Please enter your current visa information",
+      "acquired": "I have an acquired visa",
+      "planning": "I plan to acquire a visa",
+      "select_visa": "Please select your visa",
+      "select_visa_title": "Visa Selection",
+      "issue_date",: "Issue Date",
+      "expiry_date": "Expiry Date"
+    },
+    "work_experience": {
+      "subtitle": "Please enter your work experience",
+      "company_name": "Enter company name",
+      "job_title": "Enter job title",
+      "company_name_title": "Company Name",
+      "job_title_title": "Job Title",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "main_content": "Please describe your job and experience in detail"
+    },
+    "personal_info": {
+      "subtitle": "Please enter your personal information",
+      "birth_date": "Date of Birth",
+      "nationality": "Nationality",
+      "select_nationality": "Select nationality",
+      "residence": "Residence",
+      "email": "Email",
+      "phone_number": "Phone Number",
+      "verify": "Verify",
+      "gender": "Gender",
+      "select_gender": "Select gender"
+    },
+    "korean_ability": {
+      "subtitle": "Please enter your Korean language proficiency",
+      "language_level": "Language Level",
+      "select_language_level": "Please enter your Korean level",
+      "test_name": "Official Test Name",
+      "score": "Score/Grade"
+    },
+    "education": {
+      "subtitle": "Please enter your education details",
+      "school_name": "School / Institution Name",
+      "major": "Major / Course Name",
+      "start_date": "Start Date",
+      "end_date": "End Date",
+      "main_content": "Please describe what you studied in detail",
+      "character_limit": "{current}/{max} characters entered"
+    },
+    "certificate": {
+      "subtitle": "Please enter your certificate/license details",
+      "name": "Certificate/Qualification",
+      "organization": "Issuing Organization",
+      "acquisition_date": "Acquisition Date",
+      "expiry_date": "Expiry Date",
+      "main_content": "Please describe what you studied in detail"
+    }
+  },
   "app_name": "Foreign Support Center AICC",
   "login_button": "Login",
   "select_language": "Please select a language",

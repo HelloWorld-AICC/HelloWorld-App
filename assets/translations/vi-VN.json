@@ -40,6 +40,69 @@
     "title": "Tư Vấn Trò Chuyện",
     "input_hint": "Nhập nội dung bạn muốn tư vấn"
   },
+  "resume_page": {
+    "resume": {
+      "title": "Viết Sơ Yếu Lý Lịch",
+      "next": "Tiếp Theo",
+      "back": "Quay Lại",
+      "submit": "Gửi"
+    },
+    "visa": {
+      "subtitle": "Vui lòng nhập thông tin visa hiện tại của bạn",
+      "acquired": "Tôi đã có visa",
+      "planning": "Tôi dự định xin visa",
+      "select_visa": "Vui lòng chọn loại visa",
+      "select_visa_title": "Chọn loại visa",
+      "issue_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn"
+    },
+    "work_experience": {
+      "subtitle": "Vui lòng nhập kinh nghiệm làm việc của bạn",
+      "company_name": "Nhập tên công ty",
+      "job_title": "Nhập chức danh công việc",
+      "start_date": "Ngày Bắt Đầu",
+      "company_name_title": "Tên Công Ty",
+      "job_title_title": "Chức Danh Công Việc",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết công việc và kinh nghiệm của bạn"
+    },
+    "personal_info": {
+      "subtitle": "Vui lòng nhập thông tin cá nhân của bạn",
+      "birth_date": "Ngày Sinh",
+      "nationality": "Quốc Tịch",
+      "select_nationality": "Chọn quốc tịch",
+      "residence": "Nơi Cư Trú",
+      "email": "Email",
+      "phone_number": "Số Điện Thoại",
+      "verify": "Xác Minh",
+      "gender": "Giới Tính",
+      "select_gender": "Chọn giới tính"
+    },
+    "korean_ability": {
+      "subtitle": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "language_level": "Trình Độ Ngôn Ngữ",
+      "select_language_level": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "test_name": "Tên Kỳ Thi Chính Thức",
+      "score": "Điểm / Xếp Hạng"
+    },
+    "education": {
+      "subtitle": "Vui lòng nhập thông tin giáo dục của bạn",
+      "school_name": "Tên Trường / Tổ Chức",
+      "major": "Ngành Học / Khóa Học",
+      "start_date": "Ngày Bắt Đầu",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học",
+      "character_limit": "{current}/{max} ký tự đã nhập"
+    },
+    "certificate": {
+      "subtitle": "Vui lòng nhập thông tin chứng chỉ / bằng cấp của bạn",
+      "name": "Chứng Chỉ / Bằng Cấp",
+      "organization": "Tổ Chức Cấp",
+      "acquisition_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học"
+    }
+  },
   "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
   "login_button": "Đăng nhập",
   "select_language": "Vui lòng chọn ngôn ngữ",

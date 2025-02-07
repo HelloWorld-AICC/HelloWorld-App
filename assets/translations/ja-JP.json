@@ -40,6 +40,69 @@
     "title": "チャット相談",
     "input_hint": "相談したい内容を入力してください"
   },
+  "resume_page": {
+    "resume": {
+      "title": "履歴書作成",
+      "next": "次へ",
+      "back": "戻る",
+      "submit": "提出"
+    },
+    "visa": {
+      "subtitle": "現在のビザ情報を入力してください",
+      "acquired": "取得済みのビザがあります",
+      "planning": "ビザを取得予定です",
+      "select_visa": "保有しているビザを選択してください",
+      "select_visa_title": "ビザを選択",
+      "issue_date": "発行日",
+      "expiry_date": "有効期限"
+    },
+    "work_experience": {
+      "subtitle": "職務経験を入力してください",
+      "company_name": "会社名を入力してください",
+      "job_title": "職種を入力してください",
+      "company_name_title": "会社名",
+      "job_title_title": "職種",
+      "start_date": "開始日",
+      "end_date": "終了日",
+      "main_content": "仕事内容や経験を詳しく入力してください"
+    },
+    "personal_info": {
+      "subtitle": "個人情報を入力してください",
+      "birth_date": "生年月日",
+      "nationality": "国籍",
+      "select_nationality": "国籍を選択してください",
+      "residence": "居住地",
+      "email": "メールアドレス",
+      "phone_number": "電話番号",
+      "verify": "認証",
+      "gender": "性別",
+      "select_gender": "性別を選択してください"
+    },
+    "korean_ability": {
+      "subtitle": "韓国語のレベルを入力してください",
+      "language_level": "言語レベル",
+      "select_language_level": "韓国語のレベルを入力してください",
+      "test_name": "公式試験名",
+      "score": "スコア/グレード"
+    },
+    "education": {
+      "subtitle": "学歴 / 教育情報を入力してください",
+      "school_name": "学校 / 機関名",
+      "major": "専攻 / コース名",
+      "start_date": "開始日",
+      "end_date": "終了日",
+      "main_content": "何を学んだか詳しく入力してください",
+      "character_limit": "{current}/{max} 文字入力済み"
+    },
+    "certificate": {
+      "subtitle": "資格 / 証明書情報を入力してください",
+      "name": "資格 / 証明書名",
+      "organization": "発行機関",
+      "acquisition_date": "取得日",
+      "expiry_date": "有効期限",
+      "main_content": "何を学んだか詳しく入力してください"
+    }
+  },
   "app_name": "外国支援センター AICC",
   "login_button": "ログイン",
   "select_language": "言語を選択してください",

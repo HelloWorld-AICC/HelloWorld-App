@@ -4,13 +4,14 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/home/application/home_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
+import 'package:hello_world_mvp/resume/new_resume_screen.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart'; // 추가된 import
 
 import '../../center/presentation/center_screen.dart';
 import '../../community/board/presentation/community_board.dart';
 import '../../locale/domain/localization_service.dart';
 import '../../new_chat/presentation/new_chat_page.dart';
-import '../../resume/resume_screen.dart';
+import '../../resume/prev/resume_screen.dart';
 import '../../route/domain/route_service.dart';
 import 'widgets/home_page_content.dart';
 
@@ -57,7 +58,7 @@ class _HomePageState extends State<HomePage> {
               builder: (context, state) {
                 return [
                   NewChatPage(),
-                  const ResumeScreen(),
+                  ResumeScreen(),
                   HomePageContent(
                     imagesPath: _imagesPath(),
                   ),

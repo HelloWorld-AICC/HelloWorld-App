@@ -40,6 +40,129 @@
     "title": "聊天咨询",
     "input_hint": "请输入您要咨询的内容"
   },
+  "resume_page": {
+    "resume": {
+      "title": "简历填写",
+      "next": "下一步",
+      "back": "上一步",
+      "submit": "提交"
+    },
+    "visa": {
+      "subtitle": "请输入您的当前签证信息",
+      "acquired": "我已持有签证",
+      "planning": "我计划获取签证",
+      "select_visa": "请选择您的签证",
+      "issue_date": "签发日期",
+      "expiry_date": "到期日期"
+    },
+    "work_experience": {
+      "subtitle": "请输入您的工作经历",
+      "company_name": "请输入公司名称",
+      "job_title": "请输入职位",
+      "start_date": "开始日期",
+      "end_date": "结束日期",
+      "main_content": "请详细描述您的工作和经验"
+    },
+    "personal_info": {
+      "subtitle": "请输入您的个人信息",
+      "birth_date": "出生日期",
+      "nationality": "国籍",
+      "select_nationality": "请选择国籍",
+      "residence": "居住地",
+      "email": "电子邮件",
+      "phone_number": "手机号",
+      "verify": "验证",
+      "gender": "性别",
+      "select_gender": "请选择性别"
+    },
+    "korean_ability": {
+      "subtitle": "请输入您的韩语水平",
+      "language_level": "语言等级",
+      "select_language_level": "请输入您的韩语水平",
+      "test_name": "官方考试名称",
+      "score": "分数/等级"
+    },
+    "education": {
+      "subtitle": "请输入您的学历/教育信息",
+      "school_name": "学校 / 机构名称",
+      "major": "专业 / 课程名称",
+      "start_date": "开始日期",
+      "end_date": "结束日期",
+      "main_content": "请详细描述您所学的内容",
+      "character_limit": "已输入 {current}/{max} 个字符"
+    },
+    "certificate": {
+      "subtitle": "请输入您的证书/资格信息",
+      "name": "证书 / 资格",
+      "organization": "颁发机构",
+      "acquisition_date": "获取日期",
+      "expiry_date": "到期日期",
+      "main_content": "请详细描述您所学的内容"
+    }
+  },
+  "resume_page": {
+    "resume": {
+      "title": "Viết Sơ Yếu Lý Lịch",
+      "next": "Tiếp Theo",
+      "back": "Quay Lại",
+      "submit": "Gửi"
+    },
+    "visa": {
+      "subtitle": "Vui lòng nhập thông tin visa hiện tại của bạn",
+      "acquired": "Tôi đã có visa",
+      "planning": "Tôi dự định xin visa",
+      "select_visa": "Vui lòng chọn loại visa",
+      "select_visa_title": "Chọn loại visa",
+      "issue_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn"
+    },
+    "work_experience": {
+      "subtitle": "Vui lòng nhập kinh nghiệm làm việc của bạn",
+      "company_name": "Nhập tên công ty",
+      "job_title": "Nhập chức danh công việc",
+      "company_name_title": "Tên Công Ty",
+      "job_title_title": "Chức Danh",
+      "start_date": "Ngày Bắt Đầu",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết công việc và kinh nghiệm của bạn"
+    },
+    "personal_info": {
+      "subtitle": "Vui lòng nhập thông tin cá nhân của bạn",
+      "birth_date": "Ngày Sinh",
+      "nationality": "Quốc Tịch",
+      "select_nationality": "Chọn quốc tịch",
+      "residence": "Nơi Cư Trú",
+      "email": "Email",
+      "phone_number": "Số Điện Thoại",
+      "verify": "Xác Minh",
+      "gender": "Giới Tính",
+      "select_gender": "Chọn giới tính"
+    },
+    "korean_ability": {
+      "subtitle": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "language_level": "Trình Độ Ngôn Ngữ",
+      "select_language_level": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "test_name": "Tên Kỳ Thi Chính Thức",
+      "score": "Điểm / Xếp Hạng"
+    },
+    "education": {
+      "subtitle": "Vui lòng nhập thông tin giáo dục của bạn",
+      "school_name": "Tên Trường / Tổ Chức",
+      "major": "Ngành Học / Khóa Học",
+      "start_date": "Ngày Bắt Đầu",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học",
+      "character_limit": "{current}/{max} ký tự đã nhập"
+    },
+    "certificate": {
+      "subtitle": "Vui lòng nhập thông tin chứng chỉ / bằng cấp của bạn",
+      "name": "Chứng Chỉ / Bằng Cấp",
+      "organization": "Tổ Chức Cấp",
+      "acquisition_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học"
+    }
+  },
   "app_name": "外国支持中心 AICC",
   "login_button": "登录",
   "select_language": "请选择语言",
