@@ -3,35 +3,29 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/design_system/hello_colors.dart';
+import 'package:hello_world_mvp/route/domain/route_service.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import 'locale/domain/localization_service.dart';
 import 'route/application/route_bloc.dart';
 
-class CustomBottomNavigationBar extends StatefulWidget {
-  CustomBottomNavigationBar({super.key});
+final Map<String, ImageIcon> bottomNavItems = {
+  'bottom_navigation.chat':
+      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
+  'bottom_navigation.resume':
+      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
+  'bottom_navigation.home':
+      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
+  'bottom_navigation.community':
+      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 24),
+  'bottom_navigation.center':
+      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
+};
 
-  @override
-  State<CustomBottomNavigationBar> createState() =>
-      _CustomBottomNavigationBarState();
-}
+class CustomBottomNavigationBar extends StatelessWidget {
+  final Map<String, ImageIcon> items;
 
-class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
-  final Map<String, ImageIcon> items = {
-    'bottom_navigation.chat':
-        const ImageIcon(AssetImage('assets/icons/grey/3x/chat.png'), size: 24),
-    'bottom_navigation.resume': const ImageIcon(
-        AssetImage('assets/icons/grey/3x/writing.png'),
-        size: 24),
-    'bottom_navigation.home':
-        const ImageIcon(AssetImage('assets/icons/grey/3x/home.png'), size: 24),
-    'bottom_navigation.community': const ImageIcon(
-        AssetImage('assets/icons/grey/3x/community.png'),
-        size: 32),
-    'bottom_navigation.center': const ImageIcon(
-        AssetImage('assets/icons/grey/3x/announcement.png'),
-        size: 24),
-  };
+  const CustomBottomNavigationBar({super.key, required this.items});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +37,9 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
     return BlocConsumer<RouteBloc, RouteState>(
       listenWhen: (previous, current) =>
           previous.currentIndex != current.currentIndex,
-      listener: (context, routeState) {},
+      listener: (context, routeState) {
+        print("Route changed to index: ${routeState.currentIndex}");
+      },
       builder: (context, routeState) {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 300),
@@ -51,11 +47,10 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
               isKeyboardVisible ? 0 : MediaQuery.of(context).size.height * 0.11,
           child: Padding(
             padding: EdgeInsets.only(
-              // Adjust for the keyboard height if needed
-              bottom: isKeyboardVisible
-                  ? MediaQuery.of(context).viewInsets.bottom
-                  : 0,
-            ),
+                // Adjust for the keyboard height if needed
+                bottom: isKeyboardVisible
+                    ? MediaQuery.of(context).viewInsets.bottom
+                    : 0),
             child: Container(
               decoration: const BoxDecoration(
                 color: HelloColors.white,
@@ -93,19 +88,25 @@ class _CustomBottomNavigationBarState extends State<CustomBottomNavigationBar> {
                       final selectedKey = items.keys.elementAt(index);
                       final selectedRoute = '/${selectedKey.split('.').last}';
 
+                      if (selectedRoute == "/community/board") {
+                        router.push("/community/board");
+                        return;
+                      }
+
+                      if (selectedRoute == "/consultation_center") {
+                        router.push("/center");
+                        return;
+                      }
+
                       if (selectedRoute == "/resume") {
                         showToast("미구현된 기능입니다.");
                         return;
                       }
-                      context.read<RouteBloc>().add(RouteChanged(
-                            newIndex: index,
-                          ));
 
-                      Future.delayed(const Duration(milliseconds: 100), () {
-                        if (mounted) {
-                          context.push(selectedRoute);
-                        }
-                      });
+                      context.push(selectedRoute);
+                      context
+                          .read<RouteBloc>()
+                          .add(RouteChanged(newIndex: index));
                     },
                     items: _getBottomNavItems(localizationService),
                     backgroundColor: HelloColors.white,

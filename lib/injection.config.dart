@@ -47,8 +47,6 @@ import 'home/application/home_bloc.dart' as _i785;
 import 'home/injection/home_register_module.dart' as _i443;
 import 'init/application/app_init_bloc.dart' as _i775;
 import 'init/application/terms_of_service/terms_of_service_bloc.dart' as _i453;
-import 'init/domain/repository/init_repository.dart' as _i193;
-import 'init/infrastructure/repository/i_init_repository.dart' as _i614;
 import 'local_storage/local_storage_service.dart' as _i187;
 import 'locale/application/locale_bloc.dart' as _i487;
 import 'locale/domain/localization_service.dart' as _i121;
@@ -97,17 +95,18 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final homeRegisterModule = _$HomeRegisterModule();
+    gh.factory<_i775.AppInitBloc>(() => _i775.AppInitBloc());
+    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
     gh.factory<_i487.LocaleBloc>(() => _i487.LocaleBloc());
     gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
-    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
-    gh.factory<_i58.StreamedChatParseService>(
-        () => _i58.StreamedChatParseService());
+    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.factory<_i925.ChatRoomsInfoProvider>(
         () => _i925.ChatRoomsInfoProvider());
-    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
+    gh.factory<_i58.StreamedChatParseService>(
+        () => _i58.StreamedChatParseService());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
-    gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
     gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
+    gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i842.IAppVersionLocalProvider>(
@@ -127,6 +126,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i785.HomeBloc>(() => _i785.HomeBloc(
           tokenRepository: gh<_i658.ITokenRepository>(),
           bus: gh<_i461.Bus>(),
+        ));
+    gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
+          tokenRepository: gh<_i658.ITokenRepository>(),
+          appInitBloc: gh<_i775.AppInitBloc>(),
         ));
     gh.singleton<_i1053.FetchService>(
         () => _i1053.FetchService(client: gh<_i30.AuthenticatedHttpClient>()));
@@ -158,27 +161,17 @@ extension GetItInjectableX on _i174.GetIt {
         () => _i280.MypageInternalProvider(gh<_i1053.FetchService>()));
     gh.lazySingleton<_i558.IMypageRepository>(() => _i681.MypageRepository(
         mypageProvider: gh<_i897.IMypageInternalProvider>()));
-    gh.lazySingleton<_i614.IInitRepository>(() => _i193.InitRepository(
-          gh<_i1053.FetchService>(),
-          gh<_i261.ChatFetchService>(),
-        ));
     gh.lazySingleton<_i307.ICommunityRepository>(() =>
         _i996.CommunityRepository(gh<_i188.ICommunityInternalProvider>()));
     gh.factory<_i552.CenterBloc>(() =>
         _i552.CenterBloc(centerRepository: gh<_i284.ICenterRepository>()));
-    gh.factory<_i775.AppInitBloc>(
-        () => _i775.AppInitBloc(iInitRepository: gh<_i614.IInitRepository>()));
-    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
-          communityRepository: gh<_i307.ICommunityRepository>(),
-          bus: gh<_i461.Bus>(),
-        ));
     gh.factory<_i453.TermsOfServiceBloc>(() => _i453.TermsOfServiceBloc(
           communityRepository: gh<_i307.ICommunityRepository>(),
           bus: gh<_i461.Bus>(),
         ));
-    gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
-          tokenRepository: gh<_i658.ITokenRepository>(),
-          appInitBloc: gh<_i775.AppInitBloc>(),
+    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
+          communityRepository: gh<_i307.ICommunityRepository>(),
+          bus: gh<_i461.Bus>(),
         ));
     gh.factory<_i115.CreatePostBloc>(() => _i115.CreatePostBloc(
         communityRepository: gh<_i307.ICommunityRepository>()));

@@ -47,7 +47,7 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
     final failureOrTokens = await _fetchService.request(
       pathPrefix: "",
       path: "/community/$categoryId/create",
-      method: HttpMethod.file,
+      method: HttpMethod.post,
       files: postDto.medias,
       bodyParam: {
         "title": postDto.title,
@@ -72,7 +72,7 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
     final failureOrTokens = await _fetchService.request(
         pathPrefix: "",
         path: "/community/$categoryId/detail/$postId",
-        method: HttpMethod.post,
+        method: HttpMethod.get,
         queryParams: {
           "page": page.toString(),
           "size": pageSize.toString(),
@@ -89,13 +89,12 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
 
   @override
   Future<Either<Failure, Unit>> writeComment({
-    required int categoryId,
     required int postId,
     required String content,
   }) async {
     final failureOrTokens = await _fetchService.request(
       pathPrefix: "",
-      path: "/community/$categoryId/create",
+      path: "/community/$postId/comment/create",
       method: HttpMethod.post,
       bodyParam: {
         "content": content,

@@ -30,7 +30,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
       emit(tokenOrFailure.fold((f) {
         return state.copyWith(failure: f, isLoading: false);
       }, (myInfo) {
-        return state.copyWith(myInfo: myInfo, isLoading: false);
+        return state.copyWith(
+            myInfo: myInfo, isLoading: false, newNickname: myInfo.name);
       }));
     });
 
@@ -43,7 +44,8 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
     on<SelectImage>((event, emit) async {
       final ImagePicker picker = ImagePicker();
       // Pick an image.
-      final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+      final XFile? image = await picker.pickImage(
+          source: ImageSource.gallery, maxWidth: 1024, maxHeight: 1024);
 
       emit(state.copyWith(selectedProfileImage: image));
     });

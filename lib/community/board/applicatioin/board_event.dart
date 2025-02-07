@@ -5,6 +5,13 @@ sealed class BoardEvent extends Equatable {
   List<Object> get props => [];
 }
 
+final class Refresh extends BoardEvent {
+  Refresh();
+
+  @override
+  List<Object> get props => [];
+}
+
 final class GetPosts extends BoardEvent {
   GetPosts();
 

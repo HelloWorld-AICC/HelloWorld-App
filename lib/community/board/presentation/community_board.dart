@@ -37,7 +37,11 @@ class CommunityBoard extends StatelessWidget {
       create: (context) => getIt<BoardBloc>()..add(GetPosts()),
       child: Builder(builder: (context) {
         return PopScope(
-          onPopInvoked: (result) {},
+          onPopInvoked: (result) {
+            if (result) {
+              print("Pop invoked in community board");
+            }
+          },
           child: Scaffold(
             appBar: HelloAppbar(
               title: "Community",
@@ -52,7 +56,7 @@ class CommunityBoard extends StatelessWidget {
             backgroundColor: HelloColors.white,
             body: CustomMaterialIndicator(
               onRefresh: () {
-                context.read<BoardBloc>().add(GetPosts());
+                context.read<BoardBloc>().add(Refresh());
                 return Future.value();
               }, // Your refresh logic
               backgroundColor: Colors.white,
@@ -67,44 +71,7 @@ class CommunityBoard extends StatelessWidget {
                   ),
                 );
               },
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20),
-                child: Column(
-                  children: [
-                    BlocBuilder<BoardBloc, BoardState>(
-                      builder: (context, state) {
-                        return Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            ...PostCategory.values.map((board) => BoardTab(
-                                  title: board.title,
-                                  onTap: () {
-                                    context
-                                        .read<BoardBloc>()
-                                        .add(SelectBoard(category: board));
-                                  },
-                                  isSelected:
-                                      board.id == state.selectedBoard.id,
-                                )),
-                          ],
-                        );
-                      },
-                    ),
-                    const SizedBox(height: 20),
-                    const Flexible(
-                      child: SingleChildScrollView(
-                        child: MypageBackgroundGradient(
-                          child: Column(
-                            children: [
-                              _Body(),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              child: const _Body(),
             ),
           ),
         );
@@ -113,8 +80,74 @@ class CommunityBoard extends StatelessWidget {
   }
 }
 
-class _Body extends StatelessWidget {
-  const _Body();
+class _Body extends StatefulWidget {
+  const _Body({
+    super.key,
+  });
+
+  @override
+  State<_Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<_Body> {
+  final controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.addListener(() {
+      if (controller.position.maxScrollExtent - controller.position.pixels <
+          150) {
+        context.read<BoardBloc>().add(GetPosts());
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20),
+      child: Column(
+        children: [
+          BlocBuilder<BoardBloc, BoardState>(
+            builder: (context, state) {
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ...PostCategory.values.map((board) => BoardTab(
+                        title: board.title,
+                        onTap: () {
+                          context
+                              .read<BoardBloc>()
+                              .add(SelectBoard(category: board));
+                          controller.jumpTo(0);
+                        },
+                        isSelected: board.id == state.selectedBoard.id,
+                      )),
+                ],
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+          Flexible(
+            child: SingleChildScrollView(
+              controller: controller,
+              child: const MypageBackgroundGradient(
+                child: Column(
+                  children: [_ArticleList(), SizedBox(height: 50)],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ArticleList extends StatelessWidget {
+  const _ArticleList();
 
   get math => null;
 
@@ -130,7 +163,7 @@ class _Body extends StatelessWidget {
                 child: Column(
               children: [
                 const SizedBox(height: 2),
-                state.postList?.posts.isEmpty ?? true
+                state.postList?.isEmpty ?? true
                     ? Container(
                         height: MediaQuery.of(context).size.height *
                             0.5, // Adjust height as needed
@@ -159,10 +192,10 @@ class _Body extends StatelessWidget {
                     : ListView.separated(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: state.postList?.posts.length ?? 0,
+                        itemCount: state.postList?.length ?? 0,
                         itemBuilder: (context, index) {
                           return PostItem(
-                            post: state.postList!.posts[index],
+                            post: state.postList![index],
                             postCategory: state.selectedBoard,
                           );
                         },
@@ -173,7 +206,7 @@ class _Body extends StatelessWidget {
                             color: const Color(0xFF919191).withOpacity(0.8),
                           );
                         },
-                      )
+                      ),
               ],
             ));
           },

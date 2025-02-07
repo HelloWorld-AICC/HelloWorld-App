@@ -2,10 +2,12 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hello_world_mvp/route/domain/service/route_service.dart';
+import 'package:hello_world_mvp/toast/common_toast.dart';
 
 import '../../../design_system/hello_colors.dart';
+import '../../../injection.dart';
 import '../../../route/application/route_bloc.dart';
+import '../../../route/domain/route_service.dart';
 
 class HomeRouteItem extends StatelessWidget {
   final String title;
@@ -35,10 +37,11 @@ class HomeRouteItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        // if (routePath == "call_bot") {
-        //   showToast("미구현 기능입니다.");
-        //   return;
-        // }
+        if (routePath == "callbot") {
+          showToast("미구현 기능입니다.");
+          return;
+        }
+
         if (routePath == "/resume") {
           context.push("/resume");
           return;

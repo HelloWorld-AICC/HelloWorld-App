@@ -35,7 +35,7 @@ class MypageInternalProvider implements IMypageInternalProvider {
     final failureOrTokens = await _fetchService.request(
       pathPrefix: "",
       path: "/myPage/setProfile",
-      method: HttpMethod.file,
+      method: HttpMethod.patch,
       files: [if (file != null) file],
       bodyParam: {
         "nickName": nickname,

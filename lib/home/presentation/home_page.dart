@@ -2,13 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/home/application/home_bloc.dart';
-import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/locale/application/locale_bloc.dart';
 import 'package:hello_world_mvp/route/application/route_bloc.dart'; // 추가된 import
-import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 
+import '../../center/presentation/center_screen.dart';
+import '../../community/board/presentation/community_board.dart';
 import '../../locale/domain/localization_service.dart';
+import '../../new_chat/presentation/new_chat_page.dart';
+import '../../resume/resume_screen.dart';
+import '../../route/domain/route_service.dart';
 import 'widgets/home_page_content.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,13 +22,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    super.initState();
-    var languageId = context.read<AppInitBloc>().state.selectedIndex;
-    context.read<AppInitBloc>().add(SendUserLanguage(languageId));
-  }
-
   List<String> _imagesPath() {
     return [
       'assets/images/home_chat.png',
@@ -57,8 +53,18 @@ class _HomePageState extends State<HomePage> {
                 context.replace("/login");
               }
             },
-            child: HomePageContent(
-              imagesPath: _imagesPath(),
+            child: BlocBuilder<RouteBloc, RouteState>(
+              builder: (context, state) {
+                return [
+                  NewChatPage(),
+                  const ResumeScreen(),
+                  HomePageContent(
+                    imagesPath: _imagesPath(),
+                  ),
+                  const CommunityBoard(),
+                  CenterScreen()
+                ][state.currentIndex];
+              },
             ),
           );
         },

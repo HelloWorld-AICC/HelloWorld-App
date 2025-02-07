@@ -34,7 +34,8 @@ class CreatePostBloc extends Bloc<CreatePostEvent, CreatePostState> {
     on<SelectMedia>((event, emit) async {
       final ImagePicker picker = ImagePicker();
       // Pick an image.
-      final List<XFile> medias = await picker.pickMultipleMedia();
+      final List<XFile> medias =
+          await picker.pickMultipleMedia(maxWidth: 1024, maxHeight: 1024);
 
       emit(state.copyWith(medias: medias));
     });
