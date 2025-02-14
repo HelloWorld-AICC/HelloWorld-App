@@ -45,6 +45,7 @@ dependencies:
   synchronized: ^3.3.0+3
   video_player: ^2.9.2
   loading_animation_widget: ^1.3.0
+  flutter_launcher_icons: ^0.14.3
 
 dev_dependencies:
   flutter_test:
@@ -57,19 +58,27 @@ flutter:
 
   assets:
     - assets/translations/
+
+    - assets/icons/
+    - assets/icons/blue/
+    - assets/icons/blue/bottom_bar/
+    - assets/icons/grey/
+    - assets/icons/grey/bottom_bar/
+
     - assets/images/
     - assets/images/auth/
-    - assets/images/home/
-    - assets/images/home/grid_view/
     - assets/images/chat/
     - assets/images/common/
-    - assets/images/mypage/
+    - assets/images/common/app/
+    - assets/images/common/flags/
     - assets/images/community/
+    - assets/images/home/
+    - assets/images/home/grid_view/
+    - assets/images/mypage/
+    - assets/images/resume/
+
     - assets/fonts/
     - assets/icons/
-    - assets/icons/grey/
-    - assets/icons/blue/
-    - assets/images/common/flags/
 
   fonts:
     - family: SB AggroOTF

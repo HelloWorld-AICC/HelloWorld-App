@@ -8,7 +8,7 @@ class LocaleState extends Equatable {
   const LocaleState({required this.locale, required this.selectedIndex});
 
   factory LocaleState.initial() =>
-      const LocaleState(locale: null, selectedIndex: 0);
+      const LocaleState(locale: null, selectedIndex: -1);
 
   @override
   List<Object?> get props => [locale, selectedIndex];

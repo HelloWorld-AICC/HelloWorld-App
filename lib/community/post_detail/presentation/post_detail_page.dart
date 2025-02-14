@@ -50,11 +50,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
       child: BlocBuilder<PostDetailBloc, PostDetailState>(
           builder: (context, state) {
         return PopScope(
-          onPopInvoked: (result) {
-            if (result) {
-              print("Pop invoked in post detail");
-            }
-          },
           child: Scaffold(
             backgroundColor: Color(0xffECF6FE),
             appBar: HelloAppbar(

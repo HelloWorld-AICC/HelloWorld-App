@@ -33,6 +33,88 @@
   "splash_page": {
     "language_select": "Chọn ngôn ngữ"
   },
+  "offline_center_page": {
+    "title": "Trung Tâm Tư Vấn Trực Tiếp"
+  },
+  "chat_page": {
+    "title": "Tư Vấn Trò Chuyện",
+    "input_hint": "Nhập nội dung bạn muốn tư vấn"
+  },
+  "resume_page": {
+    "restart": "Bắt Đầu Lại",
+    "resume": {
+      "title": "Viết Sơ Yếu Lý Lịch",
+      "next": "Tiếp Theo",
+      "back": "Quay Lại",
+      "submit": "Gửi"
+    },
+    "visa": {
+      "subtitle": "Vui lòng nhập thông tin visa hiện tại của bạn",
+      "acquired": "Tôi đã có visa",
+      "planning": "Tôi dự định xin visa",
+      "select_visa": "Vui lòng chọn loại visa",
+      "select_visa_title": "Chọn loại visa",
+      "issue_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn"
+    },
+    "work_experience": {
+      "subtitle": "Vui lòng nhập kinh nghiệm làm việc của bạn",
+      "company_name": "Nhập tên công ty",
+      "job_title": "Nhập chức danh công việc",
+      "start_date": "Ngày Bắt Đầu",
+      "company_name_title": "Tên Công Ty",
+      "job_title_title": "Chức Danh Công Việc",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết công việc và kinh nghiệm của bạn"
+    },
+    "personal_info": {
+      "subtitle": "Vui lòng nhập thông tin cá nhân của bạn",
+      "birth_date": "Ngày Sinh",
+      "nationality": "Quốc Tịch",
+      "select_nationality": "Chọn quốc tịch",
+      "residence": "Nơi Cư Trú",
+      "email": "Email",
+      "phone_number": "Số Điện Thoại",
+      "verify": "Xác Minh",
+      "gender": "Giới Tính",
+      "select_gender": "Chọn giới tính"
+    },
+    "korean_ability": {
+      "subtitle": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "language_level": "Trình Độ Ngôn Ngữ",
+      "select_language_level": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "test_name": "Tên Kỳ Thi Chính Thức",
+      "score": "Điểm / Xếp Hạng"
+    },
+    "education": {
+      "subtitle": "Vui lòng nhập thông tin giáo dục của bạn",
+      "school_name": "Tên Trường / Tổ Chức",
+      "major": "Ngành Học / Khóa Học",
+      "start_date": "Ngày Bắt Đầu",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học",
+      "character_limit": "{current}/{max} ký tự đã nhập"
+    },
+    "certificate": {
+      "subtitle": "Vui lòng nhập thông tin chứng chỉ / bằng cấp của bạn",
+      "name": "Chứng Chỉ / Bằng Cấp",
+      "organization": "Tổ Chức Cấp",
+      "acquisition_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học"
+    }
+  },
+  "terms_page": {
+    "title": "Điều khoản sử dụng",
+    "look_details": "Xem chi tiết",
+    "snackbar": "Bạn phải đồng ý với tất cả các điều khoản.",
+    "all_agree": "Đồng ý tất cả",
+    "privacy_policy": "Đồng ý với Chính sách quyền riêng tư (Bắt buộc)",
+    "terms_of_service": "Đồng ý với Điều khoản dịch vụ (Bắt buộc)",
+    "privacy_policy_details": "Dịch vụ HelloWorld (sau đây gọi là 'Dịch vụ') được cung cấp bởi nhóm phát triển (sau đây gọi là 'Nhóm'). Nhóm coi trọng việc bảo vệ thông tin cá nhân và hướng dẫn cách xử lý thông tin cá nhân thu thập được trong quá trình sử dụng Dịch vụ như sau:\n\n1. Các loại thông tin cá nhân được thu thập\n- Thông tin thu thập khi đăng ký tài khoản: Thông tin tài khoản KakaoTalk, biệt danh\n- Thông tin thu thập thêm: Ảnh đại diện, thông tin My Team, v.v.\n\n2. Mục đích xử lý thông tin cá nhân\n- Cung cấp dịch vụ và quản lý thành viên\n- Ngăn chặn hành vi gian lận và cải thiện Dịch vụ\n- Thu thập và phân tích thống kê về việc sử dụng dịch vụ\n\n3. Thời gian lưu trữ và xử lý thông tin cá nhân\n- Thông tin cá nhân sẽ được xử lý và lưu trữ trong khoảng thời gian theo quy định của pháp luật.\n- Thông tin cá nhân sẽ bị xóa trong vòng 90 ngày sau khi ngừng sử dụng dịch vụ.\n\n4. Cung cấp thông tin cá nhân cho bên thứ ba\n- Thông tin cá nhân sẽ không được cung cấp cho bên thứ ba nếu không có sự đồng ý của thành viên.\n\n5. Biện pháp bảo vệ thông tin cá nhân\n- Nhóm áp dụng nhiều công nghệ bảo mật khác nhau để bảo vệ thông tin cá nhân.\n\n6. Quyền và nghĩa vụ của thành viên\n- Thành viên có thể xem, chỉnh sửa hoặc xóa thông tin cá nhân của mình bất cứ lúc nào và thực hiện các quyền liên quan đến việc xử lý thông tin cá nhân.\n\n7. Xóa thông tin cá nhân\n- Khi mục đích xử lý thông tin cá nhân đã đạt được, thông tin sẽ bị xóa ngay lập tức.",
+    "terms_of_service_details": "Điều khoản này quy định các điều kiện sử dụng dịch vụ HelloWorld (sau đây gọi là 'Dịch vụ') và nêu rõ quyền và nghĩa vụ giữa nhà cung cấp dịch vụ và thành viên.\n\n1. Cung cấp dịch vụ\n- Dịch vụ HelloWorld cung cấp nhiều tính năng và nội dung khác nhau cho thành viên, và việc sử dụng phải tuân theo điều khoản này.\n\n2. Nghĩa vụ của thành viên\n- Thành viên không được xâm phạm quyền của người khác hoặc cản trở hoạt động bình thường của Dịch vụ.\n- Hành vi bất hợp pháp hoặc phạm tội gây hại cho Dịch vụ có thể dẫn đến hạn chế sử dụng dịch vụ.\n\n3. Hạn chế sử dụng dịch vụ\n- Nếu phát hiện hành vi gian lận hoặc vi phạm điều khoản, Nhóm có thể hạn chế quyền sử dụng dịch vụ hoặc đình chỉ tài khoản của thành viên.\n\n4. Bảo vệ thông tin cá nhân\n- Thông tin cá nhân thu thập trong quá trình sử dụng Dịch vụ sẽ được xử lý theo Chính sách quyền riêng tư của Nhóm, và thành viên có thể yêu cầu chỉnh sửa hoặc xóa thông tin cá nhân bất cứ lúc nào.\n\n5. Thay đổi và gián đoạn dịch vụ\n- Nhóm có thể thay đổi hoặc ngừng cung cấp Dịch vụ vì lý do kỹ thuật hoặc vận hành.\n\n6. Thay đổi điều khoản\n- Nhóm có thể thay đổi điều khoản này để cải thiện dịch vụ hoặc tuân thủ các thay đổi của pháp luật. Điều khoản đã sửa đổi sẽ có hiệu lực sau khi được thông báo.\n\n7. Miễn trừ trách nhiệm\n- Nhóm không chịu trách nhiệm pháp lý về các vấn đề phát sinh trong quá trình sử dụng Dịch vụ, và thành viên phải chịu mọi trách nhiệm về hậu quả khi sử dụng Dịch vụ.\n\n8. Luật áp dụng và giải quyết tranh chấp\n- Điều khoản này tuân theo luật pháp Hàn Quốc, và các tranh chấp liên quan đến việc sử dụng Dịch vụ sẽ được giải quyết tại tòa án nơi Nhóm đặt trụ sở."
+  },
+  "main_content": "Nội dung chính",
   "app_name": "Trung Tâm Hỗ Trợ Ngoại Ngữ AICC",
   "login_button": "Đăng nhập",
   "select_language": "Vui lòng chọn ngôn ngữ",

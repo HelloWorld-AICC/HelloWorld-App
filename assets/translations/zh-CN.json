@@ -33,6 +33,148 @@
   "splash_page": {
     "language_select": "选择语言"
   },
+  "offline_center_page": {
+    "title": "线下咨询中心"
+  },
+  "chat_page": {
+    "title": "聊天咨询",
+    "input_hint": "请输入您要咨询的内容"
+  },
+  "resume_page": {
+    "resume": {
+      "title": "简历填写",
+      "next": "下一步",
+      "back": "上一步",
+      "submit": "提交"
+    },
+    "visa": {
+      "subtitle": "请输入您的当前签证信息",
+      "acquired": "我已持有签证",
+      "planning": "我计划获取签证",
+      "select_visa": "请选择您的签证",
+      "issue_date": "签发日期",
+      "expiry_date": "到期日期"
+    },
+    "work_experience": {
+      "subtitle": "请输入您的工作经历",
+      "company_name": "请输入公司名称",
+      "job_title": "请输入职位",
+      "start_date": "开始日期",
+      "end_date": "结束日期",
+      "main_content": "请详细描述您的工作和经验"
+    },
+    "personal_info": {
+      "subtitle": "请输入您的个人信息",
+      "birth_date": "出生日期",
+      "nationality": "国籍",
+      "select_nationality": "请选择国籍",
+      "residence": "居住地",
+      "email": "电子邮件",
+      "phone_number": "手机号",
+      "verify": "验证",
+      "gender": "性别",
+      "select_gender": "请选择性别"
+    },
+    "korean_ability": {
+      "subtitle": "请输入您的韩语水平",
+      "language_level": "语言等级",
+      "select_language_level": "请输入您的韩语水平",
+      "test_name": "官方考试名称",
+      "score": "分数/等级"
+    },
+    "education": {
+      "subtitle": "请输入您的学历/教育信息",
+      "school_name": "学校 / 机构名称",
+      "major": "专业 / 课程名称",
+      "start_date": "开始日期",
+      "end_date": "结束日期",
+      "main_content": "请详细描述您所学的内容",
+      "character_limit": "已输入 {current}/{max} 个字符"
+    },
+    "certificate": {
+      "subtitle": "请输入您的证书/资格信息",
+      "name": "证书 / 资格",
+      "organization": "颁发机构",
+      "acquisition_date": "获取日期",
+      "expiry_date": "到期日期",
+      "main_content": "请详细描述您所学的内容"
+    }
+  },
+  "resume_page": {
+    "restart": "重新开始",
+    "resume": {
+      "title": "Viết Sơ Yếu Lý Lịch",
+      "next": "Tiếp Theo",
+      "back": "Quay Lại",
+      "submit": "Gửi"
+    },
+    "visa": {
+      "subtitle": "Vui lòng nhập thông tin visa hiện tại của bạn",
+      "acquired": "Tôi đã có visa",
+      "planning": "Tôi dự định xin visa",
+      "select_visa": "Vui lòng chọn loại visa",
+      "select_visa_title": "Chọn loại visa",
+      "issue_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn"
+    },
+    "work_experience": {
+      "subtitle": "Vui lòng nhập kinh nghiệm làm việc của bạn",
+      "company_name": "Nhập tên công ty",
+      "job_title": "Nhập chức danh công việc",
+      "company_name_title": "Tên Công Ty",
+      "job_title_title": "Chức Danh",
+      "start_date": "Ngày Bắt Đầu",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết công việc và kinh nghiệm của bạn"
+    },
+    "personal_info": {
+      "subtitle": "Vui lòng nhập thông tin cá nhân của bạn",
+      "birth_date": "Ngày Sinh",
+      "nationality": "Quốc Tịch",
+      "select_nationality": "Chọn quốc tịch",
+      "residence": "Nơi Cư Trú",
+      "email": "Email",
+      "phone_number": "Số Điện Thoại",
+      "verify": "Xác Minh",
+      "gender": "Giới Tính",
+      "select_gender": "Chọn giới tính"
+    },
+    "korean_ability": {
+      "subtitle": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "language_level": "Trình Độ Ngôn Ngữ",
+      "select_language_level": "Vui lòng nhập trình độ tiếng Hàn của bạn",
+      "test_name": "Tên Kỳ Thi Chính Thức",
+      "score": "Điểm / Xếp Hạng"
+    },
+    "education": {
+      "subtitle": "Vui lòng nhập thông tin giáo dục của bạn",
+      "school_name": "Tên Trường / Tổ Chức",
+      "major": "Ngành Học / Khóa Học",
+      "start_date": "Ngày Bắt Đầu",
+      "end_date": "Ngày Kết Thúc",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học",
+      "character_limit": "{current}/{max} ký tự đã nhập"
+    },
+    "certificate": {
+      "subtitle": "Vui lòng nhập thông tin chứng chỉ / bằng cấp của bạn",
+      "name": "Chứng Chỉ / Bằng Cấp",
+      "organization": "Tổ Chức Cấp",
+      "acquisition_date": "Ngày Cấp",
+      "expiry_date": "Ngày Hết Hạn",
+      "main_content": "Vui lòng mô tả chi tiết những gì bạn đã học"
+    }
+  },
+  "terms_page": {
+    "title": "使用条款",
+    "look_details": "查看详情",
+    "snackbar": "您必须同意所有条款。",
+    "all_agree": "全部同意",
+    "privacy_policy": "同意隐私政策（必填）",
+    "terms_of_service": "同意服务条款（必填）",
+    "privacy_policy_details": "HelloWorld服务（以下简称“服务”）由开发团队（以下简称“团队”）提供。团队高度重视个人信息保护，并就使用服务过程中收集的个人信息处理情况作如下说明。\n\n1. 收集的个人信息类别\n- 会员注册时收集的个人信息：KakaoTalk账号信息、昵称\n- 额外收集的个人信息：个人资料照片、My Team信息等\n\n2. 个人信息处理目的\n- 提供服务及管理会员\n- 防止欺诈行为及改善服务\n- 收集和分析服务使用统计数据\n\n3. 个人信息的处理及保留期限\n- 个人信息将在法律规定的期限内进行处理和保留。\n- 服务结束后90天内删除个人信息。\n\n4. 个人信息的第三方提供\n- 未经会员同意，不会向第三方提供个人信息。\n\n5. 个人信息保护措施\n- 团队采取多种安全技术来保护个人信息。\n\n6. 会员的权利和义务\n- 会员可以随时查询、修改或删除其个人信息，并行使其个人信息处理相关权利。\n\n7. 个人信息的销毁\n- 个人信息一旦达到处理目的，将被立即销毁。",
+    "terms_of_service_details": "本条款规定了HelloWorld服务（以下简称“服务”）的使用条件，并明确了服务提供方与会员之间的权利和义务。\n\n1. 服务的提供\n- HelloWorld服务向会员提供各种功能和内容，并须遵守本条款进行使用。\n\n2. 会员义务\n- 会员不得在使用服务时侵犯他人权利或妨碍服务的正常运营。\n- 进行非法行为、犯罪行为等损害服务的行为可能导致服务使用受到限制。\n\n3. 服务使用限制\n- 团队若发现会员存在欺诈行为或违反条款的情况，可能会限制该会员的服务使用或暂停其账户。\n\n4. 个人信息保护\n- 使用服务时收集的个人信息将按照团队的隐私政策进行处理，会员可随时请求修改或删除其个人信息。\n\n5. 服务的变更及中断\n- 团队可能因技术问题或运营需求而变更或中断服务。\n\n6. 条款变更\n- 团队可因服务优化或法律变更等原因修改本条款，变更后的条款将在通知后生效。\n\n7. 免责声明\n- 团队对因使用服务而产生的问题不承担法律责任，会员需对使用服务过程中产生的所有后果负责。\n\n8. 法律适用及争议解决\n- 本条款适用大韩民国法律，与服务使用相关的争议应在团队所在地法院进行解决。"
+  },
+  "main_content": "主要内容",
   "app_name": "外国支持中心 AICC",
   "login_button": "登录",
   "select_language": "请选择语言",

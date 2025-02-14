@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/auth/application/login_bloc.dart';
 import 'package:hello_world_mvp/auth/application/status/auth_status_bloc.dart';
 import 'package:hello_world_mvp/auth/domain/failure/auth_failure.dart';
+import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
 import 'package:hello_world_mvp/injection.dart';
 import 'package:hello_world_mvp/toast/common_toast.dart';
 

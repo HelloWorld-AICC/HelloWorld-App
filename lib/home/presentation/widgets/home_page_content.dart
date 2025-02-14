@@ -5,27 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 
 import '../../../custom_bottom_navigationbar.dart';
 import '../../../design_system/hello_colors.dart';
 import '../../../locale/application/locale_bloc.dart';
 import '../../../locale/domain/localization_service.dart';
-import '../../../route/application/route_bloc.dart';
-import '../../../route/domain/route_service.dart';
 import 'home_route_grid.dart';
-
-final Map<String, ImageIcon> bottomNavItems = {
-  'bottom_navigation.chat':
-      ImageIcon(AssetImage('assets/icons/grey/chat.png'), size: 24),
-  'bottom_navigation.resume':
-      ImageIcon(AssetImage('assets/icons/grey/writing.png'), size: 24),
-  'bottom_navigation.home':
-      ImageIcon(AssetImage('assets/icons/grey/home.png'), size: 24),
-  'bottom_navigation.community/board':
-      ImageIcon(AssetImage('assets/icons/grey/community.png'), size: 32),
-  'bottom_navigation.consultation_center':
-      ImageIcon(AssetImage('assets/icons/grey/announcement.png'), size: 24),
-};
 
 class HomePageContent extends StatelessWidget {
   final List<String> imagesPath;

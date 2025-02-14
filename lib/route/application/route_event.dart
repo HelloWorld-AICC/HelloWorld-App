@@ -13,24 +13,3 @@ final class RouteChanged extends RouteEvent {
   @override
   List<Object?> get props => [newIndex];
 }
-
-final class RouteEventHome extends RouteEvent {
-  RouteEventHome();
-
-  @override
-  List<Object?> get props => [];
-}
-
-final class RouteEventLogin extends RouteEvent {
-  RouteEventLogin();
-
-  @override
-  List<Object?> get props => [];
-}
-
-final class RouteEventSplash extends RouteEvent {
-  RouteEventSplash();
-
-  @override
-  List<Object?> get props => [];
-}

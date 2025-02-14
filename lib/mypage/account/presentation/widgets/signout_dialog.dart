@@ -45,7 +45,7 @@ Future<void> showSignOutDailog(BuildContext context) async {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           SvgPicture.asset(
-                              "assets/images/common/dialog_exclamation_mark.svg",
+                              "assets/images/common/dialog_exclamation_mark.png",
                               width: 50.5,
                               height: 50.5),
                           const SizedBox(height: 27),

@@ -51,6 +51,9 @@ class HomeRouteItem extends StatelessWidget {
         } else if (routePath == "/center") {
           context.push("/center");
           return;
+        } else if (routePath == "/chat") {
+          context.push("/chat");
+          return;
         }
 
         context.read<RouteBloc>().add(RouteChanged(newIndex: bottomIndex));

@@ -4,9 +4,8 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/auth/domain/repository/i_token_repository.dart';
 import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
+import 'package:hello_world_mvp/route/domain/service/route_service.dart';
 import 'package:injectable/injectable.dart';
-
-import '../../../route/domain/route_service.dart';
 
 part 'auth_status_event.dart';
 
@@ -22,9 +21,7 @@ class AuthStatusBloc extends Bloc<AuthStatusEvent, AuthStatusState> {
     required this.appInitBloc,
   }) : super(AuthStatusState.initial()) {
     on<CheckAuthStatus>((event, emit) async {
-      print('AuthStatusBloc :: CheckAuthStatus event has been called');
       final isFirstRun = appInitBloc.state.isFirstRun;
-
       final tokensOrFailure = await tokenRepository.getTokens();
 
       emit(tokensOrFailure.fold(

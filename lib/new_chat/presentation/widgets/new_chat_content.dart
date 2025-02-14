@@ -12,14 +12,12 @@ import '../../../design_system/hello_colors.dart';
 import '../../../fetch/authenticated_http_client.dart';
 import '../../../injection.dart';
 import '../../../route/application/route_bloc.dart';
-import '../../../route/domain/route_service.dart';
 import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
 import '../../domain/service/stream/streamed_chat_service.dart';
 import 'chat_appbar.dart';
-import 'chat_guide_widget.dart';
 import 'chat_input_field.dart';
 import 'chat_rooms_drawer.dart';
 import 'message_list_widget.dart';
@@ -85,11 +83,6 @@ class NewChatContentState extends State<NewChatContent>
         builder: (context, state) {
       return SafeArea(
         child: PopScope(
-          onPopInvoked: (result) {
-            if (result) {
-              print("Pop invoked in NewChatContent");
-            }
-          },
           child: Scaffold(
             key: _scaffoldKey,
             resizeToAvoidBottomInset: false,
@@ -165,7 +158,9 @@ class NewChatContentState extends State<NewChatContent>
             ),
             bottomNavigationBar: Visibility(
               visible: !isKeyboardVisible,
-              child: CustomBottomNavigationBar(items: bottomNavItems),
+              child: CustomBottomNavigationBar(
+                items: bottomNavItems,
+              ),
             ),
             drawer: ChatRoomsDrawer(streamController: _streamController),
             onDrawerChanged: (isOpen) {

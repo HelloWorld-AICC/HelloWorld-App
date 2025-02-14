@@ -7,6 +7,14 @@ sealed class AppInitEvent extends Equatable {
 
 final class MarkAppRunnedBefore extends AppInitEvent {}
 
-final class MarkSplashDone extends AppInitEvent {}
+final class StoreSelectedLanguage extends AppInitEvent {
+  final int selectedIndex;
 
-final class MarkLanguageSelected extends AppInitEvent {}
+  StoreSelectedLanguage({required this.selectedIndex});
+}
+
+final class SendUserLanguage extends AppInitEvent {
+  final int languageId;
+
+  SendUserLanguage(this.languageId);
+}
