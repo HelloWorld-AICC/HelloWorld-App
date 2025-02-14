@@ -94,7 +94,7 @@ class CommunityInternalProvider implements ICommunityInternalProvider {
   }) async {
     final failureOrTokens = await _fetchService.request(
       pathPrefix: "",
-      path: "/community/$postId/comment/create",
+      path: "/community/$postId/comment",
       method: HttpMethod.post,
       bodyParam: {
         "content": content,
