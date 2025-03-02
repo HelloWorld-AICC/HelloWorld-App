@@ -97,17 +97,17 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final homeRegisterModule = _$HomeRegisterModule();
+    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
     gh.factory<_i487.LocaleBloc>(() => _i487.LocaleBloc());
     gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
-    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
-    gh.factory<_i58.StreamedChatParseService>(
-        () => _i58.StreamedChatParseService());
+    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.factory<_i925.ChatRoomsInfoProvider>(
         () => _i925.ChatRoomsInfoProvider());
-    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
+    gh.factory<_i58.StreamedChatParseService>(
+        () => _i58.StreamedChatParseService());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
-    gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
     gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
+    gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i842.IAppVersionLocalProvider>(
@@ -168,11 +168,11 @@ extension GetItInjectableX on _i174.GetIt {
         _i552.CenterBloc(centerRepository: gh<_i284.ICenterRepository>()));
     gh.factory<_i775.AppInitBloc>(
         () => _i775.AppInitBloc(iInitRepository: gh<_i614.IInitRepository>()));
-    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
+    gh.factory<_i453.TermsOfServiceBloc>(() => _i453.TermsOfServiceBloc(
           communityRepository: gh<_i307.ICommunityRepository>(),
           bus: gh<_i461.Bus>(),
         ));
-    gh.factory<_i453.TermsOfServiceBloc>(() => _i453.TermsOfServiceBloc(
+    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
           communityRepository: gh<_i307.ICommunityRepository>(),
           bus: gh<_i461.Bus>(),
         ));

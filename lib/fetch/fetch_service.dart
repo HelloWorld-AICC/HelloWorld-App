@@ -63,7 +63,7 @@ class FetchService {
     Response response;
 
     try {
-      if (files != null && files.isNotEmpty) {
+      if (files != null) {
         response = await client.upload(
           uri,
           files,
