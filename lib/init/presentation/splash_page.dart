@@ -108,7 +108,7 @@ class _SplashPageState extends State<SplashPage> {
                     Container(
                       height: MediaQuery.of(context).size.height / 5,
                       child: Image.asset(
-                        'assets/images/home/Nice to meet you.png',
+                        'assets/images/home/nice_to_meet_you.png',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -237,5 +237,8 @@ class _SplashPageState extends State<SplashPage> {
             index: index,
           ),
         );
+    context
+        .read<AppInitBloc>()
+        .add(StoreSelectedLanguage(selectedIndex: index));
   }
 }

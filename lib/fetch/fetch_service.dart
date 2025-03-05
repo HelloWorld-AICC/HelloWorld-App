@@ -31,7 +31,8 @@ enum HttpMethod {
 class FetchService {
   final AuthenticatedHttpClient client;
   final Map<String, String> _baseHeaders = {
-    "Content-Type": "application/json; charset=utf-8"
+    "Content-Type": "application/json; charset=utf-8",
+    "Accept": "*/*",
   };
 
   FetchService({required this.client});
@@ -46,7 +47,11 @@ class FetchService {
     List<File>? files,
   }) async {
     //body
-    final body = json.encode(bodyParam);
+    String body = json.encode(bodyParam);
+    if (bodyParam == null) {
+      print("bodyParam is null");
+      body = "";
+    }
 
     //path
     var realPath = "/mvc$pathPrefix$path";
