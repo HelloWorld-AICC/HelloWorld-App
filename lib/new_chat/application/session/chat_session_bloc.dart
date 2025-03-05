@@ -73,7 +73,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
     on<ClearChatSessionEvent>((event, emit) {
       streamedChatService.clearChatLogs();
-      emit(state.copyWith(messages: []));
+      emit(state.copyWith(messages: [], roomId: 'new_chat'));
     });
 
     on<UpdateMessagesEvent>((event, emit) {

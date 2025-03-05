@@ -208,7 +208,9 @@ class NewChatContentState extends State<NewChatContent>
           // });
 
           const String authority = "www.gotoend.store";
-          final queryParams = {'roomId': roomId};
+          final queryParams = {
+            'roomId': context.read()<ChatSessionBloc>().state.roomId
+          };
           final uri = Uri.https(authority, "webflux/chat/ask", queryParams);
 
           final request = http.Request("POST", uri);
