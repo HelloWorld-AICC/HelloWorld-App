@@ -160,6 +160,7 @@ class NewChatContentState extends State<NewChatContent>
               visible: !isKeyboardVisible,
               child: CustomBottomNavigationBar(
                 items: bottomNavItems,
+                backgroundColor: HelloColors.white,
               ),
             ),
             drawer: ChatRoomsDrawer(streamController: _streamController),

@@ -65,17 +65,18 @@ class HomePageContent extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Color(0xFFD1E6FF),
-                  Color(0xFFDDEDFF),
-                  Color(0xFFFFFFFF),
-                ],
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-              ),
-            ),
+            color: Color(0xffEEF6FF),
+            // decoration: const BoxDecoration(
+            //   gradient: LinearGradient(
+            //     colors: [
+            //       Color(0xFFD1E6FF),
+            //       Color(0xFFDDEDFF),
+            //       Color(0xFFFFFFFF),
+            //     ],
+            //     begin: Alignment.topCenter,
+            //     end: Alignment.bottomCenter,
+            //   ),
+            // ),
             child: Padding(
               padding: EdgeInsets.only(
                   left: MediaQuery.sizeOf(context).width * 0.05,
@@ -83,44 +84,9 @@ class HomePageContent extends StatelessWidget {
                   top: MediaQuery.sizeOf(context).height * 0.05),
               child: Stack(
                 children: [
-                  Stack(
-                    children: [
-                      Positioned(
-                        top: 60,
-                        child: Padding(
-                          padding: const EdgeInsets.all(30),
-                          child: ClipRect(
-                            child: Align(
-                              alignment: Alignment.topCenter,
-                              heightFactor: 0.3,
-                              child: Image.asset(
-                                'assets/images/home/nice_to_meet_you_with_sphere.png',
-                                fit: BoxFit.cover,
-                                width: MediaQuery.of(context).size.width / 0.9,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Positioned(
-                        top: 60,
-                        child: ClipRect(
-                          child: BackdropFilter(
-                            filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.withOpacity(0.01), // 배경색
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
                   Positioned(
-                    top: 10,
+                    top: 50,
+                    left: MediaQuery.sizeOf(context).width * 0.1,
                     child: _buildHeader(context),
                   ),
                   Positioned(
@@ -129,12 +95,65 @@ class HomePageContent extends StatelessWidget {
                       items: routeBoxItems,
                     ),
                   ),
+                  Positioned(
+                    top: MediaQuery.sizeOf(context).height * 0.3 - 10,
+                    child: Container(
+                      height: MediaQuery.of(context).size.height / 10,
+                      width: MediaQuery.of(context).size.width -
+                          MediaQuery.sizeOf(context).width * 0.05 * 2,
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Color(0xffE2E2E2),
+                          width: 1.0,
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: HelloColors.white,
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    top: 90,
+                    right: 30,
+                    child: Column(
+                      children: [
+                        Image.asset(
+                          'assets/images/home/mascot.png',
+                          fit: BoxFit.cover,
+                          width: MediaQuery.of(context).size.width / 3.8,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: InkWell(
+                      onTap: () {
+                        context.push('/mypage-menu');
+                      },
+                      child: Container(
+                        width: 44,
+                        height: 44,
+                        child: Align(
+                          alignment: Alignment.centerRight,
+                          child: SvgPicture.asset(
+                            "assets/images/home/profile_icon.svg",
+                            width: 20,
+                            height: 18,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
           ),
-          bottomNavigationBar: CustomBottomNavigationBar(
-            items: bottomNavItems,
+          bottomNavigationBar: Container(
+            child: CustomBottomNavigationBar(
+              items: bottomNavItems,
+              backgroundColor: Color(0xffEEF6FF),
+            ),
           ),
         );
       },
@@ -143,50 +162,26 @@ class HomePageContent extends StatelessWidget {
 
   Widget _buildHeader(BuildContext context) {
     return Container(
-      width: MediaQuery.of(context).size.width - 40,
       margin: const EdgeInsets.only(bottom: 16),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const Text(
-                "Hello World",
-                style: TextStyle(
-                  fontFamily: "SB AggroOTF",
-                  fontSize: 32,
-                  fontWeight: FontWeight.w900,
-                  color: HelloColors.mainColor2,
-                ),
-              ),
-              InkWell(
-                onTap: () {
-                  context.push('/mypage-menu');
-                },
-                child: Container(
-                  width: 44,
-                  height: 44,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: SvgPicture.asset(
-                      "assets/images/home/profile_icon.svg",
-                      width: 20,
-                      height: 18,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          const Text(
+            "Hello World",
+            style: TextStyle(
+              fontFamily: "SB AggroOTF",
+              fontSize: 24,
+              fontWeight: FontWeight.w900,
+              color: Color(0xff5E8DC5),
+            ),
           ),
+          SizedBox(height: 4),
           Text(
             context.tr("app_name"),
             style: const TextStyle(
               fontFamily: "SB AggroOTF",
-              fontSize: 14,
-              fontWeight: FontWeight.w200,
+              fontSize: 10,
+              fontWeight: FontWeight.w100,
               color: HelloColors.subTextColor,
             ),
           ),

@@ -18,19 +18,9 @@ class HomeRouteGrid extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width / 1.15,
+          SizedBox(
             height: MediaQuery.of(context).size.height / 10,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.0),
-              border: Border.all(
-                color: HelloColors.mainBlue,
-                width: 1.0,
-              ),
-              color: HelloColors.white,
-            ),
           ),
-          const SizedBox(height: 12), // 간격 추가
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

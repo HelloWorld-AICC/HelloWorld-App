@@ -21,50 +21,23 @@ import 'package:hello_world_mvp/resume/new_resume_screen.dart';
 import 'package:hello_world_mvp/resume/prev/resume_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-Future<bool> markAppRunnedBefore() async {
-  final prefs = await SharedPreferences.getInstance();
-  final keys = prefs.getKeys();
-  bool isFirstRun =
-      keys.contains('isFirstRun') ? prefs.getBool('isFirstRun')! : true;
-  String lastVersion =
-      keys.contains('lastVersion') ? prefs.getString('lastVersion')! : '0.1.0';
-  bool isUpdateProcessed = keys.contains('isUpdateProcessed')
-      ? prefs.getBool('isUpdateProcessed')!
-      : false;
-
-  String currentVersion = '0.1.1';
-
-  if (isFirstRun || (lastVersion != currentVersion && !isUpdateProcessed)) {
-    await prefs.setBool('isFirstRun', false);
-    await prefs.setString('lastVersion', currentVersion);
-    await prefs.setBool('isUpdateProcessed', true);
-    return true;
-  } else {
-    return false;
-  }
-}
-
 final router = GoRouter(initialLocation: '/', routes: [
   GoRoute(
     path: '/',
-    builder: (context, state) {
-      print("Initial Route Called");
-      return FutureBuilder<bool>(
-        future: markAppRunnedBefore(),
-        builder: (context, snapshot) {
-          bool isFirstRun = snapshot.data ?? true;
-          bool isSignedIn =
-              context.read<AuthStatusBloc>().state.isSignedIn ?? false;
+    builder: (context, state) => SplashPage(),
+    redirect: (context, state) async {
+      final prefs = await SharedPreferences.getInstance();
+      bool isFirstRun = prefs.getBool('isFirstRun') ?? true;
+      bool isSignedIn =
+          context.read<AuthStatusBloc>().state.isSignedIn ?? false;
 
-          if (!isFirstRun && isSignedIn) {
-            return HomePage();
-          } else if (!isFirstRun && !isSignedIn) {
-            return LoginScreen();
-          } else {
-            return SplashPage();
-          }
-        },
-      );
+      if (!isFirstRun && isSignedIn) {
+        return '/home';
+      } else if (!isFirstRun && !isSignedIn) {
+        return '/login';
+      } else {
+        return null;
+      }
     },
   ),
   GoRoute(
