@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hello_world_mvp/auth/application/login_bloc.dart';
 import 'package:hello_world_mvp/auth/application/status/auth_status_bloc.dart';
@@ -71,7 +72,7 @@ class LoginScreen extends StatelessWidget {
                                     height:
                                         MediaQuery.of(context).size.width * 0.4,
                                     child: Image.asset(
-                                      "assets/images/common/app_icon.png",
+                                      "assets/images/common/app/app_icon.png",
                                       fit: BoxFit.contain,
                                     ),
                                   ),
@@ -162,7 +163,7 @@ class _LoginWithGoogle extends StatelessWidget {
             children: [
               Image.asset("assets/images/auth/google_logo.png"),
               const SizedBox(width: 8),
-              const Text("Google로 로그인",
+              Text("login_page.google_login".tr(),
                   style: TextStyle(
                     color: Color(0xFF0F0F0F),
                     fontSize: 12,
