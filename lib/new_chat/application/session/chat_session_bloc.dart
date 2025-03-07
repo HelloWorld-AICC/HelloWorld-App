@@ -6,8 +6,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hello_world_mvp/new_chat/domain/model/chat_message.dart';
-import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_parse_service.dart';
-import 'package:hello_world_mvp/new_chat/domain/service/stream/streamed_chat_service.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/streamed_chat_service.dart';
 import 'package:hello_world_mvp/new_chat/infrastructure/repository/chat_repository.dart';
 import 'package:injectable/injectable.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +56,9 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
       ));
       // print(formatMessage(
       //     "채팅방 기록을 불러왔습니다: ${updatedMessages.map((e) => e.toString())}", 150));
-      // streamedChatService.addChatLogs(failureOrChatRoom);
+      updatedMessages.forEach((element) {
+        streamedChatService.addMessage(element);
+      });
     });
 
     on<ChangeLoadingEvent>((event, emit) {
@@ -72,7 +73,6 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
     });
 
     on<ClearChatSessionEvent>((event, emit) {
-      streamedChatService.clearChatLogs();
       emit(state.copyWith(messages: [], roomId: 'new_chat'));
     });
 
@@ -85,6 +85,7 @@ class ChatSessionBloc extends Bloc<ChatSessionEvent, ChatSessionState> {
 
     on<ChangeRoomIdEvent>((event, emit) {
       print("ChatSessionBloc :: ChangeRoomIdEvent : roomId=${event.roomId}");
+      streamedChatService.resetStream();
       emit(state.copyWith(roomId: event.roomId));
     });
   }

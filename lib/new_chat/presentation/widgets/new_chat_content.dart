@@ -4,6 +4,8 @@ import 'dart:convert';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hello_world_mvp/init/application/app_init_bloc.dart';
+import 'package:hello_world_mvp/new_chat/domain/service/streamed_chat_service.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../core/value_objects.dart';
@@ -16,7 +18,6 @@ import '../../application/drawer/chat_drawer_bloc.dart';
 import '../../application/session/chat_session_bloc.dart';
 import '../../domain/chat_enums.dart';
 import '../../domain/model/chat_message.dart';
-import '../../domain/service/stream/streamed_chat_service.dart';
 import 'chat_appbar.dart';
 import 'chat_input_field.dart';
 import 'chat_rooms_drawer.dart';
@@ -52,6 +53,7 @@ class NewChatContentState extends State<NewChatContent>
     _streamController = StreamController<ChatMessage>.broadcast();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("새로운 채팅방을 생성합니다.");
       final chatSessionBloc = context.read<ChatSessionBloc>();
       if (chatSessionBloc.state.roomId == null &&
           chatSessionBloc.state.isLoading) {
@@ -110,7 +112,7 @@ class NewChatContentState extends State<NewChatContent>
                       }
 
                       return StreamBuilder<ChatMessage>(
-                        stream: _streamController.stream,
+                        stream: streamedChatService.stream,
                         builder: (context, snapshot) {
                           // print("채팅방 ID: ${state.roomId}");
 
@@ -152,7 +154,9 @@ class NewChatContentState extends State<NewChatContent>
                         // },
                         ),
                   ),
-                  _buildInputArea(roomId ?? 'new_chat'),
+                  _buildInputArea(
+                      context.read<ChatSessionBloc>().state.roomId ??
+                          'new_chat'),
                 ],
               ),
             ),
@@ -163,7 +167,8 @@ class NewChatContentState extends State<NewChatContent>
                 backgroundColor: HelloColors.white,
               ),
             ),
-            drawer: ChatRoomsDrawer(streamController: _streamController),
+            drawer: ChatRoomsDrawer(
+                streamController: streamedChatService.controller),
             onDrawerChanged: (isOpen) {
               if (!isOpen) {
                 final selectedRoomId =
@@ -190,7 +195,10 @@ class NewChatContentState extends State<NewChatContent>
       listener: (context, state) {},
       builder: (context, state) => ChatInputField(
         sendMessage: () async {
-          if (_controller.text.isEmpty || _controller.text == " ") return;
+          if (_controller.text.isEmpty || _controller.text == " ") {
+            print("메시지가 비어있어 전송할 수 없습니다.");
+            return;
+          }
 
           final messageToSend = _controller.text;
           context.read<ChatSessionBloc>().add(UpdateMessagesEvent(messages: [
@@ -209,8 +217,9 @@ class NewChatContentState extends State<NewChatContent>
 
           const String authority = "www.gotoend.store";
           final queryParams = {
-            'roomId': context.read()<ChatSessionBloc>().state.roomId
+            'roomId': context.read<ChatSessionBloc>().state.roomId
           };
+          print("Room ID: ${context.read<ChatSessionBloc>().state.roomId}");
           final uri = Uri.https(authority, "webflux/chat/ask", queryParams);
 
           final request = http.Request("POST", uri);
@@ -226,7 +235,7 @@ class NewChatContentState extends State<NewChatContent>
           final finalResponse = StringBuffer();
 
           streamedResponse.stream.transform(utf8.decoder).listen((line) {
-            // print('Received line: $line');
+            print('Received line: $line');
 
             if (line.startsWith('data:')) {
               var temp = line.substring(5).trim();
@@ -260,7 +269,8 @@ class NewChatContentState extends State<NewChatContent>
                     content: StringVO(finalResponse.toString()),
                   );
 
-                  _streamController.add(botMessage!);
+                  // _streamController.add(botMessage!);
+                  streamedChatService.addMessage(botMessage!);
                   final updatedMessages = context
                       .read<ChatSessionBloc>()
                       .state
@@ -278,7 +288,8 @@ class NewChatContentState extends State<NewChatContent>
                   botMessage = botMessage!.copyWith(
                     content: StringVO(finalResponse.toString()),
                   );
-                  _streamController.add(botMessage!);
+                  // _streamController.add(botMessage!);
+                  streamedChatService.addMessage(botMessage!);
 
                   // final updatedMessages = context
                   //     .read<ChatSessionBloc>()
@@ -312,7 +323,8 @@ class NewChatContentState extends State<NewChatContent>
                       messages: updatedMessages,
                       isLoading: false,
                       failure: null));
-                  _streamController.add(botMessage!);
+                  // _streamController.add(botMessage!);
+                  streamedChatService.addMessage(botMessage!);
                   // print('Updated messages (modified bot message): $botMessage');
                 }
               }

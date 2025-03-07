@@ -29,6 +29,10 @@ class LoginScreen extends StatelessWidget {
                 context.read<AuthStatusBloc>().add(MarkSignedIn());
                 GoRouter.of(context).go('/home');
                 showToast(tr('auth_success_login'));
+
+                int selectedIdx =
+                    context.read<AppInitBloc>().state.selectedIndex;
+                context.read<AppInitBloc>().add(SendUserLanguage(selectedIdx));
               },
             ),
             BlocListener<LoginBloc, LoginState>(

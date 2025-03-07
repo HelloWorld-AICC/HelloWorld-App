@@ -108,12 +108,10 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                         context.push('/login');
                         return;
                       } else {
-                        int selectedIdx = context
-                            .read()<AppInitBloc>()
-                            .state
-                            .selectedLanguage;
+                        int selectedIdx =
+                            context.read<AppInitBloc>().state.selectedIndex;
                         context
-                            .read()<AppInitBloc>()
+                            .read<AppInitBloc>()
                             .add(SendUserLanguage(selectedIdx));
                         context.push('/home');
                       }
