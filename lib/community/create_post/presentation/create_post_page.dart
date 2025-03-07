@@ -48,7 +48,7 @@ class CreatePostPage extends StatelessWidget {
                 title: "글 작성하기",
                 action: CommunityActionButton(
                     text: "완료",
-                    buttonColor: Color(0xffECF6FE),
+                    buttonColor: HelloColors.subTextColor,
                     onTap: () {
                       context.read<CreatePostBloc>().add(SubmitPost());
                     }),
