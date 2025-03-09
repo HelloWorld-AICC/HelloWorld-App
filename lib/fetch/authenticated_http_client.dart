@@ -26,6 +26,7 @@ class AuthenticatedHttpClient extends http.BaseClient {
     final tokens = await tokenRepository.getTokens();
 
     return tokens.fold((f) {
+      print("액세스 토큰이 존재하지 않습니다.");
       return request.send();
     }, (result) {
       request.headers.putIfAbsent('Authorization',

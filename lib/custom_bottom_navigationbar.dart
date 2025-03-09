@@ -28,8 +28,10 @@ final Map<String, ImageIcon> bottomNavItems = {
 
 class CustomBottomNavigationBar extends StatelessWidget {
   final Map<String, ImageIcon> items;
+  final Color backgroundColor;
 
-  const CustomBottomNavigationBar({super.key, required this.items});
+  const CustomBottomNavigationBar(
+      {super.key, required this.items, required this.backgroundColor});
 
   @override
   Widget build(BuildContext context) {
@@ -56,8 +58,8 @@ class CustomBottomNavigationBar extends StatelessWidget {
                     ? MediaQuery.of(context).viewInsets.bottom
                     : 0),
             child: Container(
-              decoration: const BoxDecoration(
-                color: HelloColors.white,
+              decoration: BoxDecoration(
+                color: backgroundColor,
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -113,7 +115,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
                           .add(RouteChanged(newIndex: index));
                     },
                     items: _getBottomNavItems(localizationService),
-                    backgroundColor: HelloColors.white,
+                    backgroundColor: backgroundColor,
                     selectedItemColor: const Color(0xff4B7BF5),
                     unselectedItemColor: Colors.grey,
                     showUnselectedLabels: true,
@@ -137,7 +139,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
           child: entry.value,
         ),
         label: localization.getTranslatedText(entry.key),
-        backgroundColor: HelloColors.white,
+        backgroundColor: backgroundColor,
       );
     }).toList();
   }

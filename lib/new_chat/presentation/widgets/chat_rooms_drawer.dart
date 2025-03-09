@@ -12,7 +12,7 @@ import '../../application/session/chat_session_bloc.dart';
 import '../../infrastructure/repository/chat_repository.dart';
 
 class ChatRoomsDrawer extends StatefulWidget {
-  final StreamController<ChatMessage> streamController;
+  final StreamController<ChatMessage>? streamController;
 
   const ChatRoomsDrawer({Key? key, required this.streamController})
       : super(key: key);
@@ -98,7 +98,7 @@ class _ChatRoomsDrawerState extends State<ChatRoomsDrawer> {
                           updatedMessages.addAll(stateMessages);
 
                           updatedMessages.forEach((message) {
-                            widget.streamController.add(message);
+                            widget.streamController?.add(message);
                           });
 
                           context.read<ChatSessionBloc>().add(

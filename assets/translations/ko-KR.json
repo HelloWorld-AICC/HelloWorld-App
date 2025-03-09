@@ -121,6 +121,9 @@
     "china": "중국",
     "vietnam": "베트남"
   },
+  "login_page": {
+    "google_login": "Google로 로그인"
+  },
   "main_content": "주요 내용",
   "app_name": "외국인 근로자를 위한 맞춤형 지원 플랫폼",
   "login_button": "로그인",

@@ -77,6 +77,7 @@ import 'new_chat/domain/service/chat_fetch_service.dart' as _i261;
 import 'new_chat/domain/service/stream/streamed_chat_parse_service.dart'
     as _i58;
 import 'new_chat/domain/service/stream/streamed_chat_service.dart' as _i1016;
+import 'new_chat/domain/service/streamed_chat_service.dart' as _i922;
 import 'new_chat/infrastructure/providers/chat_rooms_info_provider.dart'
     as _i925;
 import 'new_chat/infrastructure/repository/chat_repository.dart' as _i605;
@@ -97,17 +98,18 @@ extension GetItInjectableX on _i174.GetIt {
       environmentFilter,
     );
     final homeRegisterModule = _$HomeRegisterModule();
-    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
     gh.factory<_i487.LocaleBloc>(() => _i487.LocaleBloc());
     gh.factory<_i121.LocalizationService>(() => _i121.LocalizationService());
-    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
-    gh.factory<_i925.ChatRoomsInfoProvider>(
-        () => _i925.ChatRoomsInfoProvider());
+    gh.factory<_i187.LocalStorageService>(() => _i187.LocalStorageService());
     gh.factory<_i58.StreamedChatParseService>(
         () => _i58.StreamedChatParseService());
+    gh.factory<_i922.StreamedChatService>(() => _i922.StreamedChatService());
+    gh.factory<_i925.ChatRoomsInfoProvider>(
+        () => _i925.ChatRoomsInfoProvider());
+    gh.factory<_i1045.RouteBloc>(() => _i1045.RouteBloc());
     gh.singleton<_i301.ToastBloc>(() => _i301.ToastBloc());
-    gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
     gh.lazySingleton<_i461.Bus>(() => _i461.Bus());
+    gh.lazySingleton<List<String>>(() => homeRegisterModule.texts);
     gh.lazySingleton<_i141.IAuthExternalProvider>(
         () => _i914.AuthExternalProvider());
     gh.lazySingleton<_i842.IAppVersionLocalProvider>(
@@ -168,13 +170,17 @@ extension GetItInjectableX on _i174.GetIt {
         _i552.CenterBloc(centerRepository: gh<_i284.ICenterRepository>()));
     gh.factory<_i775.AppInitBloc>(
         () => _i775.AppInitBloc(iInitRepository: gh<_i614.IInitRepository>()));
+    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
+          communityRepository: gh<_i307.ICommunityRepository>(),
+          bus: gh<_i461.Bus>(),
+        ));
     gh.factory<_i453.TermsOfServiceBloc>(() => _i453.TermsOfServiceBloc(
           communityRepository: gh<_i307.ICommunityRepository>(),
           bus: gh<_i461.Bus>(),
         ));
-    gh.factory<_i392.BoardBloc>(() => _i392.BoardBloc(
-          communityRepository: gh<_i307.ICommunityRepository>(),
-          bus: gh<_i461.Bus>(),
+    gh.factory<_i659.ChatSessionBloc>(() => _i659.ChatSessionBloc(
+          chatRepository: gh<_i605.ChatRepository>(),
+          streamedChatService: gh<_i922.StreamedChatService>(),
         ));
     gh.factory<_i157.AuthStatusBloc>(() => _i157.AuthStatusBloc(
           tokenRepository: gh<_i658.ITokenRepository>(),
@@ -191,10 +197,6 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i876.MypageBloc>(() => _i876.MypageBloc(
           myPageRepository: gh<_i558.IMypageRepository>(),
           bus: gh<_i461.Bus>(),
-        ));
-    gh.factory<_i659.ChatSessionBloc>(() => _i659.ChatSessionBloc(
-          chatRepository: gh<_i605.ChatRepository>(),
-          streamedChatService: gh<_i1016.StreamedChatService>(),
         ));
     gh.factory<_i317.LoginBloc>(
         () => _i317.LoginBloc(authRepository: gh<_i667.IAuthRepository>()));

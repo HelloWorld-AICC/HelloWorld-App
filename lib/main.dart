@@ -15,13 +15,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'auth/application/login_bloc.dart';
-import 'auth/presentation/login_screen.dart';
-import 'home/presentation/home_page.dart';
-import 'init/presentation/splash_page.dart';
 import 'new_chat/application/session/chat_session_bloc.dart';
-import 'new_chat/domain/service/stream/streamed_chat_service.dart';
-import 'new_chat/domain/service/stream/streamed_chat_parse_service.dart';
-import 'new_chat/domain/service/chat_fetch_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,7 +23,7 @@ void main() async {
   await EasyLocalization.ensureInitialized();
 
   final prefs = await SharedPreferences.getInstance();
-  prefs.getBool('isFirstRun') ?? true;
+  await prefs.clear();
   prefs.setString('lastVersion', '0.1.0');
   configureDependencies();
 

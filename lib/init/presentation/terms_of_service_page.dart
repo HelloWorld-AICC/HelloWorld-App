@@ -68,7 +68,7 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                     Container(
                       height: MediaQuery.of(context).size.height / 5,
                       child: Image.asset(
-                        'assets/images/home/Nice to meet you.png',
+                        'assets/images/home/nice_to_meet_you.png',
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -100,6 +100,7 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                         return;
                       }
                       context.read<AppInitBloc>().add(MarkAppRunnedBefore());
+
                       final isSignIn =
                           context.read<AuthStatusBloc>().state.isSignedIn;
 
@@ -107,6 +108,11 @@ class _TermsOfServicePageState extends State<TermsOfServicePage> {
                         context.push('/login');
                         return;
                       } else {
+                        int selectedIdx =
+                            context.read<AppInitBloc>().state.selectedIndex;
+                        context
+                            .read<AppInitBloc>()
+                            .add(SendUserLanguage(selectedIdx));
                         context.push('/home');
                       }
                     },
@@ -199,7 +205,7 @@ class _TermsContentState extends State<TermsContent> {
           children: [
             Column(
               children: [
-                Image.asset("assets/images/home/exclamation_point.png"),
+                Image.asset("assets/icons/dialog_exclamation_mark.png"),
                 const SizedBox(height: 20),
                 Text(
                   title,
